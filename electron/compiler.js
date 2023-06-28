@@ -47,7 +47,6 @@ class Compiler {
         this.fs.writeFileSync(this.sketchPath, code);
     }
     compile = async (event, payload) => {
-        this.logger.verbose('Compile command received');
         this.writeCodeToCompileLocation(payload.code);
         const compileParams = ["compile", this.sketchFolder, "--fqbn", payload.fqbn, "--build-path", this.binariesFolder];
         const compilingMessage = { event: "COMPILATION_STARTED", message: "COMPILATION_STARTED", displayTimeout: 0 };
@@ -55,7 +54,6 @@ class Compiler {
         try {
             await this.arduinoCli.runAsync(compileParams);
         } catch (error) {
-            this.logger.error("Compilation failed!", error)
             const compilationFailedMessage = { event: "COMPILATION_FAILED", message: "COMPILATION_FAILED", displayTimeout: 3000 };
             event.sender.send('backend-message', compilationFailedMessage);
             return;

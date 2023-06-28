@@ -19,9 +19,6 @@ class DeviceManager {
     }
 
     updateDevice = async (event, payload) => {
-
-        this.logger.verbose('Update Device command received');
-
         if(this.activeSerial?.isOpen){
             this.activeSerial.close();
         }
@@ -33,7 +30,6 @@ class DeviceManager {
         try {
             await this.arduinoCli.runAsync(uploadParams);
         } catch (error) {
-            this.logger.error("Upload failed", error);
             var unsuccesfulUploadMessage = { event: "UPDATE_FAILED", message: "UPDATE_FAILED", payload: payload, displayTimeout: 3000 };
             event.sender.send('backend-message', unsuccesfulUploadMessage);
             return;
@@ -46,11 +42,8 @@ class DeviceManager {
     }
 
     getDevices = async (event) => {
-        this.logger.verbose('Get Serial Devices command received');
 
         const updateIndexParams = ["core", "update-index"];
-        this.logger.info(await this.arduinoCli.runAsync(updateIndexParams));
-
         const listBoardsParams = ["board", "list", "--format", "json"];
         const connectedDevices = JSON.parse(await this.arduinoCli.runAsync(listBoardsParams)).map(b => b.port);
         const eligibleBoards = connectedDevices.filter(device => device.protocol_label == "Serial Port (USB)");

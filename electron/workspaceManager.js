@@ -7,14 +7,12 @@ class WorkspaceManager {
     }
 
     save = async (event, payload) => {
-        this.logger.verbose("Save Workspace command received");
         this.fs.writeFileSync(payload.projectFilePath, payload.data);
         const message = { event: "WORKSPACE_SAVED", message: "WORKSPACE_SAVED", payload: payload.projectFilePath, displayTimeout: 3000 };
         event.sender.send('backend-message', message);
     }
 
     saveAs = async (event, payload) => {
-        this.logger.verbose("Save Workspace As command received");
         const saveAsOptions = {
             filters: [
                 { name: `${payload.extension} files`, extensions: [payload.extension] }
@@ -35,7 +33,6 @@ class WorkspaceManager {
     }
 
     saveTemp = async (event, payload) => {
-        this.logger.verbose("Save Temp Workspace command received");
         const filePath = `${this.app.getPath("userData")}/tmp.${payload.extension}`
         this.fs.writeFileSync(filePath, payload.data);
         const message = { event: "WORKSPACE_SAVED_TEMP", message: "WORKSPACE_SAVED_TEMP", payload: filePath };
@@ -43,7 +40,6 @@ class WorkspaceManager {
     }
 
     restoreTemp = async (event, extension) => {
-        this.logger.verbose("Restore Temp Workspace command received");
         if(!extension) return;
         const data = this.fs.readFileSync(`${this.app.getPath("userData")}/tmp.${extension}`, "utf8");
         const payload = { data };
@@ -52,7 +48,6 @@ class WorkspaceManager {
     }
 
     restoreWorkspace = async (event, extension) => {
-        this.logger.verbose("Restore Workspace command received");
         const openDialogOptions = {
             filters: [
                 { name: `${extension} files`, extensions: [extension] }
@@ -71,7 +66,6 @@ class WorkspaceManager {
     }
 
     restoreCode = async (event, extension) => {
-        this.logger.verbose("Restore Code command received");
         const openDialogOptions = {
             filters: [
                 { name: `${extension} files`, extensions: [extension] }
