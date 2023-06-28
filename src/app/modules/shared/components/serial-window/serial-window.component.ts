@@ -1,6 +1,5 @@
 import { ComponentPortal, DomPortalOutlet } from '@angular/cdk/portal';
 import { AfterViewInit, ApplicationRef, Component, ComponentFactoryResolver, ComponentRef, Injector, OnInit } from '@angular/core';
-import { LogService } from 'src/app/services/log.service';
 import { DialogState } from 'src/app/state/dialog.state';
 import { SerialOutputComponent } from '../serial-output/serial-output.component';
 
@@ -16,7 +15,6 @@ export class SerialWindowComponent implements AfterViewInit {
     private componentFactoryResolver: ComponentFactoryResolver,
     private applicationRef: ApplicationRef,
     private dialogState: DialogState,
-    private logger: LogService
   ) { }
 
   ngAfterViewInit(): void {

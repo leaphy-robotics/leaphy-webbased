@@ -7,7 +7,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { StatusMessageDialog } from '../modules/core/dialogs/status-message/status-message.dialog';
 import { Router } from '@angular/router';
 import { CodeEditorType } from '../domain/code-editor.type';
-import { LogService } from '../services/log.service';
 import { BlocklyEditorState } from '../state/blockly-editor.state';
 import { ReloadConfig } from '../domain/reload.config';
 import { combineLatest } from 'rxjs';
@@ -26,8 +25,7 @@ export class AppEffects {
         private blocklyState: BlocklyEditorState,
         private codeEditorState: CodeEditorState,
         private snackBar: MatSnackBar,
-        private router: Router,
-        private logger: LogService) {
+        private router: Router) {
 
         // When the language is changed, store reload config, then request a reload
         this.appState.changedLanguage$
@@ -94,8 +92,6 @@ export class AppEffects {
         // Enable to debugging to log all backend messages
         this.backEndState.backEndMessages$
             .pipe(filter(() => this.isDebug))
-            .subscribe(message => this.logger.debug(message));
-
         // Show snackbar based on messages received from the Backend
         this.backEndState.backEndMessages$
             .pipe(filter(message => !!message && message.displayTimeout >= 0))

@@ -9,7 +9,6 @@ import { combineLatest } from 'rxjs';
 import { RobotCloudState } from '../state/robot.cloud.state';
 import { BackEndMessage } from '../domain/backend.message';
 import { AppState } from '../state/app.state';
-import { LogService } from '../services/log.service';
 
 @Injectable({
     providedIn: 'root',
@@ -28,23 +27,19 @@ export class BackEndCloudEffects {
         private backEndState: BackEndState,
         private appState: AppState,
         private blocklyEditorState: BlocklyEditorState,
-        private robotCloudState: RobotCloudState,
-        private logger: LogService
-    ) {
+        private robotCloudState: RobotCloudState    ) {
         this.appState.isRobotWired$
             .pipe(filter(isRobotWired => !isRobotWired))
             .subscribe(() => {
                 try {
                     this.myWebSocket = webSocket(`wss://${this.apiId}.execute-api.${this.region}.amazonaws.com/${this.env}`);
                 } catch (error) {
-                    this.logger.error('Error occurred while connecting to websocket:', error);
                     this.backEndState.setconnectionStatus(ConnectionStatus.Disconnected);
                 }
                 this.backEndState.setconnectionStatus(ConnectionStatus.ConnectedToBackend);
 
                 this.myWebSocket.asObservable().subscribe(
                     message => this.backEndState.setBackendMessage(message as BackEndMessage), // Called whenever there is a message from the server
-                    err => this.logger.error(err), // Called if WebSocket API signals some kind of error
                     () => {
                         // Called when connection is closed (for whatever reason)
                         this.backEndState.setconnectionStatus(ConnectionStatus.Disconnected);
@@ -54,7 +49,6 @@ export class BackEndCloudEffects {
                 this.robotCloudState.pairingCode$
                     .pipe(filter(pairingCode => !!pairingCode))
                     .subscribe(pairingCode => {
-                        this.logger.verbose('Sending pairing request with pairing code:', pairingCode);
                         this.myWebSocket.next({ action: 'pair-client', pairingCode });
                     });
 
@@ -67,7 +61,6 @@ export class BackEndCloudEffects {
                         switch (connectionStatus) {
                             case ConnectionStatus.StartPairing:
                             case ConnectionStatus.ConnectedToBackend:
-                                this.logger.verbose('Sending reconnect request with robot id:', robotId);
                                 this.myWebSocket.next({ action: 'reconnect-client', robotId });
                         }
                     });

@@ -9,7 +9,6 @@ import { ConnectionStatus } from '../domain/connection.status';
 import { AppState } from '../state/app.state';
 import { RobotWiredState } from '../state/robot.wired.state';
 import { WorkspaceStatus } from '../domain/workspace.status';
-import { LogService } from '../services/log.service';
 import { DialogState } from '../state/dialog.state';
 import { CodeEditorType } from '../domain/code-editor.type';
 
@@ -30,7 +29,6 @@ export class BackendWiredEffects {
         private blocklyEditorState: BlocklyEditorState,
         private robotWiredState: RobotWiredState,
         private dialogState: DialogState,
-        private logger: LogService,
         private zone: NgZone
     ) {
         // Only set up these effects when we're in Desktop mode
@@ -334,7 +332,6 @@ export class BackendWiredEffects {
 
     public send(channel: string, ...args): void {
         if (!this.ipc) {
-            this.logger.error('No IPC found for sending :(');
             return;
         }
         this.ipc.send(channel, ...args);

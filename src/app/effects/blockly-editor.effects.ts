@@ -9,7 +9,6 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { WorkspaceStatus } from '../domain/workspace.status';
 import { AppState } from '../state/app.state';
 import { CodeEditorType } from '../domain/code-editor.type';
-import { LogService } from '../services/log.service';
 
 declare var Blockly: any;
 
@@ -25,7 +24,6 @@ export class BlocklyEditorEffects {
         private backEndState: BackEndState,
         private appState: AppState,
         private http: HttpClient,
-        private logger: LogService
     ) {
         // When the current language is set: Find and set the blockly translations
         this.appState.currentLanguage$
