@@ -37,11 +37,7 @@ export class AppState {
     private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
 
     constructor(private localStorage: LocalStorageService) {
-        if (window.require) {
-            this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
-        } else {
-            this.isDesktopSubject$ = new BehaviorSubject<boolean>(false);
-        }
+        this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
         this.isDesktop$ = this.isDesktopSubject$.asObservable();
         this.availableRobotTypes$ = this.isDesktop$
             .pipe(map(isDesktop => {

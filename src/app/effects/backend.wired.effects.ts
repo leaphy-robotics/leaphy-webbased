@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { BlocklyEditorState } from '../state/blockly-editor.state';
 import { filter, withLatestFrom } from 'rxjs/operators';
 import { BackEndState } from '../state/backend.state';
-import { IpcRenderer } from 'electron';
+//import { IpcRenderer } from 'electron';
 import { SketchStatus } from '../domain/sketch.status';
 import { BackEndMessage } from '../domain/backend.message';
 import { ConnectionStatus } from '../domain/connection.status';
@@ -21,7 +21,7 @@ declare var Blockly: any;
 // Defines the effects on the Electron environment that different state changes have
 export class BackendWiredEffects {
 
-    private ipc: IpcRenderer | undefined;
+    //private ipc: IpcRenderer | undefined;
 
     constructor(
         private backEndState: BackEndState,
@@ -37,20 +37,20 @@ export class BackendWiredEffects {
             .subscribe(() => {
                 try {
                     // Open communications to the Electron process
-                    this.ipc = window.require('electron').ipcRenderer;
+                    //this.ipc = window.require('electron').ipcRenderer;
                     // Replace the Prompt used by Blockly Variables with something that works in Electron
-                    const electronPrompt = window.require('electron-prompt')
+                    //const electronPrompt = window.require('electron-prompt')
                     Blockly.prompt = (msg, defaultValue, callback) => {
-                        electronPrompt
-                            ({
-                                title: 'Variable',
-                                label: msg,
-                                type: 'input',
-                                height: 180
-                            })
-                            .then(name => {
-                                callback(name);
-                            })
+                        //electronPrompt
+                        //    ({
+                        //        title: 'Variable',
+                        //        label: msg,
+                        //        type: 'input',
+                        //        height: 180
+                        //    })
+                        //    .then(name => {
+                        //        callback(name);
+                        //    })
                     }
                 } catch (e) {
                     console.log(e);
@@ -324,16 +324,16 @@ export class BackendWiredEffects {
     }
 
     public on(channel: string, listener: (event: any, data: any) => void): void {
-        if (!this.ipc) {
-            return;
-        }
-        this.ipc.on(channel, listener);
+        //if (!this.ipc) {
+        //    return;
+        //}
+        //this.ipc.on(channel, listener);
     }
 
     public send(channel: string, ...args): void {
-        if (!this.ipc) {
-            return;
-        }
-        this.ipc.send(channel, ...args);
+        //if (!this.ipc) {
+        //    return;
+        //}
+        //this.ipc.send(channel, ...args);
     }
 }
