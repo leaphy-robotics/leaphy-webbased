@@ -48,7 +48,7 @@ export class AppState {
                 }
             }));
 
-        const currentLanguage = this.localStorage.fetch<Language>('currentLanguage');
+        const currentLanguage = this.localStorage.fetch<Language>('currentLanguage') || this.defaultLanguage;
         this.currentLanguageSubject$ = new BehaviorSubject(currentLanguage);
         this.currentLanguage$ = this.currentLanguageSubject$.asObservable();
 
