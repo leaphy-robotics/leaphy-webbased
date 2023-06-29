@@ -76,10 +76,10 @@ export class AppEffects {
             .subscribe(async codeEditor => {
                 switch (codeEditor) {
                     case CodeEditorType.Beginner:
-                        await this.router.navigate(['']);
+                        await this.router.navigateByUrl('', { skipLocationChange: true });
                         break;
                     case CodeEditorType.Advanced:
-                        await this.router.navigate(['/advanced']);
+                        await this.router.navigateByUrl('/advanced', { skipLocationChange: true });
                         break;
                     default:
                         //await this.router.navigate(['']);
