@@ -147,6 +147,7 @@
   },
   "defaultProject": "leaphy-client",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "defaultCollection": "@angular-eslint/schematics",
+    "analytics": "6d8c3839-2848-4328-b7fb-a10f9273fdfc"
   }
 }
