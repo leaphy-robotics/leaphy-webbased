@@ -13,7 +13,8 @@
     "buildstart": "ng build --base-href ./ && yarn run start",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "dev": "lite-server --baseDir=\"dist\""
   },
   "private": true,
   "dependencies": {
