@@ -30,6 +30,11 @@
                 "glob": "**/*",
                 "input": "./node_modules/leaphy-blockly/media",
                 "output": "./media"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaphy-blockly/msg",
+                "output": "./msg"
               }
             ],
             "styles": [
