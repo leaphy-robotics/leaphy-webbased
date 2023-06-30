@@ -32,9 +32,14 @@
                 "output": "./media"
               },
               {
-                "glob": "**/*",
-                "input": "./node_modules/leaphy-blockly/msg",
-                "output": "./msg"
+                "glob": "en.json",
+                "input": "./node_modules/leaphy-blockly/msg/json",
+                "output": "./msg/json"
+              },
+              {
+                "glob": "nl.json",
+                "input": "./node_modules/leaphy-blockly/msg/json",
+                "output": "./msg/json"
               }
             ],
             "styles": [
