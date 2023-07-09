@@ -30,6 +30,16 @@
                 "glob": "**/*",
                 "input": "./node_modules/leaphy-blockly/media",
                 "output": "./media"
+              },
+              {
+                "glob": "en.json",
+                "input": "./node_modules/leaphy-blockly/msg/json",
+                "output": "./msg/json"
+              },
+              {
+                "glob": "nl.json",
+                "input": "./node_modules/leaphy-blockly/msg/json",
+                "output": "./msg/json"
               }
             ],
             "styles": [
@@ -147,6 +157,7 @@
   },
   "defaultProject": "leaphy-client",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics"
+    "defaultCollection": "@angular-eslint/schematics",
+    "analytics": "6d8c3839-2848-4328-b7fb-a10f9273fdfc"
   }
 }
