@@ -138,7 +138,7 @@ export class DialogEffects {
                 }
             });
         // check if we stored the language in local storage
-        const language = localStorage.getItem('language');
+        const language = localStorage.getItem('currentLanguage');
         if (language) {
             console.log('Language is set to ' + language);
         } else {
@@ -148,7 +148,6 @@ export class DialogEffects {
                 width: '450px',
                 disableClose: true,
             });
-            console.log('Language is not set');
             this.dialogState.setConnectDialog(languageDialogRef);
 
             languageDialogRef.afterClosed().subscribe(() => {
