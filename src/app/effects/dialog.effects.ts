@@ -106,7 +106,6 @@ export class DialogEffects {
             });
 
         // React to messages received from the Backend
-        console.log('Subscribing to backend messages');
         this.backEndState.backEndMessages$
             .pipe(filter(message => !!message))
             .subscribe(message => {
@@ -139,27 +138,26 @@ export class DialogEffects {
                 }
             });
         // check if we stored the language in local storage
-        const language = localStorage.getItem('language');
+        const language = localStorage.getItem('currentLanguage');
         if (language) {
             console.log('Language is set to ' + language);
         } else {
-            //const languageSelectionDialogComponent = LanguageSelectDialog;
-//
-            //const languageDialogRef = this.dialog.open(languageSelectionDialogComponent, {
-            //    width: '450px',
-            //    disableClose: true,
-            //});
-            //console.log('Language is not set');
-            //this.dialogState.setConnectDialog(languageDialogRef);
-//
-            //languageDialogRef.afterClosed().subscribe(() => {
-            //    const creditsDialogComponent = CreditsDialog;
-            //    const creditsDialogRef = this.dialog.open(creditsDialogComponent, {
-            //        width: '800px',
-            //        disableClose: true,
-            //    });
-            //    this.dialogState.setConnectDialog(creditsDialogRef);
-            //});
+            const languageSelectionDialogComponent = LanguageSelectDialog;
+
+            const languageDialogRef = this.dialog.open(languageSelectionDialogComponent, {
+                width: '450px',
+                disableClose: true,
+            });
+            this.dialogState.setConnectDialog(languageDialogRef);
+
+            languageDialogRef.afterClosed().subscribe(() => {
+                const creditsDialogComponent = CreditsDialog;
+                const creditsDialogRef = this.dialog.open(creditsDialogComponent, {
+                    width: '800px',
+                    disableClose: true,
+                });
+                this.dialogState.setConnectDialog(creditsDialogRef);
+            });
         }
     }
 }
