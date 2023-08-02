@@ -13,6 +13,7 @@ import { AppState } from '../state/app.state';
 import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/confirm-editor.dialog';
 import { CodeEditorState } from '../state/code-editor.state';
 import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/language-select.dialog';
+import {NameFileDialog} from "../modules/core/dialogs/name-file/name-file.dialog";
 
 @Injectable({
     providedIn: 'root',

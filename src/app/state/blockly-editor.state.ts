@@ -167,4 +167,8 @@ export class BlocklyEditorState {
   public setIsSideNavOpenToggled() {
     this.isSideNavOpenToggledSubject$.next(true);
   }
+
+  get code(): string {
+    return this.codeSubject$.getValue();
+  }
 }

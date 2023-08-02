@@ -11,6 +11,8 @@ import { RobotWiredState } from '../state/robot.wired.state';
 import { WorkspaceStatus } from '../domain/workspace.status';
 import { DialogState } from '../state/dialog.state';
 import { CodeEditorType } from '../domain/code-editor.type';
+import {  NameFileDialog } from "../modules/core/dialogs/name-file/name-file.dialog";
+import {MatDialog} from "@angular/material/dialog";
 
 declare var Blockly: any;
 
@@ -29,7 +31,8 @@ export class BackendWiredEffects {
         private blocklyEditorState: BlocklyEditorState,
         private robotWiredState: RobotWiredState,
         private dialogState: DialogState,
-        private zone: NgZone
+        private zone: NgZone,
+        private dialog: MatDialog
     ) {
         // Only set up these effects when we're in Desktop mode
         this.appState.isDesktop$
@@ -331,9 +334,30 @@ export class BackendWiredEffects {
     }
 
     public send(channel: string, ...args): void {
-        //if (!this.ipc) {
-        //    return;
-        //}
-        //this.ipc.send(channel, ...args);
+        switch (channel) {
+            case 'save-workspace-as':
+                // make a popup asking for the file name
+                const fileNamesDialogComponent = NameFileDialog;
+                const fileNamesDialogRef = this.dialog.open(fileNamesDialogComponent, {
+                    width: '450px',
+                    disableClose: true,
+                });
+
+                fileNamesDialogRef.afterClosed().subscribe((name: string) => {
+                    const data = this.blocklyEditorState.code;
+                    const blob = new Blob([data], { type: 'text/plain' });
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = name + '.ino';
+
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    // delete a after it is clicked
+                    a.remove();
+                })
+            default:
+                console.log(channel);
+        }
     }
 }

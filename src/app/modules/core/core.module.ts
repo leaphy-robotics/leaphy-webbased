@@ -14,6 +14,7 @@ import { CreditsDialog } from './dialogs/credits/credits.dialog';
 import { InfoDialog } from './dialogs/info/info.dialog';
 import { ConfirmEditorDialog } from './dialogs/confirm-editor/confirm-editor.dialog';
 import { LanguageSelectDialog } from './dialogs/language-select/language-select.dialog';
+import {NameFileDialog} from "./dialogs/name-file/name-file.dialog";
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { LanguageSelectDialog } from './dialogs/language-select/language-select.
     StatusMessageDialog,
     CreditsDialog,
     LanguageSelectDialog,
+    NameFileDialog,
     InfoDialog
   ],
   imports: [
