@@ -1,5 +1,5 @@
 <div class="container">
-    <form (submit)="this.onNameSelected($event.submitter.getAttribute('value'))">
+    <form (submit)="this.onNameSelected(document.getElementById('filename').getAttribute('value'))">
         <input id="filename" type="text" placeholder="File name"
                (input)="document.getElementById('filename').setAttribute('value', $event.target.value)">
     </form>
