@@ -3,24 +3,12 @@ import { ChartDataset } from 'chart.js';
 import { ReplaySubject } from 'rxjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, scan } from 'rxjs/operators';
-import { SerialDevice } from '../domain/serial.device';
+import {SerialPort} from "serialport";
 
 @Injectable({
     providedIn: 'root'
 })
 export class RobotWiredState {
-
-    private isInstallationVerifiedSubject$ = new BehaviorSubject<boolean>(false);
-    public isInstallationVerified$ = this.isInstallationVerifiedSubject$.asObservable();
-
-    private serialDevicesToTrySubject$ = new BehaviorSubject<SerialDevice[]>([]);
-    public serialDevicesToTry$ = this.serialDevicesToTrySubject$.asObservable();
-
-    private isRobotDriverInstallingSubject$ = new BehaviorSubject<boolean>(false);
-    public isRobotDriverInstalling$ = this.isRobotDriverInstallingSubject$.asObservable();
-
-    private verifiedSerialDeviceSubject$ = new BehaviorSubject<SerialDevice>(null);
-    public verifiedSerialDevice$ = this.verifiedSerialDeviceSubject$.asObservable();
 
     private incomingSerialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
     public serialData$: Observable<{ time: Date, data: string }[]> = this.incomingSerialDataSubject$
@@ -56,21 +44,6 @@ export class RobotWiredState {
             return dataSets;
         }));
 
-    public setIsInstallationVerified(isVerified: boolean): void {
-        this.isInstallationVerifiedSubject$.next(isVerified);
-    }
-
-    public setSerialDevicesToTry(serialDevices: SerialDevice[]) {
-        this.serialDevicesToTrySubject$.next(serialDevices);
-    }
-
-    public setVerifiedSerialDevice(serialDevice: SerialDevice): void {
-        this.verifiedSerialDeviceSubject$.next(serialDevice);
-    }
-
-    public setIsRobotDriverInstalling(isInstalling: boolean): void {
-        this.isRobotDriverInstallingSubject$.next(isInstalling);
-    }
 
     public setIncomingSerialData(data: { time: Date, data: string }): void {
         this.incomingSerialDataSubject$.next(data);

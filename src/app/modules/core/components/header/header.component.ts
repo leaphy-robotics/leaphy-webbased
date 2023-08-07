@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import { AppState } from 'src/app/state/app.state';
-import { RobotWiredState } from 'src/app/state/robot.wired.state';
 import { BackEndState } from 'src/app/state/backend.state';
 import { BlocklyEditorState } from 'src/app/state/blockly-editor.state';
 import { WorkspaceStatus } from 'src/app/domain/workspace.status';
 import { SketchStatus } from 'src/app/domain/sketch.status';
-import { Observable, combineLatest, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 import { HostListener } from '@angular/core';
 import { DialogState } from 'src/app/state/dialog.state';
 import { Language } from 'src/app/domain/language';
@@ -20,7 +17,6 @@ export class HeaderComponent {
 
   constructor(
     public appState: AppState,
-    public robotWiredState: RobotWiredState,
     public backEndState: BackEndState,
     public blocklyState: BlocklyEditorState,
     public dialogState: DialogState,
@@ -82,31 +78,6 @@ export class HeaderComponent {
   public onToggleSoundClicked() {
     this.blocklyState.setIsSoundToggled();
   }
-
-  public onInstallDriverClicked() {
-    this.backEndState.setIsDriverInstalling(true);
-  }
-
-  public onClearLibrariesClicked() {
-    this.backEndState.setIsLibrariesClearing(true);
-  }
-
-  public isBackEndBusy$: Observable<boolean> = combineLatest(
-    [this.robotWiredState.isInstallationVerified$,
-    this.appState.selectedRobotType$,
-    this.blocklyState.sketchStatus$]
-  )
-    .pipe(switchMap(([isVerified, robotType, sketchStatus]) => {
-      return of((!!robotType && !isVerified) || sketchStatus == SketchStatus.Sending);
-    }));
-
-  public canUpload$: Observable<boolean> = combineLatest(
-    [this.robotWiredState.isInstallationVerified$, this.blocklyState.sketchStatus$]
-  )
-    .pipe(switchMap(([isVerified, sketchStatus]) => {
-      return of(isVerified && sketchStatus < SketchStatus.Sending);
-    }));
-
 
   public onLanguageChanged(language: Language) {
     this.appState.setChangedLanguage(language);

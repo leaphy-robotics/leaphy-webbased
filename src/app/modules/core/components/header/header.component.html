@@ -33,8 +33,7 @@
       <button mat-stroked-button (click)="onSaveWorkspaceClicked()">
         <mat-icon>save</mat-icon><span>{{ "SAVE" | translate }}</span>
       </button>
-      <button mat-flat-button *ngIf="appState.selectedRobotType$ | async" (click)="onUploadClicked()"
-        [disabled]="(canUpload$ | async) === false">
+      <button mat-flat-button *ngIf="appState.selectedRobotType$ | async" (click)="onUploadClicked()">
         {{ "UPLOAD" | translate }}
       </button>
     </div>
@@ -89,14 +88,6 @@
   <button mat-menu-item (click)="onViewLogClicked()">
     <mat-icon>article</mat-icon>
     <span>{{ "VIEW_LOG" | translate }}</span>
-  </button>
-  <button mat-menu-item (click)="onInstallDriverClicked()">
-    <mat-icon>settings</mat-icon>
-    <span>{{ "INSTALL_DRIVER" | translate }}</span>
-  </button>
-  <button mat-menu-item (click)="onClearLibrariesClicked()">
-    <mat-icon>settings_backup_restore</mat-icon>
-    <span>{{ "CLEAR_LIBS" | translate }}</span>
   </button>
 </mat-menu>
 
