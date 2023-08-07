@@ -11,7 +11,6 @@ import { DialogState } from 'src/app/state/dialog.state';
 export class BlocklyEditorPage  {
   constructor(
     public blocklyState: BlocklyEditorState,
-    public dialogState: DialogState
   ) {
   }
 }

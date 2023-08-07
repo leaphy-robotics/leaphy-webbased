@@ -8,10 +8,6 @@ import { distinctUntilChanged, scan } from 'rxjs/operators';
 })
 export class DialogState {
 
-  private isConnectDialogVisibleSubject$ = new BehaviorSubject(false);
-  public isConnectDialogVisible$ = this.isConnectDialogVisibleSubject$.asObservable()
-    .pipe(scan((current) => !current));
-
   private connectDialogSubject$: BehaviorSubject<MatDialogRef<unknown, any>> = new BehaviorSubject(null);
   public connectDialog$ = this.connectDialogSubject$.asObservable();
 
@@ -30,10 +26,6 @@ export class DialogState {
 
   private isEditorTypeChangeConfirmationDialogVisibleSubject$ = new BehaviorSubject(false);
   public isEditorTypeChangeConfirmationDialogVisible$ = this.isEditorTypeChangeConfirmationDialogVisibleSubject$.asObservable();
-
-  public toggleIsConnectDialogVisible() {
-    this.isConnectDialogVisibleSubject$.next(true);
-  }
 
   public setConnectDialog(dialogRef: MatDialogRef<unknown, any>) {
     this.connectDialogSubject$.next(dialogRef);

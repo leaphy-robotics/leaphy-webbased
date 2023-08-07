@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 
 import { HeaderComponent } from './components/header/header.component';
@@ -8,7 +8,6 @@ import { StartComponent } from './components/start/start.component';
 
 import { ConnectWiredDialog } from './dialogs/connect.wired/connect.wired.dialog';
 import { ConnectCloudDialog } from './dialogs/connect.cloud/connect.cloud.dialog';
-import { InstallDriverDialog } from './dialogs/install-driver/install-driver.dialog';
 import { StatusMessageDialog } from './dialogs/status-message/status-message.dialog';
 import { CreditsDialog } from './dialogs/credits/credits.dialog';
 import { InfoDialog } from './dialogs/info/info.dialog';
@@ -21,7 +20,6 @@ import {NameFileDialog} from "./dialogs/name-file/name-file.dialog";
   declarations: [
     ConnectWiredDialog,
     ConnectCloudDialog,
-    InstallDriverDialog,
     ConfirmEditorDialog,
     HeaderComponent,
     RobotSelectionComponent,
@@ -34,16 +32,16 @@ import {NameFileDialog} from "./dialogs/name-file/name-file.dialog";
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    NgOptimizedImage
   ],
-  entryComponents: [ConnectWiredDialog, ConnectCloudDialog, InstallDriverDialog, ConfirmEditorDialog, StatusMessageDialog, CreditsDialog, LanguageSelectDialog, InfoDialog],
+  entryComponents: [ConnectWiredDialog, ConnectCloudDialog, ConfirmEditorDialog, StatusMessageDialog, CreditsDialog, LanguageSelectDialog, InfoDialog],
   exports: [
     HeaderComponent,
     StartComponent,
     RobotSelectionComponent,
     ConnectCloudDialog,
     ConnectWiredDialog,
-    InstallDriverDialog,
     ConfirmEditorDialog,
     StatusMessageDialog,
     CreditsDialog,

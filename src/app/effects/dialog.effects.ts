@@ -5,7 +5,6 @@ import { DialogState } from '../state/dialog.state';
 import { ConnectWiredDialog } from '../modules/core/dialogs/connect.wired/connect.wired.dialog';
 import { BackEndState } from '../state/backend.state';
 import { ConnectionStatus } from '../domain/connection.status';
-import { InstallDriverDialog } from '../modules/core/dialogs/install-driver/install-driver.dialog';
 import { CreditsDialog } from '../modules/core/dialogs/credits/credits.dialog';
 import { RobotWiredState } from '../state/robot.wired.state';
 import { InfoDialog } from '../modules/core/dialogs/info/info.dialog';
@@ -13,7 +12,6 @@ import { AppState } from '../state/app.state';
 import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/confirm-editor.dialog';
 import { CodeEditorState } from '../state/code-editor.state';
 import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/language-select.dialog';
-import {NameFileDialog} from "../modules/core/dialogs/name-file/name-file.dialog";
 
 @Injectable({
     providedIn: 'root',
@@ -76,20 +74,6 @@ export class DialogEffects {
                 this.dialogState.setIsSerialOutputWindowOpen(true);
             });
 
-        const showInstallDriverDialog = () => {
-            const installDriverDialogComponent = InstallDriverDialog;
-            const installDriverDialogRef = this.dialog.open(installDriverDialogComponent, {
-                width: '450px',
-                disableClose: true,
-            });
-            this.dialogState.setConnectDialog(installDriverDialogRef);
-        }
-
-        // If driver install is requested, show the dialog
-        this.backEndState.isDriverInstalling$
-            .pipe(filter(install => !!install))
-            .subscribe(showInstallDriverDialog);
-
         // If the editor change needs confirmation, show the confirmation dialog
         this.appState.isCodeEditorToggleRequested$
             .pipe(withLatestFrom(this.appState.isCodeEditorToggleConfirmed$, this.codeEditorState.isDirty$))
@@ -111,9 +95,6 @@ export class DialogEffects {
             .pipe(filter(message => !!message))
             .subscribe(message => {
                 switch (message.event) {
-                    case 'DRIVER_INSTALLATION_REQUIRED':
-                        showInstallDriverDialog();
-                        break;
                     case 'FIRST_RUN':
 
                         const languageSelectionDialogComponent = LanguageSelectDialog;
@@ -131,9 +112,7 @@ export class DialogEffects {
                             });
                             this.dialogState.setConnectDialog(creditsDialogRef);
                         });
-
                         break;
-
                     default:
                         break;
                 }
