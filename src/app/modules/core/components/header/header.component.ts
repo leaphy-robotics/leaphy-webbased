@@ -22,7 +22,9 @@ export class HeaderComponent {
     public blocklyState: BlocklyEditorState,
     public dialogState: DialogState,
     private router: Router
-  ) { }
+  ) {
+
+  }
 
   public onNewProjectClicked() {
     this.appState.setSelectedRobotType(null);

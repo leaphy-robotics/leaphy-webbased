@@ -203,7 +203,7 @@ export class BackendWiredEffects {
         });
 
         fileNamesDialogRef.afterClosed().subscribe((name: string) => {
-          const data = this.blocklyEditorState.code;
+          const data = this.blocklyEditorState.workspaceXml;
           const blob = new Blob([data], {type: 'text/plain'});
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
@@ -215,6 +215,7 @@ export class BackendWiredEffects {
           // delete a after it is clicked
           a.remove();
         })
+        break;
       case 'compile':
         console.log('compiling');
         const source_code = this.blocklyEditorState.code;
@@ -247,9 +248,36 @@ export class BackendWiredEffects {
       case 'open-log-file':
         alert("To open the log, go to the console of your browser");
         break;
+      case 'restore-workspace':
+        var input = document.createElement('input');
+        input.type = 'file';
+
+        input.onchange = e => {
+
+          // getting a hold of the file reference
+          // @ts-ignore
+          var file = e.target.files[0];
+
+          // setting up the reader
+          var reader = new FileReader();
+          reader.readAsText(file,'UTF-8');
+
+          // here we tell the reader what to do when it's done reading...
+          reader.onload = readerEvent => {
+            const data = readerEvent.target.result; // this is the content!
+            this.backEndState.setBackendMessage({event: 'WORKSPACE_RESTORING', message: 'WORKSPACE_RESTORING', payload: { projectFilePath: file.path, data }, displayTimeout: 2000});
+          }
+
+        }
+
+        input.click();
+
+        break;
       default:
         console.log(channel);
         break;
     }
   }
+
+
 }

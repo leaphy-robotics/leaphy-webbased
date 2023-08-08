@@ -78,5 +78,7 @@
   "SIGNATURE_MISMATCH": "Het ID van de robot komt niet overeen, gebruik je wel de juiste robot?",
   "OPTIONS_NOT_ACCEPTED": "De robot accepteert de opties niet, probeer het opnieuw",
   "LEAVE_UPLOADING": "Ga terug naar code scherm",
-  "UPLOADING_ISSUE_HELP": "Klik hier voor upload hulp"
+  "UPLOADING_ISSUE_HELP": "Klik hier voor upload hulp",
+  "GIVE_FILENAME": "Geef een bestandsnaam",
+  "GO_BACK_TO_BLOCKS": "Ga terug naar blokken"
 }

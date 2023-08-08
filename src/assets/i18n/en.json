@@ -78,5 +78,7 @@
   "SIGNATURE_MISMATCH": "Signature mismatch, are you sure this is the right Robot?",
   "OPTIONS_NOT_ACCEPTED": "Options not accepted, try again",
   "LEAVE_UPLOADING": "Go back to editor",
-  "UPLOADING_ISSUE_HELP": "Go to upload issue page"
+  "UPLOADING_ISSUE_HELP": "Go to upload issue page",
+  "GIVE_FILENAME": "Give your download a name",
+  "GO_BACK_TO_BLOCKS": "Go back to blocks"
 }

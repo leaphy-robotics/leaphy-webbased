@@ -14,6 +14,9 @@
           {{ "MORE" | translate }}
         </button>
       </ng-container>
+      <ng-container *ngIf="!isDriverIssuesUrl()">
+        <button mat-stroked-button class="back-to-blocks" (click)="onBackToBlocks()">{{ "GO_BACK_TO_BLOCKS" | translate }}</button>
+      </ng-container>
     </div>
 
     <div class="flex-buttons">
@@ -108,7 +111,5 @@
   </button>
 </mat-menu>
 
-<ng-container *ngIf="!isDriverIssuesUrl()">
-  <button mat-stroked-button class="back-to-blocks" (click)="onBackToBlocks()">{{ "GO_BACK_TO_BLOCKS" | translate }}</button>
-</ng-container>
+
 

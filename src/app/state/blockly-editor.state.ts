@@ -16,9 +16,13 @@ declare var Prism: any;
   providedIn: "root",
 })
 export class BlocklyEditorState {
-  
+
   constructor(private localStorage: LocalStorageService){
-    const isSoundOn = this.localStorage.fetch<boolean>("isSoundOn");
+    var isSoundOn = this.localStorage.fetch<boolean>("isSoundOn");
+    if (isSoundOn === null) {
+      this.localStorage.store("isSoundOn", true);
+      isSoundOn = true;
+    }
     this.isSoundOnSubject$ = new BehaviorSubject<boolean>(isSoundOn);
     this.isSoundOn$ = this.isSoundOnSubject$.asObservable();
   }
@@ -170,5 +174,9 @@ export class BlocklyEditorState {
 
   get code(): string {
     return this.codeSubject$.getValue();
+  }
+
+  get workspaceXml(): string {
+    return this.workspaceXmlSubject$.getValue();
   }
 }
