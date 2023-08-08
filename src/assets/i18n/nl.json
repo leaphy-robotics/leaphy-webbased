@@ -70,5 +70,13 @@
   "EDITORCHANGE_CANCEL": "Ik ga ze eerst opslaan",
   "EDITORCHANGE_CONFIRM": "Dat is oké",
   "EDITORCHANGEINSTRUCTIONS": "Je hebt onopgeslagen wijzigingen. Als je nu naar het Blokken-scherm gaat, ben je die kwijt.",
-  "CLEAR_LIBS": "Herstel bibliotheken"
+  "CLEAR_LIBS": "Herstel bibliotheken",
+  "NAME_VARIABLE_PROMPT_INPUT": "Geef een naam voor de variabele",
+  "NO_DEVICE_SELECTED": "Geen robot geselecteerd",
+  "COULD_NOT_CONNECT": "Kan geen verbinding maken met de robot",
+  "NOT_IN_SYNC": "De robot is niet in sync, probeer het opnieuw",
+  "SIGNATURE_MISMATCH": "Het ID van de robot komt niet overeen, gebruik je wel de juiste robot?",
+  "OPTIONS_NOT_ACCEPTED": "De robot accepteert de opties niet, probeer het opnieuw",
+  "LEAVE_UPLOADING": "Ga terug naar code scherm",
+  "UPLOADING_ISSUE_HELP": "Klik hier voor upload hulp"
 }

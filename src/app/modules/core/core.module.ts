@@ -14,8 +14,8 @@ import { InfoDialog } from './dialogs/info/info.dialog';
 import { ConfirmEditorDialog } from './dialogs/confirm-editor/confirm-editor.dialog';
 import { LanguageSelectDialog } from './dialogs/language-select/language-select.dialog';
 import {NameFileDialog} from "./dialogs/name-file/name-file.dialog";
-
-
+import {VariableDialog} from "./dialogs/variable/variable.dialog";
+import {UploadDialog} from "./dialogs/upload/upload.dialog";
 @NgModule({
   declarations: [
     ConnectWiredDialog,
@@ -28,6 +28,8 @@ import {NameFileDialog} from "./dialogs/name-file/name-file.dialog";
     CreditsDialog,
     LanguageSelectDialog,
     NameFileDialog,
+    VariableDialog,
+    UploadDialog,
     InfoDialog
   ],
   imports: [

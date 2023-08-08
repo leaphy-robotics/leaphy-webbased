@@ -2,40 +2,50 @@
   <img src="./assets/leaphy-logo.svg" class="header-logo" />
   <div class="flex-header">
     <div class="flex-buttons">
-      <button mat-stroked-button [matMenuTriggerFor]="projectMenu" *ngIf="appState.selectedRobotType$ | async">
-        {{ "PROJECT" | translate }}
-      </button>
-      <button mat-stroked-button [matMenuTriggerFor]="helpMenu" *ngIf="appState.selectedRobotType$ | async">
-        {{ "HELP" | translate }}
-      </button>
-      <button mat-stroked-button [matMenuTriggerFor]="moreMenu" *ngIf="appState.selectedRobotType$ | async">
-        {{ "MORE" | translate }}
-      </button>
+      <!-- Add ngIf to check for URL ending with "driverissues" -->
+      <ng-container *ngIf="isDriverIssuesUrl() && this.appState.selectedRobotType$ | async">
+        <button mat-stroked-button [matMenuTriggerFor]="projectMenu">
+          {{ "PROJECT" | translate }}
+        </button>
+        <button mat-stroked-button [matMenuTriggerFor]="helpMenu">
+          {{ "HELP" | translate }}
+        </button>
+        <button mat-stroked-button [matMenuTriggerFor]="moreMenu">
+          {{ "MORE" | translate }}
+        </button>
+      </ng-container>
     </div>
 
-    <div class="flex-buttons" *ngIf="appState.selectedRobotType$ | async">
-      <button mat-stroked-button class="icon-button" (click)="onUndoClicked()">
-        <mat-icon>undo</mat-icon>
-      </button>
-
-      <button mat-stroked-button class="icon-button" (click)="onRedoClicked()">
-        <mat-icon>redo</mat-icon>
-      </button>
+    <div class="flex-buttons">
+      <!-- Add ngIf to check for URL ending with "driverissues" -->
+      <ng-container *ngIf="isDriverIssuesUrl()  && this.appState.selectedRobotType$ | async">
+        <button mat-stroked-button class="icon-button" (click)="onUndoClicked()">
+          <mat-icon>undo</mat-icon>
+        </button>
+        <button mat-stroked-button class="icon-button" (click)="onRedoClicked()">
+          <mat-icon>redo</mat-icon>
+        </button>
+      </ng-container>
     </div>
 
-    <div class="flex-buttons" *ngIf="appState.selectedRobotType$ | async">
-      <button mat-stroked-button [disabled]="(appState.canChangeCodeEditor$ | async) === false"  *ngIf="(appState.codeEditorType$ | async) === 1" (click)="onCodeEditorClicked()">
-        <mat-icon>editor</mat-icon><span>{{ "CODE" | translate }}</span>
-      </button>
-      <button mat-stroked-button [disabled]="(appState.canChangeCodeEditor$ | async) === false" *ngIf="(appState.codeEditorType$ | async) === 2" (click)="onCodeEditorClicked()">
-        <mat-icon id="block-icon" svgIcon="block"></mat-icon><span>{{ "BLOCKS" | translate }}</span>
-      </button>
-      <button mat-stroked-button (click)="onSaveWorkspaceClicked()">
-        <mat-icon>save</mat-icon><span>{{ "SAVE" | translate }}</span>
-      </button>
-      <button mat-flat-button *ngIf="appState.selectedRobotType$ | async" (click)="onUploadClicked()">
-        {{ "UPLOAD" | translate }}
-      </button>
+    <div class="flex-buttons">
+      <!-- Add ngIf to check for URL ending with "driverissues" -->
+      <ng-container *ngIf="isDriverIssuesUrl() && this.appState.selectedRobotType$ | async">
+        <button mat-stroked-button [disabled]="(appState.canChangeCodeEditor$ | async) === false"
+                *ngIf="(appState.codeEditorType$ | async) === 1" (click)="onCodeEditorClicked()">
+          <mat-icon>editor</mat-icon><span>{{ "CODE" | translate }}</span>
+        </button>
+        <button mat-stroked-button [disabled]="(appState.canChangeCodeEditor$ | async) === false"
+                *ngIf="(appState.codeEditorType$ | async) === 2" (click)="onCodeEditorClicked()">
+          <mat-icon id="block-icon" svgIcon="block"></mat-icon><span>{{ "BLOCKS" | translate }}</span>
+        </button>
+        <button mat-stroked-button (click)="onSaveWorkspaceClicked()">
+          <mat-icon>save</mat-icon><span>{{ "SAVE" | translate }}</span>
+        </button>
+        <button mat-flat-button *ngIf="appState.selectedRobotType$ | async" (click)="onUploadClicked()">
+          {{ "UPLOAD" | translate }}
+        </button>
+      </ng-container>
     </div>
   </div>
 </mat-toolbar>
@@ -97,3 +107,8 @@
     <span [class.selected]="language.code === (appState.currentLanguage$ | async)?.code">{{language.name}}</span>
   </button>
 </mat-menu>
+
+<ng-container *ngIf="!isDriverIssuesUrl()">
+  <button mat-stroked-button class="back-to-blocks" (click)="onBackToBlocks()">{{ "GO_BACK_TO_BLOCKS" | translate }}</button>
+</ng-container>
+

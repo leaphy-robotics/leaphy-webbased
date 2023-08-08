@@ -156,7 +156,14 @@ export class AppState {
     }
 
     public setSelectedCodeEditor(codeEditor: CodeEditorType) {
-        this.selectedCodeEditorTypeSubject$.next(codeEditor);
+      this.selectedCodeEditorTypeSubject$.next(codeEditor);
     }
 
+    public getCurrentLanguageCode(): string {
+        return this.currentLanguageSubject$.getValue().code;
+    }
+
+    public getCurrentEditor(): CodeEditorType {
+        return this.selectedCodeEditorTypeSubject$.getValue();
+    }
 }

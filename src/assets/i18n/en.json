@@ -70,5 +70,13 @@
   "EDITORCHANGE_CANCEL": "I'll save them first",
   "EDITORCHANGE_CONFIRM": "That's okay",
   "EDITORCHANGEINSTRUCTIONS": "You have unsaved changes. If you go to the block-editor now, they will be lost.",
-  "CLEAR_LIBS": "Restore libraries"
+  "CLEAR_LIBS": "Restore libraries",
+  "NAME_VARIABLE_PROMPT_INPUT": "Enter a name for your variable:",
+  "NO_DEVICE_SELECTED": "No robot selected",
+  "COULD_NOT_CONNECT": "Could not connect to robot",
+  "NOT_IN_SYNC": "Robot not in sync, please reconnect",
+  "SIGNATURE_MISMATCH": "Signature mismatch, are you sure this is the right Robot?",
+  "OPTIONS_NOT_ACCEPTED": "Options not accepted, try again",
+  "LEAVE_UPLOADING": "Go back to editor",
+  "UPLOADING_ISSUE_HELP": "Go to upload issue page"
 }
