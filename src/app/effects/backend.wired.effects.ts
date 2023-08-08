@@ -2,7 +2,6 @@ import {Injectable, NgZone} from '@angular/core';
 import {BlocklyEditorState} from '../state/blockly-editor.state';
 import {filter, withLatestFrom} from 'rxjs/operators';
 import {BackEndState} from '../state/backend.state';
-//import { IpcRenderer } from 'electron';
 import {SketchStatus} from '../domain/sketch.status';
 import {BackEndMessage} from '../domain/backend.message';
 import {ConnectionStatus} from '../domain/connection.status';
@@ -13,7 +12,9 @@ import {DialogState} from '../state/dialog.state';
 import {CodeEditorType} from '../domain/code-editor.type';
 import {NameFileDialog} from "../modules/core/dialogs/name-file/name-file.dialog";
 import {MatDialog} from "@angular/material/dialog";
-import {UploadService} from "../services/upload.service";
+import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
+import {UploadDialog} from "../modules/core/dialogs/upload/upload.dialog";
+import {Router} from "@angular/router";
 
 declare var Blockly: any;
 
@@ -24,10 +25,7 @@ declare var Blockly: any;
 // Defines the effects on the Electron environment that different state changes have
 export class BackendWiredEffects {
 
-  //private ipc: IpcRenderer | undefined;
-  private upload: UploadService = new UploadService();
-
-  constructor(private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
+  constructor(private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
     // Only set up these effects when we're in Desktop mode
     this.appState.isDesktop$
       .pipe(filter(isDesktop => !!isDesktop))
@@ -38,17 +36,12 @@ export class BackendWiredEffects {
           // Replace the Prompt used by Blockly Variables with something that works in Electron
           //const electronPrompt = window.require('electron-prompt')
           Blockly.prompt = (msg, defaultValue, callback) => {
-            // TODO: This is a hack to get around the fact that the Electron prompt doesn't work
-            //electronPrompt
-            //    ({
-            //        title: 'Variable',
-            //        label: msg,
-            //        type: 'input',
-            //        height: 180
-            //    })
-            //    .then(name => {
-            //        callback(name);
-            //    })
+            this.dialog.open(VariableDialog, {
+              width: '400px',
+              data: {name: defaultValue}
+            }).afterClosed().subscribe(result => {
+              callback(result);
+            });
           }
         } catch (e) {
           console.log(e);
@@ -210,7 +203,7 @@ export class BackendWiredEffects {
         });
 
         fileNamesDialogRef.afterClosed().subscribe((name: string) => {
-          const data = this.blocklyEditorState.code;
+          const data = this.blocklyEditorState.workspaceXml;
           const blob = new Blob([data], {type: 'text/plain'});
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
@@ -222,6 +215,7 @@ export class BackendWiredEffects {
           // delete a after it is clicked
           a.remove();
         })
+        break;
       case 'compile':
         console.log('compiling');
         const source_code = this.blocklyEditorState.code;
@@ -229,50 +223,61 @@ export class BackendWiredEffects {
         const board = args[0].fqbn;
 
         // make a request to the backend to compile the code
-        function makeRequest(source_code, board, libraries) {
-            return new Promise((resolve, reject) => {
-              const xhr = new XMLHttpRequest();
-              xhr.open('POST', 'https://webservice.leaphyeasybloqs.com/compile/cpp', true);
-              xhr.setRequestHeader('Content-Type', 'application/json');
-
-              xhr.onload = () => {
-                if (xhr.status === 200) {
-                  resolve(xhr.response);
-                } else {
-                  reject(new Error('Request failed: ' + xhr.status));
-                }
-                xhr.abort();
-              };
-
-              xhr.onerror = () => {
-                reject(new Error('Network error'));
-              };
-
-              xhr.responseType = 'json'; // Change the responseType to 'json'
-              xhr.send(JSON.stringify({source_code, board, libraries}));
-            });
-        }
 
         try {
-          const response = await makeRequest(source_code, board, libraries);
-          const hex = response['hex']; // Extract the "hex" property from the response
+          this.dialog.open(UploadDialog, {
+            width: '450px', disableClose: true,
+            data: {source_code: source_code, libraries: libraries, board: board}
+          }).afterClosed().subscribe((result) => {
+            console.log(result);
+            if (result) {
+              if (result == "HELP_ENVIRONMENT") {
+                const langcode = this.appState.getCurrentLanguageCode();
+                console.log(langcode);
+                this.router.navigateByUrl('/' + langcode + '/driverissues', { skipLocationChange: true });
+              }
+            }
+          });
 
-          console.log('Success!', hex);
-          if ('serial' in navigator) {
-              // @ts-ignore
-            await this.upload.upload(hex);
-          } else {
-            console.log('Web serial doesn\'t seem to be enabled in your browser. Try enabling it by visiting:');
-            console.log('chrome://flags/#enable-experimental-web-platform-features');
-          }
 
         } catch (error) {
           console.log('Error:', error.message);
         }
 
         break;
+      case 'open-log-file':
+        alert("To open the log, go to the console of your browser");
+        break;
+      case 'restore-workspace':
+        var input = document.createElement('input');
+        input.type = 'file';
+
+        input.onchange = e => {
+
+          // getting a hold of the file reference
+          // @ts-ignore
+          var file = e.target.files[0];
+
+          // setting up the reader
+          var reader = new FileReader();
+          reader.readAsText(file,'UTF-8');
+
+          // here we tell the reader what to do when it's done reading...
+          reader.onload = readerEvent => {
+            const data = readerEvent.target.result; // this is the content!
+            this.backEndState.setBackendMessage({event: 'WORKSPACE_RESTORING', message: 'WORKSPACE_RESTORING', payload: { projectFilePath: file.path, data }, displayTimeout: 2000});
+          }
+
+        }
+
+        input.click();
+
+        break;
       default:
         console.log(channel);
+        break;
     }
   }
+
+
 }

@@ -13,6 +13,7 @@
     "target": "es2015",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
+    "allowJs": true,
     "typeRoots": [
       "node_modules/@types"
     ],

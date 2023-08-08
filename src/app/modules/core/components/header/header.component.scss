@@ -1,10 +1,13 @@
 .header-container {
   background-color: var(--leaphy-color-primary);
+  padding: 10px 0; /* Added padding to prevent content from being too close to the edges */
 }
 
 .header-logo {
   height: 18px;
   width: auto;
+  max-width: fit-content; /* Added max-width to prevent the logo from overflowing */
+  padding-left: 10px;
 }
 
 button {
@@ -33,6 +36,7 @@ button {
   font-size: 12px;
   font-weight: normal;
   border-radius: 20px;
+  padding: 5px 15px; /* Added padding to buttons */
 }
 
 #block-icon {
@@ -41,7 +45,7 @@ button {
 
 [mat-flat-button] {
   background-color: var(--leaphy-color-secundary);
-  border-color: none;
+  border: none;
 }
 
 mat-button-toggle-group {
@@ -56,10 +60,7 @@ mat-button-toggle {
   font-weight: normal;
 }
 
-::ng-deep
-  .mat-button-toggle-group-appearance-standard
-  .mat-button-toggle
-  + .mat-button-toggle {
+::ng-deep .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
   border-color: var(--leaphy-color-secundary);
 }
 
@@ -69,9 +70,7 @@ mat-button-toggle {
   font-weight: bold;
 }
 
-::ng-deep
-  .mat-button-toggle-appearance-standard
-  .mat-button-toggle-label-content {
+::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
   line-height: 10px;
 }
 
@@ -105,7 +104,8 @@ button mat-icon + span {
   justify-content: space-between;
   align-items: center;
   padding-left: 40px;
-  width: 100%;
+  padding-right: 40px; /* Added padding to prevent content from being too close to the edges */
+  width: 100vw;
 }
 
 .flex-buttons {

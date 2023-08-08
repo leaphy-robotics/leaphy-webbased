@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
-import { AppState } from 'src/app/state/app.state';
-import { BackEndState } from 'src/app/state/backend.state';
-import { BlocklyEditorState } from 'src/app/state/blockly-editor.state';
-import { WorkspaceStatus } from 'src/app/domain/workspace.status';
-import { SketchStatus } from 'src/app/domain/sketch.status';
-import { HostListener } from '@angular/core';
-import { DialogState } from 'src/app/state/dialog.state';
-import { Language } from 'src/app/domain/language';
+import {Component, HostListener} from '@angular/core';
+import {AppState} from 'src/app/state/app.state';
+import {BackEndState} from 'src/app/state/backend.state';
+import {BlocklyEditorState} from 'src/app/state/blockly-editor.state';
+import {WorkspaceStatus} from 'src/app/domain/workspace.status';
+import {SketchStatus} from 'src/app/domain/sketch.status';
+import {DialogState} from 'src/app/state/dialog.state';
+import {Language} from 'src/app/domain/language';
+import {Router} from "@angular/router";
+import {CodeEditorType} from "../../../../domain/code-editor.type";
 
 @Component({
   selector: 'app-header',
@@ -20,7 +21,10 @@ export class HeaderComponent {
     public backEndState: BackEndState,
     public blocklyState: BlocklyEditorState,
     public dialogState: DialogState,
-  ) { }
+    private router: Router
+  ) {
+
+  }
 
   public onNewProjectClicked() {
     this.appState.setSelectedRobotType(null);
@@ -67,6 +71,10 @@ export class HeaderComponent {
     this.appState.setShowHelpPage(true);
   }
 
+  isDriverIssuesUrl(): boolean {
+    return !(this.router.url.endsWith('driverissues'));
+  }
+
   public onShowInfoClicked() {
     this.dialogState.setIsInfoDialogVisible(true);
   }
@@ -81,6 +89,13 @@ export class HeaderComponent {
 
   public onLanguageChanged(language: Language) {
     this.appState.setChangedLanguage(language);
+  }
+
+  public onBackToBlocks() {
+    if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
+      this.router.navigateByUrl('', { skipLocationChange: true });
+    else
+      this.router.navigateByUrl('/advanced', { skipLocationChange: true });
   }
 }
 
