@@ -5589,10 +5589,10 @@ klona@^2.0.4, klona@^2.0.5:
   resolved "https://registry.npmjs.org/klona/-/klona-2.0.6.tgz"
   integrity sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==
 
-leaphy-blockly@^3.0.1:
-  version "3.0.2"
-  resolved "https://registry.npmjs.org/leaphy-blockly/-/leaphy-blockly-3.0.2.tgz"
-  integrity sha512-18+saStpqcQ75xKbE8s46l7sngajNBm0OQdzrFb3VRTdFGy9BMW8t5N1v6FbRE5HccNDhC6Vv2RN+MXv8Kogjg==
+leaphy-blockly@3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/leaphy-blockly/-/leaphy-blockly-3.0.1.tgz#63ea44b0f8e2a81c9615ba12573d6178504dc2ed"
+  integrity sha512-1sfROm0fqbt67CnQgX+tgcKjGv06xt6MIlU/jOPY6WK0Sg7gUjDNBqY0i5FJoNw2nVQIFHJTA5nB87zkyl71XA==
   dependencies:
     jsdom "15.2.1"
 
