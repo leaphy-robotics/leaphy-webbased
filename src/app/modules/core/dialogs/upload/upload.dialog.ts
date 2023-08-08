@@ -1,7 +1,5 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import { Language } from 'src/app/domain/language';
-import { AppState } from 'src/app/state/app.state';
 import {TranslateService} from "@ngx-translate/core";
 import ArduinoUploader from "../../../../services/webserial/ArduinoUploader";
 

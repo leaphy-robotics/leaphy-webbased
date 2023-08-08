@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Language } from 'src/app/domain/language';
 import { AppState } from 'src/app/state/app.state';
 
 @Component({

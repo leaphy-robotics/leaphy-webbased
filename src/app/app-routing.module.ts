@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {DriverIssuesEnglishModule} from "./modules/driver-issues-english/driver-issues.module";
 
 
 const routes: Routes = [
