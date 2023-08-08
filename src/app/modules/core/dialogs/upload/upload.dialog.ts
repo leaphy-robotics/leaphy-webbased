@@ -64,9 +64,11 @@ export class UploadDialog {
       } catch (error) {
         if (error.toString() === 'Error: No device selected') {
           this.onUpdate('NO_DEVICE_SELECTED')
+          this.showReturnOptions();
           console.error(error);
         } else {
           this.onUpdate('DRIVER_ERROR')
+          this.showReturnOptions();
           console.error(error);
         }
         return;
@@ -84,8 +86,8 @@ export class UploadDialog {
       this.onUpdate('UPDATE_COMPLETE')
       this.showReturnOptions();
     } else {
-      console.log('Web serial doesn\'t seem to be enabled in your browser. Try enabling it by visiting:');
-      console.log('chrome://flags/#enable-experimental-web-platform-features');
+      this.onUpdate('NO_SERIAL_SUPPORT')
+      this.showReturnOptions();
     }
   }
   onUpdate(message: string) {

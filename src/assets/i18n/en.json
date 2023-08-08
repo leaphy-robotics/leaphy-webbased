@@ -80,5 +80,6 @@
   "LEAVE_UPLOADING": "Go back to editor",
   "UPLOADING_ISSUE_HELP": "Go to upload issue page",
   "GIVE_FILENAME": "Give your download a name",
-  "GO_BACK_TO_BLOCKS": "Go back to blocks"
+  "GO_BACK_TO_BLOCKS": "Go back to blocks",
+  "NO_SERIAL_SUPPORT": "No web serial supported on your browser, look at the upload issue page for more information"
 }
