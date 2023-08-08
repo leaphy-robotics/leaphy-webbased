@@ -99,6 +99,9 @@ export class UploadDialog {
 
   showReturnOptions() {
     document.getElementById("return-options").classList.remove("hidden");
+    document.getElementById("upload-progress-bar").classList.add("hidden");
+    document.getElementById("return-options").classList.add("return-options");
+
   }
 
   returnBlockEnvironment() {
