@@ -26,6 +26,7 @@ export class UploadDialog {
   }
 
   public async startUpload(source_code: string, board: string, libraries: string) {
+    console.log("Starting upload");
     const uploader = new ArduinoUploader();
     function makeRequest(source_code, board, libraries) {
       return new Promise((resolve, reject) => {
@@ -57,7 +58,6 @@ export class UploadDialog {
     this.onUpdate('COMPILATION_COMPLETE');
 
     if ('serial' in navigator) {
-      // @ts-ignore
       try {
         await this.upload.connect();
         this.progressBarWidth += 25;
@@ -78,17 +78,17 @@ export class UploadDialog {
         await this.upload.upload(hex, (message: string) => { this.onUpdate(message) });
       } catch (error) {
         // close dialog
-        this.onUpdate('UPDATE_FAILED')
         this.showReturnOptions();
         console.error(error);
 
       }
-      this.onUpdate('UPDATE_COMPLETE')
       this.showReturnOptions();
-    } else {
+    }
+    else {
       this.onUpdate('NO_SERIAL_SUPPORT')
       this.showReturnOptions();
     }
+    console.log("Finished upload");
   }
   onUpdate(message: string) {
     if (message.endsWith("%")) {
