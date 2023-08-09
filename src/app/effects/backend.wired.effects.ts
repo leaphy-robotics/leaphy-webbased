@@ -217,12 +217,9 @@ export class BackendWiredEffects {
         })
         break;
       case 'compile':
-        console.log('compiling');
         const source_code = this.blocklyEditorState.code;
         const libraries = args[0].libs;
         const board = args[0].fqbn;
-
-        // make a request to the backend to compile the code
 
         try {
           this.dialog.open(UploadDialog, {
