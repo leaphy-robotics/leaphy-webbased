@@ -25,7 +25,7 @@ class Arduino {
     var port;
     try {
       // @ts-ignore
-      port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}]});
+      port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}]});
     } catch (error) {
       console.error(error)
       throw new Error('No device selected')
