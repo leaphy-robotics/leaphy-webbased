@@ -203,17 +203,32 @@ export class BackendWiredEffects {
         });
 
         fileNamesDialogRef.afterClosed().subscribe((name: string) => {
-          const data = this.blocklyEditorState.workspaceXml;
-          const blob = new Blob([data], {type: 'text/plain'});
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = name + '.ino';
+          console.log(this.appState.getCurrentEditor())
+          if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+            const data = this.blocklyEditorState.workspaceXml;
+            const blob = new Blob([data], {type: 'text/plain'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name + '.leaphy';
 
-          a.click();
-          window.URL.revokeObjectURL(url);
-          // delete a after it is clicked
-          a.remove();
+            a.click();
+            window.URL.revokeObjectURL(url);
+            // delete a after it is clicked
+            a.remove();
+          } else {
+            const data = this.blocklyEditorState.code;
+            const blob = new Blob([data], {type: 'text/plain'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = name + '.ino';
+
+            a.click();
+            window.URL.revokeObjectURL(url);
+            // delete a after it is clicked
+            a.remove();
+          }
         })
         break;
       case 'compile':
