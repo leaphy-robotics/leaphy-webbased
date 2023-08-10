@@ -12,7 +12,7 @@
   "INSTALL": "OK, ga ik doen!",
   "PROJECT": "Mijn projecten",
   "HELP": "Tips",
-  "HELP_FORUM": "Dokter Leaphy Forum",
+  "HELP_FORUM": "Leaphy Discord (Help Forum)",
   "MORE": "Meer...",
   "MORE_ABOUT": "Over Easybloqs",
   "UPLOAD": "Upload naar robot",
@@ -39,7 +39,7 @@
   "WORKSPACE_RESTORE_CANCELLED": "Project laden geannuleerd",
   "WORKSPACE_SAVE_CANCELLED": "Project opslaan geannuleerd",
   "WORKSPACE_SAVED": "Project opgeslagen",
-  "SERIAL_OUTPUT": "Toon op scherm",
+  "SERIAL_OUTPUT": "Toon output op scherm",
   "CREDITS_INTRODUCTION": "EASYBLOQS is een educatief open source product van",
   "CREDITS_SUPPORT": "Gemaakt met steun van de",
   "CREDITS_CONTRIBUTERS_INTRO": "Iedereen die eraan bij heeft gedragen:",
@@ -82,4 +82,5 @@
   "GIVE_FILENAME": "Geef een bestandsnaam",
   "GO_BACK_TO_BLOCKS": "Ga terug naar blokken",
   "NO_SERIAL_SUPPORT": "Geen seriële verbinding mogelijk vanwege de browser, kijk naar de upload hulp voor meer informatie",
+  "CHOOSE_ROBOT": "Kies een robot"
 }

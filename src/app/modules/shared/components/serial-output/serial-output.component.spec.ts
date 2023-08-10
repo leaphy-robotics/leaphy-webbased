@@ -23,3 +23,4 @@ describe('SerialOutputComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+

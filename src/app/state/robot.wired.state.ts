@@ -3,12 +3,21 @@ import { ChartDataset } from 'chart.js';
 import { ReplaySubject } from 'rxjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, scan } from 'rxjs/operators';
-import {SerialPort} from "serialport";
+
 
 @Injectable({
     providedIn: 'root'
 })
 export class RobotWiredState {
+
+    private serialPortSubject$: BehaviorSubject<SerialPort> = new BehaviorSubject(null);
+    public serialPort$: Observable<SerialPort> = this.serialPortSubject$.asObservable();
+
+    private abortControllerSubject$: BehaviorSubject<AbortController> = new BehaviorSubject(null);
+    public abortController$: Observable<AbortController> = this.abortControllerSubject$.asObservable();
+
+    private isSerialOutputStillListening$ = new BehaviorSubject(false);
+    public isSerialOutputStillListening = this.isSerialOutputStillListening$.asObservable();
 
     private incomingSerialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
     public serialData$: Observable<{ time: Date, data: string }[]> = this.incomingSerialDataSubject$
@@ -16,6 +25,9 @@ export class RobotWiredState {
         .pipe(scan((all, incoming) => {
             if (incoming.data === this.poisonPill) {
                 return [];
+            }
+            if (all.length > 100) {
+                return all.slice(1).concat(incoming);
             }
             return all.concat(incoming);
         }, []));
@@ -51,6 +63,30 @@ export class RobotWiredState {
 
     public clearSerialData(): void {
         this.setIncomingSerialData({ time: new Date(), data: this.poisonPill });
+    }
+
+    public setSerialPort(port: SerialPort): void {
+        this.serialPortSubject$.next(port);
+    }
+
+    public getSerialPort(): SerialPort {
+        return this.serialPortSubject$.getValue();
+    }
+
+    public setAbortController(abortController: AbortController): void {
+        this.abortControllerSubject$.next(abortController);
+    }
+
+    public getAbortController(): AbortController {
+        return this.abortControllerSubject$.getValue();
+    }
+
+    public setIsSerialOutputStillListening(isListening: boolean): void {
+        this.isSerialOutputStillListening$.next(isListening);
+    }
+
+    public getIsSerialOutputStillListening(): boolean {
+        return this.isSerialOutputStillListening$.getValue();
     }
 
     private readonly poisonPill: string = "caaa61a6-a666-4c0b-83b4-ebc75b08fecb"

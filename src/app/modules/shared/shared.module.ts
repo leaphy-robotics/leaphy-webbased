@@ -12,7 +12,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatButtonModule } from '@angular/material/button'; 
+import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -24,29 +24,31 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { NgChartsModule  } from 'ng2-charts';
+import {DragDropModule} from "@angular/cdk/drag-drop";
 
 @NgModule({
   declarations: [ButtonBarComponent, SerialOutputComponent, SerialWindowComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    TranslateModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
-    MatInputModule,
-    MatButtonToggleModule,
-    MatToolbarModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatTooltipModule,
-    MatSnackBarModule,
-    PortalModule,
-    NgChartsModule 
-  ],
+	imports: [
+		CommonModule,
+		FormsModule,
+		TranslateModule,
+		MatIconModule,
+		MatSidenavModule,
+		MatCheckboxModule,
+		MatButtonModule,
+		MatProgressSpinnerModule,
+		MatDialogModule,
+		MatInputModule,
+		MatButtonToggleModule,
+		MatToolbarModule,
+		MatSelectModule,
+		MatMenuModule,
+		MatTooltipModule,
+		MatSnackBarModule,
+		PortalModule,
+		NgChartsModule,
+		DragDropModule
+	],
   exports: [
     FormsModule,
     ButtonBarComponent,
@@ -66,7 +68,7 @@ import { NgChartsModule  } from 'ng2-charts';
     MatMenuModule,
     MatTooltipModule,
     MatSnackBarModule
-  ], 
+  ],
   entryComponents:[SerialOutputComponent, SerialWindowComponent]
 })
 export class SharedModule { }

@@ -13,6 +13,9 @@
         <button mat-stroked-button [matMenuTriggerFor]="moreMenu">
           {{ "MORE" | translate }}
         </button>
+        <button mat-stroked-button (click)="onChooseRobot()">
+          {{ "CHOOSE_ROBOT" | translate }}
+        </button>
       </ng-container>
       <ng-container *ngIf="!isDriverIssuesUrl()">
         <button mat-stroked-button class="back-to-blocks" (click)="onBackToBlocks()">{{ "GO_BACK_TO_BLOCKS" | translate }}</button>

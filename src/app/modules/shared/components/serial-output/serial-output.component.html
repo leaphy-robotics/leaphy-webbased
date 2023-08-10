@@ -1,12 +1,15 @@
-<div id="container">
-    <div id="header">
+<div id="container" >
+    <div id="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
         {{ "SERIAL_OUTPUT" | translate}}
         <div id="button-container">
+            <button mat-stroked-button class="icon-button" (click)="onCloseClicked()">
+                <mat-icon>close</mat-icon>
+            </button>
             <button mat-stroked-button class="icon-button" [class.mode-selected]="(dialogState.isSerialGraphOutputSelected$ | async) === false"
                 (click)="onViewTextOutputClicked()">
                 <mat-icon>view_headline</mat-icon>
             </button>
-            <button mat-stroked-button class="icon-button" [disabled]="(robotWiredState.serialChartDataSets$ | async).length === 0" [class.mode-selected]="dialogState.isSerialGraphOutputSelected$ | async"
+            <button mat-stroked-button class="icon-button"  [disabled]="(robotWiredState.serialChartDataSets$ | async) === []" [class.mode-selected]="dialogState.isSerialGraphOutputSelected$ | async"
                 (click)="onViewGraphOutputClicked()">
                 <mat-icon>timeline</mat-icon>
             </button>
@@ -22,10 +25,10 @@
             [plugins]="lineChartPlugins">
         </canvas>
     </div>
-    <div class="serial-output" [hidden]="dialogState.isSerialGraphOutputSelected$ | async"  #content>
+    <div class="serial-output" style="max-height: 50vh" [hidden]="dialogState.isSerialGraphOutputSelected$ | async"  #content>
         <div class="output-item" *ngFor="let item of (robotWiredState.serialData$ | async)" #messages>
             <div class="output-time">{{item.time | date:'HH:mm:ss:SSS'}}</div>
-            <div class="output-data">{{item.data}}</div>
+            <pre class="output-data">{{item.data}}</pre>
         </div>
     </div>
 </div>

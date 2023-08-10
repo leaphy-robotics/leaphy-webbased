@@ -12,7 +12,7 @@
   "INSTALL": "OK, I will!",
   "PROJECT": "My projects",
   "HELP": "Tips",
-  "HELP_FORUM": "Doctor Leaphy Forum",
+  "HELP_FORUM": "Leaphy Discord (Help forum)",
   "MORE": "More...",
   "MORE_ABOUT": "About Easybloqs",
   "UPLOAD": "Upload to robot",
@@ -39,7 +39,7 @@
   "WORKSPACE_RESTORE_CANCELLED": "Loading project cancelled",
   "WORKSPACE_SAVE_CANCELLED": "Saving project cancelled",
   "WORKSPACE_SAVED": "Project saved",
-  "SERIAL_OUTPUT": "Show on screen",
+  "SERIAL_OUTPUT": "Show output on screen",
   "CREDITS_INTRODUCTION": "EASYBLOQS is an educational open source product of",
   "CREDITS_SUPPORT": "made with support of the",
   "CREDITS_CONTRIBUTERS_INTRO": "Everyone who participated:",
@@ -81,5 +81,6 @@
   "UPLOADING_ISSUE_HELP": "Go to upload issue page",
   "GIVE_FILENAME": "Give your download a name",
   "GO_BACK_TO_BLOCKS": "Go back to blocks",
-  "NO_SERIAL_SUPPORT": "No web serial supported on your browser, look at the upload issue page for more information"
+  "NO_SERIAL_SUPPORT": "No web serial supported on your browser, look at the upload issue page for more information",
+  "CHOOSE_ROBOT": "Choose a robot"
 }
