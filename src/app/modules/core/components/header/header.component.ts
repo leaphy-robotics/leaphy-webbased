@@ -102,6 +102,7 @@ export class HeaderComponent {
 
   public onLanguageChanged(language: Language) {
     this.appState.setChangedLanguage(language);
+    window.location.reload();
   }
 
   public onBackToBlocks() {

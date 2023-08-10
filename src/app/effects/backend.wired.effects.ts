@@ -25,7 +25,7 @@ declare var Blockly: any;
 // Defines the effects on the Electron environment that different state changes have
 export class BackendWiredEffects {
 
-  constructor(private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
+  constructor(private blocklyState: BlocklyEditorState, private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
     // Only set up these effects when we're in Desktop mode
     this.appState.isDesktop$
       .pipe(filter(isDesktop => !!isDesktop))
@@ -273,6 +273,24 @@ export class BackendWiredEffects {
       case 'open-browser-page':
         const url = args[0];
         window.open(url, '_blank').focus();
+        break;
+      case 'save-workspace-temp':
+        const data = args[0].data;
+        sessionStorage.setItem('workspace', data);
+        break;
+      case 'restore-workspace-temp':
+        console.log('restoring workspace');
+        const workspaceTemp = sessionStorage.getItem('workspace');
+        console.log(workspaceTemp);
+        try {
+          this.blocklyState.setWorkspaceXml(workspaceTemp);
+          this.blocklyState.setProjectFilePath('');
+          this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+        } catch (error) {
+          console.log('Error:', error.message);
+        }
+        console.log('restored workspace');
+        break;
       default:
         console.log(channel);
         break;
