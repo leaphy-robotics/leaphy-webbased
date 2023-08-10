@@ -52,7 +52,7 @@ export class BackendWiredEffects {
         this.backEndState.setconnectionStatus(ConnectionStatus.ConnectedToBackend);
 
         // If the focus is set on an open window, relay to backend
-        this.dialogState.isSerialOutputFocus$
+        this.dialogState.isSerialOutputListening$
           .pipe(withLatestFrom(this.dialogState.isSerialOutputWindowOpen$))
           .pipe(filter(([isFocus, isOpen]) => isFocus && isOpen))
           .subscribe(() => {
@@ -270,6 +270,9 @@ export class BackendWiredEffects {
         input.click();
 
         break;
+      case 'open-browser-page':
+        const url = args[0];
+        window.open(url, '_blank').focus();
       default:
         console.log(channel);
         break;

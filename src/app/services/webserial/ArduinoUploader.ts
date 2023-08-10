@@ -24,7 +24,6 @@ class Arduino {
   async connect() {
     var port;
     try {
-      // @ts-ignore
       port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}]});
     } catch (error) {
       console.error(error)
@@ -103,7 +102,9 @@ class Arduino {
     await this.send([Requests.LEAVE_PROG_MODE]);
 
     // Reset the Arduino
-    await this.reset(115200);
+    try {
+      await this.reset(115200);
+    } catch (error) {}
 
     // Complete the upload
     callback("UPDATE_COMPLETE")
@@ -111,13 +112,18 @@ class Arduino {
   }
 
   /**
-   * Try to the sync with the Arduino using the old bootloader.
+   * Try to the sync with the Arduino using the old bootloader
    * @returns {Promise<string>} The response of the Device
    * @param callback The callback to call when a update is available
    */
   async attemptOldBootloader(callback = (message: string) => {}) : Promise<string> {
     let response = null
-    await this.reset(57600);
+    try {
+      await this.reset(57600);
+    } catch (error) {
+      callback("COULD_NOT_CONNECT")
+      throw new Error('Could not connect to Arduino: Reset failed')
+    }
     for (let i = 0; i < 10; i++) {
       try {
         response = await this.send([Requests.GET_SYNC], 500)
@@ -145,7 +151,12 @@ class Arduino {
    */
   async attemptNewBootloader(callback = (message: string) => {}) : Promise<string> {
     let response = null
-    await this.reset(this.serialOptions.baudRate);
+    try {
+      await this.reset(this.serialOptions.baudRate);
+    } catch (error) {
+      callback("COULD_NOT_CONNECT")
+      throw new Error('Could not connect to Arduino: Reset failed')
+    }
     for (let i = 0; i < 10; i++) {
       try {
         response = await this.send([Requests.GET_SYNC], 500)
@@ -301,38 +312,64 @@ class Arduino {
    * @returns {Promise<void>}
    */
   async clearReadBuffer() {
+    console.log("Clearing read buffer");
     const timeoutPromise = new Promise((resolve, _) => {
       setTimeout(() => {
         resolve("Timeout");
       }, 100);
     });
+    const timeoutPromiseRead = new Promise((resolve, _) => {
+      setTimeout(() => {
+        resolve("Timeout");
+      }, 1500);
+    });
 
+    let i = 1;
     while (true) {
-      const result = await Promise.race([this.receive(), timeoutPromise]);
-      if (result === "Timeout")
+      console.log("Attempt #" + i);
+      const promise = new Promise(async (resolve, _) => {
+        while (true) {
+          const result = await Promise.race([this.readStream.read(), timeoutPromise]);
+          if (result === "Timeout")
+            break;
+        }
+        resolve("K");
+      });
+      const result = await Promise.race([promise, timeoutPromiseRead]);
+
+      if (result !== "Timeout")
         break;
+      if (i > 10)
+        throw new Error('Timeout');
+      i++;
     }
+    console.log("Read buffer cleared");
   }
 
   /**
    * Reset the Arduino.
    * @returns {Promise<void>}
    */
-  async reset(baudrate) {
+  async reset(baudRate: number) {
     await this.writeStream.releaseLock();
     await this.readStream.releaseLock();
     await this.port.close();
-    await this.port.open({ baudRate: baudrate })
+    await this.port.open({ baudRate: baudRate })
     this.readStream = this.port.readable.getReader();
     this.writeStream = this.port.writable.getWriter();
-    await this.port.setSignals({ dataTerminalReady: false })
-    await delay(250);
-    await this.port.setSignals({ dataTerminalReady: true })
-    await this.clearReadBuffer();
+
+    try {
+      await this.port.setSignals({ dataTerminalReady: false })
+      await delay(250);
+      await this.port.setSignals({ dataTerminalReady: true })
+      await this.clearReadBuffer();
+    } catch (e) {
+      throw e;
+    }
   }
 
   /**
-   * Clean up the connection.
+   * Clean up the connection
    * @returns {Promise<void>}
    */
   async close() {
@@ -341,7 +378,6 @@ class Arduino {
     this.readStream = null;
     this.writeStream = null;
     this.isUploading = false
-    this.port.close();
   }
 
   /**

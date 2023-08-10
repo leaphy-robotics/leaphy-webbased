@@ -1,23 +1,42 @@
-import { AfterViewInit, Component, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {
+  AfterViewInit, ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { ChartOptions } from 'chart.js';
 import 'chartjs-adapter-moment';
 import { DialogState } from 'src/app/state/dialog.state';
 import { RobotWiredState } from 'src/app/state/robot.wired.state';
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-serial-output',
   templateUrl: './serial-output.component.html',
   styleUrls: ['./serial-output.component.scss']
 })
-export class SerialOutputComponent implements AfterViewInit {
+export class SerialOutputComponent implements AfterViewInit, OnInit {
 
   @ViewChildren('messages') messages: QueryList<any>;
   @ViewChild('content') content: ElementRef;
 
   constructor(
     public robotWiredState: RobotWiredState,
-    public dialogState: DialogState
+    public dialogState: DialogState,
+    private changeDetectorRef: ChangeDetectorRef,
+    private dialog: MatDialogRef<SerialOutputComponent>
   ) { }
+
+  ngOnInit(): void {
+    this.robotWiredState.serialData$.subscribe(() => {
+      this.changeDetectorRef.detectChanges();
+      this.scrollToBottom();
+    });
+  }
 
   ngAfterViewInit() {
     //https://stackoverflow.com/a/45655337/1056283
@@ -43,6 +62,10 @@ export class SerialOutputComponent implements AfterViewInit {
 
   public onClearSerialDataClicked() {
     this.robotWiredState.clearSerialData();
+  }
+
+  public onCloseClicked() {
+    this.dialog.close();
   }
 
   public lineChartOptions: ChartOptions = {

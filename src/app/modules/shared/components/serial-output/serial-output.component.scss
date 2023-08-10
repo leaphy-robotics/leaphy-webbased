@@ -1,6 +1,11 @@
 #container {
   width: 100%;
   height: calc(100% - 64px);
+  max-height: 50vh;
+}
+
+#header:hover {
+  cursor: grab;
 }
 
 #header {
@@ -58,4 +63,9 @@
   flex: 1 0 auto;
   padding-left: 5px;
   color: var(--leaphy-color-secundary);
+}
+
+.serial-output-backdrop {
+  pointer-events: all; /* Allow interaction with elements behind the dialog */
+  background-color: rgba(0, 0, 0, 0.5); /* Customize the backdrop color if needed */
 }

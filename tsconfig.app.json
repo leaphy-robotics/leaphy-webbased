@@ -9,7 +9,8 @@
     "src/polyfills.ts"
   ],
   "include": [
-    "src/**/*.d.ts"
+    "src/**/*.d.ts",
+    "node_modules/@types/w3c-web-serial/*.d.ts"
   ],
   "exclude": [
     "src/test.ts",

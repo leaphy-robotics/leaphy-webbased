@@ -12,6 +12,7 @@ import { AppState } from '../state/app.state';
 import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/confirm-editor.dialog';
 import { CodeEditorState } from '../state/code-editor.state';
 import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/language-select.dialog';
+import {SerialOutputComponent} from "../modules/shared/components/serial-output/serial-output.component";
 
 @Injectable({
     providedIn: 'root',
@@ -60,19 +61,21 @@ export class DialogEffects {
                 this.dialogState.setConnectDialog(null);
             });
 
-        // Open the Serial window when serial messages start appearing
-        this.robotWiredState.serialData$
+        // If the isSerialOutputWindowOpen is set to true open the dialog
+        this.dialogState.isSerialOutputWindowOpen$
             .subscribe(() => {
-                this.dialogState.setIsSerialOutputWindowOpen(true);
+                console.log('Serial output window is open ', this.dialogState.getIsSerialOutputWindowOpen());
+                if (this.dialogState.getIsSerialOutputWindowOpen() !== true)
+                  return;
+                this.dialog.open(SerialOutputComponent, {
+                  width: "800px",
+                  disableClose: true,
+                  hasBackdrop: false,
+                }).afterClosed().subscribe(() => {
+                  this.dialogState.setIsSerialOutputWindowOpen(false);
+                });
             });
 
-        // If the focus is set but the serial dialog is not open, open it
-        this.dialogState.isSerialOutputFocus$
-            .pipe(withLatestFrom(this.dialogState.isSerialOutputWindowOpen$))
-            .pipe(filter(([isFocus, isOpen]) => isFocus && !isOpen))
-            .subscribe(() => {
-                this.dialogState.setIsSerialOutputWindowOpen(true);
-            });
 
         // If the editor change needs confirmation, show the confirmation dialog
         this.appState.isCodeEditorToggleRequested$

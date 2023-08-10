@@ -2,6 +2,8 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {TranslateService} from "@ngx-translate/core";
 import ArduinoUploader from "../../../../services/webserial/ArduinoUploader";
+import {DialogState} from "../../../../state/dialog.state";
+import {RobotWiredState} from "../../../../state/robot.wired.state";
 
 @Component({
   selector: 'upload-information',
@@ -15,6 +17,8 @@ export class UploadDialog {
   progressBarWidth: number = 0;
   constructor(
     public dialogRef: MatDialogRef<UploadDialog>,
+    private dialogState: DialogState,
+    private robotWiredState: RobotWiredState,
     private translate: TranslateService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -27,6 +31,7 @@ export class UploadDialog {
 
   public async startUpload(source_code: string, board: string, libraries: string) {
     console.log("Starting upload");
+    this.dialogState.setIsSerialOutputListening(false);
     const uploader = new ArduinoUploader();
     function makeRequest(source_code, board, libraries) {
       return new Promise((resolve, reject) => {
@@ -58,8 +63,20 @@ export class UploadDialog {
     this.onUpdate('COMPILATION_COMPLETE');
 
     if ('serial' in navigator) {
+
       try {
-        await this.upload.connect();
+        if (this.robotWiredState.getSerialPort() !== null) {
+          this.dialogState.setIsSerialOutputListening(false);
+          this.robotWiredState.getAbortController().abort("Upload started");
+          while (this.robotWiredState.getIsSerialOutputStillListening()) {
+            await new Promise(r => setTimeout(r, 1000));
+          }
+          this.upload.port = this.robotWiredState.getSerialPort();
+
+        } else {
+          await this.upload.connect();
+          this.robotWiredState.setSerialPort(this.upload.port);
+        }
         this.progressBarWidth += 25;
       } catch (error) {
         if (error.toString() === 'Error: No device selected') {
@@ -89,6 +106,7 @@ export class UploadDialog {
       this.showReturnOptions();
     }
     console.log("Finished upload");
+
   }
   onUpdate(message: string) {
     if (message.endsWith("%")) {
@@ -107,10 +125,12 @@ export class UploadDialog {
   }
 
   returnBlockEnvironment() {
+    this.dialogState.setIsSerialOutputListening(true);
     this.dialogRef.close("BLOCK_ENVIRONMENT");
   }
 
   returnHelpEnvironment() {
+    this.dialogState.setIsSerialOutputListening(true);
     this.dialogRef.close("HELP_ENVIRONMENT");
   }
 

@@ -8,6 +8,7 @@ import {DialogState} from 'src/app/state/dialog.state';
 import {Language} from 'src/app/domain/language';
 import {Router} from "@angular/router";
 import {CodeEditorType} from "../../../../domain/code-editor.type";
+import {RobotWiredState} from "../../../../state/robot.wired.state";
 
 @Component({
   selector: 'app-header',
@@ -21,6 +22,7 @@ export class HeaderComponent {
     public backEndState: BackEndState,
     public blocklyState: BlocklyEditorState,
     public dialogState: DialogState,
+    private robotWiredState: RobotWiredState,
     private router: Router
   ) {
 
@@ -32,6 +34,17 @@ export class HeaderComponent {
 
   public onLoadWorkspaceClicked() {
     this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Finding);
+  }
+
+  public async onChooseRobot() {
+    if ('serial' in navigator) {
+      const port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}]})
+      if (port !== this.robotWiredState.getSerialPort()) {
+        await port.open({baudRate: 115200});
+        this.robotWiredState.setSerialPort(port);
+        this.dialogState.setIsSerialOutputListening(true);
+      }
+    }
   }
 
   public onSaveWorkspaceClicked() {

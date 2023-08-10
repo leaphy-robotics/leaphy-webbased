@@ -15,8 +15,8 @@ export class DialogState {
   public isSerialOutputWindowOpen$ = this.isSerialOutputWindowOpenSubject$.asObservable()
     .pipe(distinctUntilChanged());
 
-  private isSerialOutputFocusSubject$ = new BehaviorSubject(false);
-  public isSerialOutputFocus$ = this.isSerialOutputFocusSubject$.asObservable();
+  private isSerialOutputListeningSubject$ = new BehaviorSubject(true);
+  public isSerialOutputListening$ = this.isSerialOutputListeningSubject$.asObservable();
 
   private isSerialGraphOutputSelectedSubject$ = new BehaviorSubject(false);
   public isSerialGraphOutputSelected$ = this.isSerialGraphOutputSelectedSubject$.asObservable();
@@ -35,8 +35,8 @@ export class DialogState {
     this.isSerialOutputWindowOpenSubject$.next(isOpen);
   }
 
-  public setIsSerialOutputFocus(isFocus: boolean) {
-    this.isSerialOutputFocusSubject$.next(isFocus);
+  public setIsSerialOutputListening(isFocus: boolean) {
+    this.isSerialOutputListeningSubject$.next(isFocus);
   }
 
   public setIsSerialGraphOutputSelected(isSelected: boolean) {
@@ -49,5 +49,9 @@ export class DialogState {
 
   public setIsEditorTypeChangeConfirmationDialogVisible(isVisible: boolean) {
     this.isEditorTypeChangeConfirmationDialogVisibleSubject$.next(isVisible);
+  }
+
+  public getIsSerialOutputWindowOpen() {
+    return this.isSerialOutputWindowOpenSubject$.getValue();
   }
 }

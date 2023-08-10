@@ -24,7 +24,7 @@ export class ButtonBarComponent {
   }
 
   public onShowSerialOutputClicked() {
-    this.dialogState.setIsSerialOutputFocus(true);
+    this.dialogState.setIsSerialOutputWindowOpen(true);
   }
 }
 
