@@ -29,10 +29,9 @@ export class BlocklyEditorEffects {
         this.appState.currentLanguage$
             .pipe(filter(language => !!language))
             .subscribe(async language => {
+                console.log('Loading Blockly translations for language: ' + language.code);
                 const translations = await import(`node_modules/leaphy-blockly/msg/${language.code}.js`);
-                Object.keys(translations.default).forEach(function (tk) {
-                    Blockly.Msg[tk] = translations[tk];
-                });
+                Blockly.setLocale(translations);
             });
 
         // When the language is changed, save the workspace temporarily
@@ -139,11 +138,17 @@ export class BlocklyEditorEffects {
         this.blocklyState.workspaceStatus$
             .pipe(filter(status => status === WorkspaceStatus.Restoring))
             .pipe(withLatestFrom(this.blocklyState.workspaceXml$, this.blocklyState.workspace$))
-            .subscribe(([, workspaceXml, workspace]) => {
-                workspace.clear();
-                const xml = Blockly.Xml.textToDom(workspaceXml);
-                Blockly.Xml.domToWorkspace(xml, workspace);
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
+            .subscribe(async ([, workspaceXml, workspace]) => {
+              console.log('Restoring workspace');
+              while (this.blocklyState.workspace == null) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+              }
+              workspace = this.blocklyState.workspace;
+              console.log('Workspace loaded');
+              workspace.clear();
+              const xml = Blockly.Xml.textToDom(workspaceXml);
+              Blockly.Xml.domToWorkspace(xml, workspace);
+              this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
             });
 
         // When the user presses undo or redo, trigger undo or redo on the workspace

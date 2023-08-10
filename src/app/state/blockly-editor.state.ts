@@ -179,4 +179,8 @@ export class BlocklyEditorState {
   get workspaceXml(): string {
     return this.workspaceXmlSubject$.getValue();
   }
+
+  get workspace(): any {
+    return this.workspaceSubject$.getValue();
+  }
 }
