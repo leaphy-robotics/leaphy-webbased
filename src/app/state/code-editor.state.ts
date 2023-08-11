@@ -18,7 +18,7 @@ void setup() {
 void loop() {
 
 }`
-    
+
     constructor(){
         this.isDirty$ = this.code$
             .pipe(withLatestFrom(this.originalCode$))
@@ -35,7 +35,7 @@ void loop() {
     public originalCode$ = this.originalCodeSubject$.asObservable();
 
     private codeSubject$ = new BehaviorSubject<string>(this.originalProgram);
-    
+
     public code$ = this.codeSubject$.asObservable();
 
     public isDirty$: Observable<boolean>;
@@ -54,6 +54,10 @@ void loop() {
 
     public setCode(program: string){
         this.codeSubject$.next(program);
+    }
+
+    public getCode(): string {
+        return this.codeSubject$.getValue();
     }
 
 }

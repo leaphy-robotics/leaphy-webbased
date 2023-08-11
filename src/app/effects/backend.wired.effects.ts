@@ -15,8 +15,18 @@ import {MatDialog} from "@angular/material/dialog";
 import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
 import {UploadDialog} from "../modules/core/dialogs/upload/upload.dialog";
 import {Router} from "@angular/router";
+import {CodeEditorState} from "../state/code-editor.state";
 
 declare var Blockly: any;
+
+const fileExtensions = [
+  ".l_flitz",
+  ".l_original",
+  ".l_click",
+  ".l_uno",
+  ".l_wifi",
+  ".ino",
+]
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +35,7 @@ declare var Blockly: any;
 // Defines the effects on the Electron environment that different state changes have
 export class BackendWiredEffects {
 
-  constructor(private blocklyState: BlocklyEditorState, private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
+  constructor(private codeEditorState: CodeEditorState, private blocklyState: BlocklyEditorState, private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
     // Only set up these effects when we're in Desktop mode
     this.appState.isDesktop$
       .pipe(filter(isDesktop => !!isDesktop))
@@ -112,7 +122,7 @@ export class BackendWiredEffects {
           .pipe(withLatestFrom(this.appState.codeEditorType$))
           .pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Advanced))
           .subscribe(() => {
-            this.send('restore-workspace-code', appState.genericRobotType.id);
+            this.send('restore-workspace-code', AppState.genericRobotType.id);
           });
 
         // When the temp workspace is being loaded, relay the command to Electron
@@ -161,7 +171,7 @@ export class BackendWiredEffects {
           .pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.SavingAs && codeEditorType === CodeEditorType.Advanced))
           .pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.code$))
           .subscribe(([, projectFilePath, code]) => {
-            const payload = {projectFilePath, data: code, extension: appState.genericRobotType.id};
+            const payload = {projectFilePath, data: code, extension: AppState.genericRobotType.id};
             this.send('save-workspace-as', payload);
           });
 
@@ -170,8 +180,12 @@ export class BackendWiredEffects {
           .pipe(filter(status => status === WorkspaceStatus.SavingTemp))
           .pipe(withLatestFrom(this.blocklyEditorState.workspaceXml$, this.appState.selectedRobotType$))
           .subscribe(([, workspaceXml, robotType]) => {
-            const payload = {data: workspaceXml, extension: robotType.id};
-            this.send('save-workspace-temp', payload);
+            if (CodeEditorType.Advanced == this.appState.getCurrentEditor()) {
+              this.send('save-workspace-temp', {data: workspaceXml, extension: robotType.id, type: 'advanced'});
+            } else {
+              this.send('save-workspace-temp', {data: workspaceXml, extension: robotType.id});
+            }
+
           });
 
         // When the user clicks help, open the default OS browser with the leaphy Forum
@@ -203,18 +217,16 @@ export class BackendWiredEffects {
         });
 
         fileNamesDialogRef.afterClosed().subscribe((name: string) => {
-          console.log(this.appState.getCurrentEditor())
           if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
             const data = this.blocklyEditorState.workspaceXml;
             const blob = new Blob([data], {type: 'text/plain'});
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = name + '.leaphy';
+            a.download = name + '.' + args[0].extension;
 
             a.click();
             window.URL.revokeObjectURL(url);
-            // delete a after it is clicked
             a.remove();
           } else {
             const data = this.blocklyEditorState.code;
@@ -263,21 +275,36 @@ export class BackendWiredEffects {
       case 'restore-workspace':
         var input = document.createElement('input');
         input.type = 'file';
+        // add a list of extensions to accept
+        input.accept = fileExtensions.join(',');
 
         input.onchange = e => {
-
-          // getting a hold of the file reference
           // @ts-ignore
           var file = e.target.files[0];
 
-          // setting up the reader
           var reader = new FileReader();
           reader.readAsText(file,'UTF-8');
 
-          // here we tell the reader what to do when it's done reading...
           reader.onload = readerEvent => {
             const data = readerEvent.target.result; // this is the content!
-            this.backEndState.setBackendMessage({event: 'WORKSPACE_RESTORING', message: 'WORKSPACE_RESTORING', payload: { projectFilePath: file.path, data }, displayTimeout: 2000});
+            if (!fileExtensions.includes(file.name.substring(file.name.lastIndexOf('.'))))
+              return;
+
+            if (file.name.endsWith('.ino')) {
+              this.backEndState.setBackendMessage({
+                event: 'WORKSPACE_RESTORING',
+                message: 'WORKSPACE_RESTORING',
+                payload: {projectFilePath: file.path, data, type: 'advanced'},
+                displayTimeout: 2000
+              });
+            } else {
+              this.backEndState.setBackendMessage({
+                event: 'WORKSPACE_RESTORING',
+                message: 'WORKSPACE_RESTORING',
+                payload: {projectFilePath: file.path, data, type: 'beginner', extension: file.name.substring(file.name.lastIndexOf('.'))},
+                displayTimeout: 2000
+              });
+            }
           }
 
         }
@@ -292,19 +319,36 @@ export class BackendWiredEffects {
       case 'save-workspace-temp':
         const data = args[0].data;
         sessionStorage.setItem('workspace', data);
+        sessionStorage.setItem('robotType', this.appState.getSelectedRobotType().id);
+        if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+          sessionStorage.setItem('type', 'beginner');
+        } else {
+          sessionStorage.setItem('type', 'advanced');
+        }
         break;
       case 'restore-workspace-temp':
-        console.log('restoring workspace');
         const workspaceTemp = sessionStorage.getItem('workspace');
-        console.log(workspaceTemp);
-        try {
-          this.blocklyState.setWorkspaceXml(workspaceTemp);
-          this.blocklyState.setProjectFilePath('');
-          this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-        } catch (error) {
-          console.log('Error:', error.message);
+        const robotType = sessionStorage.getItem('robotType');
+        const type = sessionStorage.getItem('type');
+        if (type == 'beginner' && this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+          if (robotType != this.appState.getSelectedRobotType().id) {
+            return;
+          }
+          try {
+            this.blocklyState.setWorkspaceXml(workspaceTemp);
+            this.blocklyState.setProjectFilePath('');
+            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+          } catch (error) {
+            console.log('Error:', error.message);
+          }
+        } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.Advanced) {
+          try {
+            this.codeEditorState.setCode(workspaceTemp);
+            this.blocklyEditorState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+          } catch (error) {
+            console.log('Error:', error.message);
+          }
         }
-        console.log('restored workspace');
         break;
       default:
         console.log(channel);

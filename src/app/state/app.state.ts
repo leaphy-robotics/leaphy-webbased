@@ -13,24 +13,33 @@ import packageJson from '../../../package.json';
 })
 export class AppState {
     /* eslint-disable max-len */
-    private leaphyOriginalRobotType = new RobotType('l_original', 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyOriginalRobotType = new RobotType('l_original', 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         ['Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor']
     );
-    private leaphyFlitzRobotType = new RobotType('l_flitz', 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyFlitzRobotType = new RobotType('l_flitz', 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         ['Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor'], true, false, false
     );
-    private leaphyClickRobotType = new RobotType('l_click', 'Leaphy Click', 'click.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyClickRobotType = new RobotType('l_click', 'Leaphy Click', 'click.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         ['Leaphy Extra Extension', 'Servo']
     );
-    private arduinoUnoRobotType = new RobotType('l_uno', 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static arduinoUnoRobotType = new RobotType('l_uno', 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         ['Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor']
     );
-    private leaphyWiFiRobotType = new RobotType('l_wifi', 'Leaphy WiFi', 'wifi.svg', 'NodeMCU', 'esp8266:esp8266:nodemcuv2', 'bin', 'esp8266:esp8266',
+    private static leaphyWiFiRobotType = new RobotType('l_wifi', 'Leaphy WiFi', 'wifi.svg', 'NodeMCU', 'esp8266:esp8266:nodemcuv2', 'bin', 'esp8266:esp8266',
         ['Leaphy WiFi Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor'], false
     );
-    public genericRobotType = new RobotType('l_code', 'Generic Robot', null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    public static genericRobotType = new RobotType('l_code', 'Generic Robot', null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         ['Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor']
     );
+
+    public static idToRobotType = {
+        'l_original': AppState.leaphyOriginalRobotType,
+        'l_flitz': AppState.leaphyFlitzRobotType,
+        'l_click': AppState.leaphyClickRobotType,
+        'l_uno': AppState.arduinoUnoRobotType,
+        'l_wifi': AppState.leaphyWiFiRobotType,
+        'l_code': AppState.genericRobotType
+    }
     /* eslint-enable max-len */
 
     private defaultLanguage = new Language('nl', 'Nederlands')
@@ -42,9 +51,9 @@ export class AppState {
         this.availableRobotTypes$ = this.isDesktop$
             .pipe(map(isDesktop => {
                 if (isDesktop) {
-                    return [this.leaphyFlitzRobotType, this.leaphyOriginalRobotType, this.leaphyClickRobotType, this.arduinoUnoRobotType]
+                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType]
                 } else {
-                    return [this.leaphyWiFiRobotType]
+                    return [AppState.leaphyWiFiRobotType]
                 }
             }));
 
@@ -59,7 +68,7 @@ export class AppState {
         this.codeEditorType$ = combineLatest([this.selectedRobotType$, this.selectedCodeEditorType$])
             .pipe(filter(([robotType,]) => !!robotType))
             .pipe(map(([robotType, selectedCodeEditorType]) => {
-                if (robotType === this.genericRobotType) {
+                if (robotType === AppState.genericRobotType) {
                     return CodeEditorType.Advanced
                 }
                 return selectedCodeEditorType;
@@ -67,7 +76,7 @@ export class AppState {
 
         this.canChangeCodeEditor$ = this.selectedRobotType$
             .pipe(filter(robotType => !!robotType))
-            .pipe(map(robotType => robotType !== this.genericRobotType))
+            .pipe(map(robotType => robotType !== AppState.genericRobotType))
 
         this.packageJsonVersionSubject$ = new BehaviorSubject(packageJson.version);
         this.packageJsonVersion$ = this.packageJsonVersionSubject$.asObservable();
@@ -165,5 +174,9 @@ export class AppState {
 
     public getCurrentEditor(): CodeEditorType {
         return this.selectedCodeEditorTypeSubject$.getValue();
+    }
+
+    public getSelectedRobotType(): RobotType {
+        return this.selectedRobotTypeSubject$.getValue();
     }
 }
