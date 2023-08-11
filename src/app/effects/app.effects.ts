@@ -63,11 +63,8 @@ export class AppEffects {
         this.appState.isCodeEditorToggleConfirmed$
             .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.codeEditorType$))
             .subscribe(([, codeEditorType]) => {
-                if (codeEditorType == CodeEditorType.Beginner) {
-                    this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);
-                } else {
-                    this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
-                }
+              this.appState.setSelectedCodeEditor(codeEditorType === CodeEditorType.Beginner ? CodeEditorType.Advanced : CodeEditorType.Beginner);
+
             });
 
         // When the code editor changes, route to the correct screen

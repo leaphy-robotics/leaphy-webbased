@@ -51,7 +51,7 @@ export class BlocklyEditorEffects {
         // When all prerequisites are there, Create a new workspace and open the codeview if needed
         combineLatest([this.blocklyState.blocklyElement$, this.blocklyState.blocklyConfig$])
             .pipe(withLatestFrom(this.appState.selectedRobotType$))
-            .pipe(filter(([[element, config], robotType]) => !!element && !!config && !!robotType && robotType !== this.appState.genericRobotType))
+            .pipe(filter(([[element, config], robotType]) => !!element && !!config && !!robotType && robotType !== AppState.genericRobotType))
             .pipe(withLatestFrom(
                 this.getXmlContent('./assets/blockly/base-toolbox.xml'),
                 this.getXmlContent('./assets/blockly/leaphy-toolbox.xml'),
@@ -271,20 +271,21 @@ export class BlocklyEditorEffects {
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
                         break;
                     case 'WORKSPACE_RESTORING':
+                        if (message.payload.type == 'advanced') {
+                            this.blocklyState.setCode(message.payload.data as string);
+                            this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);
+                            this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
+                            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+                            this.appState.setSelectedRobotType(AppState.genericRobotType);
+                            return;
+                        }
+                        this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')]);
                         this.blocklyState.setWorkspaceXml(message.payload.data as string);
                         this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                        break;
-                    case 'WORKSPACE_CODE_RESTORING':
-                        this.blocklyState.setCode(message.payload.data as string);
-                        this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                        break;
-                    case 'WORKSPACE_RESTORING_TEMP':
-                        this.blocklyState.setWorkspaceXml(message.payload.data as string);
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
                         break;
                     default:
+                        console.log('Unknown message received from backend: ' + message.event);
                         break;
                 }
             });
