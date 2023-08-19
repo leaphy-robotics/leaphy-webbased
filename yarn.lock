@@ -1592,6 +1592,13 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@leaphy-robotics/leaphy-blockly@^3.0.6":
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blockly/-/leaphy-blockly-3.0.6.tgz#2f0118d95e8086e4e7bcf4e4e8d5d78d38d65536"
+  integrity sha512-9WVXLXZiIJXLR8gwLrAp4820xe2u26cXxk4NcpTApYT0zOf79CHR33zlZFg2hCv+0VC1J7lCeTvK93nEKsGD/A==
+  dependencies:
+    jsdom "15.2.1"
+
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
@@ -5516,13 +5523,6 @@ klona@^2.0.4, klona@^2.0.5:
   version "2.0.6"
   resolved "https://registry.npmjs.org/klona/-/klona-2.0.6.tgz"
   integrity sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==
-
-leaphy-blockly@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/leaphy-blockly/-/leaphy-blockly-3.0.1.tgz#63ea44b0f8e2a81c9615ba12573d6178504dc2ed"
-  integrity sha512-1sfROm0fqbt67CnQgX+tgcKjGv06xt6MIlU/jOPY6WK0Sg7gUjDNBqY0i5FJoNw2nVQIFHJTA5nB87zkyl71XA==
-  dependencies:
-    jsdom "15.2.1"
 
 less-loader@11.0.0:
   version "11.0.0"

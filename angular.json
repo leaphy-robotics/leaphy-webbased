@@ -28,17 +28,17 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./node_modules/leaphy-blockly/media",
+                "input": "./node_modules/@leaphy-robotics/leaphy-blockly/media",
                 "output": "./media"
               },
               {
                 "glob": "en.json",
-                "input": "./node_modules/leaphy-blockly/msg/json",
+                "input": "./node_modules/@leaphy-robotics/leaphy-blockly/msg/json",
                 "output": "./msg/json"
               },
               {
                 "glob": "nl.json",
-                "input": "./node_modules/leaphy-blockly/msg/json",
+                "input": "./node_modules/@leaphy-robotics/leaphy-blockly/msg/json",
                 "output": "./msg/json"
               }
             ],
@@ -48,9 +48,9 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/leaphy-blockly/blockly_compressed.js",
-              "./node_modules/leaphy-blockly/blocks_compressed.js",
-              "./node_modules/leaphy-blockly/arduino_compressed.js",
+              "./node_modules/@leaphy-robotics/leaphy-blockly/blockly_compressed.js",
+              "./node_modules/@leaphy-robotics/leaphy-blockly/blocks_compressed.js",
+              "./node_modules/@leaphy-robotics/leaphy-blockly/arduino_compressed.js",
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/bootstrap/dist/js/bootstrap.min.js",
               "./node_modules/prismjs/prism.js",

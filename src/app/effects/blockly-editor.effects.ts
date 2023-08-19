@@ -30,7 +30,7 @@ export class BlocklyEditorEffects {
             .pipe(filter(language => !!language))
             .subscribe(async language => {
                 console.log('Loading Blockly translations for language: ' + language.code);
-                const translations = await import(`node_modules/leaphy-blockly/msg/${language.code}.js`);
+                const translations = await import(`node_modules/@leaphy-robotics/leaphy-blockly/msg/${language.code}.js`);
                 Blockly.setLocale(translations);
             });
 
