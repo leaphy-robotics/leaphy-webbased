@@ -38,7 +38,7 @@ export class HeaderComponent {
 
   public async onChooseRobot() {
     if ('serial' in navigator) {
-      const port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}]})
+      const port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}, {usbVendorId: 0403}]})
       if (port !== this.robotWiredState.getSerialPort()) {
         await port.open({baudRate: 115200});
         this.robotWiredState.setSerialPort(port);
