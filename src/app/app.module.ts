@@ -20,6 +20,8 @@ import { AppEffects } from './effects/app.effects';
 import { RobotWiredEffects } from './effects/robot.wired.effects';
 import { CoreModule } from './modules/core/core.module';
 
+import { MatomoModule } from 'ngx-matomo';
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -31,7 +33,7 @@ export function createTranslateLoader(http: HttpClient) {
     AppComponent
   ],
   imports: [
-    BrowserModule, 
+    BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -42,7 +44,18 @@ export function createTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    CoreModule
+    MatomoModule.forRoot({
+      scriptUrl: 'https://leaphyeasybloqs.com/matomo/matomo.js',
+      trackers: [
+        {
+          trackerUrl: 'https://leaphyeasybloqs.com/matomo/matomo.php',
+          siteId: 1
+        }
+      ],
+      routeTracking: {
+        enable: true
+      }
+    }),    CoreModule
   ],
   providers: [
     // Initialize the Effects on startup
