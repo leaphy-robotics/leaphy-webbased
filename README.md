@@ -17,6 +17,6 @@ The following should be installed:
 ### Running locally
 
 First install the dependencies by running `yarn`. This will take a while the first time. 
-Then run `yarn buildstart` to build and start the application. 
+Then run `yarn start` to build and start the application. 
 
 
