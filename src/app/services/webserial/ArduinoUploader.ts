@@ -24,7 +24,7 @@ class Arduino {
   async connect() {
     var port;
     try {
-      port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}]});
+      port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}, {usbVendorId: 0x0403}]});
     } catch (error) {
       console.error(error)
       throw new Error('No device selected')

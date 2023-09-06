@@ -296,7 +296,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/router@~15.2.9":
+"@angular/router@>=14.0.0 <16.0.0", "@angular/router@~15.2.9":
   version "15.2.9"
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-15.2.9.tgz#c3879be22bda236eacf97a18a1e8619b51a53d47"
   integrity sha512-UCbh5DLSDhybv0xKYT7kGQMfOVdyhHIHOZz5EYVebbhste6S+W1LE57vTHq7QtxJsyKBa/WSkaUkCLXD6ntCAg==
@@ -6047,6 +6047,16 @@ ng2-charts@3.0.11:
     lodash-es "^4.17.15"
     tslib "^2.3.0"
 
+ngx-matomo@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/ngx-matomo/-/ngx-matomo-1.1.0.tgz#48e54f1c0abdea89e9b964c79e30dc335f4776a1"
+  integrity sha512-tzC7CtpGeI3mSpQSVpis6wUr+HIZcwta0lYN3FVocOZbjBBjIyqB1s/qjgaytSQUBBFTN2xADLLXpO/2ViKsxg==
+  dependencies:
+    tslib "^2.3.0"
+  optionalDependencies:
+    "@angular/router" ">=14.0.0 <16.0.0"
+    rxjs "^7.5.0"
+
 nice-napi@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmjs.org/nice-napi/-/nice-napi-1.0.2.tgz"
@@ -7152,7 +7162,7 @@ rxjs@6.6.7, rxjs@^6.5.4:
   dependencies:
     tslib "^1.9.0"
 
-rxjs@^7.5.5:
+rxjs@^7.5.0, rxjs@^7.5.5:
   version "7.8.1"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-7.8.1.tgz#6f6f3d99ea8044291efd92e7c7fcf562c4057543"
   integrity sha512-AA3TVj+0A2iuIoQkWEK/tqFjBq2j+6PO6Y0zJcvzLAFhEFIO3HL0vls9hWLncZbAAbK0mar7oZ4V079I/qPMxg==
