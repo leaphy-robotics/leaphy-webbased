@@ -43,6 +43,20 @@ button {
   vertical-align: top;
 }
 
+#download_drivers {
+  font-size: 12px;
+  font-weight: normal;
+  border-radius: 20px;
+  padding: 5px 15px; /* Added padding to buttons */
+
+  mat-icon {
+    color: var(--leaphy-color-primary);
+    margin-right: 5px;
+  }
+
+
+}
+
 [mat-flat-button] {
   background-color: var(--leaphy-color-secundary);
   border: none;
