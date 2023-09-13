@@ -244,7 +244,7 @@ export class BackendWiredEffects {
         })
         break;
       case 'compile':
-        const source_code = this.blocklyEditorState.code;
+        const source_code = (this.appState.getCurrentEditor() == CodeEditorType.Beginner) ? this.blocklyEditorState.code : this.codeEditorState.getCode();
         const libraries = args[0].libs;
         const board = args[0].fqbn;
 
