@@ -1737,12 +1737,13 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@leaphy-robotics/leaphy-blockly@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blockly/-/leaphy-blockly-3.0.6.tgz#2f0118d95e8086e4e7bcf4e4e8d5d78d38d65536"
-  integrity sha512-9WVXLXZiIJXLR8gwLrAp4820xe2u26cXxk4NcpTApYT0zOf79CHR33zlZFg2hCv+0VC1J7lCeTvK93nEKsGD/A==
+"@leaphy-robotics/leaphy-blockly@^3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blockly/-/leaphy-blockly-3.0.8.tgz#a157a90650ac23809645c83747abd496ae6cd162"
+  integrity sha512-4vauvK7younHtreeTBDw/Oa+gLmrdSvwCrWwNPsFygOBsi0eqXx9dk8vDGO4Qomsd3g/pkb0oAW9DAst9E/8VQ==
   dependencies:
     jsdom "15.2.1"
+    yarn "^1.22.19"
 
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
@@ -8611,6 +8612,11 @@ yargs@^17.2.1, yargs@^17.6.2:
     string-width "^4.2.3"
     y18n "^5.0.5"
     yargs-parser "^21.1.1"
+
+yarn@^1.22.19:
+  version "1.22.19"
+  resolved "https://registry.yarnpkg.com/yarn/-/yarn-1.22.19.tgz#4ba7fc5c6e704fce2066ecbfb0b0d8976fe62447"
+  integrity sha512-/0V5q0WbslqnwP91tirOvldvYISzaqhClxzyUKXYxs07yUILIs5jx/k6CFe8bvKSkds5w+eiOqta39Wk3WxdcQ==
 
 yn@3.1.1:
   version "3.1.1"
