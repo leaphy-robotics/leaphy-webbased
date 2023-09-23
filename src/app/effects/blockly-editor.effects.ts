@@ -5,10 +5,11 @@ import { BackEndState } from '../state/backend.state';
 import { ConnectionStatus } from '../domain/connection.status';
 import { filter, pairwise, withLatestFrom } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { combineLatest, Observable, of } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { WorkspaceStatus } from '../domain/workspace.status';
 import { AppState } from '../state/app.state';
 import { CodeEditorType } from '../domain/code-editor.type';
+import {BackendWiredEffects} from "./backend.wired.effects";
 
 declare var Blockly: any;
 
@@ -22,6 +23,7 @@ export class BlocklyEditorEffects {
     constructor(
         private blocklyState: BlocklyEditorState,
         private backEndState: BackEndState,
+        private backEndWiredEffects: BackendWiredEffects,
         private appState: AppState,
         private http: HttpClient,
     ) {
@@ -39,13 +41,6 @@ export class BlocklyEditorEffects {
             .pipe(filter(language => !!language))
             .subscribe(() => {
                 this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingTemp);
-            });
-
-        // When a reload config is found, restore the temp workspace
-        combineLatest([this.appState.reloadConfig$, this.blocklyState.workspace$])
-            .pipe(filter(([reloadConfig, blockly]) => !!reloadConfig && !!blockly))
-            .subscribe(([,]) => {
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.FindingTemp);
             });
 
         // When all prerequisites are there, Create a new workspace and open the codeview if needed
@@ -78,6 +73,7 @@ export class BlocklyEditorEffects {
                 Blockly.Xml.domToWorkspace(xml, workspace);
                 this.blocklyState.setWorkspace(workspace);
                 this.blocklyState.setToolboxXml(toolboxXmlString);
+                this.backEndWiredEffects.send('restore-workspace-temp', robotType.id);
                 toolbox.selectItemByPosition(0);
                 toolbox.refreshTheme();
 
@@ -139,12 +135,6 @@ export class BlocklyEditorEffects {
             .pipe(filter(status => status === WorkspaceStatus.Restoring))
             .pipe(withLatestFrom(this.blocklyState.workspaceXml$, this.blocklyState.workspace$))
             .subscribe(async ([, workspaceXml, workspace]) => {
-              console.log('Restoring workspace');
-              while (this.blocklyState.workspace == null) {
-                await new Promise(resolve => setTimeout(resolve, 1000));
-              }
-              workspace = this.blocklyState.workspace;
-              console.log('Workspace loaded');
               workspace.clear();
               const xml = Blockly.Xml.textToDom(workspaceXml);
               Blockly.Xml.domToWorkspace(xml, workspace);
@@ -183,16 +173,6 @@ export class BlocklyEditorEffects {
             .subscribe(() => {
                 this.blocklyState.setIsSideNavOpen(false);
                 this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingTemp)
-            });
-
-        // When the code editor is changed to beginner, set the workspace status to FindingTemp
-        this.appState.codeEditorType$
-            .pipe(
-                pairwise(),
-                filter(([previous, current]) => current === CodeEditorType.Beginner && current !== previous)
-            )
-            .subscribe(() => {
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.FindingTemp)
             });
 
         // Toggle the isSideNavOpen state
@@ -271,6 +251,7 @@ export class BlocklyEditorEffects {
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
                         break;
                     case 'WORKSPACE_RESTORING':
+                        console.log('WORKSPACE_RESTORING');
                         if (message.payload.type == 'advanced') {
                             this.blocklyState.setCode(message.payload.data as string);
                             this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);

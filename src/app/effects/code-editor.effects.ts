@@ -5,6 +5,7 @@ import { CodeEditorState } from "../state/code-editor.state";
 
 import * as ace from "ace-builds";
 import { BackEndState } from "../state/backend.state";
+import {BackendWiredEffects} from "./backend.wired.effects";
 
 @Injectable({
     providedIn: 'root',
@@ -12,7 +13,7 @@ import { BackEndState } from "../state/backend.state";
 
 // Defines the effects on the Editor that different state changes have
 export class CodeEditorEffects {
-    constructor(private codeEditorState: CodeEditorState, private blocklyState: BlocklyEditorState, private backEndState: BackEndState) {
+    constructor(private codeEditorState: CodeEditorState, private blocklyState: BlocklyEditorState, private backEndState: BackEndState, private backEndWiredEffects: BackendWiredEffects) {
 
         this.codeEditorState.aceElement$
             .pipe(filter(element => !!element))
@@ -39,11 +40,15 @@ export class CodeEditorEffects {
                 this.codeEditorState.setOriginalCode(startingCode);
                 this.codeEditorState.setCode(startingCode);
 
+                this.backEndWiredEffects.send('restore-workspace-temp', -1, aceEditor);
+
                 aceEditor.on("change", () => {
                     const changedCode = aceEditor.getValue();
                     this.codeEditorState.setCode(changedCode)
                     this.blocklyState.setCode(changedCode);
                 });
+
+
             });
 
         // React to the backend message and set the ACE Editor code

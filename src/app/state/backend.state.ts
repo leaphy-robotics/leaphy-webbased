@@ -22,7 +22,6 @@ export class BackEndState {
   }
 
   public setBackendMessage(message: BackEndMessage) {
-    console.log('setBackendMessage', message);
     this.backEndMessagesSubject$.next(message);
   }
 
