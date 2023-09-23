@@ -126,14 +126,6 @@ export class BackendWiredEffects {
             this.send('restore-workspace-code', AppState.genericRobotType.id);
           });
 
-        // When the temp workspace is being loaded, relay the command to Electron
-        this.blocklyEditorState.workspaceStatus$
-          .pipe(filter(status => status === WorkspaceStatus.FindingTemp))
-          .pipe(withLatestFrom(this.appState.selectedRobotType$))
-          .subscribe(([, robotType]) => {
-            this.send('restore-workspace-temp', robotType.id);
-          });
-
         // When an existing project's workspace is being saved, relay the command to Electron
         this.blocklyEditorState.workspaceStatus$
           .pipe(withLatestFrom(this.appState.codeEditorType$))
@@ -334,6 +326,8 @@ export class BackendWiredEffects {
         const workspaceTemp = sessionStorage.getItem('workspace');
         const robotType = sessionStorage.getItem('robotType');
         const type = sessionStorage.getItem('type');
+        console.log(type);
+        console.log(this.appState.getCurrentEditor());
         if (type == 'beginner' && this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
           if (robotType != this.appState.getSelectedRobotType().id) {
             return;
@@ -347,8 +341,10 @@ export class BackendWiredEffects {
           }
         } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.Advanced) {
           try {
+            args[1].session.setValue(workspaceTemp);
+            console.log(workspaceTemp);
+            this.codeEditorState.setOriginalCode(workspaceTemp);
             this.codeEditorState.setCode(workspaceTemp);
-            this.blocklyEditorState.setWorkspaceStatus(WorkspaceStatus.Restoring);
           } catch (error) {
             console.log('Error:', error.message);
           }

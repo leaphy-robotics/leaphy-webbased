@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {AppState} from 'src/app/state/app.state';
 import {RobotType} from 'src/app/domain/robot.type';
 import {CodeEditorType} from "../../../../domain/code-editor.type";
-import {BackEndState} from "../../../../state/backend.state";
 import {BackendWiredEffects} from "../../../../effects/backend.wired.effects";
 
 @Component({
@@ -12,7 +11,7 @@ import {BackendWiredEffects} from "../../../../effects/backend.wired.effects";
 })
 export class RobotSelectionComponent {
 
-  constructor(public appState: AppState, private backEndState: BackendWiredEffects) { }
+  constructor(public appState: AppState) { }
   public onRobotSelected(robot: RobotType) {
     this.appState.setSelectedRobotType(robot);
     console.log(robot);
@@ -21,7 +20,6 @@ export class RobotSelectionComponent {
     } else {
       this.appState.setSelectedCodeEditor(CodeEditorType.Beginner)
     }
-    this.backEndState.send('restore-workspace-temp', {});
   }
 
   protected readonly AppState = AppState;
