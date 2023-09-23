@@ -16,6 +16,7 @@ import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
 import {UploadDialog} from "../modules/core/dialogs/upload/upload.dialog";
 import {Router} from "@angular/router";
 import {CodeEditorState} from "../state/code-editor.state";
+import {DebugInformationDialog} from "../modules/core/dialogs/debug-information/debug-information.dialog";
 
 declare var Blockly: any;
 
@@ -270,7 +271,10 @@ export class BackendWiredEffects {
 
         break;
       case 'open-log-file':
-        alert("To open the log, go to the console of your browser");
+        // Open a module to view the log file so .op
+        this.dialog.open(DebugInformationDialog, {
+          width: '450px', disableClose: false,
+        });
         break;
       case 'restore-workspace':
         var input = document.createElement('input');
