@@ -1,11 +1,12 @@
-import { Injectable } from "@angular/core";
-import { filter, withLatestFrom } from "rxjs/operators";
-import { BlocklyEditorState } from "../state/blockly-editor.state";
-import { CodeEditorState } from "../state/code-editor.state";
+import {Injectable} from "@angular/core";
+import {filter, withLatestFrom} from "rxjs/operators";
+import {BlocklyEditorState} from "../state/blockly-editor.state";
+import {CodeEditorState} from "../state/code-editor.state";
 
 import * as ace from "ace-builds";
-import { BackEndState } from "../state/backend.state";
+import {BackEndState} from "../state/backend.state";
 import {BackendWiredEffects} from "./backend.wired.effects";
+import {WorkspaceStatus} from "../domain/workspace.status";
 
 @Injectable({
     providedIn: 'root',
@@ -40,7 +41,9 @@ export class CodeEditorEffects {
                 this.codeEditorState.setOriginalCode(startingCode);
                 this.codeEditorState.setCode(startingCode);
 
-                this.backEndWiredEffects.send('restore-workspace-temp', -1, aceEditor);
+                if (this.blocklyState.workspaceStatus == WorkspaceStatus.Clean) {
+                  this.backEndWiredEffects.send('restore-workspace-temp', -1, aceEditor);
+                }
 
                 aceEditor.on("change", () => {
                     const changedCode = aceEditor.getValue();

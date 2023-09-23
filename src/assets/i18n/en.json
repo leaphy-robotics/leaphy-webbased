@@ -78,5 +78,9 @@
   "GO_BACK_TO_BLOCKS": "Go back to blocks",
   "NO_SERIAL_SUPPORT": "No web serial supported on your browser, look at the upload issue page for more information",
   "CHOOSE_ROBOT": "Choose a robot",
-  "UPLOAD_OUTPUT": "Upload output"
+  "UPLOAD_OUTPUT": "Upload output",
+  "WEB_SERIAL_NOT_SUPPORTED": "Web serial not supported",
+  "WEB_SERIAL_SUPPORTED": "Web serial supported",
+  "UNKNOWN": "Unknown",
+  "DEVICE_INFORMATION": "Device information"
 }

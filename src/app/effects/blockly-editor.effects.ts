@@ -73,7 +73,9 @@ export class BlocklyEditorEffects {
                 Blockly.Xml.domToWorkspace(xml, workspace);
                 this.blocklyState.setWorkspace(workspace);
                 this.blocklyState.setToolboxXml(toolboxXmlString);
-                this.backEndWiredEffects.send('restore-workspace-temp', robotType.id);
+                if (this.blocklyState.workspaceStatus == WorkspaceStatus.Clean) {
+                  this.backEndWiredEffects.send('restore-workspace-temp', robotType.id);
+                }
                 toolbox.selectItemByPosition(0);
                 toolbox.refreshTheme();
 
@@ -251,7 +253,6 @@ export class BlocklyEditorEffects {
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
                         break;
                     case 'WORKSPACE_RESTORING':
-                        console.log('WORKSPACE_RESTORING');
                         if (message.payload.type == 'advanced') {
                             this.blocklyState.setCode(message.payload.data as string);
                             this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);

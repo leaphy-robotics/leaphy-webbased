@@ -32,11 +32,28 @@
   background-color: lightgray;
 }
 
+.device-information {
+  width: 100%;
+  height: fit-content;
+  margin: 0;
+  background-color: lightgray;
+}
+
 #header:hover {
   cursor: grab;
 }
 
 #header {
+  background-color: var(--leaphy-color-primary);
+  color: var(--leaphy-color-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  width: 100%;
+}
+
+#device-information {
   background-color: var(--leaphy-color-primary);
   color: var(--leaphy-color-light);
   display: flex;

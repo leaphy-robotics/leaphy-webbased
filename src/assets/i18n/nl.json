@@ -78,5 +78,9 @@
   "GO_BACK_TO_BLOCKS": "Ga terug naar blokken",
   "NO_SERIAL_SUPPORT": "Geen seriële verbinding mogelijk vanwege de browser, kijk naar de upload hulp voor meer informatie",
   "CHOOSE_ROBOT": "Kies een robot",
-  "UPLOAD_OUTPUT": "Upload output"
+  "UPLOAD_OUTPUT": "Upload output",
+  "WEB_SERIAL_NOT_SUPPORTED": "Web serial wordt niet ondersteund",
+  "WEB_SERIAL_SUPPORTED": "Web serial wordt ondersteund",
+  "UNKNOWN": "Niet gevonden",
+  "DEVICE_INFORMATION": "Apparaat informatie"
 }

@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {AppState} from 'src/app/state/app.state';
 import {RobotType} from 'src/app/domain/robot.type';
 import {CodeEditorType} from "../../../../domain/code-editor.type";
-import {BackendWiredEffects} from "../../../../effects/backend.wired.effects";
 
 @Component({
   selector: 'app-robot-selection',
@@ -14,7 +13,6 @@ export class RobotSelectionComponent {
   constructor(public appState: AppState) { }
   public onRobotSelected(robot: RobotType) {
     this.appState.setSelectedRobotType(robot);
-    console.log(robot);
     if (robot.id === 'l_code') {
       this.appState.setSelectedCodeEditor(CodeEditorType.Advanced)
     } else {

@@ -246,11 +246,9 @@ export class BackendWiredEffects {
             width: '450px', disableClose: true,
             data: {source_code: source_code, libraries: libraries, board: board}
           }).afterClosed().subscribe((result) => {
-            console.log(result);
             if (result) {
               if (result == "HELP_ENVIRONMENT") {
                 const langcode = this.appState.getCurrentLanguageCode();
-                console.log(langcode);
                 this.router.navigateByUrl('/' + langcode + '/driverissues', { skipLocationChange: true });
               }
             }
