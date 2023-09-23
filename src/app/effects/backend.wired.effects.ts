@@ -326,8 +326,6 @@ export class BackendWiredEffects {
         const workspaceTemp = sessionStorage.getItem('workspace');
         const robotType = sessionStorage.getItem('robotType');
         const type = sessionStorage.getItem('type');
-        console.log(type);
-        console.log(this.appState.getCurrentEditor());
         if (type == 'beginner' && this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
           if (robotType != this.appState.getSelectedRobotType().id) {
             return;
@@ -342,7 +340,6 @@ export class BackendWiredEffects {
         } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.Advanced) {
           try {
             args[1].session.setValue(workspaceTemp);
-            console.log(workspaceTemp);
             this.codeEditorState.setOriginalCode(workspaceTemp);
             this.codeEditorState.setCode(workspaceTemp);
           } catch (error) {
