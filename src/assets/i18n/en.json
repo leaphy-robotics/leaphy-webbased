@@ -77,5 +77,6 @@
   "GIVE_FILENAME": "Give your download a name",
   "GO_BACK_TO_BLOCKS": "Go back to blocks",
   "NO_SERIAL_SUPPORT": "No web serial supported on your browser, look at the upload issue page for more information",
-  "CHOOSE_ROBOT": "Choose a robot"
+  "CHOOSE_ROBOT": "Choose a robot",
+  "UPLOAD_OUTPUT": "Upload output"
 }

@@ -1,0 +1,14 @@
+<div class="container">
+
+  <div id="header">
+    {{ "UPLOAD_OUTPUT" | translate}}
+    <button mat-stroked-button class="icon-button" (click)="onCloseClicked()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div class="upload-log">
+    <div class="upload-log-item" *ngFor="let item of (robotWiredState.uploadLog$ | async)">
+      <div class="upload-log-data">{{item}}</div>
+    </div>
+  </div>
+</div>

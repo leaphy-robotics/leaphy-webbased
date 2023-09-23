@@ -16,6 +16,8 @@ import { LanguageSelectDialog } from './dialogs/language-select/language-select.
 import {NameFileDialog} from "./dialogs/name-file/name-file.dialog";
 import {VariableDialog} from "./dialogs/variable/variable.dialog";
 import {UploadDialog} from "./dialogs/upload/upload.dialog";
+import {DebugInformationDialog} from "./dialogs/debug-information/debug-information.dialog";
+import {DragDropModule} from "@angular/cdk/drag-drop";
 @NgModule({
   declarations: [
     ConnectWiredDialog,
@@ -30,12 +32,14 @@ import {UploadDialog} from "./dialogs/upload/upload.dialog";
     NameFileDialog,
     VariableDialog,
     UploadDialog,
+    DebugInformationDialog,
     InfoDialog
   ],
   imports: [
     CommonModule,
     SharedModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    DragDropModule
   ],
   entryComponents: [ConnectWiredDialog, ConnectCloudDialog, ConfirmEditorDialog, StatusMessageDialog, CreditsDialog, LanguageSelectDialog, InfoDialog],
   exports: [

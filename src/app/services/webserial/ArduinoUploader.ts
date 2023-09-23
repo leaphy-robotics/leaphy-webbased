@@ -2,6 +2,7 @@ import { Requests, Responses, Signature } from './stk500'
 import { convertArrayToHex, delay, includesAll } from './utils'
 import { parse } from 'intel-hex'
 import {Buffer} from "buffer";
+import {RobotWiredState} from "../../state/robot.wired.state";
 
 class Arduino {
   port = null
@@ -9,13 +10,16 @@ class Arduino {
   serialOptions = null
   readStream = null
   writeStream = null
+  robotWiredState: RobotWiredState
 
   /**
    * Create a new Arduino instance.
    * @param serialOptions The options to use when opening the serial port.
+   * @param robotWiredState The appstate to use
    */
-  constructor(serialOptions = { baudRate: 115200 }) {
+  constructor(robotWiredState: RobotWiredState, serialOptions = { baudRate: 115200 }) {
     this.serialOptions = serialOptions
+    this.robotWiredState = robotWiredState
   }
 
   /**
@@ -26,7 +30,7 @@ class Arduino {
     try {
       port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}, {usbVendorId: 0x0403}]});
     } catch (error) {
-      console.error(error)
+      console.log(error)
       throw new Error('No device selected')
     }
     if (port === this.port)
@@ -34,7 +38,7 @@ class Arduino {
     try {
       await port.open(this.serialOptions)
     } catch (error) {
-      console.error(error)
+      console.log(error)
       throw new Error('Connecting to device')
     }
     this.port = port
@@ -48,6 +52,7 @@ class Arduino {
   async upload(program: string, callback = (message: string) => {}) {
     if (this.isUploading)
       throw new Error('Arduino is already uploading')
+    this.robotWiredState.clearUploadLog()
     this.isUploading = true
 
     this.readStream = this.port.readable.getReader();
@@ -59,11 +64,11 @@ class Arduino {
     if (response === null) {
       response = await this.attemptOldBootloader();
       if (response !== null) {
-        console.log("Using old bootloader")
+        this.robotWiredState.addToUploadLog("Using old bootloader")
       }
     }
     else {
-      console.log("Using new bootloader")
+      this.robotWiredState.addToUploadLog("Using new bootloader")
     }
 
     if (response === null) {
@@ -129,7 +134,7 @@ class Arduino {
         response = await this.send([Requests.GET_SYNC], 500)
         break
       } catch (error) {
-        console.log(error)
+        this.robotWiredState.addToUploadLog(error.toString())
       }
     }
     if (response === null) {
@@ -154,6 +159,7 @@ class Arduino {
     try {
       await this.reset(this.serialOptions.baudRate);
     } catch (error) {
+      this.robotWiredState.addToUploadLog("Could not connect to Arduino: Reset failed (new bootloader)")
       callback("COULD_NOT_CONNECT")
       throw new Error('Could not connect to Arduino: Reset failed')
     }
@@ -162,7 +168,7 @@ class Arduino {
         response = await this.send([Requests.GET_SYNC], 500)
         break;
       } catch (error) {
-        console.log(error)
+        this.robotWiredState.addToUploadLog(error.toString())
       }
     }
     if (response === null) {
@@ -171,6 +177,7 @@ class Arduino {
       this.readStream = null;
       this.writeStream = null;
       callback("COULD_NOT_CONNECT")
+      this.robotWiredState.addToUploadLog("Could not connect to Arduino (new bootloader)")
       throw new Error('Could not connect to Arduino')
     }
     return response
@@ -185,7 +192,7 @@ class Arduino {
    */
   async send(command, timeoutMs = 1000) {
     const buffer = new Uint8Array([...command, Requests.CRC_EOP]);
-    console.log("Sending: " + convertArrayToHex(buffer).join(' '));
+    this.robotWiredState.addToUploadLog("Sending: " + convertArrayToHex(buffer).join(' '))
     await this.writeBuffer(buffer);
 
     const timeoutPromise = new Promise((resolve, _) => {
@@ -203,9 +210,10 @@ class Arduino {
 
       if (result instanceof Uint8Array) {
         const answer = Array.from(result);
-        if (answer.includes(Responses.NOT_IN_SYNC))
+        if (answer.includes(Responses.NOT_IN_SYNC)) {
+          this.robotWiredState.addToUploadLog("Arduino is not in sync")
           throw new Error('Arduino is not in sync');
-        else
+        } else
           returnBuffer = new Uint8Array([...returnBuffer, ...answer]);
         if (answer.includes(Responses.IN_SYNC))
           IN_SYNC = true;
@@ -238,7 +246,7 @@ class Arduino {
    */
   async receive() {
     const { value } = await this.readStream.read()
-    console.log("Received: " + convertArrayToHex(value).join(' '))
+    this.robotWiredState.addToUploadLog("Received: " + convertArrayToHex(value).join(' '))
     return value
   }
 
@@ -312,7 +320,7 @@ class Arduino {
    * @returns {Promise<void>}
    */
   async clearReadBuffer() {
-    console.log("Clearing read buffer");
+    this.robotWiredState.addToUploadLog("Clearing read buffer");
     const timeoutPromise = new Promise((resolve, _) => {
       setTimeout(() => {
         resolve("Timeout");
@@ -326,7 +334,7 @@ class Arduino {
 
     let i = 1;
     while (true) {
-      console.log("Attempt #" + i);
+      this.robotWiredState.addToUploadLog("Attempt #" + i);
       const promise = new Promise(async (resolve, _) => {
         while (true) {
           const result = await Promise.race([this.readStream.read(), timeoutPromise]);
@@ -343,7 +351,7 @@ class Arduino {
         throw new Error('Timeout');
       i++;
     }
-    console.log("Read buffer cleared");
+    this.robotWiredState.addToUploadLog("Read buffer cleared");
   }
 
   /**
