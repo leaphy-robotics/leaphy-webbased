@@ -17,8 +17,7 @@ import {UploadDialog} from "../modules/core/dialogs/upload/upload.dialog";
 import {Router} from "@angular/router";
 import {CodeEditorState} from "../state/code-editor.state";
 import {DebugInformationDialog} from "../modules/core/dialogs/debug-information/debug-information.dialog";
-
-declare var Blockly: any;
+import * as Blockly from 'blockly/core';
 
 const fileExtensions = [
   ".l_flitz",
@@ -42,18 +41,14 @@ export class BackendWiredEffects {
       .pipe(filter(isDesktop => !!isDesktop))
       .subscribe(() => {
         try {
-          // Open communications to the Electron process
-          //this.ipc = window.require('electron').ipcRenderer;
-          // Replace the Prompt used by Blockly Variables with something that works in Electron
-          //const electronPrompt = window.require('electron-prompt')
-          Blockly.prompt = (msg, defaultValue, callback) => {
+          Blockly.dialog.setPrompt((msg, defaultValue, callback) => {
             this.dialog.open(VariableDialog, {
               width: '400px',
               data: {name: defaultValue}
             }).afterClosed().subscribe(result => {
               callback(result);
             });
-          }
+          });
         } catch (e) {
           console.log(e);
           throw e;
