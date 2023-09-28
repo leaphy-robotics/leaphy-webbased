@@ -28,17 +28,17 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./node_modules/@leaphy-robotics/leaphy-blockly/media",
+                "input": "./node_modules/@leaphy-robotics/leaphy-blocks/media",
                 "output": "./media"
               },
               {
                 "glob": "en.json",
-                "input": "./node_modules/@leaphy-robotics/leaphy-blockly/msg/json",
+                "input": "./node_modules/@leaphy-robotics/leaphy-blocks/msg/json",
                 "output": "./msg/json"
               },
               {
                 "glob": "nl.json",
-                "input": "./node_modules/@leaphy-robotics/leaphy-blockly/msg/json",
+                "input": "./node_modules/@leaphy-robotics/leaphy-blocks/msg/json",
                 "output": "./msg/json"
               }
             ],

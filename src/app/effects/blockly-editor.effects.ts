@@ -11,10 +11,23 @@ import { AppState } from '../state/app.state';
 import { CodeEditorType } from '../domain/code-editor.type';
 import {BackendWiredEffects} from "./backend.wired.effects";
 import * as Blockly from 'blockly/core';
-import Arduino from '@leaphy-robotics/leaphy-blockly/src/generators/arduino';
-import {blocks, blocksJs} from "@leaphy-robotics/leaphy-blockly/src/blocks/blocks";
-import {CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN, LIST_MODES_MUTATOR_MIXIN, LIST_MODES_MUTATOR_EXTENSION, IS_DIVISIBLEBY_MUTATOR_MIXIN, IS_DIVISIBLE_MUTATOR_EXTENSION,MATH_TOOLTIPS_BY_OP, LOGIC_TOOLTIPS_BY_OP, LOGIC_COMPARE_EXTENSION, TEXT_QUOTES_EXTENSION, APPEND_STATEMENT_INPUT_STACK, CONTROLS_IF_MUTATOR_MIXIN, CONTROLS_IF_TOOLTIP_EXTENSION, WHILE_UNTIL_TOOLTIPS} from "@leaphy-robotics/leaphy-blockly/src/blocks/extensions";
-import {defaultBlockStyles, categoryStyles, componentStyles} from "@leaphy-robotics/leaphy-blockly/src/theme/theme";
+import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
+import {blocks, blocksJs} from "@leaphy-robotics/leaphy-blocks/blocks/blocks";
+import {CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
+  LIST_MODES_MUTATOR_MIXIN,
+  LIST_MODES_MUTATOR_EXTENSION,
+  IS_DIVISIBLEBY_MUTATOR_MIXIN,
+  IS_DIVISIBLE_MUTATOR_EXTENSION,
+  MATH_TOOLTIPS_BY_OP,
+  LOGIC_TOOLTIPS_BY_OP,
+  LOGIC_COMPARE_EXTENSION,
+  TEXT_QUOTES_EXTENSION,
+  APPEND_STATEMENT_INPUT_STACK,
+  CONTROLS_IF_MUTATOR_MIXIN,
+  CONTROLS_IF_TOOLTIP_EXTENSION,
+  WHILE_UNTIL_TOOLTIPS
+} from "@leaphy-robotics/leaphy-blocks/blocks/extensions";
+import {defaultBlockStyles, categoryStyles, componentStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
 import {LeaphyCategory} from "../services/Toolbox/Category";
 import {LeaphyToolbox} from "../services/Toolbox/Toolbox";
 
@@ -84,7 +97,7 @@ export class BlocklyEditorEffects {
         this.appState.currentLanguage$
             .pipe(filter(language => !!language))
             .subscribe(async language => {
-                const translations = await import(`node_modules/@leaphy-robotics/leaphy-blockly/src/msg/js/${language.code}.js`);
+                const translations = await import(`node_modules/@leaphy-robotics/leaphy-blocks/msg/js/${language.code}.js`);
                 Blockly.setLocale(translations.default);
             });
 
