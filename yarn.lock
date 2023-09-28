@@ -1739,7 +1739,7 @@
 
 "@leaphy-robotics/leaphy-blockly@https://github.com/leaphy-robotics/leaphy-blocks.git":
   version "4.0.0"
-  resolved "https://github.com/leaphy-robotics/leaphy-blocks.git#adf3181c23f1a5f4fe5108c2911aedbc86a7a384"
+  resolved "https://github.com/leaphy-robotics/leaphy-blocks.git#12ccd956e3b77a6b3246f74ef95db0cf19bdd7e1"
   dependencies:
     blockly "^10.1.3"
     typescript "4.3.2"
