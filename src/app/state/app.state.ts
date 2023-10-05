@@ -34,7 +34,7 @@ export class AppState {
         ['Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor']
     );
 
-    private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', 'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano:cpu=atmega328old', 'hex', 'arduino:avr',
+    private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', 'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
         ['Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor'], true, false, false
     );
 
