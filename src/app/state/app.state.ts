@@ -7,6 +7,8 @@ import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
 import { ReloadConfig } from '../domain/reload.config';
 import packageJson from '../../../package.json';
+import { MatDialog } from '@angular/material/dialog';
+import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
 
 @Injectable({
     providedIn: 'root'
@@ -32,26 +34,36 @@ export class AppState {
         ['Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor']
     );
 
+    private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', 'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano:cpu=atmega328old', 'hex', 'arduino:avr',
+        ['Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor'], true, false, false
+    );
+
+    private static arduinoNanoRobotType = new RobotType('l_nano', 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
+        ['Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor']
+    );
+
     public static idToRobotType = {
         'l_original': AppState.leaphyOriginalRobotType,
         'l_flitz': AppState.leaphyFlitzRobotType,
         'l_click': AppState.leaphyClickRobotType,
         'l_uno': AppState.arduinoUnoRobotType,
         'l_wifi': AppState.leaphyWiFiRobotType,
-        'l_code': AppState.genericRobotType
+        'l_code': AppState.genericRobotType,
+        'l_flitz_nano': AppState.leaphyFlitzNanoRobotType,
+        'l_nano': AppState.arduinoNanoRobotType,
     }
     /* eslint-enable max-len */
 
     private defaultLanguage = new Language('nl', 'Nederlands')
     private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
 
-    constructor(private localStorage: LocalStorageService) {
+    constructor(private localStorage: LocalStorageService, private dialog: MatDialog) {
         this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
         this.isDesktop$ = this.isDesktopSubject$.asObservable();
         this.availableRobotTypes$ = this.isDesktop$
             .pipe(map(isDesktop => {
                 if (isDesktop) {
-                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType]
+                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType, AppState.arduinoNanoRobotType]
                 } else {
                     return [AppState.leaphyWiFiRobotType]
                 }
@@ -139,7 +151,23 @@ export class AppState {
     }
 
     public setSelectedRobotType(robotType: RobotType) {
-        this.selectedRobotTypeSubject$.next(robotType);
+        // Intercept flitz robots and ask what type of flitz robot: nano, or uno
+        if (robotType === AppState.leaphyFlitzRobotType) {
+            this.dialog.open(SelectRobotTypeDialog, {
+                width: '250px',
+                data: { boardTypes: ["Flitz Uno", "Flitz Nano"], icons: ["flitz.svg", "flitz.svg"] }
+            }).afterClosed().subscribe((result: string) => {
+                if (result === "Flitz Uno") {
+                    robotType = AppState.leaphyFlitzRobotType;
+                } else if (result === "Flitz Nano") {
+                    robotType = AppState.leaphyFlitzNanoRobotType;
+                }
+                this.selectedRobotTypeSubject$.next(robotType);
+            });
+
+        } else {
+          this.selectedRobotTypeSubject$.next(robotType);
+        }
     }
 
     public setChangedLanguage(language: Language) {
