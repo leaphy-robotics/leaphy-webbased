@@ -12,7 +12,7 @@ import { CodeEditorType } from '../domain/code-editor.type';
 import {BackendWiredEffects} from "./backend.wired.effects";
 import * as Blockly from 'blockly/core';
 import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
-import {blocks, blocksJs} from "@leaphy-robotics/leaphy-blocks/blocks/blocks";
+import getBlocks from "@leaphy-robotics/leaphy-blocks/blocks/blocks";
 import {CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
   LIST_MODES_MUTATOR_MIXIN,
   LIST_MODES_MUTATOR_EXTENSION,
@@ -47,15 +47,7 @@ export class BlocklyEditorEffects {
         private appState: AppState,
         private http: HttpClient,
     ) {
-        Blockly.registry.register(
-          Blockly.registry.Type.TOOLBOX_ITEM,
-          Blockly.ToolboxCategory.registrationName,
-          LeaphyCategory, true);
-        Blockly.registry.register(Blockly.registry.Type.TOOLBOX, Blockly.CollapsibleToolboxCategory.registrationName, LeaphyToolbox);
-        Blockly.defineBlocksWithJsonArray(blocks)
-        for (const [name, block] of Object.entries(blocksJs)) {
-          Blockly.Blocks[name] = block;
-        }
+
 
 
         // Variables:
@@ -71,6 +63,12 @@ export class BlocklyEditorEffects {
         Extensions.register(
           'math_change_tooltip',
           Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
+
+        Blockly.registry.register(
+          Blockly.registry.Type.TOOLBOX_ITEM,
+          Blockly.ToolboxCategory.registrationName,
+          LeaphyCategory, true);
+        Blockly.registry.register(Blockly.registry.Type.TOOLBOX, Blockly.CollapsibleToolboxCategory.registrationName, LeaphyToolbox);
 
         Extensions.registerMutator(
         'math_modes_of_list_mutator', LIST_MODES_MUTATOR_MIXIN,
@@ -118,43 +116,47 @@ export class BlocklyEditorEffects {
                 this.getXmlContent('./assets/blockly/leaphy-start.xml')
             ))
             .subscribe(([[[element, config], robotType], baseToolboxXml, leaphyToolboxXml, startWorkspaceXml]) => {
-
-
-              const LeaphyTheme = Blockly.Theme.defineTheme('leaphy', {
-                  'blockStyles': defaultBlockStyles,
-                  'categoryStyles': categoryStyles,
-                  'componentStyles': componentStyles,
-                  name: 'leaphy',
-                })
-                config.theme = LeaphyTheme;
-                const parser = new DOMParser();
-                const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
-                const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
-                const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
-                const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
-                toolboxElement.prepend(leaphyRobotCategory);
-                if (robotType.showLeaphyExtra) {
-                    const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_extra`);
-                    toolboxElement.appendChild(leaphyExtraCategory);
+                console.log('Creating new workspace');
+                const leaphyBlocks = getBlocks(this.appState.getSelectedRobotType().id);
+                Blockly.defineBlocksWithJsonArray(leaphyBlocks.block)
+                for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {
+                  Blockly.Blocks[name] = block;
                 }
-                const serializer = new XMLSerializer();
-                const toolboxXmlString = serializer.serializeToString(toolboxXmlDoc);
-                config.toolbox = toolboxXmlString;
-                // @ts-ignore
-                const workspace = Blockly.inject(element, config);
-                const toolbox = workspace.getToolbox();
-                toolbox.getFlyout().autoClose = false;
-                const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
-                Blockly.Xml.domToWorkspace(xml, workspace);
-                this.blocklyState.setWorkspace(workspace);
-                this.blocklyState.setToolboxXml(toolboxXmlString);
-                if (this.blocklyState.workspaceStatus == WorkspaceStatus.Clean) {
-                  this.backEndWiredEffects.send('restore-workspace-temp', robotType.id);
-                }
-                toolbox.selectItemByPosition(0);
-                toolbox.refreshTheme();
+                const LeaphyTheme = Blockly.Theme.defineTheme('leaphy', {
+                    'blockStyles': defaultBlockStyles,
+                    'categoryStyles': categoryStyles,
+                    'componentStyles': componentStyles,
+                    name: 'leaphy',
+                  })
+                  config.theme = LeaphyTheme;
+                  const parser = new DOMParser();
+                  const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
+                  const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
+                  const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
+                  const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
+                  toolboxElement.prepend(leaphyRobotCategory);
+                  if (robotType.showLeaphyExtra) {
+                      const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_extra`);
+                      toolboxElement.appendChild(leaphyExtraCategory);
+                  }
+                  const serializer = new XMLSerializer();
+                  const toolboxXmlString = serializer.serializeToString(toolboxXmlDoc);
+                  config.toolbox = toolboxXmlString;
+                  // @ts-ignore
+                  const workspace = Blockly.inject(element, config);
+                  const toolbox = workspace.getToolbox();
+                  toolbox.getFlyout().autoClose = false;
+                  const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
+                  Blockly.Xml.domToWorkspace(xml, workspace);
+                  this.blocklyState.setWorkspace(workspace);
+                  this.blocklyState.setToolboxXml(toolboxXmlString);
+                  if (this.blocklyState.workspaceStatus == WorkspaceStatus.Clean) {
+                    this.backEndWiredEffects.send('restore-workspace-temp', robotType.id);
+                  }
+                  toolbox.selectItemByPosition(0);
+                  toolbox.refreshTheme();
 
-                setTimeout(() => this.blocklyState.setIsSideNavOpen(robotType.showCodeOnStart), 200);
+                  setTimeout(() => this.blocklyState.setIsSideNavOpen(robotType.showCodeOnStart), 200);
             });
 
         // When a new project is started, reset the blockly code

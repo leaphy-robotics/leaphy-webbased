@@ -18,6 +18,7 @@ import {VariableDialog} from "./dialogs/variable/variable.dialog";
 import {UploadDialog} from "./dialogs/upload/upload.dialog";
 import {DebugInformationDialog} from "./dialogs/debug-information/debug-information.dialog";
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import { SelectRobotTypeDialog } from './dialogs/robot-select/robot-select.dialog';
 @NgModule({
   declarations: [
     ConnectWiredDialog,
@@ -29,6 +30,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
     StatusMessageDialog,
     CreditsDialog,
     LanguageSelectDialog,
+    SelectRobotTypeDialog,
     NameFileDialog,
     VariableDialog,
     UploadDialog,
