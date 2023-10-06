@@ -116,7 +116,6 @@ export class BlocklyEditorEffects {
                 this.getXmlContent('./assets/blockly/leaphy-start.xml')
             ))
             .subscribe(([[[element, config], robotType], baseToolboxXml, leaphyToolboxXml, startWorkspaceXml]) => {
-                console.log('Creating new workspace');
                 const leaphyBlocks = getBlocks(this.appState.getSelectedRobotType().id);
                 Blockly.defineBlocksWithJsonArray(leaphyBlocks.block)
                 for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {

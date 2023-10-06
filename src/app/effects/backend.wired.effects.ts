@@ -19,6 +19,7 @@ import {CodeEditorState} from "../state/code-editor.state";
 import {DebugInformationDialog} from "../modules/core/dialogs/debug-information/debug-information.dialog";
 import * as Blockly from 'blockly/core';
 
+
 const fileExtensions = [
   ".l_flitz",
   ".l_original",

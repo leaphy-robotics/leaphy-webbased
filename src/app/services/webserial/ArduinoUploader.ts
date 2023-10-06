@@ -60,15 +60,14 @@ class Arduino {
 
     let response = null
     // start timer
-    response = await this.attemptNewBootloader(callback)
-    if (response === null) {
+    try {
+      response = await this.attemptNewBootloader(callback);
+      this.robotWiredState.addToUploadLog("Using new bootloader")
+    } catch {
       response = await this.attemptOldBootloader();
       if (response !== null) {
         this.robotWiredState.addToUploadLog("Using old bootloader")
       }
-    }
-    else {
-      this.robotWiredState.addToUploadLog("Using new bootloader")
     }
 
     if (response === null) {
@@ -143,6 +142,7 @@ class Arduino {
       this.readStream = null;
       this.writeStream = null;
       callback("COULD_NOT_CONNECT")
+      this.robotWiredState.addToUploadLog("Could not connect to Arduino (old bootloader)")
       throw new Error('Could not connect to Arduino')
     }
     return response
@@ -172,11 +172,6 @@ class Arduino {
       }
     }
     if (response === null) {
-      this.readStream.releaseLock();
-      this.writeStream.releaseLock();
-      this.readStream = null;
-      this.writeStream = null;
-      callback("COULD_NOT_CONNECT")
       this.robotWiredState.addToUploadLog("Could not connect to Arduino (new bootloader)")
       throw new Error('Could not connect to Arduino')
     }
