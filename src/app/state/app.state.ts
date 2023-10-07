@@ -161,6 +161,8 @@ export class AppState {
                     robotType = AppState.leaphyFlitzRobotType;
                 } else if (result === "Flitz Nano") {
                     robotType = AppState.leaphyFlitzNanoRobotType;
+                } else {
+                    return;
                 }
                 this.selectedRobotTypeSubject$.next(robotType);
             });
