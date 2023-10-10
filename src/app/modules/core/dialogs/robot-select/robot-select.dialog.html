@@ -1,0 +1,15 @@
+<div class="container">
+  <img class="leaphyLogo" src="./assets/leaphy-logo-color.svg" />
+  <div class="robots">
+    <button mat-stroked-button *ngFor="let robot of data.boardTypes; index as i" (click)="onRobotSelected(robot)">
+      <div class="robot">
+        <div style="width: 100%;">
+          <img src="./assets/{{data.icons[i]}}" width="50" height="50">
+        </div>
+        <div class="robot-name">
+          {{robot}}
+        </div>
+      </div>
+    </button>
+  </div>
+</div>

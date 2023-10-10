@@ -19,6 +19,10 @@ export class RobotWiredState {
     private isSerialOutputStillListening$ = new BehaviorSubject(false);
     public isSerialOutputStillListening = this.isSerialOutputStillListening$.asObservable();
 
+    // Upload log, a Log of list of strings
+    private uploadLogSubject$ = new BehaviorSubject<string[]>([]);
+    public uploadLog$: Observable<string[]> = this.uploadLogSubject$.asObservable();
+
     private incomingSerialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
     public serialData$: Observable<{ time: Date, data: string }[]> = this.incomingSerialDataSubject$
         .pipe(filter(output => !!output))
@@ -87,6 +91,18 @@ export class RobotWiredState {
 
     public getIsSerialOutputStillListening(): boolean {
         return this.isSerialOutputStillListening$.getValue();
+    }
+
+    public addToUploadLog(log: string): void {
+        this.uploadLogSubject$.next([...this.uploadLogSubject$.getValue(), log]);
+    }
+
+    public clearUploadLog(): void {
+        this.uploadLogSubject$.next([]);
+    }
+
+    public getUploadLog(): string[] {
+        return this.uploadLogSubject$.getValue();
     }
 
     private readonly poisonPill: string = "caaa61a6-a666-4c0b-83b4-ebc75b08fecb"

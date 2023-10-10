@@ -11,10 +11,12 @@ import {RobotWiredState} from "../../../../state/robot.wired.state";
   styleUrls: ['./upload.dialog.scss']
 })
 export class UploadDialog {
-  private upload = new ArduinoUploader();
+  private upload = new ArduinoUploader(this.robotWiredState);
 
   statusMessage: string = '';
   progressBarWidth: number = 0;
+  uploadFailed: boolean = false;
+
   constructor(
     public dialogRef: MatDialogRef<UploadDialog>,
     private dialogState: DialogState,
@@ -32,7 +34,6 @@ export class UploadDialog {
   public async startUpload(source_code: string, board: string, libraries: string) {
     console.log("Starting upload");
     this.dialogState.setIsSerialOutputListening(false);
-    const uploader = new ArduinoUploader();
     function makeRequest(source_code, board, libraries) {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -101,10 +102,12 @@ export class UploadDialog {
         this.progressBarWidth += 25;
       } catch (error) {
         if (error.toString() === 'Error: No device selected') {
+          this.uploadFailed = true;
           this.onUpdate('NO_DEVICE_SELECTED')
           this.showReturnOptions();
           console.error(error);
         } else {
+          this.uploadFailed = true;
           this.onUpdate('DRIVER_ERROR')
           this.showReturnOptions();
           console.error(error);
@@ -116,6 +119,7 @@ export class UploadDialog {
         await this.upload.upload(hex, (message: string) => { this.onUpdate(message) });
       } catch (error) {
         // close dialog
+        this.uploadFailed = true;
         this.showReturnOptions();
         console.error(error);
 
@@ -142,7 +146,10 @@ export class UploadDialog {
     document.getElementById("return-options").classList.remove("hidden");
     document.getElementById("upload-progress-bar").classList.add("hidden");
     document.getElementById("return-options").classList.add("return-options");
-
+    if (this.uploadFailed) {
+      document.getElementById("upload-status").classList.add("failed-upload");
+      document.getElementById("helpEnviroment").classList.remove("hidden");
+    }
   }
 
   returnBlockEnvironment() {
@@ -158,6 +165,7 @@ export class UploadDialog {
     onError(error: string) {
       document.getElementById("error-message").innerText = error;
       document.getElementById("error-message").classList.remove("hidden");
+      this.uploadFailed = true;
     }
 
   protected readonly document = document;

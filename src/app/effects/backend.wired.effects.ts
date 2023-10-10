@@ -16,8 +16,9 @@ import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
 import {UploadDialog} from "../modules/core/dialogs/upload/upload.dialog";
 import {Router} from "@angular/router";
 import {CodeEditorState} from "../state/code-editor.state";
+import {DebugInformationDialog} from "../modules/core/dialogs/debug-information/debug-information.dialog";
+import * as Blockly from 'blockly/core';
 
-declare var Blockly: any;
 
 const fileExtensions = [
   ".l_flitz",
@@ -41,18 +42,14 @@ export class BackendWiredEffects {
       .pipe(filter(isDesktop => !!isDesktop))
       .subscribe(() => {
         try {
-          // Open communications to the Electron process
-          //this.ipc = window.require('electron').ipcRenderer;
-          // Replace the Prompt used by Blockly Variables with something that works in Electron
-          //const electronPrompt = window.require('electron-prompt')
-          Blockly.prompt = (msg, defaultValue, callback) => {
+          Blockly.dialog.setPrompt((msg, defaultValue, callback) => {
             this.dialog.open(VariableDialog, {
               width: '400px',
               data: {name: defaultValue}
             }).afterClosed().subscribe(result => {
               callback(result);
             });
-          }
+          });
         } catch (e) {
           console.log(e);
           throw e;
@@ -123,14 +120,6 @@ export class BackendWiredEffects {
           .pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Advanced))
           .subscribe(() => {
             this.send('restore-workspace-code', AppState.genericRobotType.id);
-          });
-
-        // When the temp workspace is being loaded, relay the command to Electron
-        this.blocklyEditorState.workspaceStatus$
-          .pipe(filter(status => status === WorkspaceStatus.FindingTemp))
-          .pipe(withLatestFrom(this.appState.selectedRobotType$))
-          .subscribe(([, robotType]) => {
-            this.send('restore-workspace-temp', robotType.id);
           });
 
         // When an existing project's workspace is being saved, relay the command to Electron
@@ -253,11 +242,9 @@ export class BackendWiredEffects {
             width: '450px', disableClose: true,
             data: {source_code: source_code, libraries: libraries, board: board}
           }).afterClosed().subscribe((result) => {
-            console.log(result);
             if (result) {
               if (result == "HELP_ENVIRONMENT") {
                 const langcode = this.appState.getCurrentLanguageCode();
-                console.log(langcode);
                 this.router.navigateByUrl('/' + langcode + '/driverissues', { skipLocationChange: true });
               }
             }
@@ -270,7 +257,10 @@ export class BackendWiredEffects {
 
         break;
       case 'open-log-file':
-        alert("To open the log, go to the console of your browser");
+        // Open a module to view the log file so .op
+        this.dialog.open(DebugInformationDialog, {
+          width: '450px', disableClose: false,
+        });
         break;
       case 'restore-workspace':
         var input = document.createElement('input');
@@ -343,8 +333,9 @@ export class BackendWiredEffects {
           }
         } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.Advanced) {
           try {
+            args[1].session.setValue(workspaceTemp);
+            this.codeEditorState.setOriginalCode(workspaceTemp);
             this.codeEditorState.setCode(workspaceTemp);
-            this.blocklyEditorState.setWorkspaceStatus(WorkspaceStatus.Restoring);
           } catch (error) {
             console.log('Error:', error.message);
           }

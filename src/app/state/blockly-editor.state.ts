@@ -132,6 +132,9 @@ export class BlocklyEditorState {
   }
 
   public setWorkspaceStatus(status: WorkspaceStatus) {
+    if (this.workspaceSubject$.getValue() === null) {
+      throw new Error("Workspace must be set before setting workspace status; Tried to set workspace status to " + status + "");
+    }
     this.workspaceStatusSubject$.next(status);
   }
 
@@ -182,5 +185,9 @@ export class BlocklyEditorState {
 
   get workspace(): any {
     return this.workspaceSubject$.getValue();
+  }
+
+  get workspaceStatus(): WorkspaceStatus {
+    return this.workspaceStatusSubject$.getValue();
   }
 }
