@@ -1737,10 +1737,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@leaphy-robotics/leaphy-blocks@^1.3.6":
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.3.6.tgz#69c098f6d41c88e11084bfd26df72678f55a994d"
-  integrity sha512-cgDvpomvAV429Q7jCKpJF5NIr0OeaLe54a5g3q7HqnbqwrBSx4XWMwwiRNhOCQxkV5fj+0dkDmhgBoN1Owad6Q==
+"@leaphy-robotics/leaphy-blocks@1.3.7":
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.3.7.tgz#b61bb0d30b3d3b588a693f9265c8361ff7591646"
+  integrity sha512-OG1+wuyGEC3c+8HmL6iJowvEhc7fqa6uAVbB/QNXKaUw/1f6tngQdVjWOmmPK/4FIe7JtM0mtpmbrqmb8egjzQ==
   dependencies:
     blockly "^10.1.3"
     typescript "4.3.2"
