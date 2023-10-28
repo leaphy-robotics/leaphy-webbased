@@ -64,15 +64,14 @@ export class DialogEffects {
         // If the isSerialOutputWindowOpen is set to true open the dialog
         this.dialogState.isSerialOutputWindowOpen$
             .subscribe(() => {
-                console.log('Serial output window is open ', this.dialogState.getIsSerialOutputWindowOpen());
                 if (this.dialogState.getIsSerialOutputWindowOpen() !== true)
-                  return;
+                    return;
                 this.dialog.open(SerialOutputComponent, {
-                  width: "800px",
-                  disableClose: true,
-                  hasBackdrop: false,
+                    width: "800px",
+                    disableClose: true,
+                    hasBackdrop: false,
                 }).afterClosed().subscribe(() => {
-                  this.dialogState.setIsSerialOutputWindowOpen(false);
+                    this.dialogState.setIsSerialOutputWindowOpen(false);
                 });
             });
 
