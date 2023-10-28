@@ -9,108 +9,118 @@ import {Language} from 'src/app/domain/language';
 import {Router} from "@angular/router";
 import {CodeEditorType} from "../../../../domain/code-editor.type";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
 
-  constructor(
-    public appState: AppState,
-    public backEndState: BackEndState,
-    public blocklyState: BlocklyEditorState,
-    public dialogState: DialogState,
-    private robotWiredState: RobotWiredState,
-    private router: Router
-  ) {
+    constructor(
+        public appState: AppState,
+        public backEndState: BackEndState,
+        public blocklyState: BlocklyEditorState,
+        public dialogState: DialogState,
+        private robotWiredState: RobotWiredState,
+        private router: Router,
+        private snackBar: MatSnackBar,
+    ) {
 
-  }
-
-  public onNewProjectClicked() {
-    this.appState.setSelectedRobotType(null);
-  }
-
-  public onLoadWorkspaceClicked() {
-    this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Finding);
-  }
-
-  public async onChooseRobot() {
-    if ('serial' in navigator) {
-      const port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}, {usbVendorId: 0x0403}]})
-      if (port !== this.robotWiredState.getSerialPort()) {
-        await port.open({baudRate: 115200});
-        this.robotWiredState.setSerialPort(port);
-        this.dialogState.setIsSerialOutputListening(true);
-      }
     }
-  }
 
-  public onSaveWorkspaceClicked() {
-    this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Saving);
-  }
-
-  // To capture the keyboard shortcut for Saving a project
-  @HostListener('window:keydown', ['$event'])
-  onCtrlS(event: KeyboardEvent) {
-    if ((event.metaKey || event.ctrlKey) && event.key === 's') {
-      this.onSaveWorkspaceClicked();
-      event.preventDefault();
+    public onNewProjectClicked() {
+        this.appState.setSelectedRobotType(null);
     }
-  }
 
-  public onCodeEditorClicked() {
-    this.appState.setIsCodeEditorToggleRequested();
-  }
+    public onLoadWorkspaceClicked() {
+        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Finding);
+    }
 
-  public onSaveWorkspaceAsClicked() {
-    this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingAs);
-  }
+    public async onChooseRobot() {
+        if ('serial' in navigator) {
+            const port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}, {usbVendorId: 0x0403}]})
+            if (port !== this.robotWiredState.getSerialPort()) {
+                await port.open({baudRate: 115200});
+                this.robotWiredState.setSerialPort(port);
+                this.dialogState.setIsSerialOutputListening(true);
+            }
+        }
+    }
 
-  public onUploadClicked() {
-    this.blocklyState.setSketchStatus(SketchStatus.Sending);
-  }
+    public onSaveWorkspaceClicked() {
+        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Saving);
+    }
 
-  public onUndoClicked() {
-    this.blocklyState.setUndo(false);
-  }
+    // To capture the keyboard shortcut for Saving a project
+    @HostListener('window:keydown', ['$event'])
+    onCtrlS(event: KeyboardEvent) {
+        if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+            this.onSaveWorkspaceClicked();
+            event.preventDefault();
+        }
+    }
 
-  public onRedoClicked() {
-    this.blocklyState.setUndo(true);
-  }
+    public onCodeEditorClicked() {
+        this.appState.setIsCodeEditorToggleRequested();
+    }
 
-  public onHelpClicked() {
-    this.appState.setShowHelpPage(true);
-  }
+    public onSaveWorkspaceAsClicked() {
+        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingAs);
+    }
 
-  isDriverIssuesUrl(): boolean {
-    return !(this.router.url.endsWith('driverissues'));
-  }
+    public onUploadClicked() {
+        this.blocklyState.setSketchStatus(SketchStatus.Sending);
+    }
 
-  public onShowInfoClicked() {
-    this.dialogState.setIsInfoDialogVisible(true);
-  }
+    public onUndoClicked() {
+        this.blocklyState.setUndo(false);
+    }
 
-  public onViewLogClicked() {
-    this.backEndState.setIsViewLogClicked();
-  }
+    public onRedoClicked() {
+        this.blocklyState.setUndo(true);
+    }
 
-  public onToggleSoundClicked() {
-    this.blocklyState.setIsSoundToggled();
-  }
+    public onHelpClicked() {
+        this.appState.setShowHelpPage(true);
+    }
 
-  public onLanguageChanged(language: Language) {
-    this.appState.setChangedLanguage(language);
-    window.location.reload();
-  }
+    public onEmailClicked() {
+        // copy email to clipboard
+        navigator.clipboard.writeText('helpdesk@leaphy.nl').then(function() {});
+        this.snackBar.open('Email copied to clipboard', 'Close', {
+            duration: 2000,
+        });
+    }
 
-  public onBackToBlocks() {
-    if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
-      this.router.navigateByUrl('', { skipLocationChange: true });
-    else
-      this.router.navigateByUrl('/advanced', { skipLocationChange: true });
-  }
+    isDriverIssuesUrl(): boolean {
+        return !(this.router.url.endsWith('driverissues'));
+    }
+
+    public onShowInfoClicked() {
+        this.dialogState.setIsInfoDialogVisible(true);
+    }
+
+    public onViewLogClicked() {
+        this.backEndState.setIsViewLogClicked();
+    }
+
+    public onToggleSoundClicked() {
+        this.blocklyState.setIsSoundToggled();
+    }
+
+    public onLanguageChanged(language: Language) {
+        this.appState.setChangedLanguage(language);
+        window.location.reload();
+    }
+
+    public onBackToBlocks() {
+        if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
+            this.router.navigateByUrl('', { skipLocationChange: true });
+        else
+            this.router.navigateByUrl('/advanced', { skipLocationChange: true });
+    }
 }
 
 
