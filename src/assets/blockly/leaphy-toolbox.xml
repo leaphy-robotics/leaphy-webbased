@@ -198,6 +198,26 @@
 			</shadow>
 		</value>
 	</block>
+	<sep gap="8"></sep>
+	<block type="leaphy_nano_set_motor">
+		<value name="MOTOR_SPEED">
+			<shadow type="math_number">
+				<field name="NUM">
+					100
+				</field>
+			</shadow>
+		</value>
+	</block>
+	<sep gap="8"></sep>
+	<block type="leaphy_nano_move_motors">
+		<value name="MOTOR_SPEED">
+			<shadow type="math_number">
+				<field name="NUM">
+					100
+				</field>
+			</shadow>
+		</value>
+	</block>
   </category>
 	<category id="l_click" toolboxitemid="l_click" name="%{BKY_LEAPHY_CLICK_CATEGORY}" categorystyle="leaphy_category">
 		<block type="leaphy_io_digitalwrite">
@@ -739,7 +759,7 @@
 			</value>
 		</block>
 		<sep gap="8"></sep>
-		<block type="leaphy_original_set_motor">
+		<block type="leaphy_nano_set_motor">
 			<value name="MOTOR_SPEED">
 				<shadow type="math_number">
 					<field name="NUM">
@@ -749,7 +769,7 @@
 			</value>
 		</block>
 		<sep gap="8"></sep>
-		<block type="leaphy_original_move_motors">
+		<block type="leaphy_nano_move_motors">
 			<value name="MOTOR_SPEED">
 				<shadow type="math_number">
 					<field name="NUM">
