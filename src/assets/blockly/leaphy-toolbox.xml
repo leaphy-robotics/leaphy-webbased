@@ -146,7 +146,7 @@
     <block type="leaphy_flitz_nano_read_hand_sensor">
     </block>
     <sep gap="8"></sep>
-    <block type="leaphy_flitz_nano_led">
+    <block type="leaphy_flitz_led">
       <value name="FLITZ_LED_R">
         <shadow type="math_number">
           <field name="NUM">
@@ -739,7 +739,7 @@
 			</value>
 		</block>
 		<sep gap="8"></sep>
-		<block type="leaphy_nano_set_motor">
+		<block type="leaphy_original_set_motor">
 			<value name="MOTOR_SPEED">
 				<shadow type="math_number">
 					<field name="NUM">
@@ -749,7 +749,7 @@
 			</value>
 		</block>
 		<sep gap="8"></sep>
-		<block type="leaphy_nano_move_motors">
+		<block type="leaphy_original_move_motors">
 			<value name="MOTOR_SPEED">
 				<shadow type="math_number">
 					<field name="NUM">
