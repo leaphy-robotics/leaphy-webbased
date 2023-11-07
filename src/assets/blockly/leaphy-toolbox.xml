@@ -468,6 +468,9 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_display_display">
 		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_compass_degrees">
+		</block>
 	</category>
 	<category id="l_click_extra" toolboxitemid="l_extra" name="%{BKY_LEAPHY_EXTRA_CATEGORY}" categorystyle="leaphy_category">
 		<block type="leaphy_sonar_read">
@@ -702,6 +705,9 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_display_display">
 		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_compass_degrees">
+		</block>
 	</category>
 	<category id="l_nano" toolboxitemid="l_nano" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
 		<block type="leaphy_original_get_distance">
@@ -718,6 +724,9 @@
 		</block>
 		<sep gap="8"></sep>
 		<block type="leaphy_rgb_color_raw">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_compass_degrees">
 		</block>
 	</category>
 	<category id="l_nano_extra" toolboxitemid="l_extra" name="%{BKY_ACTUATOREN_CATEGORY}" categorystyle="leaphy_category">
