@@ -17,5 +17,9 @@ export class NameFileDialog {
     this.dialogRef.close(name);
   }
 
+  public onClose() {
+    this.dialogRef.close(null);
+  }
+
   protected readonly document = document;
 }
