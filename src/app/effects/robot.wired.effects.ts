@@ -3,18 +3,21 @@ import { filter } from 'rxjs/operators';
 import { BackEndState } from '../state/backend.state';
 import { RobotWiredState } from '../state/robot.wired.state';
 import {DialogState} from "../state/dialog.state";
+import ArduinoWebserial from "../services/webserial/ArduinoWebserial";
 
 @Injectable({
     providedIn: 'root',
 })
 
 export class RobotWiredEffects {
+    private webserial: ArduinoWebserial;
 
     constructor(
         private robotWiredState: RobotWiredState,
         private backEndState: BackEndState,
         private dialogState: DialogState,
     ) {
+        this.webserial = new ArduinoWebserial(this.robotWiredState);
         this.backEndState.backEndMessages$
             .pipe(filter(message => !!message))
             .subscribe(message => {
@@ -28,58 +31,39 @@ export class RobotWiredEffects {
         this.dialogState.isSerialOutputListening$
             .pipe(filter(isListening => !!isListening))
             .subscribe(async () => {
-                if (this.robotWiredState.getSerialPort() == null) {
-                    return;
-                }
-                try {
-                    try {
-                        await this.robotWiredState.getSerialPort().open({ baudRate: 115200 });
-                    } catch (e) {
-                        if (!e.message.includes("already open")) {
-                            console.log(e);
+                const robotWiredState = this.robotWiredState;
+
+                const writableStream = new WritableStream({
+                    write: async (chunk) => {
+                        let entireStr = new TextDecoder("utf-8").decode(chunk);
+                        const date = new Date();
+
+                        function makeString (chunkedStr: string) {
+                            const serialData = { time: date, data: chunkedStr };
+                            robotWiredState.setIncomingSerialData(serialData);
                         }
-                    }
-                    this.robotWiredState.setIsSerialOutputStillListening(true);
-                    const abortController = new AbortController();
-
-                    const readableStream = this.robotWiredState.getSerialPort().readable;
-
-                    const writableStream = new WritableStream({
-                        write: async (chunk) => {
-                            const str = new TextDecoder("utf-8").decode(chunk);
-                            const serialData = { time: new Date(), data: str };
-                            this.robotWiredState.setIncomingSerialData(serialData);
-                        },
-                    });
-
-                    const pipePromise = readableStream.pipeTo(writableStream, { signal: abortController.signal });
-
-                    pipePromise.catch((error) => {
-                        if (error.toString().includes('Upload started')) {
-                            writableStream.abort("Upload started")
-                            console.log('Stream aborted');
-                        } else if (error.toString().includes('The device has been lost.')) {
-                            this.robotWiredState.setSerialPort(null);
-                            console.log('Device disconnected');
-                        } else {
-                            this.robotWiredState.setSerialPort(null);
-                            console.error('Error while piping stream:', error);
+                        function makeStringFinal (chunkedStr: string) {
+                            const serialData = { time: date, data: chunkedStr };
+                            robotWiredState.setFinalSerialData(serialData);
                         }
-                    }).then(
-                        async () => {
-                            if (this.robotWiredState.getSerialPort() == null) {
-                                return;
-                            }
-                            await this.robotWiredState.getSerialPort().close();
-                            await this.robotWiredState.getSerialPort().open({baudRate: 115200});
-                            this.robotWiredState.setIsSerialOutputStillListening(false);
-                        }
-                    );
+                        console.log("entireStr: " + entireStr.replace(/\n/g, "\\n"));
+                        let icount = 0;
+                        let i;
+                        do {
+                            console.log("icount: " + icount);
+                            i = entireStr.indexOf("\n");
+                            let part = entireStr.slice(0, i);
+                            entireStr = entireStr.slice(i + 1);
+                            console.log("part: " + part);
+                            console.log("entireStr: " + entireStr);
+                            makeStringFinal(part);
+                            icount++;
+                        } while (i != -1);
+                        if (entireStr !== '\n') { makeString(entireStr); }
+                    },
+                });
 
-                    this.robotWiredState.setAbortController(abortController);
-                } catch (e) {
-                    console.log(e);
-                }
+                this.webserial.serialMonitor(writableStream);
             });
     }
 

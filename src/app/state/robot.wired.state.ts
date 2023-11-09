@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ChartDataset } from 'chart.js';
-import { ReplaySubject } from 'rxjs';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ReplaySubject, BehaviorSubject, Observable} from 'rxjs';
 import { filter, map, scan } from 'rxjs/operators';
 
 
@@ -23,8 +22,15 @@ export class RobotWiredState {
     private uploadLogSubject$ = new BehaviorSubject<string[]>([]);
     public uploadLog$: Observable<string[]> = this.uploadLogSubject$.asObservable();
 
-    private incomingSerialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
-    public serialData$: Observable<{ time: Date, data: string }[]> = this.incomingSerialDataSubject$
+
+    private unfinalizedSerialDataSubject$ = new BehaviorSubject({ time: new Date(), data: '' });
+    public serialDataUnfinalized$: Observable<{ time: Date, data: string }> = this.unfinalizedSerialDataSubject$.asObservable();
+
+    private finalizedSerialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
+
+    // combine the unfinalizedSerialDataSubject$ with the finalizedSerialDataSubject$
+    // private combinedSerialData = combineLatestWith(this.finalizedSerialDataSubject$)(this.serialDataUnfinalized$);
+    public serialData$: Observable<{ time: Date, data: string }[]> = this.finalizedSerialDataSubject$
         .pipe(filter(output => !!output))
         .pipe(scan((all, incoming) => {
             if (incoming.data === this.poisonPill) {
@@ -35,6 +41,7 @@ export class RobotWiredState {
             }
             return all.concat(incoming);
         }, []));
+
 
     public serialChartDataSets$: Observable<ChartDataset[]> = this.serialData$
         .pipe(map(data => {
@@ -62,7 +69,16 @@ export class RobotWiredState {
 
 
     public setIncomingSerialData(data: { time: Date, data: string }): void {
-        this.incomingSerialDataSubject$.next(data);
+        this.finalizedSerialDataSubject$.next(data);
+    }
+
+    public setFinalSerialData(data: { time: Date, data: string }): void {
+        this.finalizedSerialDataSubject$.next(data);
+    }
+
+    public finalizeLastSerialData(): void {
+        this.finalizedSerialDataSubject$.next(this.unfinalizedSerialDataSubject$.getValue());
+        this.unfinalizedSerialDataSubject$.next(null);
     }
 
     public clearSerialData(): void {
