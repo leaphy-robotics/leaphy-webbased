@@ -201,7 +201,7 @@ export class BlocklyEditorEffects {
                 workspace.clearUndo();
                 workspace.addChangeListener(Blockly.Events.disableOrphans);
                 workspace.addChangeListener(async () => {
-                    this.blocklyState.setCode(Arduino.workspaceToCode(workspace));
+                    this.blocklyState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
                     const xml = Blockly.Xml.workspaceToDom(workspace);
                     const prettyXml = Blockly.Xml.domToPrettyText(xml);
                     this.blocklyState.setWorkspaceXml(prettyXml);
