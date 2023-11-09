@@ -399,12 +399,7 @@ class Arduino {
                 this.port.readable.getReader().releaseLock();
             }
             await this.port.close();
-<<<<<<< HEAD
-            await this.port.open({baudRate: 115200, flowControl: "hardware", bufferSize: 1024 * 4});
-=======
             await this.port.open({baudRate: 115200, flowControl: "hardware", bufferSize: 1024});
->>>>>>> origin/stability
-
             this.robotWiredState.setIsSerialOutputStillListening(true);
             const abortController = new AbortController();
 
@@ -412,12 +407,6 @@ class Arduino {
 
             this.readStream = this.port.readable.getReader();
             this.writeStream = this.port.writable.getWriter();
-<<<<<<< HEAD
-            await this.port.setSignals({ dataTerminalReady: false })
-            await delay(250);
-            await this.port.setSignals({ dataTerminalReady: true })
-=======
->>>>>>> origin/stability
             await this.clearReadBuffer();
             this.readStream.releaseLock();
             this.writeStream.releaseLock();
