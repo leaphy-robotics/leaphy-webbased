@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ChartDataset } from 'chart.js';
-import { ReplaySubject } from 'rxjs';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { ReplaySubject, BehaviorSubject, Observable} from 'rxjs';
 import { filter, map, scan } from 'rxjs/operators';
 
 
@@ -23,8 +22,8 @@ export class RobotWiredState {
     private uploadLogSubject$ = new BehaviorSubject<string[]>([]);
     public uploadLog$: Observable<string[]> = this.uploadLogSubject$.asObservable();
 
-    private incomingSerialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
-    public serialData$: Observable<{ time: Date, data: string }[]> = this.incomingSerialDataSubject$
+    private serialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
+    public serialData$: Observable<{ time: Date, data: string }[]> = this.serialDataSubject$
         .pipe(filter(output => !!output))
         .pipe(scan((all, incoming) => {
             if (incoming.data === this.poisonPill) {
@@ -35,6 +34,7 @@ export class RobotWiredState {
             }
             return all.concat(incoming);
         }, []));
+
 
     public serialChartDataSets$: Observable<ChartDataset[]> = this.serialData$
         .pipe(map(data => {
@@ -62,7 +62,7 @@ export class RobotWiredState {
 
 
     public setIncomingSerialData(data: { time: Date, data: string }): void {
-        this.incomingSerialDataSubject$.next(data);
+        this.serialDataSubject$.next(data);
     }
 
     public clearSerialData(): void {

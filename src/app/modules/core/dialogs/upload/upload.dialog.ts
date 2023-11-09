@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {TranslateService} from "@ngx-translate/core";
-import ArduinoUploader from "../../../../services/webserial/ArduinoUploader";
+import ArduinoWebserial from "../../../../services/webserial/ArduinoWebserial";
 import {DialogState} from "../../../../state/dialog.state";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
 
@@ -15,7 +15,7 @@ export class UploadDialog {
     progressBarWidth: number = 0;
     uploadFailed: boolean = false;
     protected readonly document = document;
-    private upload = new ArduinoUploader(this.robotWiredState);
+    private upload = new ArduinoWebserial(this.robotWiredState);
 
     constructor(
         public dialogRef: MatDialogRef<UploadDialog>,
