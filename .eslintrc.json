@@ -55,7 +55,7 @@
       "extends": [
         "plugin:@angular-eslint/template/recommended"
       ],
-      "rules": {  }
+      "rules": {}
     }
   ]
 }
