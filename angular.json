@@ -94,7 +94,6 @@
           }
         },
         "serve": {
-
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "browserTarget": "leaphy-client:build"
@@ -153,9 +152,18 @@
       }
     }
   },
-  "defaultProject": "leaphy-client",
   "cli": {
-    "defaultCollection": "@angular-eslint/schematics",
-    "analytics": "6d8c3839-2848-4328-b7fb-a10f9273fdfc"
+    "analytics": "6d8c3839-2848-4328-b7fb-a10f9273fdfc",
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
+  },
+  "schematics": {
+    "@angular-eslint/schematics:application": {
+      "setParserOptionsProject": true
+    },
+    "@angular-eslint/schematics:library": {
+      "setParserOptionsProject": true
+    }
   }
 }
