@@ -28,7 +28,7 @@ export class AppState {
         AppState.defaultLibraries
     );
     private static arduinoUnoRobotType = new RobotType('l_uno', 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass'])
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
     private static leaphyWiFiRobotType = new RobotType('l_wifi', 'Leaphy WiFi', 'wifi.svg', 'NodeMCU', 'esp8266:esp8266:nodemcuv2', 'bin', 'esp8266:esp8266',
         AppState.defaultLibraries.concat(['Leaphy WiFi Extension'])
@@ -40,7 +40,7 @@ export class AppState {
         AppState.defaultLibraries, true, false
     );
     private static arduinoNanoRobotType = new RobotType('l_nano', 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass'])
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
 
     public static idToRobotType = {
