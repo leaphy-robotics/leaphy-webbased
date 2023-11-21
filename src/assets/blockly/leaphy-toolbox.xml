@@ -1,83 +1,5 @@
 <xml xmlns="https://developers.google.com/blockly/xml" style="display: none">
-	<category id="l_original" toolboxitemid="l_original" name="%{BKY_LEAPHY_ORIGINAL_CATEGORY}" categorystyle="leaphy_category">
-		<block type="leaphy_original_set_led">
-			<value name="LED_RED">
-				<shadow type="math_number">
-					<field name="NUM">0</field>
-				</shadow>
-			</value>
-			<value name="LED_GREEN">
-				<shadow type="math_number">
-					<field name="NUM">0</field>
-				</shadow>
-			</value>
-			<value name="LED_BLUE">
-				<shadow type="math_number">
-					<field name="NUM">0</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_original_set_motor">
-			<value name="MOTOR_SPEED">
-				<shadow type="math_number">
-					<field name="NUM">
-						100
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_original_move_motors">
-			<value name="MOTOR_SPEED">
-				<shadow type="math_number">
-					<field name="NUM">
-						100
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_original_buzz">
-			<value name="FREQUENCY">
-				<shadow type="math_number">
-					<field name="NUM">
-						440
-					</field>
-				</shadow>
-			</value>
-			<value name="DURATION">
-				<shadow type="math_number">
-					<field name="NUM">
-						100
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_serial_print_line">
-			<value name="VALUE">
-				<shadow type="text">
-					<field name="TEXT">text</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_serial_print_value">
-			<value name="NAME">
-				<shadow type="text">
-					<field name="TEXT">text</field>
-				</shadow>
-			</value>
-			<value name="VALUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
+	<category id="l_original" toolboxitemid="l_original" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
 		<block type="leaphy_original_get_distance">
 		</block>
 		<sep gap="8"></sep>
@@ -85,6 +7,16 @@
 		</block>
 		<sep gap="8"></sep>
 		<block type="analog_read">
+		</block>
+		<block type="leaphy_sonar_read">
+		</block>
+		<block type="leaphy_rgb_color">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_rgb_color_raw">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_compass_degrees">
 		</block>
 	</category>
 	<category id="l_flitz" toolboxitemid="l_flitz" name="%{BKY_LEAPHY_FLITZ_CATEGORY}" categorystyle="leaphy_category">
@@ -199,7 +131,362 @@
 		</value>
 	</block>
   </category>
-	<category id="l_click" toolboxitemid="l_click" name="%{BKY_LEAPHY_CLICK_CATEGORY}" categorystyle="leaphy_category">
+	<category id="l_click" toolboxitemid="l_click" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
+		<block type="digital_read">
+		</block>
+		<sep gap="8"></sep>
+		<block type="analog_read">
+		</block>
+		<block type="leaphy_sonar_read">
+		</block>
+		<block type="leaphy_rgb_color">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_rgb_color_raw">
+		</block>
+	</category>
+	<category id="l_uno" toolboxitemid="l_uno" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
+		<sep gap="8"></sep>
+		<block type="digital_read">
+		</block>
+		<sep gap="8"></sep>
+		<block type="analog_read">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_sonar_read">
+		</block>
+		<block type="leaphy_rgb_color">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_rgb_color_raw">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_compass_degrees">
+		</block>
+	</category>
+	<category id="l_wifi" toolboxitemid="l_wifi" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
+	</category>
+	<category id="l_original_extra" toolboxitemid="l_extra" name="%{BKY_ACTUATOREN_CATEGORY}" categorystyle="leaphy_category">
+		<block type="leaphy_io_digitalwrite">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_io_analogwrite">
+			<value name="NUM">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_servo_write">
+			<value name="SERVO_ANGLE">
+				<shadow type="math_number">
+					<field name="NUM">
+						90
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="leaphy_led_set_strip">
+			<value name="LED_SET_PIN">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_SET_LEDS">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_led_set_basic">
+			<value name="LED_SET_LED">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_BASIC_RED">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_BASIC_GREEN">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_BASIC_BLUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_led_set_speed">
+			<value name="LED_SET_SPEEDVALUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_led_strip_demo">
+			<value name="LED_STRIP_DEMO_RED">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_STRIP_DEMO_GREEN">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_STRIP_DEMO_BLUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="leaphy_display_clear">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_display_print_line">
+			<value name="VALUE">
+				<shadow type="text">
+					<field name="TEXT">text</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_display_print_value">
+			<value name="NAME">
+				<shadow type="text">
+					<field name="TEXT">text</field>
+				</shadow>
+			</value>
+			<value name="VALUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_display_display">
+		</block>
+		<block type="leaphy_original_set_led">
+			<value name="LED_RED">
+				<shadow type="math_number">
+					<field name="NUM">0</field>
+				</shadow>
+			</value>
+			<value name="LED_GREEN">
+				<shadow type="math_number">
+					<field name="NUM">0</field>
+				</shadow>
+			</value>
+			<value name="LED_BLUE">
+				<shadow type="math_number">
+					<field name="NUM">0</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_original_set_motor">
+			<value name="MOTOR_SPEED">
+				<shadow type="math_number">
+					<field name="NUM">
+						100
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_original_move_motors">
+			<value name="MOTOR_SPEED">
+				<shadow type="math_number">
+					<field name="NUM">
+						100
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_original_buzz">
+			<value name="FREQUENCY">
+				<shadow type="math_number">
+					<field name="NUM">
+						440
+					</field>
+				</shadow>
+			</value>
+			<value name="DURATION">
+				<shadow type="math_number">
+					<field name="NUM">
+						100
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_serial_print_line">
+			<value name="VALUE">
+				<shadow type="text">
+					<field name="TEXT">text</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_serial_print_value">
+			<value name="NAME">
+				<shadow type="text">
+					<field name="TEXT">text</field>
+				</shadow>
+			</value>
+			<value name="VALUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+	</category>
+	<category id="l_click_extra" toolboxitemid="l_extra" name="%{BKY_ACTUATOREN_CATEGORY}" categorystyle="leaphy_category">
+		<block type="leaphy_led_set_strip">
+			<value name="LED_SET_PIN">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_SET_LEDS">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_led_set_basic">
+			<value name="LED_SET_LED">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_BASIC_RED">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_BASIC_GREEN">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_BASIC_BLUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_led_set_speed">
+			<value name="LED_SET_SPEEDVALUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_led_strip_demo">
+			<value name="LED_STRIP_DEMO_RED">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_STRIP_DEMO_GREEN">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+			<value name="LED_STRIP_DEMO_BLUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="leaphy_display_clear">
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_display_print_line">
+			<value name="VALUE">
+				<shadow type="text">
+					<field name="TEXT">text</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_display_print_value">
+			<value name="NAME">
+				<shadow type="text">
+					<field name="TEXT">text</field>
+				</shadow>
+			</value>
+			<value name="VALUE">
+				<shadow type="math_number">
+					<field name="NUM">
+						0
+					</field>
+				</shadow>
+			</value>
+		</block>
+		<sep gap="8"></sep>
+		<block type="leaphy_display_display">
+		</block>
 		<block type="leaphy_io_digitalwrite">
 		</block>
 		<sep gap="8"></sep>
@@ -251,11 +538,6 @@
 				</shadow>
 			</value>
 		</block>
-		<block type="digital_read">
-		</block>
-		<sep gap="8"></sep>
-		<block type="analog_read">
-		</block>
 		<block type="leaphy_original_buzz">
 			<value name="FREQUENCY">
 				<shadow type="math_number">
@@ -273,7 +555,7 @@
 			</value>
 		</block>
 	</category>
-	<category id="l_uno" toolboxitemid="l_uno" name="%{BKY_LEAPHY_UNO_CATEGORY}" categorystyle="leaphy_category">
+	<category id="l_uno_extra" toolboxitemid="l_extra" name="%{BKY_ACTUATOREN_CATEGORY}" categorystyle="leaphy_category">
 		<block type="leaphy_io_digitalwrite">
 		</block>
 		<sep gap="8"></sep>
@@ -317,48 +599,6 @@
 				</shadow>
 			</value>
 		</block>
-		<sep gap="8"></sep>
-		<block type="digital_read">
-		</block>
-		<sep gap="8"></sep>
-		<block type="analog_read">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_sonar_read">
-		</block>
-	</category>
-	<category id="l_wifi" toolboxitemid="l_wifi" name="%{BKY_LEAPHY_WIFI_CATEGORY}" categorystyle="leaphy_category">
-	</category>
-	<category id="l_original_extra" toolboxitemid="l_extra" name="%{BKY_LEAPHY_EXTRA_CATEGORY}" categorystyle="leaphy_category">
-		<block type="leaphy_io_digitalwrite">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_io_analogwrite">
-			<value name="NUM">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_servo_write">
-			<value name="SERVO_ANGLE">
-				<shadow type="math_number">
-					<field name="NUM">
-						90
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<block type="leaphy_sonar_read">
-		</block>
-		<block type="leaphy_rgb_color">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_rgb_color_raw">
-		</block>
 		<block type="leaphy_led_set_strip">
 			<value name="LED_SET_PIN">
 				<shadow type="math_number">
@@ -467,252 +707,6 @@
 		</block>
 		<sep gap="8"></sep>
 		<block type="leaphy_display_display">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_compass_degrees">
-		</block>
-	</category>
-	<category id="l_click_extra" toolboxitemid="l_extra" name="%{BKY_LEAPHY_EXTRA_CATEGORY}" categorystyle="leaphy_category">
-		<block type="leaphy_sonar_read">
-		</block>
-		<block type="leaphy_rgb_color">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_rgb_color_raw">
-		</block>
-		<block type="leaphy_led_set_strip">
-			<value name="LED_SET_PIN">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_SET_LEDS">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_led_set_basic">
-			<value name="LED_SET_LED">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_BASIC_RED">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_BASIC_GREEN">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_BASIC_BLUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_led_set_speed">
-			<value name="LED_SET_SPEEDVALUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_led_strip_demo">
-			<value name="LED_STRIP_DEMO_RED">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_STRIP_DEMO_GREEN">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_STRIP_DEMO_BLUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<block type="leaphy_display_clear">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_display_print_line">
-			<value name="VALUE">
-				<shadow type="text">
-					<field name="TEXT">text</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_display_print_value">
-			<value name="NAME">
-				<shadow type="text">
-					<field name="TEXT">text</field>
-				</shadow>
-			</value>
-			<value name="VALUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_display_display">
-		</block>
-	</category>
-	<category id="l_uno_extra" toolboxitemid="l_extra" name="%{BKY_LEAPHY_EXTRA_CATEGORY}" categorystyle="leaphy_category">
-		<block type="leaphy_rgb_color">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_rgb_color_raw">
-		</block>
-		<block type="leaphy_led_set_strip">
-			<value name="LED_SET_PIN">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_SET_LEDS">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_led_set_basic">
-			<value name="LED_SET_LED">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_BASIC_RED">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_BASIC_GREEN">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_BASIC_BLUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_led_set_speed">
-			<value name="LED_SET_SPEEDVALUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_led_strip_demo">
-			<value name="LED_STRIP_DEMO_RED">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_STRIP_DEMO_GREEN">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-			<value name="LED_STRIP_DEMO_BLUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<block type="leaphy_display_clear">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_display_print_line">
-			<value name="VALUE">
-				<shadow type="text">
-					<field name="TEXT">text</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_display_print_value">
-			<value name="NAME">
-				<shadow type="text">
-					<field name="TEXT">text</field>
-				</shadow>
-			</value>
-			<value name="VALUE">
-				<shadow type="math_number">
-					<field name="NUM">
-						0
-					</field>
-				</shadow>
-			</value>
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_display_display">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_compass_degrees">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_i2c_rgb_color">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_i2c_gesture">
 		</block>
 	</category>
 	<category id="l_nano" toolboxitemid="l_nano" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
@@ -733,12 +727,6 @@
 		</block>
 		<sep gap="8"></sep>
 		<block type="leaphy_compass_degrees">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_i2c_rgb_color">
-		</block>
-		<sep gap="8"></sep>
-		<block type="leaphy_i2c_gesture">
 		</block>
 	</category>
 	<category id="l_nano_extra" toolboxitemid="l_extra" name="%{BKY_ACTUATOREN_CATEGORY}" categorystyle="leaphy_category">
