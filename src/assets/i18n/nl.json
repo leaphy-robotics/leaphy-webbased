@@ -83,5 +83,7 @@
     "WEB_SERIAL_SUPPORTED": "Web serial wordt ondersteund",
     "UNKNOWN": "Niet gevonden",
     "DEVICE_INFORMATION": "Apparaat informatie",
-    "EMAIL": "E-mail"
+    "EMAIL": "E-mail",
+    "FLASH_FIRMWARE": "Firmware flashen",
+    "FLASHING": "Flashing de firmware..."
 }

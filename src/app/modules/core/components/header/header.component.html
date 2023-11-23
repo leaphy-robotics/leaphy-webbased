@@ -38,11 +38,11 @@
             <!-- Add ngIf to check for URL ending with "driverissues" -->
             <ng-container *ngIf="isDriverIssuesUrl() && this.appState.selectedRobotType$ | async">
                 <button mat-stroked-button [disabled]="(appState.canChangeCodeEditor$ | async) === false"
-                        *ngIf="(appState.codeEditorType$ | async) === 1" (click)="onCodeEditorClicked()">
+                        *ngIf="(appState.selectedCodeEditorType$ | async) === 1" (click)="onCodeEditorClicked()">
                     <mat-icon>editor</mat-icon><span>{{ "CODE" | translate }}</span>
                 </button>
                 <button mat-stroked-button [disabled]="(appState.canChangeCodeEditor$ | async) === false"
-                        *ngIf="(appState.codeEditorType$ | async) === 2" (click)="onCodeEditorClicked()">
+                        *ngIf="(appState.selectedCodeEditorType$ | async) === 2" (click)="onCodeEditorClicked()">
                     <mat-icon id="block-icon" svgIcon="block"></mat-icon><span>{{ "BLOCKS" | translate }}</span>
                 </button>
                 <button mat-stroked-button (click)="onSaveWorkspaceClicked()">

@@ -18,17 +18,22 @@ import { Router } from "@angular/router";
 import { CodeEditorState } from "../state/code-editor.state";
 import { DebugInformationDialog } from "../modules/core/dialogs/debug-information/debug-information.dialog";
 import * as Blockly from 'blockly/core';
+import {UploadPythonDialog} from "../modules/core/dialogs/upload-python/upload-python.dialog";
+import {GlobalVariablesService} from "../state/global.state";
+import {RobotType} from "../domain/robot.type";
+import {PythonUploaderService} from "../services/python-uploader/PythonUploader.service";
+import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
 
 
 const fileExtensions = [
-  ".l_flitz",
-  ".l_flitz_nano",
-  ".l_original",
-  ".l_click",
-  ".l_uno",
-  ".l_nano",
-  ".l_wifi",
-  ".ino",
+	".l_flitz",
+	".l_flitz_nano",
+	".l_original",
+	".l_click",
+	".l_uno",
+	".l_nano",
+	".l_wifi",
+	".ino",
 ]
 
 @Injectable({
@@ -38,7 +43,7 @@ const fileExtensions = [
 // Defines the effects on the Electron environment that different state changes have
 export class BackendWiredEffects {
 
-	constructor(private codeEditorState: CodeEditorState, private blocklyState: BlocklyEditorState, private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
+	constructor(private pythonUpload: PythonUploaderService ,private global: GlobalVariablesService, private blocklyState: BlocklyEditorState, private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
 		// Only set up these effects when we're in Desktop mode
 		this.appState.isDesktop$
 			.pipe(filter(isDesktop => !!isDesktop))
@@ -109,7 +114,7 @@ export class BackendWiredEffects {
 
 				// When a workspace project is being loaded, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditorType$))
+					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Beginner))
 					.pipe(withLatestFrom(this.appState.selectedRobotType$))
 					.subscribe(([, robotType]) => {
@@ -118,15 +123,23 @@ export class BackendWiredEffects {
 
 				// When a code project is being loaded, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditorType$))
+					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Advanced))
 					.subscribe(() => {
 						this.send('restore-workspace-code', AppState.genericRobotType.id);
 					});
 
+				this.blocklyEditorState.workspaceStatus$
+					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
+					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Python))
+					.subscribe(() => {
+						this.send('restore-workspace-code', AppState.microPythonRobotType.id);
+					});
+
+
 				// When an existing project's workspace is being saved, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditorType$))
+					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Saving && codeEditorType === CodeEditorType.Beginner))
 					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.workspaceXml$))
 					.pipe(filter(([, projectFilePath,]) => !!projectFilePath))
@@ -137,7 +150,7 @@ export class BackendWiredEffects {
 
 				// When an existing project's code is being saved, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditorType$))
+					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Saving && codeEditorType === CodeEditorType.Advanced))
 					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.code$))
 					.pipe(filter(([, projectFilePath,]) => !!projectFilePath))
@@ -148,7 +161,7 @@ export class BackendWiredEffects {
 
 				// When the workspace is being saved as a new project, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditorType$))
+					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.SavingAs && codeEditorType === CodeEditorType.Beginner))
 					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.workspaceXml$, this.appState.selectedRobotType$))
 					.subscribe(([, projectFilePath, workspaceXml, robotType]) => {
@@ -158,7 +171,7 @@ export class BackendWiredEffects {
 
 				// When the code is being saved as a new project, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditorType$))
+					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.SavingAs && codeEditorType === CodeEditorType.Advanced))
 					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.code$))
 					.subscribe(([, projectFilePath, code]) => {
@@ -171,7 +184,7 @@ export class BackendWiredEffects {
 					.pipe(filter(status => status === WorkspaceStatus.SavingTemp))
 					.pipe(withLatestFrom(this.blocklyEditorState.workspaceXml$, this.appState.selectedRobotType$))
 					.subscribe(([, workspaceXml, robotType]) => {
-						if (CodeEditorType.Advanced == this.appState.getCurrentEditor()) {
+						if (CodeEditorType.Advanced == this.appState.getCurrentEditor() || CodeEditorType.Python == this.appState.getCurrentEditor()) {
 							this.send('save-workspace-temp', { data: workspaceXml, extension: robotType.id, type: 'advanced' });
 						} else {
 							this.send('save-workspace-temp', { data: workspaceXml, extension: robotType.id });
@@ -197,7 +210,6 @@ export class BackendWiredEffects {
 		//}
 		//this.ipc.on(channel, listener);
 	}
-
 	public async send(channel: string, ...args): Promise<void> {
 		switch (channel) {
 			case 'save-workspace-as':
@@ -235,22 +247,36 @@ export class BackendWiredEffects {
 				})
 				break;
 			case 'compile':
-				const source_code = (this.appState.getCurrentEditor() == CodeEditorType.Beginner) ? this.blocklyEditorState.code : this.codeEditorState.getCode();
+				const source_code = (this.appState.getCurrentEditor() == CodeEditorType.Beginner) ? this.blocklyEditorState.code : this.global.codeEditorState.getCode();
 				const libraries = args[0].libs;
 				const board = args[0].fqbn;
 
 				try {
-					this.dialog.open(UploadDialog, {
-						width: '450px', disableClose: true,
-						data: { source_code: source_code, libraries: libraries, board: board }
-					}).afterClosed().subscribe((result) => {
-						if (result) {
-							if (result == "HELP_ENVIRONMENT") {
-								const langcode = this.appState.getCurrentLanguageCode();
-								this.router.navigateByUrl('/' + langcode + '/driverissues', { skipLocationChange: true });
+					if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+						this.dialog.open(UploadPythonDialog, {
+							width: '600px', disableClose: true,
+							data: { source_code: source_code, libraries: libraries, board: board }
+						}).afterClosed().subscribe((result) => {
+							if (result) {
+								if (result == "HELP_ENVIRONMENT") {
+									const langcode = this.appState.getCurrentLanguageCode();
+									this.router.navigateByUrl('/' + langcode + '/driverissues', { skipLocationChange: true });
+								}
 							}
-						}
-					});
+						});
+					} else {
+						this.dialog.open(UploadDialog, {
+							width: '450px', disableClose: true,
+							data: {source_code: source_code, libraries: libraries, board: board}
+						}).afterClosed().subscribe((result) => {
+							if (result) {
+								if (result == "HELP_ENVIRONMENT") {
+									const langcode = this.appState.getCurrentLanguageCode();
+									this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
+								}
+							}
+						});
+					}
 
 
 				} catch (error) {
@@ -314,8 +340,10 @@ export class BackendWiredEffects {
 				sessionStorage.setItem('robotType', this.appState.getSelectedRobotType().id);
 				if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
 					sessionStorage.setItem('type', 'beginner');
-				} else {
+				} else if (this.appState.getCurrentEditor() == CodeEditorType.Advanced) {
 					sessionStorage.setItem('type', 'advanced');
+				} else if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+					sessionStorage.setItem('type', 'python');
 				}
 				break;
 			case 'restore-workspace-temp':
@@ -335,12 +363,35 @@ export class BackendWiredEffects {
 					}
 				} else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.Advanced) {
 					try {
-						args[1].session.setValue(workspaceTemp);
-						this.codeEditorState.setOriginalCode(workspaceTemp);
-						this.codeEditorState.setCode(workspaceTemp);
+                        args[1].session.setValue(workspaceTemp);
+                        this.global.codeEditorState.setOriginalCode(workspaceTemp);
+                        this.global.codeEditorState.setCode(workspaceTemp);
 					} catch (error) {
 						console.log('Error:', error.message);
 					}
+				} else if (type == 'python' && this.appState.getCurrentEditor() == CodeEditorType.Python) {
+					try {
+						args[1].session.setValue(workspaceTemp);
+						this.global.codeEditorState.setOriginalCode(workspaceTemp);
+						this.global.codeEditorState.setCode(workspaceTemp);
+					} catch (error) {
+						console.log('Error:', error.message);
+					}
+				}
+				break;
+			case 'restore-workspace-code':
+				const robot = args[0];
+				if (robot == AppState.microPythonRobotType.id) {
+					this.dialog.open(FileExplorerDialog, {
+                        width: '75vw', disableClose: true,
+                    }).afterClosed().subscribe((result) => {
+                        if (result) {
+                            console.log("result: " + result);
+                            this.global.codeEditorState.getAceEditor().session.setValue(result);
+                            this.global.codeEditorState.setOriginalCode(result);
+                            this.global.codeEditorState.setCode(result);
+                        }
+                    });
 				}
 				break;
 			default:
@@ -348,6 +399,4 @@ export class BackendWiredEffects {
 				break;
 		}
 	}
-
-
 }

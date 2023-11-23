@@ -19,42 +19,47 @@ import {UploadDialog} from "./dialogs/upload/upload.dialog";
 import {DebugInformationDialog} from "./dialogs/debug-information/debug-information.dialog";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import { SelectRobotTypeDialog } from './dialogs/robot-select/robot-select.dialog';
+import {UploadPythonDialog} from "./dialogs/upload-python/upload-python.dialog";
+import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
+
 @NgModule({
-  declarations: [
-    ConnectWiredDialog,
-    ConnectCloudDialog,
-    ConfirmEditorDialog,
-    HeaderComponent,
-    RobotSelectionComponent,
-    StartComponent,
-    StatusMessageDialog,
-    CreditsDialog,
-    LanguageSelectDialog,
-    SelectRobotTypeDialog,
-    NameFileDialog,
-    VariableDialog,
-    UploadDialog,
-    DebugInformationDialog,
-    InfoDialog
-  ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    NgOptimizedImage,
-    DragDropModule
-  ],
-  entryComponents: [ConnectWiredDialog, ConnectCloudDialog, ConfirmEditorDialog, StatusMessageDialog, CreditsDialog, LanguageSelectDialog, InfoDialog],
-  exports: [
-    HeaderComponent,
-    StartComponent,
-    RobotSelectionComponent,
-    ConnectCloudDialog,
-    ConnectWiredDialog,
-    ConfirmEditorDialog,
-    StatusMessageDialog,
-    CreditsDialog,
-    LanguageSelectDialog,
-    InfoDialog
-  ]
+    declarations: [
+        ConnectWiredDialog,
+        ConnectCloudDialog,
+        ConfirmEditorDialog,
+        HeaderComponent,
+        RobotSelectionComponent,
+        StartComponent,
+        StatusMessageDialog,
+        CreditsDialog,
+        LanguageSelectDialog,
+        SelectRobotTypeDialog,
+        NameFileDialog,
+        FileExplorerDialog,
+        VariableDialog,
+        UploadDialog,
+        UploadPythonDialog,
+        DebugInformationDialog,
+        InfoDialog
+    ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        NgOptimizedImage,
+        DragDropModule
+    ],
+    entryComponents: [ConnectWiredDialog, ConnectCloudDialog, ConfirmEditorDialog, StatusMessageDialog, CreditsDialog, LanguageSelectDialog, InfoDialog],
+    exports: [
+        HeaderComponent,
+        StartComponent,
+        RobotSelectionComponent,
+        ConnectCloudDialog,
+        ConnectWiredDialog,
+        ConfirmEditorDialog,
+        StatusMessageDialog,
+        CreditsDialog,
+        LanguageSelectDialog,
+        InfoDialog
+    ]
 })
 export class CoreModule { }

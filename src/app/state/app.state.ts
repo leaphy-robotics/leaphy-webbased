@@ -42,6 +42,8 @@ export class AppState {
     private static arduinoNanoRobotType = new RobotType('l_nano', 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
+    public static microPythonRobotType = new RobotType('l_micropython', 'MicroPython', 'micropython.svg', 'MicroPython', '', 'bin', '',
+        [], true, false);
 
     public static idToRobotType = {
         'l_original': AppState.leaphyOriginalRobotType,
@@ -52,6 +54,7 @@ export class AppState {
         'l_code': AppState.genericRobotType,
         'l_flitz_nano': AppState.leaphyFlitzNanoRobotType,
         'l_nano': AppState.arduinoNanoRobotType,
+        'l_micropython': AppState.microPythonRobotType
     }
     /* eslint-enable max-len */
 
@@ -64,7 +67,7 @@ export class AppState {
         this.availableRobotTypes$ = this.isDesktop$
             .pipe(map(isDesktop => {
                 if (isDesktop) {
-                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType, AppState.arduinoNanoRobotType]
+                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType, AppState.arduinoNanoRobotType, AppState.microPythonRobotType]
                 } else {
                     return [AppState.leaphyWiFiRobotType]
                 }
@@ -77,15 +80,6 @@ export class AppState {
         const reloadConfig = this.localStorage.fetch<ReloadConfig>('reloadConfig');
         this.reloadConfigSubject$ = new BehaviorSubject(reloadConfig);
         this.reloadConfig$ = this.reloadConfigSubject$.asObservable();
-
-        this.codeEditorType$ = combineLatest([this.selectedRobotType$, this.selectedCodeEditorType$])
-            .pipe(filter(([robotType,]) => !!robotType))
-            .pipe(map(([robotType, selectedCodeEditorType]) => {
-                if (robotType === AppState.genericRobotType) {
-                    return CodeEditorType.Advanced
-                }
-                return selectedCodeEditorType;
-            }))
 
         this.canChangeCodeEditor$ = this.selectedRobotType$
             .pipe(filter(robotType => !!robotType))
@@ -134,8 +128,6 @@ export class AppState {
     private selectedCodeEditorTypeSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.Beginner);
     public selectedCodeEditorType$ = this.selectedCodeEditorTypeSubject$.asObservable();
 
-    public codeEditorType$: Observable<CodeEditorType>;
-
     public canChangeCodeEditor$: Observable<boolean>;
 
     private packageJsonVersionSubject$: BehaviorSubject<string>;
@@ -169,7 +161,7 @@ export class AppState {
             });
 
         } else {
-          this.selectedRobotTypeSubject$.next(robotType);
+            this.selectedRobotTypeSubject$.next(robotType);
         }
     }
 
@@ -196,7 +188,7 @@ export class AppState {
     }
 
     public setSelectedCodeEditor(codeEditor: CodeEditorType) {
-      this.selectedCodeEditorTypeSubject$.next(codeEditor);
+        this.selectedCodeEditorTypeSubject$.next(codeEditor);
     }
 
     public getCurrentLanguageCode(): string {

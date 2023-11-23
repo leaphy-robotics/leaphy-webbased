@@ -13,6 +13,7 @@ import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/conf
 import { CodeEditorState } from '../state/code-editor.state';
 import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/language-select.dialog';
 import {SerialOutputComponent} from "../modules/shared/components/serial-output/serial-output.component";
+import {GlobalVariablesService} from "../state/global.state";
 
 @Injectable({
     providedIn: 'root',
@@ -24,9 +25,8 @@ export class DialogEffects {
     constructor(
         private dialogState: DialogState,
         private appState: AppState,
-        private codeEditorState: CodeEditorState,
         private backEndState: BackEndState,
-        private robotWiredState: RobotWiredState,
+        private global: GlobalVariablesService,
         private dialog: MatDialog
     ) {
         // Open the connect dialog if closed when waiting for robot
@@ -76,11 +76,11 @@ export class DialogEffects {
             });
 
 
-        // If the editor change needs confirmation, show the confirmation dialog
-        this.appState.isCodeEditorToggleRequested$
-            .pipe(withLatestFrom(this.appState.isCodeEditorToggleConfirmed$, this.codeEditorState.isDirty$))
-            .pipe(filter(([requested, confirmed, isDirty]) => !!requested && !confirmed && isDirty))
-            .subscribe(() => this.dialogState.setIsEditorTypeChangeConfirmationDialogVisible(true));
+        // // If the editor change needs confirmation, show the confirmation dialog
+        // this.appState.isCodeEditorToggleRequested$
+        //     .pipe(withLatestFrom(this.appState.isCodeEditorToggleConfirmed$, this.global.codeEditorState.isDirty$))
+        //     .pipe(filter(([requested, confirmed, isDirty]) => !!requested && !confirmed && isDirty))
+        //     .subscribe(() => this.dialogState.setIsEditorTypeChangeConfirmationDialogVisible(true));
 
         // When the info dialog visibility is set to true, open the dialog
         this.dialogState.isEditorTypeChangeConfirmationDialogVisible$

@@ -1,0 +1,96 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.hidden {
+  display: none;
+}
+
+#error-message {
+  color: red;
+  width: 100%;
+}
+
+.block-environment {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 10px;
+  align-self: center;
+
+  background-color: var(--leaphy-color-primary);
+  color: white;
+}
+
+.block-environment:hover {
+    background-color: var(--leaphy-color-primary-dark-tint);
+}
+
+.upload {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+    align-self: center;
+
+    background-color: var(--leaphy-color-primary);
+    color: white;
+}
+
+.upload:hover {
+    background-color: var(--leaphy-color-primary-dark-tint);
+}
+
+.firmware {
+    padding: 10px 20px;
+    font-size: 10px;
+    border: none;
+    cursor: pointer;
+    margin-top: 1vw;
+    align-self: flex-end;
+    background-color: transparent;
+    //text-underline: var(--leaphy-color-primary) 1px;
+    color: blue;
+}
+
+.help-environment {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: 10px;
+  align-self: center;
+
+  background-color: var(--leaphy-color-secundary);
+  color: white;
+}
+
+.help-environment:hover {
+  background-color: var(--leaphy-color-dark);
+}
+
+.return-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.failed-upload {
+  color: red;
+}

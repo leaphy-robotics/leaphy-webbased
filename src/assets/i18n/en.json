@@ -83,5 +83,7 @@
     "WEB_SERIAL_SUPPORTED": "Web serial supported",
     "UNKNOWN": "Unknown",
     "DEVICE_INFORMATION": "Device information",
-    "EMAIL": "Email"
+    "EMAIL": "Email",
+    "FLASH_FIRMWARE": "Flash firmware",
+    "FLASHING": "Flashing firmware..."
 }

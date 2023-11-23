@@ -9,7 +9,7 @@ class Arduino {
     isUploading = false
     serialOptions = null
     readStream = null
-    writeStream = null
+    writeStream: WritableStreamDefaultWriter = null
     robotWiredState: RobotWiredState
 
     /**

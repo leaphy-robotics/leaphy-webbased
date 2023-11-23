@@ -23,7 +23,6 @@ export class AppEffects {
         private translate: TranslateService,
         private backEndState: BackEndState,
         private blocklyState: BlocklyEditorState,
-        private codeEditorState: CodeEditorState,
         private snackBar: MatSnackBar,
         private router: Router) {
 
@@ -55,28 +54,36 @@ export class AppEffects {
         // When the editor toggle is requested to advanced, just autoconfirm it
         // When the editor toggle is requested to beginner, and there are no changes, just autoconfirm it
         this.appState.isCodeEditorToggleRequested$
-            .pipe(withLatestFrom(this.appState.codeEditorType$, this.codeEditorState.isDirty$))
-            .pipe(filter(([requested, codeEditorType, isDirty]) => !!requested && (codeEditorType === CodeEditorType.Beginner || codeEditorType === CodeEditorType.Advanced && !isDirty)))
+            .pipe()
             .subscribe(() => this.appState.setIsCodeEditorToggleConfirmed(true));
 
         // When the editor change has been confirmed, toggle the codeeditor
         this.appState.isCodeEditorToggleConfirmed$
-            .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.codeEditorType$))
+            .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.selectedCodeEditorType$))
             .subscribe(([, codeEditorType]) => {
-              this.appState.setSelectedCodeEditor(codeEditorType === CodeEditorType.Beginner ? CodeEditorType.Advanced : CodeEditorType.Beginner);
-
+                console.log("codeEditorType", codeEditorType);
+                if (codeEditorType == CodeEditorType.Beginner) {
+                    this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);
+                } else if (codeEditorType == CodeEditorType.Advanced) {
+                    this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
+                } else if (codeEditorType == CodeEditorType.Python) {
+                    this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
+                }
             });
 
         // When the code editor changes, route to the correct screen
-        this.appState.codeEditorType$
+        this.appState.selectedCodeEditorType$
             .pipe(filter(codeEditor => !!codeEditor))
             .subscribe(async codeEditor => {
                 switch (codeEditor) {
                     case CodeEditorType.Beginner:
-                        await this.router.navigateByUrl('', { skipLocationChange: true });
+                        await this.router.navigate(['']);
                         break;
                     case CodeEditorType.Advanced:
-                        await this.router.navigateByUrl('/advanced', { skipLocationChange: true });
+                        await this.router.navigate(['/advanced-arduino'], { skipLocationChange: true });
+                        break;
+                    case CodeEditorType.Python:
+                        await this.router.navigate(['/advanced-python'], { skipLocationChange: true });
                         break;
                     default:
                         //await this.router.navigate(['']);
@@ -85,10 +92,6 @@ export class AppEffects {
                 this.appState.setIsCodeEditorToggleConfirmed(false);
             });
 
-
-        // Enable to debugging to log all backend messages
-        this.backEndState.backEndMessages$
-            .pipe(filter(() => this.isDebug))
         // Show snackbar based on messages received from the Backend
         this.backEndState.backEndMessages$
             .pipe(filter(message => !!message && message.displayTimeout >= 0))
