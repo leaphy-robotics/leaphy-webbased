@@ -61,12 +61,9 @@ export class AppEffects {
         this.appState.isCodeEditorToggleConfirmed$
             .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.selectedCodeEditorType$))
             .subscribe(([, codeEditorType]) => {
-                console.log("codeEditorType", codeEditorType);
                 if (codeEditorType == CodeEditorType.Beginner) {
                     this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);
                 } else if (codeEditorType == CodeEditorType.Advanced) {
-                    this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
-                } else if (codeEditorType == CodeEditorType.Python) {
                     this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
                 }
             });
@@ -77,7 +74,7 @@ export class AppEffects {
             .subscribe(async codeEditor => {
                 switch (codeEditor) {
                     case CodeEditorType.Beginner:
-                        await this.router.navigate(['']);
+                        await this.router.navigate(['/blocks'], { skipLocationChange: true });
                         break;
                     case CodeEditorType.Advanced:
                         await this.router.navigate(['/advanced-arduino'], { skipLocationChange: true });

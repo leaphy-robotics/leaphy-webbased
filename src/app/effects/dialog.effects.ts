@@ -13,7 +13,7 @@ import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/conf
 import { CodeEditorState } from '../state/code-editor.state';
 import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/language-select.dialog';
 import {SerialOutputComponent} from "../modules/shared/components/serial-output/serial-output.component";
-import {GlobalVariablesService} from "../state/global.state";
+import {GlobalState} from "../state/global.state";
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +26,7 @@ export class DialogEffects {
         private dialogState: DialogState,
         private appState: AppState,
         private backEndState: BackEndState,
-        private global: GlobalVariablesService,
+        private global: GlobalState,
         private dialog: MatDialog
     ) {
         // Open the connect dialog if closed when waiting for robot

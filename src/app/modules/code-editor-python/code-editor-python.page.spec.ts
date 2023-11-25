@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CodeEditorPythonPage } from './code-editor-python.page';
 
-describe('CodeEditorPage', () => {
+describe('CodeEditorPythonPage', () => {
   let component: CodeEditorPythonPage;
   let fixture: ComponentFixture<CodeEditorPythonPage>;
 

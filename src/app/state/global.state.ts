@@ -2,37 +2,41 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CodeEditorState } from './code-editor.state';
 import { CodeEditorEffects } from '../effects/code-editor.effects';
+// import random number generator
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
     providedIn: 'root'
 })
-export class GlobalVariablesService {
-    private codeEditorStateSubject: BehaviorSubject<CodeEditorState> = new BehaviorSubject<CodeEditorState>(null);
-    private codeEditorEffectSubject: BehaviorSubject<CodeEditorEffects> = new BehaviorSubject<CodeEditorEffects>(null);
+export class GlobalState {
+    private codeEditorStateSubject$: BehaviorSubject<CodeEditorState> = new BehaviorSubject<CodeEditorState>(null);
+    public codeEditorState$: Observable<CodeEditorState> = this.codeEditorStateSubject$.asObservable();
+
+    private codeEditorEffectSubject$: BehaviorSubject<CodeEditorEffects> = new BehaviorSubject<CodeEditorEffects>(null);
+    public codeEditorEffect$: Observable<CodeEditorEffects> = this.codeEditorEffectSubject$.asObservable();
+
     private lang: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-    public codeEditorState$: Observable<CodeEditorState>;
-    public codeEditorEffect$: Observable<CodeEditorEffects>;
+    public uuid: string = uuidv4();
 
     constructor() {
-        this.codeEditorState$ = this.codeEditorStateSubject.asObservable();
-        this.codeEditorEffect$ = this.codeEditorEffectSubject.asObservable();
+        console.log("constructor:", this.uuid);
     }
 
     get codeEditorState(): CodeEditorState {
-        return this.codeEditorStateSubject.value;
+        return this.codeEditorStateSubject$.value;
     }
 
     set codeEditorState(value: CodeEditorState) {
-        this.codeEditorStateSubject.next(value);
+        this.codeEditorStateSubject$.next(value);
     }
 
     get codeEditorEffect(): CodeEditorEffects {
-        return this.codeEditorEffectSubject.value;
+        return this.codeEditorEffectSubject$.value;
     }
 
     set codeEditorEffect(value: CodeEditorEffects) {
-        this.codeEditorEffectSubject.next(value);
+        this.codeEditorEffectSubject$.next(value);
     }
 
     get langValue(): string {

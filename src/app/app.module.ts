@@ -18,7 +18,6 @@ import { RobotCloudEffects } from './effects/robot.cloud.effects';
 import { AppEffects } from './effects/app.effects';
 import { RobotWiredEffects } from './effects/robot.wired.effects';
 import { CoreModule } from './modules/core/core.module';
-import { GlobalVariablesService } from './state/global.state';
 
 import { MatomoModule } from 'ngx-matomo';
 import { NgTerminalModule } from 'ng-terminal';
@@ -72,8 +71,7 @@ export function createTranslateLoader(http: HttpClient) {
                     BlocklyEditorEffects,
                     DialogEffects,
                     RobotCloudEffects,
-                    RobotWiredEffects,
-                    GlobalVariablesService
+                    RobotWiredEffects
                 ], useFactory: () => () => null, multi: true
         }
     ],

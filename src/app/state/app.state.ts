@@ -125,7 +125,7 @@ export class AppState {
     private isCodeEditorToggleConfirmedSubject$ = new BehaviorSubject<boolean>(false);
     public isCodeEditorToggleConfirmed$ = this.isCodeEditorToggleConfirmedSubject$.asObservable();
 
-    private selectedCodeEditorTypeSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.Beginner);
+    private selectedCodeEditorTypeSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.None);
     public selectedCodeEditorType$ = this.selectedCodeEditorTypeSubject$.asObservable();
 
     public canChangeCodeEditor$: Observable<boolean>;

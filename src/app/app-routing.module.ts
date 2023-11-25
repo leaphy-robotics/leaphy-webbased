@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 
 const routes: Routes = [
-    { path: '', loadChildren: () => import('./modules/blockly-editor/blockly-editor.module').then(m => m.BlocklyEditorModule) },
+    { path: 'blocks', loadChildren: () => import('./modules/blockly-editor/blockly-editor.module').then(m => m.BlocklyEditorModule) },
     { path: 'advanced-arduino', loadChildren: () => import('./modules/code-editor-arduino/code-editor.module').then(m => m.CodeEditorModule) },
     { path: 'advanced-python', loadChildren: () => import('./modules/code-editor-python/code-editor-python.module').then(m => m.CodeEditorPythonModule) },
     { path: 'en/driverissues', loadChildren: () => import('./modules/driver-issues-english/driver-issues.module').then(m => m.DriverIssuesEnglishModule) },

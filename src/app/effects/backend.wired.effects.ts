@@ -15,13 +15,10 @@ import { MatDialog } from "@angular/material/dialog";
 import { VariableDialog } from "../modules/core/dialogs/variable/variable.dialog";
 import { UploadDialog } from "../modules/core/dialogs/upload/upload.dialog";
 import { Router } from "@angular/router";
-import { CodeEditorState } from "../state/code-editor.state";
 import { DebugInformationDialog } from "../modules/core/dialogs/debug-information/debug-information.dialog";
 import * as Blockly from 'blockly/core';
 import {UploadPythonDialog} from "../modules/core/dialogs/upload-python/upload-python.dialog";
-import {GlobalVariablesService} from "../state/global.state";
-import {RobotType} from "../domain/robot.type";
-import {PythonUploaderService} from "../services/python-uploader/PythonUploader.service";
+import {GlobalState} from "../state/global.state";
 import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
 
 
@@ -43,7 +40,7 @@ const fileExtensions = [
 // Defines the effects on the Electron environment that different state changes have
 export class BackendWiredEffects {
 
-	constructor(private pythonUpload: PythonUploaderService ,private global: GlobalVariablesService, private blocklyState: BlocklyEditorState, private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
+	constructor(private global: GlobalState, private blocklyState: BlocklyEditorState, private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
 		// Only set up these effects when we're in Desktop mode
 		this.appState.isDesktop$
 			.pipe(filter(isDesktop => !!isDesktop))
@@ -386,10 +383,13 @@ export class BackendWiredEffects {
                         width: '75vw', disableClose: true,
                     }).afterClosed().subscribe((result) => {
                         if (result) {
-                            console.log("result: " + result);
+                            console.log(this.global.uuid);
+                            console.log(this.global.codeEditorState.getAceEditor());
+                            console.log(this.global.codeEditorState.getAceEditor().session);
                             this.global.codeEditorState.getAceEditor().session.setValue(result);
                             this.global.codeEditorState.setOriginalCode(result);
                             this.global.codeEditorState.setCode(result);
+                            console.log("result: " + result);
                         }
                     });
 				}

@@ -1,8 +1,7 @@
 import { ElementRef, Injectable, Optional, Inject, InjectionToken, } from "@angular/core";
 import { Ace } from "ace-builds";
 import { BehaviorSubject, Observable } from "rxjs";
-import { filter, map, tap, withLatestFrom } from "rxjs/operators";
-import { GlobalVariablesService } from "./global.state";
+import { map, withLatestFrom } from "rxjs/operators";
 
 export const CODE_EDITOR_TYPE = new InjectionToken<string>('codeEditorType');
 
@@ -10,9 +9,6 @@ export const CODE_EDITOR_TYPE = new InjectionToken<string>('codeEditorType');
     providedIn: 'root',
 })
 export class CodeEditorState  {
-
-
-
     private originalProgram = `void leaphyProgram() {
 }
 
@@ -40,7 +36,7 @@ void loop() {
     public lang: string = '';
 
 
-    constructor(@Optional() @Inject(CODE_EDITOR_TYPE) private codeType: string, private globalVariables: GlobalVariablesService) {
+    constructor(@Optional() @Inject(CODE_EDITOR_TYPE) private codeType: string) {
         if (this.codeType === 'python') {
             this.program = this.pythonProgram;
             this.lang = 'python';
@@ -67,8 +63,6 @@ void loop() {
         this.isDirty$ = this.code$
             .pipe(withLatestFrom(this.startCode$))
             .pipe(map(([code, original]) => code !== original))
-
-        this.globalVariables.codeEditorState = this;
     }
 
     public setAceElement(element: ElementRef<HTMLElement>) {

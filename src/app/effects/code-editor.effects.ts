@@ -3,7 +3,7 @@ import { filter, withLatestFrom, tap } from "rxjs/operators";
 import { BlocklyEditorState } from "../state/blockly-editor.state";
 import * as ace from "ace-builds";
 import { BackEndState } from "../state/backend.state";
-import { GlobalVariablesService } from "../state/global.state";
+import {GlobalState} from "../state/global.state";
 import { Subscription } from "rxjs/internal/Subscription";
 
 @Injectable({
@@ -14,13 +14,9 @@ import { Subscription } from "rxjs/internal/Subscription";
 export class CodeEditorEffects {
     private subscriptions: Subscription[] = [];
 
-    constructor(private globalVariableService: GlobalVariablesService, private blocklyState: BlocklyEditorState, private backEndState: BackEndState) {
-        // kill the old codeEditorEffectSubject
-        this.globalVariableService.codeEditorEffect = null;
-        // create a new codeEditorEffectSubject
-        this.globalVariableService.codeEditorEffect = this;
+    constructor(private global: GlobalState, private blocklyState: BlocklyEditorState, private backEndState: BackEndState) {
 
-        const aceElementSubscription = this.globalVariableService.codeEditorState.aceElement$
+        const aceElementSubscription = this.global.codeEditorState.aceElement$
             .pipe(
                 filter(element => !!element))
             .subscribe(element => {
@@ -28,33 +24,33 @@ export class CodeEditorEffects {
                 //ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
                 const aceEditor = ace.edit(element.nativeElement);
                 aceEditor.setTheme('ace/theme/solarized_light');
-                if (this.globalVariableService.langValue == 'python') {
+                if (this.global.langValue == 'python') {
                     aceEditor.session.setMode('ace/mode/python');
-                } else {
+                } else if (this.global.langValue == 'arduino') {
                     aceEditor.session.setMode('ace/mode/c_cpp');
                 }
                 aceEditor.setOptions({
                     enableBasicAutocompletion: true,
                     enableLiveAutocompletion: true
                 });
-                this.globalVariableService.codeEditorState.setAceEditor(aceEditor);
+                this.global.codeEditorState.setAceEditor(aceEditor);
             });
         this.subscriptions.push(aceElementSubscription);
 
 
         // When the Ace Editor is set, set it with the code, and update the blockly code with changes
-        const aceEditorSubscription = this.globalVariableService.codeEditorState.aceEditor$
+        const aceEditorSubscription = this.global.codeEditorState.aceEditor$
             .pipe(filter(aceEditor => !!aceEditor))
-            .pipe(withLatestFrom(this.blocklyState.code$, this.globalVariableService.codeEditorState.code$))
+            .pipe(withLatestFrom(this.blocklyState.code$, this.global.codeEditorState.code$))
             .subscribe(([aceEditor, blocklyCode, editorCode]) => {
-                const startingCode = this.globalVariableService.codeEditorState.getCode();
+                const startingCode = this.global.codeEditorState.getCode();
                 aceEditor.session.setValue(startingCode);
-                this.globalVariableService.codeEditorState.setOriginalCode(startingCode);
-                this.globalVariableService.codeEditorState.setCode(startingCode);
+                this.global.codeEditorState.setOriginalCode(startingCode);
+                this.global.codeEditorState.setCode(startingCode);
 
                 aceEditor.on("change", () => {
                     const changedCode = aceEditor.getValue();
-                    this.globalVariableService.codeEditorState.setCode(changedCode)
+                    this.global.codeEditorState.setCode(changedCode)
                     this.blocklyState.setCode(changedCode);
                 });
             });
@@ -62,20 +58,20 @@ export class CodeEditorEffects {
         // React to the backend message and set the ACE Editor code
         // React to messages received from the Backend
         const backEndMessagesSubscription = this.backEndState.backEndMessages$
-            .pipe(withLatestFrom(this.globalVariableService.codeEditorState.aceEditor$))
+            .pipe(withLatestFrom(this.global.codeEditorState.aceEditor$))
             .pipe(filter(([message,]) => !!message))
             .subscribe(([message, aceEditor]) => {
                 switch (message.event) {
                     case 'WORKSPACE_CODE_RESTORING':
                         const code = message.payload.data as string;
                         aceEditor.session.setValue(code);
-                        this.globalVariableService.codeEditorState.setOriginalCode(code);
-                        this.globalVariableService.codeEditorState.setCode(code);
+                        this.global.codeEditorState.setOriginalCode(code);
+                        this.global.codeEditorState.setCode(code);
                         break;
                     case 'WORKSPACE_SAVED':
                         const savedCode = aceEditor.getValue();
-                        this.globalVariableService.codeEditorState.setOriginalCode(savedCode);
-                        this.globalVariableService.codeEditorState.setCode(savedCode);
+                        this.global.codeEditorState.setOriginalCode(savedCode);
+                        this.global.codeEditorState.setCode(savedCode);
                         break;
                     default:
                         break;
