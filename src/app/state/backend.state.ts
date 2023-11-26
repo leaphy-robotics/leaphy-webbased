@@ -17,7 +17,7 @@ export class BackEndState {
     private isViewLogClickedSubject$ = new BehaviorSubject<boolean>(false);
     public isViewLogClicked$ = this.isViewLogClickedSubject$.asObservable();
 
-    public setconnectionStatus(status: ConnectionStatus) {
+    public setConnectionStatus(status: ConnectionStatus) {
         this.connectionStatusSubject$.next(status);
     }
 

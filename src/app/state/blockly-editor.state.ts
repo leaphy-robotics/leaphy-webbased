@@ -18,7 +18,7 @@ declare var Prism: any;
 export class BlocklyEditorState {
 
     constructor(private localStorage: LocalStorageService){
-        var isSoundOn = this.localStorage.fetch<boolean>("isSoundOn");
+        let isSoundOn = this.localStorage.fetch<boolean>("isSoundOn");
         if (isSoundOn === null) {
             this.localStorage.store("isSoundOn", true);
             isSoundOn = true;

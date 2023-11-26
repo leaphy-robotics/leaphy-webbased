@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { RobotType } from '../domain/robot.type';
 import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
@@ -30,9 +30,6 @@ export class AppState {
     private static arduinoUnoRobotType = new RobotType('l_uno', 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
-    private static leaphyWiFiRobotType = new RobotType('l_wifi', 'Leaphy WiFi', 'wifi.svg', 'NodeMCU', 'esp8266:esp8266:nodemcuv2', 'bin', 'esp8266:esp8266',
-        AppState.defaultLibraries.concat(['Leaphy WiFi Extension'])
-    );
     public static genericRobotType = new RobotType('l_code', 'Generic Robot', null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass'])
     );
@@ -50,7 +47,6 @@ export class AppState {
         'l_flitz': AppState.leaphyFlitzRobotType,
         'l_click': AppState.leaphyClickRobotType,
         'l_uno': AppState.arduinoUnoRobotType,
-        'l_wifi': AppState.leaphyWiFiRobotType,
         'l_code': AppState.genericRobotType,
         'l_flitz_nano': AppState.leaphyFlitzNanoRobotType,
         'l_nano': AppState.arduinoNanoRobotType,
@@ -68,9 +64,7 @@ export class AppState {
             .pipe(map(isDesktop => {
                 if (isDesktop) {
                     return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType, AppState.arduinoNanoRobotType, AppState.microPythonRobotType]
-                } else {
-                    return [AppState.leaphyWiFiRobotType]
-                }
+                } else {}
             }));
 
         const currentLanguage = this.localStorage.fetch<Language>('currentLanguage') || this.defaultLanguage;

@@ -11,10 +11,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { BackendWiredEffects } from './effects/backend.wired.effects';
-import { BackEndCloudEffects } from './effects/backend.cloud.effects';
 import { BlocklyEditorEffects } from './effects/blockly-editor.effects';
 import { DialogEffects } from './effects/dialog.effects';
-import { RobotCloudEffects } from './effects/robot.cloud.effects';
 import { AppEffects } from './effects/app.effects';
 import { RobotWiredEffects } from './effects/robot.wired.effects';
 import { CoreModule } from './modules/core/core.module';
@@ -68,10 +66,8 @@ export function createTranslateLoader(http: HttpClient) {
                 [
                     AppEffects,
                     BackendWiredEffects,
-                    BackEndCloudEffects,
                     BlocklyEditorEffects,
                     DialogEffects,
-                    RobotCloudEffects,
                     CodeEditorEffects,
                     RobotWiredEffects
                 ], useFactory: () => () => null, multi: true

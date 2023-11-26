@@ -39,7 +39,7 @@ export class CodeEditorEffects {
 
 
         // When the Ace Editor is set, set it with the code, and update the blockly code with changes
-        const aceEditorSubscription = this.codeEditorState.aceEditor$
+        this.codeEditorState.aceEditor$
             .pipe(filter(aceEditor => !!aceEditor))
             .pipe(withLatestFrom(this.blocklyState.code$, this.codeEditorState.code$))
             .subscribe(([aceEditor, blocklyCode, editorCode]) => {

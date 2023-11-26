@@ -2,11 +2,9 @@ import {ElementRef, Injectable,} from "@angular/core";
 import {Ace} from "ace-builds";
 import {BehaviorSubject, Observable} from "rxjs";
 import {map, withLatestFrom} from "rxjs/operators";
-import {AppState} from "./app.state";
-import {CodeEditorType} from "../domain/code-editor.type";
 
 @Injectable({
-    providedIn: 'root',
+    providedIn: 'root'
 })
 export class CodeEditorState  {
     public readonly originalProgram = `void leaphyProgram() {
@@ -37,9 +35,7 @@ void loop() {
     public isDirty$: Observable<boolean>;
 
 
-    constructor(
-        private appState: AppState,
-    ) {
+    constructor() {
 
         this.isDirty$ = this.code$
             .pipe(withLatestFrom(this.startCode$))

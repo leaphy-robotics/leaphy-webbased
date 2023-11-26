@@ -69,7 +69,7 @@ export class BackendWiredEffects {
 				}
 
 				// If that worked, set the backend Connection status
-				this.backEndState.setconnectionStatus(ConnectionStatus.ConnectedToBackend);
+				this.backEndState.setConnectionStatus(ConnectionStatus.ConnectedToBackend);
 
 				// If the focus is set on an open window, relay to backend
 				this.dialogState.isSerialOutputListening$
