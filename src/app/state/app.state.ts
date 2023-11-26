@@ -119,9 +119,6 @@ export class AppState {
     private showHelpPageSubject$ = new BehaviorSubject<boolean>(false);
     public showHelpPage$ = this.showHelpPageSubject$.asObservable();
 
-    private isCodeEditorToggleRequestedSubject$ = new BehaviorSubject<boolean>(false);
-    public isCodeEditorToggleRequested$ = this.isCodeEditorToggleRequestedSubject$.asObservable();
-
     private isCodeEditorToggleConfirmedSubject$ = new BehaviorSubject<boolean>(false);
     public isCodeEditorToggleConfirmed$ = this.isCodeEditorToggleConfirmedSubject$.asObservable();
 
@@ -179,8 +176,13 @@ export class AppState {
         this.showHelpPageSubject$.next(show);
     }
 
-    public setIsCodeEditorToggleRequested() {
-        this.isCodeEditorToggleRequestedSubject$.next(true);
+    public switchCodeEditor() {
+        if (this.selectedCodeEditorTypeSubject$.getValue() == CodeEditorType.Beginner) {
+            this.selectedCodeEditorTypeSubject$.next(CodeEditorType.Advanced);
+        }
+        else if (this.selectedCodeEditorTypeSubject$.getValue() == CodeEditorType.Advanced) {
+            this.selectedCodeEditorTypeSubject$.next(CodeEditorType.Beginner);
+        }
     }
 
     public setIsCodeEditorToggleConfirmed(confirmed: boolean) {

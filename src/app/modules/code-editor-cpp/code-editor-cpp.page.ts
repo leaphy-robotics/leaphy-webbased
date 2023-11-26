@@ -6,12 +6,13 @@ import {BlocklyEditorState} from "../../state/blockly-editor.state";
 import {GlobalState} from "../../state/global.state";
 import {BackEndState} from "../../state/backend.state";
 
+
 @Component({
-    selector: 'app-code-editor-arduino',
-    templateUrl: './code-editor.page.html',
-    styleUrls: ['./code-editor.page.scss']
+    selector: 'app-code-editor-cpp',
+    templateUrl: './code-editor-cpp.page.html',
+    styleUrls: ['./code-editor-cpp.page.scss']
 })
-export class CodeEditorPage implements AfterViewInit {
+export class CodeEditorCppPage implements AfterViewInit {
 
     @ViewChild("editor") private editor: ElementRef<HTMLElement>;
 

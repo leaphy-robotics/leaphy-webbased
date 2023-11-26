@@ -51,12 +51,6 @@ export class AppEffects {
                 setTimeout(() => this.appState.setSelectedRobotType(reloadConfig.robotType), 500);
             });
 
-        // When the editor toggle is requested to advanced, just autoconfirm it
-        // When the editor toggle is requested to beginner, and there are no changes, just autoconfirm it
-        this.appState.isCodeEditorToggleRequested$
-            .pipe()
-            .subscribe(() => this.appState.setIsCodeEditorToggleConfirmed(true));
-
         // When the editor change has been confirmed, toggle the codeeditor
         this.appState.isCodeEditorToggleConfirmed$
             .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.selectedCodeEditorType$))

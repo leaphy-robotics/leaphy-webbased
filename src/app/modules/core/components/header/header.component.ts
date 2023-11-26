@@ -63,7 +63,7 @@ export class HeaderComponent {
     }
 
     public onCodeEditorClicked() {
-        this.appState.setIsCodeEditorToggleRequested();
+        this.appState.switchCodeEditor();
     }
 
     public onSaveWorkspaceAsClicked() {

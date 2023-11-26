@@ -22,6 +22,7 @@ import { CoreModule } from './modules/core/core.module';
 import { MatomoModule } from 'ngx-matomo';
 import { NgTerminalModule } from 'ng-terminal';
 import {TerminalComponent} from "./modules/terminal/terminal.component";
+import {GlobalState} from "./state/global.state";
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');

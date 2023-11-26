@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CodeEditorPage } from './code-editor.page';
+import { CodeEditorCppPage } from './code-editor-cpp.page';
 
 const routes: Routes = [{
   path: '',
-  component: CodeEditorPage
+  component: CodeEditorCppPage
 }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CodeEditorRoutingModule { }
+export class CodeEditorCppRoutingModule { }
