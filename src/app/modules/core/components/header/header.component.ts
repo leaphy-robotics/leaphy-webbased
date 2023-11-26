@@ -119,7 +119,7 @@ export class HeaderComponent {
         console.log("onBackToBlocks: ", this.appState.getCurrentEditor());
         if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
             this.router.navigate(['/blocks'], { skipLocationChange: true });
-        else if (this.appState.getCurrentEditor() == CodeEditorType.Advanced)
+        else if (this.appState.getCurrentEditor() == CodeEditorType.CPP)
             this.router.navigate(['/cppEditor'], { skipLocationChange: true });
         else if (this.appState.getCurrentEditor() == CodeEditorType.Python)
             this.router.navigate(['/pythonEditor'], { skipLocationChange: true });

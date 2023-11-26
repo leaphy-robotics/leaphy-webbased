@@ -15,7 +15,7 @@ export class RobotSelectionComponent {
         // checked
         this.appState.setSelectedRobotType(robot);
         if (robot.id === 'l_code') {
-            this.appState.setSelectedCodeEditor(CodeEditorType.Advanced)
+            this.appState.setSelectedCodeEditor(CodeEditorType.CPP)
         } else if (robot.id === 'l_micropython') {
             this.appState.setSelectedCodeEditor(CodeEditorType.Python)
         } else {

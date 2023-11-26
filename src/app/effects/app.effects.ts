@@ -53,24 +53,24 @@ export class AppEffects {
 
         // When the editor change has been confirmed, toggle the codeeditor
         this.appState.isCodeEditorToggleConfirmed$
-            .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.selectedCodeEditorType$))
+            .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.codeEditor$))
             .subscribe(([, codeEditorType]) => {
                 if (codeEditorType == CodeEditorType.Beginner) {
-                    this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);
-                } else if (codeEditorType == CodeEditorType.Advanced) {
+                    this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+                } else if (codeEditorType == CodeEditorType.CPP) {
                     this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
                 }
             });
 
         // When the code editor changes, route to the correct screen
-        this.appState.selectedCodeEditorType$
+        this.appState.codeEditor$
             .pipe(filter(codeEditor => !!codeEditor))
             .subscribe(async codeEditor => {
                 switch (codeEditor) {
                     case CodeEditorType.Beginner:
                         await this.router.navigate(['/blocks'], { skipLocationChange: true });
                         break;
-                    case CodeEditorType.Advanced:
+                    case CodeEditorType.CPP:
                         await this.router.navigate(['/cppEditor'], { skipLocationChange: true });
                         break;
                     case CodeEditorType.Python:

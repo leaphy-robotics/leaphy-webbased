@@ -243,10 +243,10 @@ export class BlocklyEditorEffects {
             });
 
         // When Advanced CodeEditor is Selected, set the workspace status to SavingTemp and hide the sideNav
-        this.appState.selectedCodeEditorType$
+        this.appState.codeEditor$
             .pipe(
                 pairwise(),
-                filter(([previous, current]) => (current === CodeEditorType.Advanced || current === CodeEditorType.Python ) && current !== previous)
+                filter(([previous, current]) => (current === CodeEditorType.CPP || current === CodeEditorType.Python ) && current !== previous)
             )
             .subscribe(() => {
                 this.blocklyState.setIsSideNavOpen(false);
@@ -283,7 +283,7 @@ export class BlocklyEditorEffects {
             });
 
         // When the code editor is changed, clear the projectFilePath
-        this.appState.selectedCodeEditorType$
+        this.appState.codeEditor$
             .subscribe(() => this.blocklyState.setProjectFilePath(''));
 
         // When an new project is being saved, reset the WorkspaceStatus to SavingAs
@@ -332,7 +332,7 @@ export class BlocklyEditorEffects {
                         console.log("WORKSPACE_RESTORING");
                         if (message.payload.type == 'advanced') {
                             this.blocklyState.setCode(message.payload.data as string);
-                            this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);
+                            this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
                             this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
                             this.appState.setSelectedRobotType(AppState.genericRobotType);

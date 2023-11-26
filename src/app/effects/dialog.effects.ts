@@ -6,14 +6,12 @@ import { ConnectWiredDialog } from '../modules/core/dialogs/connect.wired/connec
 import { BackEndState } from '../state/backend.state';
 import { ConnectionStatus } from '../domain/connection.status';
 import { CreditsDialog } from '../modules/core/dialogs/credits/credits.dialog';
-import { RobotWiredState } from '../state/robot.wired.state';
 import { InfoDialog } from '../modules/core/dialogs/info/info.dialog';
 import { AppState } from '../state/app.state';
 import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/confirm-editor.dialog';
 import { CodeEditorState } from '../state/code-editor.state';
 import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/language-select.dialog';
 import {SerialOutputComponent} from "../modules/shared/components/serial-output/serial-output.component";
-import {GlobalState} from "../state/global.state";
 
 @Injectable({
     providedIn: 'root',
@@ -26,7 +24,7 @@ export class DialogEffects {
         private dialogState: DialogState,
         private appState: AppState,
         private backEndState: BackEndState,
-        private global: GlobalState,
+        private codeEditorState: CodeEditorState,
         private dialog: MatDialog
     ) {
         // Open the connect dialog if closed when waiting for robot

@@ -22,7 +22,7 @@ import { CoreModule } from './modules/core/core.module';
 import { MatomoModule } from 'ngx-matomo';
 import { NgTerminalModule } from 'ng-terminal';
 import {TerminalComponent} from "./modules/terminal/terminal.component";
-import {GlobalState} from "./state/global.state";
+import {CodeEditorEffects} from "./effects/code-editor.effects";
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -72,6 +72,7 @@ export function createTranslateLoader(http: HttpClient) {
                     BlocklyEditorEffects,
                     DialogEffects,
                     RobotCloudEffects,
+                    CodeEditorEffects,
                     RobotWiredEffects
                 ], useFactory: () => () => null, multi: true
         }

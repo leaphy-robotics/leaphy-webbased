@@ -6,7 +6,6 @@ import { SketchStatus } from '../domain/sketch.status';
 import { BackEndMessage } from '../domain/backend.message';
 import { ConnectionStatus } from '../domain/connection.status';
 import { AppState } from '../state/app.state';
-import { RobotWiredState } from '../state/robot.wired.state';
 import { WorkspaceStatus } from '../domain/workspace.status';
 import { DialogState } from '../state/dialog.state';
 import { CodeEditorType } from '../domain/code-editor.type';
@@ -18,8 +17,8 @@ import { Router } from "@angular/router";
 import { DebugInformationDialog } from "../modules/core/dialogs/debug-information/debug-information.dialog";
 import * as Blockly from 'blockly/core';
 import {UploadPythonDialog} from "../modules/core/dialogs/upload-python/upload-python.dialog";
-import {GlobalState} from "../state/global.state";
 import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
+import {CodeEditorState} from "../state/code-editor.state";
 
 
 const fileExtensions = [
@@ -40,7 +39,17 @@ const fileExtensions = [
 // Defines the effects on the Electron environment that different state changes have
 export class BackendWiredEffects {
 
-	constructor(private global: GlobalState, private blocklyState: BlocklyEditorState, private router: Router, private backEndState: BackEndState, private appState: AppState, private blocklyEditorState: BlocklyEditorState, private robotWiredState: RobotWiredState, private dialogState: DialogState, private zone: NgZone, private dialog: MatDialog) {
+	constructor(
+        private blocklyState: BlocklyEditorState,
+        private router: Router,
+        private backEndState: BackEndState,
+        private appState: AppState,
+        private blocklyEditorState: BlocklyEditorState,
+        private dialogState: DialogState,
+        private zone: NgZone,
+        private dialog: MatDialog,
+        private codeEditorState: CodeEditorState
+    ) {
 		// Only set up these effects when we're in Desktop mode
 		this.appState.isDesktop$
 			.pipe(filter(isDesktop => !!isDesktop))
@@ -111,7 +120,7 @@ export class BackendWiredEffects {
 
 				// When a workspace project is being loaded, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
+					.pipe(withLatestFrom(this.appState.codeEditor$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Beginner))
 					.pipe(withLatestFrom(this.appState.selectedRobotType$))
 					.subscribe(([, robotType]) => {
@@ -120,14 +129,14 @@ export class BackendWiredEffects {
 
 				// When a code project is being loaded, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Advanced))
+					.pipe(withLatestFrom(this.appState.codeEditor$))
+					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.CPP))
 					.subscribe(() => {
 						this.send('restore-workspace-code', AppState.genericRobotType.id);
 					});
 
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
+					.pipe(withLatestFrom(this.appState.codeEditor$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Python))
 					.subscribe(() => {
 						this.send('restore-workspace-code', AppState.microPythonRobotType.id);
@@ -136,7 +145,7 @@ export class BackendWiredEffects {
 
 				// When an existing project's workspace is being saved, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
+					.pipe(withLatestFrom(this.appState.codeEditor$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Saving && codeEditorType === CodeEditorType.Beginner))
 					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.workspaceXml$))
 					.pipe(filter(([, projectFilePath,]) => !!projectFilePath))
@@ -147,8 +156,8 @@ export class BackendWiredEffects {
 
 				// When an existing project's code is being saved, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Saving && codeEditorType === CodeEditorType.Advanced))
+					.pipe(withLatestFrom(this.appState.codeEditor$))
+					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Saving && codeEditorType === CodeEditorType.CPP))
 					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.code$))
 					.pipe(filter(([, projectFilePath,]) => !!projectFilePath))
 					.subscribe(([, projectFilePath, code]) => {
@@ -158,7 +167,7 @@ export class BackendWiredEffects {
 
 				// When the workspace is being saved as a new project, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
+					.pipe(withLatestFrom(this.appState.codeEditor$))
 					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.SavingAs && codeEditorType === CodeEditorType.Beginner))
 					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.workspaceXml$, this.appState.selectedRobotType$))
 					.subscribe(([, projectFilePath, workspaceXml, robotType]) => {
@@ -168,8 +177,8 @@ export class BackendWiredEffects {
 
 				// When the code is being saved as a new project, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.selectedCodeEditorType$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.SavingAs && codeEditorType === CodeEditorType.Advanced))
+					.pipe(withLatestFrom(this.appState.codeEditor$))
+					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.SavingAs && codeEditorType === CodeEditorType.CPP))
 					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.code$))
 					.subscribe(([, projectFilePath, code]) => {
 						const payload = { projectFilePath, data: code, extension: AppState.genericRobotType.id };
@@ -181,7 +190,7 @@ export class BackendWiredEffects {
 					.pipe(filter(status => status === WorkspaceStatus.SavingTemp))
 					.pipe(withLatestFrom(this.blocklyEditorState.workspaceXml$, this.appState.selectedRobotType$))
 					.subscribe(([, workspaceXml, robotType]) => {
-						if (CodeEditorType.Advanced == this.appState.getCurrentEditor() || CodeEditorType.Python == this.appState.getCurrentEditor()) {
+						if (CodeEditorType.CPP == this.appState.getCurrentEditor() || CodeEditorType.Python == this.appState.getCurrentEditor()) {
 							this.send('save-workspace-temp', { data: workspaceXml, extension: robotType.id, type: 'advanced' });
 						} else {
 							this.send('save-workspace-temp', { data: workspaceXml, extension: robotType.id });
@@ -244,7 +253,7 @@ export class BackendWiredEffects {
 				})
 				break;
 			case 'compile':
-				const source_code = (this.appState.getCurrentEditor() == CodeEditorType.Beginner) ? this.blocklyEditorState.code : this.global.codeEditorState.getCode();
+				const source_code = (this.appState.getCurrentEditor() == CodeEditorType.Beginner) ? this.blocklyEditorState.code : this.codeEditorState.getCode();
 				const libraries = args[0].libs;
 				const board = args[0].fqbn;
 
@@ -337,7 +346,7 @@ export class BackendWiredEffects {
 				sessionStorage.setItem('robotType', this.appState.getSelectedRobotType().id);
 				if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
 					sessionStorage.setItem('type', 'beginner');
-				} else if (this.appState.getCurrentEditor() == CodeEditorType.Advanced) {
+				} else if (this.appState.getCurrentEditor() == CodeEditorType.CPP) {
 					sessionStorage.setItem('type', 'advanced');
 				} else if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
 					sessionStorage.setItem('type', 'python');
@@ -358,19 +367,19 @@ export class BackendWiredEffects {
 					} catch (error) {
 						console.log('Error:', error.message);
 					}
-				} else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.Advanced) {
+				} else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.CPP) {
 					try {
                         args[1].session.setValue(workspaceTemp);
-                        this.global.codeEditorState.setOriginalCode(workspaceTemp);
-                        this.global.codeEditorState.setCode(workspaceTemp);
+                        this.codeEditorState.setOriginalCode(workspaceTemp);
+                        this.codeEditorState.setCode(workspaceTemp);
 					} catch (error) {
 						console.log('Error:', error.message);
 					}
 				} else if (type == 'python' && this.appState.getCurrentEditor() == CodeEditorType.Python) {
 					try {
 						args[1].session.setValue(workspaceTemp);
-						this.global.codeEditorState.setOriginalCode(workspaceTemp);
-						this.global.codeEditorState.setCode(workspaceTemp);
+						this.codeEditorState.setOriginalCode(workspaceTemp);
+						this.codeEditorState.setCode(workspaceTemp);
 					} catch (error) {
 						console.log('Error:', error.message);
 					}
@@ -383,12 +392,11 @@ export class BackendWiredEffects {
                         width: '75vw', disableClose: true,
                     }).afterClosed().subscribe((result) => {
                         if (result) {
-                            console.log(this.global.uuid);
-                            console.log(this.global.codeEditorState.getAceEditor());
-                            console.log(this.global.codeEditorState.getAceEditor().session);
-                            this.global.codeEditorState.getAceEditor().session.setValue(result);
-                            this.global.codeEditorState.setOriginalCode(result);
-                            this.global.codeEditorState.setCode(result);
+                            console.log(this.codeEditorState.getAceEditor());
+                            console.log(this.codeEditorState.getAceEditor().session);
+                            this.codeEditorState.getAceEditor().session.setValue(result);
+                            this.codeEditorState.setOriginalCode(result);
+                            this.codeEditorState.setCode(result);
                             console.log("result: " + result);
                         }
                     });

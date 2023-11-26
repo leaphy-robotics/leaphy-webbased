@@ -122,8 +122,8 @@ export class AppState {
     private isCodeEditorToggleConfirmedSubject$ = new BehaviorSubject<boolean>(false);
     public isCodeEditorToggleConfirmed$ = this.isCodeEditorToggleConfirmedSubject$.asObservable();
 
-    private selectedCodeEditorTypeSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.None);
-    public selectedCodeEditorType$ = this.selectedCodeEditorTypeSubject$.asObservable();
+    private codeEditorSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.None);
+    public codeEditor$ = this.codeEditorSubject$.asObservable();
 
     public canChangeCodeEditor$: Observable<boolean>;
 
@@ -177,11 +177,11 @@ export class AppState {
     }
 
     public switchCodeEditor() {
-        if (this.selectedCodeEditorTypeSubject$.getValue() == CodeEditorType.Beginner) {
-            this.selectedCodeEditorTypeSubject$.next(CodeEditorType.Advanced);
+        if (this.codeEditorSubject$.getValue() == CodeEditorType.Beginner) {
+            this.codeEditorSubject$.next(CodeEditorType.CPP);
         }
-        else if (this.selectedCodeEditorTypeSubject$.getValue() == CodeEditorType.Advanced) {
-            this.selectedCodeEditorTypeSubject$.next(CodeEditorType.Beginner);
+        else if (this.codeEditorSubject$.getValue() == CodeEditorType.CPP) {
+            this.codeEditorSubject$.next(CodeEditorType.Beginner);
         }
     }
 
@@ -190,7 +190,7 @@ export class AppState {
     }
 
     public setSelectedCodeEditor(codeEditor: CodeEditorType) {
-        this.selectedCodeEditorTypeSubject$.next(codeEditor);
+        this.codeEditorSubject$.next(codeEditor);
     }
 
     public getCurrentLanguageCode(): string {
@@ -198,7 +198,7 @@ export class AppState {
     }
 
     public getCurrentEditor(): CodeEditorType {
-        return this.selectedCodeEditorTypeSubject$.getValue();
+        return this.codeEditorSubject$.getValue();
     }
 
     public getSelectedRobotType(): RobotType {

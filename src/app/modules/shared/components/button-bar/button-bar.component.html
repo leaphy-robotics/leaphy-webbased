@@ -1,12 +1,12 @@
 <div class="sidenav-buttons">
     <button mat-fab [attr.data-label]="'READ_CODE' | translate"
-            [ngClass]="{'active': (appState.selectedCodeEditorType$ | async) === 1 && (blocklyState.isSideNavOpen$ | async)}"
-            (click)="onSideNavToggled()" [disabled]="(appState.selectedCodeEditorType$ | async) !== 1">
+            [ngClass]="{'active': (appState.codeEditor$ | async) === 1 && (blocklyState.isSideNavOpen$ | async)}"
+            (click)="onSideNavToggled()" [disabled]="(appState.codeEditor$ | async) !== 1">
         <mat-icon>code</mat-icon>
     </button>
 
 
-    <button *ngIf="(appState.selectedCodeEditorType$ | async) !== CodeEditorType.Python" mat-fab [attr.data-label]="'SERIAL_OUTPUT' | translate"  (click)="onShowSerialOutputClicked()">
+    <button *ngIf="(appState.codeEditor$ | async) !== CodeEditorType.Python" mat-fab [attr.data-label]="'SERIAL_OUTPUT' | translate" (click)="onShowSerialOutputClicked()">
         <mat-icon>article</mat-icon>
     </button>
 
