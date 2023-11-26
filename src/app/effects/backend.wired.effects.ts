@@ -1,13 +1,11 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BlocklyEditorState } from '../state/blockly-editor.state';
 import { filter, withLatestFrom } from 'rxjs/operators';
 import { BackEndState } from '../state/backend.state';
 import { SketchStatus } from '../domain/sketch.status';
-import { BackEndMessage } from '../domain/backend.message';
 import { ConnectionStatus } from '../domain/connection.status';
 import { AppState } from '../state/app.state';
 import { WorkspaceStatus } from '../domain/workspace.status';
-import { DialogState } from '../state/dialog.state';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { NameFileDialog } from "../modules/core/dialogs/name-file/name-file.dialog";
 import { MatDialog } from "@angular/material/dialog";
@@ -45,8 +43,6 @@ export class BackendWiredEffects {
         private backEndState: BackEndState,
         private appState: AppState,
         private blocklyEditorState: BlocklyEditorState,
-        private dialogState: DialogState,
-        private zone: NgZone,
         private dialog: MatDialog,
         private codeEditorState: CodeEditorState
     ) {
@@ -268,17 +264,17 @@ export class BackendWiredEffects {
 				});
 				break;
 			case 'restore-workspace':
-				var input = document.createElement('input');
-				input.type = 'file';
+                const input = document.createElement('input');
+                input.type = 'file';
 				// add a list of extensions to accept
 				input.accept = fileExtensions.join(',');
 
 				input.onchange = e => {
 					// @ts-ignore
-					var file = e.target.files[0];
+                    const file = e.target.files[0];
 
-					var reader = new FileReader();
-					reader.readAsText(file, 'UTF-8');
+                    const reader = new FileReader();
+                    reader.readAsText(file, 'UTF-8');
 
 					reader.onload = readerEvent => {
 						const data = readerEvent.target.result; // this is the content!

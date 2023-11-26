@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { filter, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { DialogState } from '../state/dialog.state';
-import { BackEndState } from '../state/backend.state';
-import { ConnectionStatus } from '../domain/connection.status';
 import { CreditsDialog } from '../modules/core/dialogs/credits/credits.dialog';
 import { InfoDialog } from '../modules/core/dialogs/info/info.dialog';
 import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/confirm-editor.dialog';
@@ -19,7 +17,6 @@ export class DialogEffects {
 
     constructor(
         private dialogState: DialogState,
-        private backEndState: BackEndState,
         private dialog: MatDialog,
     ) {
         // When the info dialog visibility is set to true, open the dialog
@@ -59,18 +56,15 @@ export class DialogEffects {
 
         const language = localStorage.getItem('currentLanguage');
         if (language) {
-            console.log('Language is set to ' + language);
+            //console.log('Language is set to ' + language);
         } else {
-            const languageSelectionDialogComponent = LanguageSelectDialog;
-
-            const languageDialogRef = this.dialog.open(languageSelectionDialogComponent, {
+            const languageDialogRef = this.dialog.open(LanguageSelectDialog, {
                 width: '450px',
                 disableClose: true,
             });
 
             languageDialogRef.afterClosed().subscribe(() => {
-                const creditsDialogComponent = CreditsDialog;
-                const creditsDialogRef = this.dialog.open(creditsDialogComponent, {
+                this.dialog.open(CreditsDialog, {
                     width: '800px',
                     disableClose: true,
                 });

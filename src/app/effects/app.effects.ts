@@ -7,14 +7,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { StatusMessageDialog } from '../modules/core/dialogs/status-message/status-message.dialog';
 import { Router } from '@angular/router';
 import { CodeEditorType } from '../domain/code-editor.type';
-import { BlocklyEditorState } from '../state/blockly-editor.state';
 
 @Injectable({
     providedIn: 'root',
 })
 
 export class AppEffects {
-    private isDebug = false;
     constructor(
         private appState: AppState,
         private translate: TranslateService,

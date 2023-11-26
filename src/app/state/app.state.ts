@@ -81,9 +81,6 @@ export class AppState {
     private isDesktopSubject$: BehaviorSubject<boolean>;
     public isDesktop$: Observable<boolean>;
 
-    private isReloadRequestedSubject$ = new BehaviorSubject<boolean>(false);
-    public isReloadRequested$ = this.isReloadRequestedSubject$.asObservable();
-
     public availableRobotTypes$: Observable<RobotType[]>;
 
     private selectedRobotTypeSubject$ = new BehaviorSubject<RobotType>(null);
@@ -97,10 +94,6 @@ export class AppState {
 
     private changedLanguageSubject$ = new BehaviorSubject(null);
     public changedLanguage$ = this.changedLanguageSubject$.asObservable();
-
-    public isRobotWired$: Observable<boolean> = this.selectedRobotType$
-        .pipe(filter(selectedRobotType => !!selectedRobotType))
-        .pipe(map(selectedRobotType => selectedRobotType.isWired));
 
     private showHelpPageSubject$ = new BehaviorSubject<boolean>(false);
     public showHelpPage$ = this.showHelpPageSubject$.asObservable();

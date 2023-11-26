@@ -65,8 +65,4 @@ void loop() {
     public getAceEditor(){
         return this.aceEditorSubject$.value;
     }
-
-    public getOriginalCode(){
-        return this.startCodeSubject$.value;
-    }
 }

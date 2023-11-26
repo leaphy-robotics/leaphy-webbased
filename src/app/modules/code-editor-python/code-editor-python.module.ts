@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { CodeEditorPythonRoutingModule } from './code-editor-python-routing.module';
 import { CodeEditorPythonPage } from './code-editor-python.page';
 import { SharedModule } from '../shared/shared.module';
+import {CodeEditorPythonRoutingModule} from "./code-editor-python-routing.module";
 import {AppModule} from "../../app.module";
 
 
@@ -13,7 +13,7 @@ import {AppModule} from "../../app.module";
         CommonModule,
         CodeEditorPythonRoutingModule,
         SharedModule,
-        AppModule,
+        AppModule
     ]
 })
 export class CodeEditorPythonModule { }

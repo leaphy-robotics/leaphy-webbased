@@ -31,7 +31,7 @@ import {defaultBlockStyles, categoryStyles, componentStyles} from "@leaphy-robot
 import {LeaphyCategory} from "../services/Toolbox/Category";
 import {LeaphyToolbox} from "../services/Toolbox/Toolbox";
 
-var Extensions = Blockly.Extensions;
+const Extensions = Blockly.Extensions;
 
 @Injectable({
     providedIn: 'root',
@@ -121,13 +121,12 @@ export class BlocklyEditorEffects {
                 for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {
                     Blockly.Blocks[name] = block;
                 }
-                const LeaphyTheme = Blockly.Theme.defineTheme('leaphy', {
+                config.theme = Blockly.Theme.defineTheme('leaphy', {
                     'blockStyles': defaultBlockStyles,
                     'categoryStyles': categoryStyles,
                     'componentStyles': componentStyles,
                     name: 'leaphy',
-                })
-                config.theme = LeaphyTheme;
+                });
                 const parser = new DOMParser();
                 const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
                 const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');

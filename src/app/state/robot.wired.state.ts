@@ -101,9 +101,5 @@ export class RobotWiredState {
         this.uploadLogSubject$.next([]);
     }
 
-    public getUploadLog(): string[] {
-        return this.uploadLogSubject$.getValue();
-    }
-
     private readonly poisonPill: string = "caaa61a6-a666-4c0b-83b4-ebc75b08fecb"
 }

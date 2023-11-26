@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MatDialogRef } from '@angular/material/dialog';
-import { distinctUntilChanged, scan } from 'rxjs/operators';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -38,10 +37,6 @@ export class DialogState {
 
     public setIsInfoDialogVisible(isVisible: boolean) {
         this.isInfoDialogVisibleSubject$.next(isVisible);
-    }
-
-    public setIsEditorTypeChangeConfirmationDialogVisible(isVisible: boolean) {
-        this.isEditorTypeChangeConfirmationDialogVisibleSubject$.next(isVisible);
     }
 
     public getIsSerialOutputWindowOpen() {
