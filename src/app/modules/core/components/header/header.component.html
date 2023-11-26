@@ -83,7 +83,6 @@
     <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onHelpClicked()">
         <mat-icon>help_center</mat-icon>
         <span>{{ "HELP_FORUM" | translate }}</span>
-        # email
     </button>
     <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onEmailClicked()">
         <mat-icon>email</mat-icon>

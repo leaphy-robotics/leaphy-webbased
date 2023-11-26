@@ -71,30 +71,6 @@ export class BackendWiredEffects {
 				// If that worked, set the backend Connection status
 				this.backEndState.setConnectionStatus(ConnectionStatus.ConnectedToBackend);
 
-				// If the focus is set on an open window, relay to backend
-				this.dialogState.isSerialOutputListening$
-					.pipe(withLatestFrom(this.dialogState.isSerialOutputWindowOpen$))
-					.pipe(filter(([isFocus, isOpen]) => isFocus && isOpen))
-					.subscribe(() => {
-						this.send('focus-serial');
-					});
-
-				// Relay messages from Electron to the Backend State
-				this.on('backend-message', (event: any, message: BackEndMessage) => {
-					// This is needed to trigger UI refresh from IPC events
-					this.zone.run(() => {
-						this.backEndState.setBackendMessage(message);
-					});
-				});
-
-				// When a reload is requested and we are done saving the temp workspace, relay to Electron backend
-				this.blocklyEditorState.workspaceStatus$
-					.pipe(filter(status => status === WorkspaceStatus.Clean), withLatestFrom(this.appState.isReloadRequested$))
-					.pipe(filter(([, isRequested]) => !!isRequested))
-					.subscribe(() => {
-						this.send('restart-app');
-					});
-
 				// When the sketch status is set to sending, send a compile request to backend
 				this.blocklyEditorState.sketchStatus$
 					.pipe(withLatestFrom(this.blocklyEditorState.code$, this.appState.selectedRobotType$))
@@ -210,12 +186,7 @@ export class BackendWiredEffects {
 			});
 	}
 
-	public on(channel: string, listener: (event: any, data: any) => void): void {
-		//if (!this.ipc) {
-		//    return;
-		//}
-		//this.ipc.on(channel, listener);
-	}
+
 	public async send(channel: string, ...args): Promise<void> {
 		switch (channel) {
 			case 'save-workspace-as':

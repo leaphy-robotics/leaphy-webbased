@@ -8,9 +8,6 @@ import { StatusMessageDialog } from '../modules/core/dialogs/status-message/stat
 import { Router } from '@angular/router';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { BlocklyEditorState } from '../state/blockly-editor.state';
-import { ReloadConfig } from '../domain/reload.config';
-import { combineLatest } from 'rxjs';
-import { CodeEditorState } from '../state/code-editor.state';
 
 @Injectable({
     providedIn: 'root',
@@ -22,34 +19,14 @@ export class AppEffects {
         private appState: AppState,
         private translate: TranslateService,
         private backEndState: BackEndState,
-        private blocklyState: BlocklyEditorState,
         private snackBar: MatSnackBar,
         private router: Router) {
-
-        // When the language is changed, store reload config, then request a reload
-        this.appState.changedLanguage$
-            .pipe(filter(changedLanguage => !!changedLanguage))
-            .pipe(withLatestFrom(this.appState.currentLanguage$, this.appState.selectedRobotType$))
-            .pipe(filter(([changedLanguage, currentLanguage,]) => changedLanguage.code !== currentLanguage.code))
-            .subscribe(([changedLanguage, , robotType]) => {
-                this.appState.setCurrentLanguage(changedLanguage);
-                const reloadConfig = new ReloadConfig(robotType);
-                this.appState.setReloadConfig(reloadConfig);
-                this.appState.setIsReloadRequested(true);
-            });
 
         // Use the current language to translate the angular strings
         this.appState.currentLanguage$
             .pipe(filter(language => !!language))
             .subscribe(language => this.translate.use(language.code));
 
-        // When a reloadConfig is found, clear it and set the robotType
-        combineLatest([this.appState.reloadConfig$, this.blocklyState.blocklyConfig$])
-            .pipe(filter(([reloadConfig, blockly]) => !!reloadConfig && !!blockly))
-            .subscribe(([reloadConfig,]) => {
-                this.appState.setReloadConfig(null);
-                setTimeout(() => this.appState.setSelectedRobotType(reloadConfig.robotType), 500);
-            });
 
         // When the editor change has been confirmed, toggle the codeeditor
         this.appState.isCodeEditorToggleConfirmed$

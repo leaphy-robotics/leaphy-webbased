@@ -6,8 +6,6 @@ import { HeaderComponent } from './components/header/header.component';
 import { RobotSelectionComponent } from './components/robot-selection/robot-selection.component';
 import { StartComponent } from './components/start/start.component';
 
-import { ConnectWiredDialog } from './dialogs/connect.wired/connect.wired.dialog';
-import { ConnectCloudDialog } from './dialogs/connect.cloud/connect.cloud.dialog';
 import { StatusMessageDialog } from './dialogs/status-message/status-message.dialog';
 import { CreditsDialog } from './dialogs/credits/credits.dialog';
 import { InfoDialog } from './dialogs/info/info.dialog';
@@ -24,8 +22,6 @@ import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
 
 @NgModule({
     declarations: [
-        ConnectWiredDialog,
-        ConnectCloudDialog,
         ConfirmEditorDialog,
         HeaderComponent,
         RobotSelectionComponent,
@@ -48,13 +44,11 @@ import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
         NgOptimizedImage,
         DragDropModule
     ],
-    entryComponents: [ConnectWiredDialog, ConnectCloudDialog, ConfirmEditorDialog, StatusMessageDialog, CreditsDialog, LanguageSelectDialog, InfoDialog],
+    entryComponents: [ConfirmEditorDialog, StatusMessageDialog, CreditsDialog, LanguageSelectDialog, InfoDialog],
     exports: [
         HeaderComponent,
         StartComponent,
         RobotSelectionComponent,
-        ConnectCloudDialog,
-        ConnectWiredDialog,
         ConfirmEditorDialog,
         StatusMessageDialog,
         CreditsDialog,

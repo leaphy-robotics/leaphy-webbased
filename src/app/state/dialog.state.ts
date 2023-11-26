@@ -8,9 +8,6 @@ import { distinctUntilChanged, scan } from 'rxjs/operators';
 })
 export class DialogState {
 
-    private connectDialogSubject$: BehaviorSubject<MatDialogRef<unknown, any>> = new BehaviorSubject(null);
-    public connectDialog$ = this.connectDialogSubject$.asObservable();
-
     private isSerialOutputWindowOpenSubject$ = new BehaviorSubject(false);
     public isSerialOutputWindowOpen$ = this.isSerialOutputWindowOpenSubject$.asObservable()
         .pipe(distinctUntilChanged());
@@ -26,10 +23,6 @@ export class DialogState {
 
     private isEditorTypeChangeConfirmationDialogVisibleSubject$ = new BehaviorSubject(false);
     public isEditorTypeChangeConfirmationDialogVisible$ = this.isEditorTypeChangeConfirmationDialogVisibleSubject$.asObservable();
-
-    public setConnectDialog(dialogRef: MatDialogRef<unknown, any>) {
-        this.connectDialogSubject$.next(dialogRef);
-    }
 
     public setIsSerialOutputWindowOpen(isOpen: boolean) {
         this.isSerialOutputWindowOpenSubject$.next(isOpen);

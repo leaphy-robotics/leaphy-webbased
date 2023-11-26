@@ -5,7 +5,6 @@ import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
-import { ReloadConfig } from '../domain/reload.config';
 import packageJson from '../../../package.json';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
@@ -71,10 +70,6 @@ export class AppState {
         this.currentLanguageSubject$ = new BehaviorSubject(currentLanguage);
         this.currentLanguage$ = this.currentLanguageSubject$.asObservable();
 
-        const reloadConfig = this.localStorage.fetch<ReloadConfig>('reloadConfig');
-        this.reloadConfigSubject$ = new BehaviorSubject(reloadConfig);
-        this.reloadConfig$ = this.reloadConfigSubject$.asObservable();
-
         this.canChangeCodeEditor$ = this.selectedRobotType$
             .pipe(filter(robotType => !!robotType))
             .pipe(map(robotType => robotType !== AppState.genericRobotType))
@@ -85,9 +80,6 @@ export class AppState {
 
     private isDesktopSubject$: BehaviorSubject<boolean>;
     public isDesktop$: Observable<boolean>;
-
-    private reloadConfigSubject$: BehaviorSubject<ReloadConfig>;
-    public reloadConfig$: Observable<ReloadConfig>;
 
     private isReloadRequestedSubject$ = new BehaviorSubject<boolean>(false);
     public isReloadRequested$ = this.isReloadRequestedSubject$.asObservable();
@@ -123,16 +115,6 @@ export class AppState {
 
     private packageJsonVersionSubject$: BehaviorSubject<string>;
     public packageJsonVersion$: Observable<string>;
-
-
-    public setReloadConfig(reloadConfig: ReloadConfig) {
-        if (!reloadConfig) this.localStorage.remove('reloadConfig');
-        else this.localStorage.store('reloadConfig', reloadConfig);
-    }
-
-    public setIsReloadRequested(isRequested: boolean) {
-        this.isReloadRequestedSubject$.next(isRequested);
-    }
 
     public setSelectedRobotType(robotType: RobotType) {
         // Intercept flitz robots and ask what type of flitz robot: nano, or uno
