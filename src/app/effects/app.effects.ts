@@ -77,10 +77,10 @@ export class AppEffects {
                         await this.router.navigate(['/blocks'], { skipLocationChange: true });
                         break;
                     case CodeEditorType.Advanced:
-                        await this.router.navigate(['/advanced-arduino'], { skipLocationChange: true });
+                        await this.router.navigate(['/cppEditor'], { skipLocationChange: true });
                         break;
                     case CodeEditorType.Python:
-                        await this.router.navigate(['/advanced-python'], { skipLocationChange: true });
+                        await this.router.navigate(['/pythonEditor'], { skipLocationChange: true });
                         break;
                     default:
                         //await this.router.navigate(['']);

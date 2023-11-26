@@ -118,11 +118,11 @@ export class HeaderComponent {
     public onBackToBlocks() {
         console.log("onBackToBlocks: ", this.appState.getCurrentEditor());
         if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
-            this.router.navigateByUrl('/blocks', { skipLocationChange: true });
+            this.router.navigate(['/blocks'], { skipLocationChange: true });
         else if (this.appState.getCurrentEditor() == CodeEditorType.Advanced)
-            this.router.navigateByUrl('/advanced-arduino', { skipLocationChange: true });
+            this.router.navigate(['/cppEditor'], { skipLocationChange: true });
         else if (this.appState.getCurrentEditor() == CodeEditorType.Python)
-            this.router.navigateByUrl('/python', { skipLocationChange: true });
+            this.router.navigate(['/pythonEditor'], { skipLocationChange: true });
     }
 }
 
