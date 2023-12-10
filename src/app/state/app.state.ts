@@ -19,7 +19,7 @@ export class AppState {
         'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor'
     ]
     private static leaphyOriginalRobotType = new RobotType('l_original', 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass'])
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
     private static leaphyFlitzRobotType = new RobotType('l_flitz', 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries, true, false
@@ -34,7 +34,7 @@ export class AppState {
         AppState.defaultLibraries.concat(['Leaphy WiFi Extension'])
     );
     public static genericRobotType = new RobotType('l_code', 'Generic Robot', null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass'])
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
     private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', 'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
         AppState.defaultLibraries, true, false
