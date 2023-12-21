@@ -88,7 +88,7 @@ export class HeaderComponent {
 
     public onEmailClicked() {
         // copy email to clipboard
-        navigator.clipboard.writeText('helpdesk@leaphy.nl').then(function() {});
+        navigator.clipboard.writeText('helpdesk@leaphy.org').then(function() {});
         this.snackBar.open('Email copied to clipboard', 'Close', {
             duration: 2000,
         });
