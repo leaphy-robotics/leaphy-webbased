@@ -70,26 +70,23 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
 
   exportToCsv() {
     var data = this.serialDataAsJSON
-    var filename = 'TEST_NAME.csv'
+    var filename = 'serial_monitor_export.csv'
 
     const csv = Papa.unparse(data, {
       header: true
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    if (navigator.msSaveBlob) {
-      // For IE 10+
-      navigator.msSaveBlob(blob, filename);
-    } else {
-      const link = document.createElement('a');
-      if (link.download !== undefined) {
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
+    
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    
     }}
 
   ngAfterViewInit() {
