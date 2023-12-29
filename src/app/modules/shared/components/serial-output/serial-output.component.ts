@@ -16,12 +16,6 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import * as Papa from 'papaparse';
 import { Subscription } from 'rxjs';
 
-declare global {
-  interface Navigator {
-    msSaveBlob?: any;
-  }
-}
-
 @Component({
   selector: 'app-serial-output',
   templateUrl: './serial-output.component.html',
@@ -64,7 +58,6 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
 
     this.serialDataSubscription = this.robotWiredState.serialData$.subscribe((data: SerialData[]) => {
       this.serialDataAsJSON = data.map(item => ({ time: item.time, data: item.data.trim() }));
-      // Additional logic if needed...
     });
   }
 
