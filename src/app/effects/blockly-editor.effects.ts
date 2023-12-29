@@ -133,8 +133,8 @@ export class BlocklyEditorEffects {
                   const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
                   const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
                   const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
-                  if (robotType.showLeaphyExtra) {
-                      const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_extra`);
+                  if (robotType.showLeaphyActuators) {
+                      const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_actuators`);
                       toolboxElement.prepend(leaphyExtraCategory);
                   }
                   toolboxElement.prepend(leaphyRobotCategory);
