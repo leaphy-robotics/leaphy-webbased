@@ -1,20 +1,20 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { ChartOptions } from 'chart.js';
+import {ChartOptions} from 'chart.js';
 import 'chartjs-adapter-moment';
-import { DialogState } from 'src/app/state/dialog.state';
-import { RobotWiredState } from 'src/app/state/robot.wired.state';
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import * as Papa from 'papaparse';
-import { Subscription } from 'rxjs';
+import {DialogState} from 'src/app/state/dialog.state';
+import {RobotWiredState} from 'src/app/state/robot.wired.state';
+import {MatDialogRef} from "@angular/material/dialog";
+import {unparse} from 'papaparse';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-serial-output',
@@ -62,10 +62,10 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
   }
 
   exportToCsv() {
-    var data = this.serialDataAsJSON
-    var filename = 'serial_monitor_export.csv'
+    let data = this.serialDataAsJSON
+    let filename = 'serial_monitor_export.csv'
 
-    const csv = Papa.unparse(data, {
+    const csv = unparse(data, {
       header: true
     });
 
@@ -79,7 +79,6 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    
     }}
 
   ngAfterViewInit() {
