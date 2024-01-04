@@ -31,6 +31,7 @@ import {defaultBlockStyles, categoryStyles, componentStyles} from "@leaphy-robot
 import {LeaphyCategory} from "../services/Toolbox/Category";
 import {LeaphyToolbox} from "../services/Toolbox/Toolbox";
 
+import * as libraryBlocks from 'blockly/blocks';
 var Extensions = Blockly.Extensions;
 
 @Injectable({
@@ -49,47 +50,13 @@ export class BlocklyEditorEffects {
     ) {
 
 
-
-        // Variables:
-        Extensions.registerMixin(
-          'contextMenu_variableSetterGetter',
-          CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
-        // // Math:
-        Extensions.registerMutator(
-          'math_is_divisibleby_mutator', IS_DIVISIBLEBY_MUTATOR_MIXIN,
-          IS_DIVISIBLE_MUTATOR_EXTENSION);
-
-        // Update the tooltip of 'math_change' block to reference the variable.
-        Extensions.register(
-          'math_change_tooltip',
-          Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
-
         Blockly.registry.register(
           Blockly.registry.Type.TOOLBOX_ITEM,
           Blockly.ToolboxCategory.registrationName,
           LeaphyCategory, true);
         Blockly.registry.register(Blockly.registry.Type.TOOLBOX, Blockly.CollapsibleToolboxCategory.registrationName, LeaphyToolbox);
 
-        Extensions.registerMutator(
-        'math_modes_of_list_mutator', LIST_MODES_MUTATOR_MIXIN,
-          LIST_MODES_MUTATOR_EXTENSION);
-        //
-        Extensions.register('text_quotes', TEXT_QUOTES_EXTENSION)
         Extensions.register('appendStatementInputStack', APPEND_STATEMENT_INPUT_STACK)
-        Extensions.register('logic_compare', LOGIC_COMPARE_EXTENSION);
-        // // Tooltip extensions
-        Extensions.register('controls_whileUntil_tooltip', Extensions.buildTooltipForDropdown('MODE', WHILE_UNTIL_TOOLTIPS));
-        Extensions.register(
-          'logic_op_tooltip',
-            Extensions.buildTooltipForDropdown('OP', LOGIC_TOOLTIPS_BY_OP));
-        Extensions.register(
-          'math_op_tooltip',
-          Extensions.buildTooltipForDropdown('OP', MATH_TOOLTIPS_BY_OP));
-        //
-        Extensions.registerMutator(
-        'controls_if_mutator', CONTROLS_IF_MUTATOR_MIXIN, null,
-        ['controls_if_elseif', 'controls_if_else']);
-        Extensions.register('controls_if_tooltip', CONTROLS_IF_TOOLTIP_EXTENSION);
 
         // When the current language is set: Find and set the blockly translations
         this.appState.currentLanguage$
@@ -120,6 +87,9 @@ export class BlocklyEditorEffects {
                 Blockly.defineBlocksWithJsonArray(leaphyBlocks.block)
                 for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {
                   Blockly.Blocks[name] = block;
+                }
+                for (const [name, block] of Object.entries(libraryBlocks)) {
+                    Blockly.Blocks[name] = block;
                 }
                 const LeaphyTheme = Blockly.Theme.defineTheme('leaphy', {
                     'blockStyles': defaultBlockStyles,
