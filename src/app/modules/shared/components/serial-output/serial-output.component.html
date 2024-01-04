@@ -5,6 +5,9 @@
             <button mat-stroked-button class="icon-button" (click)="onCloseClicked()">
                 <mat-icon>close</mat-icon>
             </button>
+            <button mat-stroked-button class="icon-button" (click)="exportToCsv()">
+                <mat-icon>arrow_downward</mat-icon>
+            </button>
             <button mat-stroked-button class="icon-button" [class.mode-selected]="(dialogState.isSerialGraphOutputSelected$ | async) === false"
                 (click)="onViewTextOutputClicked()">
                 <mat-icon>view_headline</mat-icon>
