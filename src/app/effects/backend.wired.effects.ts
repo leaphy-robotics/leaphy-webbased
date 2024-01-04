@@ -21,9 +21,9 @@ import * as Blockly from 'blockly/core';
 
 
 const fileExtensions = [
-  ".l_flitz",
+  ".l_flitz_uno",
   ".l_flitz_nano",
-  ".l_original",
+  ".l_original_uno",
   ".l_click",
   ".l_uno",
   ".l_nano",
