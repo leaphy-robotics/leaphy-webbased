@@ -1,18 +1,20 @@
 import {
-  AfterViewInit, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   QueryList,
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import { ChartOptions } from 'chart.js';
+import {ChartOptions} from 'chart.js';
 import 'chartjs-adapter-moment';
-import { DialogState } from 'src/app/state/dialog.state';
-import { RobotWiredState } from 'src/app/state/robot.wired.state';
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {DialogState} from 'src/app/state/dialog.state';
+import {RobotWiredState} from 'src/app/state/robot.wired.state';
+import {MatDialogRef} from "@angular/material/dialog";
+import {unparse} from 'papaparse';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-serial-output',
@@ -23,6 +25,9 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
 
   @ViewChildren('messages') messages: QueryList<any>;
   @ViewChild('content') content: ElementRef;
+
+  private serialDataSubscription: Subscription | undefined;
+  public serialDataAsJSON: any[] = [];
 
   constructor(
     public robotWiredState: RobotWiredState,
@@ -35,8 +40,46 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
     this.robotWiredState.serialData$.subscribe(() => {
       this.changeDetectorRef.detectChanges();
       this.scrollToBottom();
+      this.subscribeToSerialData();
     });
   }
+
+  ngOnDestroy(): void {
+    if (this.serialDataSubscription) {
+      this.serialDataSubscription.unsubscribe();
+    }
+  }
+
+  private subscribeToSerialData() {
+    interface SerialData {
+      time: Date;
+      data: string;
+    }
+
+    this.serialDataSubscription = this.robotWiredState.serialData$.subscribe((data: SerialData[]) => {
+      this.serialDataAsJSON = data.map(item => ({ time: item.time, data: item.data.trim() }));
+    });
+  }
+
+  exportToCsv() {
+    let data = this.serialDataAsJSON
+    let filename = 'serial_monitor_export.csv'
+
+    const csv = unparse(data, {
+      header: true
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    
+    const link = document.createElement('a');
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }}
 
   ngAfterViewInit() {
     //https://stackoverflow.com/a/45655337/1056283

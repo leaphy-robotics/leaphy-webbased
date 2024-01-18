@@ -1737,10 +1737,10 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
-"@leaphy-robotics/leaphy-blocks@1.5.4":
-  version "1.5.4"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.5.4.tgz#57f925895c5d338f6b7669fea29f64469d2b14a8"
-  integrity sha512-/l10d90WtuvdrVYTj8GtWpkfiH1yS7k+eV82iZlgwVtSY206PX+iXtYBFgzQxOzA17g36XlcoTKgEB12EOi9sg==
+"@leaphy-robotics/leaphy-blocks@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.6.0.tgz#49090f352319a477db7a3de0a45361fed9aa475c"
+  integrity sha512-Rxzt9qwSHJ1ewmqr30afcsYH5KqRh8D/N995lP6gWrBUnTsyMO+kWQafJo8fLZ+1rdUs85SpS1vzr0PnPP9Jmg==
   dependencies:
     blockly "^10.1.3"
     typescript "4.3.2"
@@ -6411,6 +6411,11 @@ pako@^1.0.3, pako@~1.0.2:
   version "1.0.11"
   resolved "https://registry.npmjs.org/pako/-/pako-1.0.11.tgz"
   integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
+
+papaparse@^5.4.1:
+  version "5.4.1"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-5.4.1.tgz#f45c0f871853578bd3a30f92d96fdcfb6ebea127"
+  integrity sha512-HipMsgJkZu8br23pW15uvo6sib6wne/4woLZPlFf3rpDyMe9ywEXUsuD7+6K9PRkJlVT51j/sCOYDKGGS3ZJrw==
 
 parent-module@^1.0.0:
   version "1.0.1"
