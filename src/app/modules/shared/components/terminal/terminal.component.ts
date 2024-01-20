@@ -14,7 +14,10 @@ export class TerminalComponent implements AfterViewInit {
     @ViewChild('term', {static: false}) child: NgTerminal;
     private abortController: AbortController = null;
 
-    constructor(private robotWireState: RobotWiredState, private pythonUploader: PythonUploaderService) {}
+    constructor(
+        private robotWireState: RobotWiredState,
+        private pythonUploader: PythonUploaderService,
+    ) {}
 
 
     ngAfterViewInit() {
@@ -71,7 +74,6 @@ export class TerminalComponent implements AfterViewInit {
                         // replace the charachter at the current indent with the input
                         currentLine = currentLine.substring(0, currentIndent) + input + currentLine.substring(currentIndent + 1);
                         currentIndent++;
-                        console.log(currentLine);
                     }
                 }
             }
@@ -86,9 +88,7 @@ export class TerminalComponent implements AfterViewInit {
 
         this.robotWireState.isPythonCodeRunning$.subscribe(async (isRunning) => {
             if (isRunning) {
-                const port = this.robotWireState.getSerialPort();
-                await port.close();
-                await port.open({baudRate: 115200, flowControl: "hardware", bufferSize: 1024});
+                var port = this.robotWireState.getSerialPort();
                 const abortController = new AbortController();
 
                 const child = this.child;
@@ -109,9 +109,6 @@ export class TerminalComponent implements AfterViewInit {
                                 // cut everything before the first OK in the UInt8array so "OKa" would become "a"
                                 chunk = chunk.slice(chunk.indexOf(79) + 2);
                             }
-                            if (!readingStdOut && !readingStdErr) {
-                                return;
-                            }
 
                             if (chunk.includes(EOF)) {
                                 if (readingStdErr) {
@@ -127,11 +124,10 @@ export class TerminalComponent implements AfterViewInit {
                                 }
                             }
 
+
                             if (readingStdErr) {
-                                console.log('Error: ' + decoder.decode(chunk));
                                 child.write('\x1b[31m' + decoder.decode(chunk) + '\x1b[0m');
                             } else if (readingStdOut) {
-                                console.log('Output: ' + decoder.decode(chunk));
                                 child.write(decoder.decode(chunk));
                             }
 
@@ -144,7 +140,8 @@ export class TerminalComponent implements AfterViewInit {
                         decode(c);
 
                         if (done) {
-                            abortController.abort('Upload started');
+                            console.log('Done');
+                            this.robotWireState.setPythonCodeRunning(false);
                         }
                     },
                 });
@@ -161,6 +158,8 @@ export class TerminalComponent implements AfterViewInit {
                     } else if (error.toString().includes('The device has been lost.')) {
                         this.robotWireState.setSerialPort(null);
                         console.log('Device disconnected');
+                    } else if (error.toString().includes('Running code done')) {
+                        console.log('Running code done');
                     } else {
                         this.robotWireState.setSerialPort(null);
                         console.error('Error while piping stream:', error);
@@ -168,23 +167,19 @@ export class TerminalComponent implements AfterViewInit {
                 }).then(
                     async () => {
                         if (port == null) {
-                            return;
-                        }
-                        if (port.readable.locked) {
-                            await port.readable.cancel();
-                        }
-                        if (port.writable.locked) {
-                            await port.writable.close();
+                            port = this.robotWireState.getSerialPort();
                         }
                         await port.close();
                         await port.open({baudRate: 115200});
                     }
                 );
             } else {
+
                 if (this.abortController !== null) {
+                    this.abortController.abort("Running code done");
                     this.abortController = null;
-                    this.child.write(this.prompt);
                 }
+                this.child.write(this.prompt);
             }
         });
     }

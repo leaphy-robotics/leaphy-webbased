@@ -149,7 +149,6 @@ export class HeaderComponent {
     }
 
     public onBackToBlocks() {
-        console.log("onBackToBlocks: ", this.appState.getCurrentEditor());
         if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
             this.router.navigate(['/blocks'], { skipLocationChange: true });
         else if (this.appState.getCurrentEditor() == CodeEditorType.CPP)

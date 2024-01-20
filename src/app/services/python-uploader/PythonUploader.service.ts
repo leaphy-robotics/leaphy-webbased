@@ -15,6 +15,7 @@ export class PythonUploaderService {
     port: SerialPort = null
     private firmware: Blob = null
     private packageManager: PackageManager = new PackageManager();
+    private isPythonCodeRunning = false;
 
     constructor(private robotWiredState: RobotWiredState) {
         this.robotWiredState = robotWiredState
@@ -25,11 +26,17 @@ export class PythonUploaderService {
         });
     }
 
-    private async canPythonCodeRun(use: boolean) {
+    private async setPythonCodeRunning(use: boolean, runSerialMonitor = false) {
         if (use == false) {
             await this.sendKeyboardInterrupt();
         }
-        this.robotWiredState.setPythonCodeRunning(use);
+        if (this.robotWiredState.getPythonCodeRunning() === use) {
+            throw new Error('There is already a program running')
+        }
+        this.isPythonCodeRunning = use;
+        if (runSerialMonitor) {
+            this.robotWiredState.setPythonCodeRunning(use);
+        }
     }
 
     async sendKeyboardInterrupt() {
@@ -44,13 +51,6 @@ export class PythonUploaderService {
         }
         writer.releaseLock()
 
-    }
-
-    private async clearReadBuffer(reader: ReadableStreamDefaultReader) {
-
-        while (true) {
-
-        }
     }
 
     async connect() {
@@ -70,6 +70,7 @@ export class PythonUploaderService {
             console.log(error)
             throw new Error('Connecting to device')
         }
+        await this.setPythonCodeRunning(true, false)
         this.port = port
         const writer = this.port.writable.getWriter();
         const reader = this.port.readable.getReader();
@@ -80,7 +81,9 @@ export class PythonUploaderService {
         reader.releaseLock();
         this.packageManager.port = port;
         this.robotWiredState.setSerialPort(port);
-        await this.canPythonCodeRun(false)
+        try {
+            await this.setPythonCodeRunning(false)
+        } catch (error) {}
     }
 
     async connectInBootMode() {
@@ -108,17 +111,16 @@ export class PythonUploaderService {
     }
 
     async runCode(code: string) {
-        await this.canPythonCodeRun(false)
+        await this.setPythonCodeRunning(true, true)
         if (this.port === null)
             throw new Error('Not connected')
         const writer = this.port.writable.getWriter();
         await sendCommand(writer, code);
         writer.releaseLock();
-        await this.canPythonCodeRun(true);
     }
 
     async installStandardLibraries() {
-        await this.canPythonCodeRun(false)
+        await this.setPythonCodeRunning(true)
         this.packageManager.port = this.port;
         await this.packageManager.flashLibrary('github:leaphy-robotics/leaphy-micropython/package.json');
     }
@@ -129,7 +131,7 @@ export class PythonUploaderService {
      * @param args The args for the command
      */
     async runFileSystemCommand(command: string, ...args: string[]) {
-        await this.canPythonCodeRun(false)
+        await this.setPythonCodeRunning(true)
         if (this.port === null)
             throw new Error('Not connected')
         const writer = this.port.writable.getWriter();
@@ -152,6 +154,7 @@ export class PythonUploaderService {
         }
         writer.releaseLock();
         reader.releaseLock();
+        await this.setPythonCodeRunning(false);
         return response;
     }
 
