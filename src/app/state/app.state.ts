@@ -32,7 +32,7 @@ export class AppState {
     private static arduinoUnoRobotType = new RobotType('l_uno', 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
-    public static genericRobotType = new RobotType('l_code', 'Generic Robot', null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    public static genericRobotType = new RobotType('l_code', 'Leaphy C++', "c++.svg", 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
     AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
     private static arduinoNanoRobotType = new RobotType('l_nano', 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
@@ -62,7 +62,7 @@ export class AppState {
         this.availableRobotTypes$ = this.isDesktop$
             .pipe(map(isDesktop => {
                 if (isDesktop) {
-                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType, AppState.arduinoNanoRobotType, AppState.microPythonRobotType]
+                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType, AppState.arduinoNanoRobotType]
                 } else {}
             }));
 
