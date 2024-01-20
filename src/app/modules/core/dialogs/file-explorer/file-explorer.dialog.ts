@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AppState } from 'src/app/state/app.state';
 import {PythonUploaderService} from "../../../../services/python-uploader/PythonUploader.service";
+import {BackEndState} from "../../../../state/backend.state";
+import {RobotWiredState} from "../../../../state/robot.wired.state";
 
 @Component({
     selector: 'app-file-explorer',
@@ -17,9 +19,11 @@ export class FileExplorerDialog {
     constructor(
         private upload: PythonUploaderService,
         public dialogRef: MatDialogRef<FileExplorerDialog>,
-        public appState: AppState
+        public appState: AppState,
+        private robotWiredState: RobotWiredState
     ) {
         this.upload.connect().then(() => {
+            this.robotWiredState.setSerialPort(this.upload.port)
             this.upload.runFileSystemCommand('ls', this.currentPath).then((files) => {
                 this.dirContent = files;
             });

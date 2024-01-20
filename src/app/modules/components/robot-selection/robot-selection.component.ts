@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {AppState} from 'src/app/state/app.state';
 import {RobotType} from 'src/app/domain/robot.type';
-import {CodeEditorType} from "../../../../domain/code-editor.type";
+import {CodeEditorType} from "../../../domain/code-editor.type";
 
 @Component({
     selector: 'app-robot-selection',

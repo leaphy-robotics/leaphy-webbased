@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { SharedModule } from '../shared/shared.module';
 
-import { HeaderComponent } from './components/header/header.component';
-import { RobotSelectionComponent } from './components/robot-selection/robot-selection.component';
-import { StartComponent } from './components/start/start.component';
+import { HeaderComponent } from '../components/header/header.component';
+import { RobotSelectionComponent } from '../components/robot-selection/robot-selection.component';
+import { StartComponent } from '../components/start/start.component';
 
 import { StatusMessageDialog } from './dialogs/status-message/status-message.dialog';
 import { CreditsDialog } from './dialogs/credits/credits.dialog';
@@ -17,7 +17,7 @@ import {UploadDialog} from "./dialogs/upload/upload.dialog";
 import {DebugInformationDialog} from "./dialogs/debug-information/debug-information.dialog";
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import { SelectRobotTypeDialog } from './dialogs/robot-select/robot-select.dialog';
-import {UploadPythonDialog} from "./dialogs/upload-python/upload-python.dialog";
+import {ConnectPythonDialog} from "./dialogs/connect-python/connect-python.dialog";
 import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
 
 @NgModule({
@@ -34,7 +34,7 @@ import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
         FileExplorerDialog,
         VariableDialog,
         UploadDialog,
-        UploadPythonDialog,
+        ConnectPythonDialog,
         DebugInformationDialog,
         InfoDialog
     ],

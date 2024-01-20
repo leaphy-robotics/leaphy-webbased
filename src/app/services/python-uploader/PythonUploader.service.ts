@@ -1,7 +1,8 @@
 import {RobotWiredState} from "../../state/robot.wired.state";
-import {sendCommand, exitReplMode, enterReplMode} from "./repl/BoardCommunication";
-import { put, get, ls } from "./filesystem/FileSystem";
+import {sendCommand, exitReplMode, enterReplMode, readResponse} from "./comms/BoardCommunication";
+import {put, get, ls, rm, rmdir} from "./filesystem/FileSystem";
 import {Injectable, InjectionToken} from "@angular/core";
+import {PackageManager} from "./mip/PackageManager";
 
 const SERIAL_OPTIONS = new InjectionToken<{baudRate: number}>('serialOptions');
 
@@ -13,6 +14,7 @@ export class PythonUploaderService {
     drive: FileSystemDirectoryHandle = null
     port: SerialPort = null
     private firmware: Blob = null
+    private packageManager: PackageManager = new PackageManager();
 
     constructor(private robotWiredState: RobotWiredState) {
         this.robotWiredState = robotWiredState
@@ -23,7 +25,36 @@ export class PythonUploaderService {
         });
     }
 
+    private async canPythonCodeRun(use: boolean) {
+        if (use == false) {
+            await this.sendKeyboardInterrupt();
+        }
+        this.robotWiredState.setPythonCodeRunning(use);
+    }
+
+    async sendKeyboardInterrupt() {
+        if (this.port === null)
+            throw new Error('Not connected')
+        const writer = this.port.writable.getWriter();
+        await sendCommand(writer, '\u0003');
+        if (this.robotWiredState.getPythonCodeRunning()) {
+            const reader = this.port.readable.getReader();
+            await readResponse(reader);
+            reader.releaseLock()
+        }
+        writer.releaseLock()
+
+    }
+
+    private async clearReadBuffer(reader: ReadableStreamDefaultReader) {
+
+        while (true) {
+
+        }
+    }
+
     async connect() {
+
         let port: SerialPort;
         try {
             port = await navigator.serial.requestPort({filters: [{usbVendorId: 11914}]});
@@ -42,9 +73,14 @@ export class PythonUploaderService {
         this.port = port
         const writer = this.port.writable.getWriter();
         const reader = this.port.readable.getReader();
+        // make sure no program is running
+        await sendCommand(writer, '\u0003');
         await enterReplMode(writer, reader);
         writer.releaseLock();
         reader.releaseLock();
+        this.packageManager.port = port;
+        this.robotWiredState.setSerialPort(port);
+        await this.canPythonCodeRun(false)
     }
 
     async connectInBootMode() {
@@ -71,41 +107,44 @@ export class PythonUploaderService {
         await writable.close();
     }
 
-    async getStandardLibraries() {
-        // Get the package.json file
-        const response = await fetch('https://raw.githubusercontent.com/leaphy-robotics/leaphy-micropython/HEAD/package.json');
-        const json = await response.json();
-        const urls = json['urls'];
-        const version = json['version'];
-        return {urls, version};
-    }
-
-    async getInstalledVersion() {
-
+    async runCode(code: string) {
+        await this.canPythonCodeRun(false)
+        if (this.port === null)
+            throw new Error('Not connected')
+        const writer = this.port.writable.getWriter();
+        await sendCommand(writer, code);
+        writer.releaseLock();
+        await this.canPythonCodeRun(true);
     }
 
     async installStandardLibraries() {
-        if (this.port === null)
-            throw new Error('Not connected')
-
-        const writer = this.port.writable.getWriter();
-        const reader = this.port.readable.getReader();
-        await enterReplMode(writer, reader);
-        await put(writer, reader, 'main.py', 'import leaphy')
+        await this.canPythonCodeRun(false)
+        this.packageManager.port = this.port;
+        await this.packageManager.flashLibrary('github:leaphy-robotics/leaphy-micropython/package.json');
     }
 
+    /**
+     * Run a command that interacts with the filesystem of the pico
+     * @param command The command to execute: ['ls', 'get', 'put', 'rm', 'rmdir']
+     * @param args The args for the command
+     */
     async runFileSystemCommand(command: string, ...args: string[]) {
+        await this.canPythonCodeRun(false)
         if (this.port === null)
             throw new Error('Not connected')
         const writer = this.port.writable.getWriter();
         const reader = this.port.readable.getReader();
-        let response;
+        let response: any;
         if (command === 'ls') {
             response = await ls(writer, reader, args[0]);
         } else if (command === 'get') {
             response = await get(writer, reader, args[0]);
-        }  else if (command === 'put') {
+        } else if (command === 'put') {
             response = await put(writer, reader, args[0], args[1]);
+        } else if (command === 'rm') {
+            response = await rm(writer, reader, args[0]);
+        } else if (command === 'rmdir') {
+            response = await rmdir(writer, reader, args[0], true);
         } else {
             writer.releaseLock();
             reader.releaseLock();
@@ -116,6 +155,10 @@ export class PythonUploaderService {
         return response;
     }
 
+    /**
+     * Check if filesystem is a eligible
+     * @param filesystem The filesystem directory handle to use
+     */
     static async checkFilesystem(filesystem: FileSystemDirectoryHandle) {
         try {
             await filesystem.getFileHandle('INDEX.HTM');

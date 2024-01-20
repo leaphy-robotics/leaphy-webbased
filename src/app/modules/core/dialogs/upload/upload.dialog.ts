@@ -89,11 +89,7 @@ export class UploadDialog {
 
             try {
                 if (this.robotWiredState.getSerialPort() !== null) {
-                    this.dialogState.setIsSerialOutputListening(false);
                     this.robotWiredState.getAbortController().abort("Upload started");
-                    while (this.robotWiredState.getIsSerialOutputStillListening()) {
-                        await new Promise(r => setTimeout(r, 1000));
-                    }
                     this.upload.port = this.robotWiredState.getSerialPort();
 
                 } else {

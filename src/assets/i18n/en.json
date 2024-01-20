@@ -75,7 +75,7 @@
     "LEAVE_UPLOADING": "Go back to editor",
     "UPLOADING_ISSUE_HELP": "Go to upload issue page",
     "GIVE_FILENAME": "Give your download a name",
-    "GO_BACK_TO_BLOCKS": "Go back to blocks",
+    "GO_BACK_TO_BLOCKS": "Go back",
     "NO_SERIAL_SUPPORT": "No web serial supported on your browser, look at the upload issue page for more information",
     "CHOOSE_ROBOT": "Connect",
     "UPLOAD_OUTPUT": "Upload output",
@@ -85,5 +85,10 @@
     "DEVICE_INFORMATION": "Device information",
     "EMAIL": "Email",
     "FLASH_FIRMWARE": "Flash firmware",
-    "FLASHING": "Flashing firmware..."
+    "FLASHING": "Flashing firmware...",
+    "FLASHED": "Firmware flashed",
+    "CONNECT_PYTHON_ROBOT": "Connect Python robot",
+    "RUN_CODE": "Run code",
+    "CONNECTING": "Connecting to robot...",
+    "CONNECTED": "Connected"
 }

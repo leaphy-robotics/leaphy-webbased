@@ -47,9 +47,6 @@ export class BlocklyEditorEffects {
         private appState: AppState,
         private http: HttpClient,
     ) {
-
-
-
         // Variables:
         Extensions.registerMixin(
             'contextMenu_variableSetterGetter',
@@ -148,8 +145,8 @@ export class BlocklyEditorEffects {
                 Blockly.Xml.domToWorkspace(xml, workspace);
                 this.blocklyState.setWorkspace(workspace);
                 this.blocklyState.setToolboxXml(toolboxXmlString);
-                if (this.blocklyState.workspaceStatus == WorkspaceStatus.Clean) {
-                    this.backEndWiredEffects.send('restore-workspace-temp', robotType.id);
+                if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+                    this.backEndWiredEffects.send('restore-workspace-temp', this.appState.getSelectedRobotType().id);
                 }
                 toolbox.selectItemByPosition(0);
                 toolbox.refreshTheme();

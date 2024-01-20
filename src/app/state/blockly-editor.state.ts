@@ -132,6 +132,7 @@ export class BlocklyEditorState {
     }
 
     public setWorkspaceStatus(status: WorkspaceStatus) {
+        console.log("Workspace status changed to: " + status);
         this.workspaceStatusSubject$.next(status);
     }
 

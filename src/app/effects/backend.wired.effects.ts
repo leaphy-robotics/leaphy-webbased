@@ -14,9 +14,10 @@ import { UploadDialog } from "../modules/core/dialogs/upload/upload.dialog";
 import { Router } from "@angular/router";
 import { DebugInformationDialog } from "../modules/core/dialogs/debug-information/debug-information.dialog";
 import * as Blockly from 'blockly/core';
-import {UploadPythonDialog} from "../modules/core/dialogs/upload-python/upload-python.dialog";
+import {ConnectPythonDialog} from "../modules/core/dialogs/connect-python/connect-python.dialog";
 import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
 import {CodeEditorState} from "../state/code-editor.state";
+import {PythonUploaderService} from "../services/python-uploader/PythonUploader.service";
 
 
 const fileExtensions = [
@@ -44,7 +45,8 @@ export class BackendWiredEffects {
         private appState: AppState,
         private blocklyEditorState: BlocklyEditorState,
         private dialog: MatDialog,
-        private codeEditorState: CodeEditorState
+        private codeEditorState: CodeEditorState,
+        private uploaderService: PythonUploaderService,
     ) {
 		// Only set up these effects when we're in Desktop mode
 		this.appState.isDesktop$
@@ -85,6 +87,17 @@ export class BackendWiredEffects {
 								};
 								this.send('compile', payload);
 								break;
+                            case SketchStatus.ReadyToSend:
+                                this.dialog.open(ConnectPythonDialog, {
+                                    width: '600px', disableClose: true,
+                                }).afterClosed().subscribe((result) => {
+                                    if (result) {
+                                        if (result == "HELP_ENVIRONMENT") {
+                                            const langcode = this.appState.getCurrentLanguageCode();
+                                            this.router.navigateByUrl('/' + langcode + '/driverissues', { skipLocationChange: true });
+                                        }
+                                    }
+                                });
 							default:
 								break;
 						}
@@ -226,17 +239,7 @@ export class BackendWiredEffects {
 
 				try {
 					if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
-						this.dialog.open(UploadPythonDialog, {
-							width: '600px', disableClose: true,
-							data: { source_code: source_code, libraries: libraries, board: board }
-						}).afterClosed().subscribe((result) => {
-							if (result) {
-								if (result == "HELP_ENVIRONMENT") {
-									const langcode = this.appState.getCurrentLanguageCode();
-									this.router.navigateByUrl('/' + langcode + '/driverissues', { skipLocationChange: true });
-								}
-							}
-						});
+                        await this.uploaderService.runCode(source_code)
 					} else {
 						this.dialog.open(UploadDialog, {
 							width: '450px', disableClose: true,
@@ -336,7 +339,7 @@ export class BackendWiredEffects {
 					}
 				} else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.CPP) {
 					try {
-                        args[1].session.setValue(workspaceTemp);
+                        this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
                         this.codeEditorState.setOriginalCode(workspaceTemp);
                         this.codeEditorState.setCode(workspaceTemp);
 					} catch (error) {
@@ -344,7 +347,7 @@ export class BackendWiredEffects {
 					}
 				} else if (type == 'python' && this.appState.getCurrentEditor() == CodeEditorType.Python) {
 					try {
-						args[1].session.setValue(workspaceTemp);
+						this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
 						this.codeEditorState.setOriginalCode(workspaceTemp);
 						this.codeEditorState.setCode(workspaceTemp);
 					} catch (error) {

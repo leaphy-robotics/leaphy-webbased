@@ -1,5 +1,5 @@
 <mat-toolbar class="shadow-sm header-container" id="header-container">
-    <img src="./assets/leaphy-logo.svg" class="header-logo" width="300" height="24"/>
+    <img src="../../../../assets/leaphy-logo.svg" class="header-logo" width="300" height="24"/>
     <div class="flex-header">
         <div class="flex-buttons">
             <!-- Add ngIf to check for URL ending with "driverissues" -->
@@ -13,9 +13,11 @@
                 <button mat-stroked-button [matMenuTriggerFor]="moreMenu">
                     {{ "MORE" | translate }}
                 </button>
-                <button mat-stroked-button (click)="onChooseRobot()">
-                    {{ "CHOOSE_ROBOT" | translate }}
-                </button>
+                <ng-container *ngIf="(this.appState.selectedRobotType$ | async) !== AppState.microPythonRobotType">
+                    <button mat-stroked-button (click)="onChooseRobot()">
+                        {{ "CHOOSE_ROBOT" | translate }}
+                    </button>
+                </ng-container>
             </ng-container>
             <ng-container *ngIf="!isDriverIssuesUrl()">
                 <button mat-stroked-button class="back-to-blocks" (click)="onBackToBlocks()">{{ "GO_BACK_TO_BLOCKS" | translate }}</button>
@@ -48,9 +50,18 @@
                 <button mat-stroked-button (click)="onSaveWorkspaceClicked()">
                     <mat-icon>save</mat-icon><span>{{ "SAVE" | translate }}</span>
                 </button>
-                <button mat-flat-button *ngIf="appState.selectedRobotType$ | async" (click)="onUploadClicked()">
-                    {{ "UPLOAD" | translate }}
-                </button>
+
+                <ng-container *ngIf="this.appState.selectedRobotType$ | async">
+                    <button mat-flat-button *ngIf="(appState.selectedRobotType$ | async) !== AppState.microPythonRobotType" (click)="onRunClicked()">
+                        {{ "UPLOAD" | translate }}
+                    </button>
+                    <button mat-flat-button *ngIf="(appState.selectedRobotType$ | async) === AppState.microPythonRobotType" (click)="onConnectClicked()">
+                        {{ "CONNECT_PYTHON_ROBOT" | translate }}
+                    </button>
+                    <button mat-flat-button *ngIf="(robotWiredState.isPythonDeviceConnected$ | async) === true" (click)="onRunClicked()">
+                        {{ "RUN_CODE" | translate }}
+                    </button>
+                </ng-container>
             </ng-container>
         </div>
     </div>
@@ -110,10 +121,10 @@
         <span>{{ "VIEW_LOG" | translate }}</span>
     </button>
 
-    <a mat-menu-item id="download_drivers" href="https://github.com/leaphy-robotics/leaphy-webbased/archive/refs/heads/executables.zip">
+    <button mat-menu-item id="download_drivers" (click)="onDownloadDriversClicked()">
         <mat-icon>download</mat-icon>
         <span>{{ "DOWNLOAD_DRIVERS" | translate }}</span>
-    </a>
+    </button>
 </mat-menu>
 
 <mat-menu #languageMenu="matMenu" class="matmenus">

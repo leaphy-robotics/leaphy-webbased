@@ -32,6 +32,8 @@ export class RobotWiredEffects {
         this.dialogState.isSerialOutputListening$
             .pipe(filter(isListening => !!isListening))
             .subscribe(async () => {
+                if (this.robotWiredState.getPythonDeviceConnected())
+                    return;
                 const robotWiredState = this.robotWiredState;
 
                 const writableStream = new WritableStream({

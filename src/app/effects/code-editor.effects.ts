@@ -6,6 +6,7 @@ import {BackEndState} from "../state/backend.state";
 import {CodeEditorState} from "../state/code-editor.state";
 import {AppState} from "../state/app.state";
 import {CodeEditorType} from "../domain/code-editor.type";
+import {BackendWiredEffects} from "./backend.wired.effects";
 
 @Injectable({
     providedIn: 'root',
@@ -14,13 +15,18 @@ import {CodeEditorType} from "../domain/code-editor.type";
 // Defines the effects on the Editor that different state changes have
 export class CodeEditorEffects {
 
-    constructor(private blocklyState: BlocklyEditorState, private backEndState: BackEndState, private codeEditorState: CodeEditorState, private appState: AppState) {
+    constructor(
+        private blocklyState: BlocklyEditorState,
+        private backEndState: BackEndState,
+        private codeEditorState: CodeEditorState,
+        private appState: AppState,
+        private backEndWiredEffects: BackendWiredEffects
+    ) {
 
         this.codeEditorState.aceElement$
             .pipe(
                 filter(element => !!element))
             .subscribe(element => {
-                console.log("CodeEditorEffects:aceElement$");
                 ace.config.set("fontSize", "14px");
                 //ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
                 const aceEditor = ace.edit(element.nativeElement);
@@ -43,10 +49,12 @@ export class CodeEditorEffects {
             .pipe(filter(aceEditor => !!aceEditor))
             .pipe(withLatestFrom(this.blocklyState.code$, this.codeEditorState.code$))
             .subscribe(([aceEditor, blocklyCode, editorCode]) => {
+
                 const startingCode = this.codeEditorState.getCode();
                 aceEditor.session.setValue(startingCode);
                 this.codeEditorState.setOriginalCode(startingCode);
                 this.codeEditorState.setCode(startingCode);
+                this.backEndWiredEffects.send('restore-workspace-temp', this.appState.getSelectedRobotType().id);
 
                 aceEditor.on("change", () => {
                     const changedCode = aceEditor.getValue();

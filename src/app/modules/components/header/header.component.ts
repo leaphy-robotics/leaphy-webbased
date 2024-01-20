@@ -7,9 +7,10 @@ import {SketchStatus} from 'src/app/domain/sketch.status';
 import {DialogState} from 'src/app/state/dialog.state';
 import {Language} from 'src/app/domain/language';
 import {Router} from "@angular/router";
-import {CodeEditorType} from "../../../../domain/code-editor.type";
-import {RobotWiredState} from "../../../../state/robot.wired.state";
+import {CodeEditorType} from "../../../domain/code-editor.type";
+import {RobotWiredState} from "../../../state/robot.wired.state";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import JSZip from 'jszip';
 
 @Component({
     selector: 'app-header',
@@ -23,7 +24,7 @@ export class HeaderComponent {
         public backEndState: BackEndState,
         public blocklyState: BlocklyEditorState,
         public dialogState: DialogState,
-        private robotWiredState: RobotWiredState,
+        public robotWiredState: RobotWiredState,
         private router: Router,
         private snackBar: MatSnackBar,
     ) {
@@ -36,6 +37,36 @@ export class HeaderComponent {
 
     public onLoadWorkspaceClicked() {
         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Finding);
+    }
+
+    public async onDownloadDriversClicked() {
+        // check the GitHub api for what files we need to download with url: https://api.github.com/repos/leaphy-robotics/leaphy-firmware/
+        // then download the files with the url: https://raw.githubusercontent.com/leaphy-robotics/leaphy-firmware/master/drivers/
+        // then zip the files into one file and download them all
+        const url = 'https://api.github.com/repos/leaphy-robotics/leaphy-firmware/contents/drivers';
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        const files = [];
+        for (const file of data) {
+            files.push(file.download_url);
+        }
+        console.log(files);
+        const zip = new JSZip();
+        const promises = [];
+        for (const file of files) {
+            promises.push(fetch(file).then(response => response.blob()).then(blob => {
+                zip.file(file.split('/').pop(), blob);
+            }));
+        }
+        await Promise.all(promises);
+        const content = await zip.generateAsync({type: 'blob'});
+        const a = document.createElement('a');
+        const url2 = URL.createObjectURL(content);
+        a.href = url2;
+        a.download = 'leaphy-drivers.zip';
+        a.click();
+        URL.revokeObjectURL(url2);
     }
 
     public async onChooseRobot() {
@@ -70,7 +101,11 @@ export class HeaderComponent {
         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingAs);
     }
 
-    public onUploadClicked() {
+    public onConnectClicked() {
+        this.blocklyState.setSketchStatus(SketchStatus.ReadyToSend);
+    }
+
+    public onRunClicked() {
         this.blocklyState.setSketchStatus(SketchStatus.Sending);
     }
 
@@ -124,6 +159,8 @@ export class HeaderComponent {
         else if (this.appState.getCurrentEditor() == CodeEditorType.Python)
             this.router.navigate(['/pythonEditor'], { skipLocationChange: true });
     }
+
+    protected readonly AppState = AppState;
 }
 
 

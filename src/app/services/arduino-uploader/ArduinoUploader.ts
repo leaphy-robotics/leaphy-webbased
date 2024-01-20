@@ -400,7 +400,6 @@ class Arduino {
             }
             await this.port.close();
             await this.port.open({baudRate: 115200, flowControl: "hardware", bufferSize: 1024});
-            this.robotWiredState.setIsSerialOutputStillListening(true);
             const abortController = new AbortController();
 
             const readableStream = this.port.readable;
@@ -430,7 +429,6 @@ class Arduino {
                     }
                     await this.port.close();
                     await this.port.open({baudRate: 115200});
-                    this.robotWiredState.setIsSerialOutputStillListening(false);
                 }
             );
 

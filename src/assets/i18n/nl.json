@@ -75,7 +75,7 @@
     "LEAVE_UPLOADING": "Ga terug naar code scherm",
     "UPLOADING_ISSUE_HELP": "Klik hier voor upload hulp",
     "GIVE_FILENAME": "Geef een bestandsnaam",
-    "GO_BACK_TO_BLOCKS": "Ga terug naar blokken",
+    "GO_BACK_TO_BLOCKS": "Terug",
     "NO_SERIAL_SUPPORT": "Geen seriële verbinding mogelijk vanwege de browser, kijk naar de upload hulp voor meer informatie",
     "CHOOSE_ROBOT": "Verbinden",
     "UPLOAD_OUTPUT": "Upload output",
@@ -85,5 +85,10 @@
     "DEVICE_INFORMATION": "Apparaat informatie",
     "EMAIL": "E-mail",
     "FLASH_FIRMWARE": "Firmware flashen",
-    "FLASHING": "Flashing de firmware..."
+    "FLASHING": "Flashing de firmware...",
+    "FLASHED": "Firmware succesvol geflashed",
+    "CONNECT_PYTHON_ROBOT": "Verbind met Python robot",
+    "RUN_CODE": "Code uitvoeren",
+    "CONNECTING": "Verbinden met robot...",
+    "CONNECTED": "Verbonden"
 }

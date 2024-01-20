@@ -1,15 +1,21 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { CodeEditorState } from 'src/app/state/code-editor.state';
 import {BackendWiredEffects} from "../../effects/backend.wired.effects";
-import {CodeEditorEffects} from "../../effects/code-editor.effects";
-import {BlocklyEditorState} from "../../state/blockly-editor.state";
-import {BackEndState} from "../../state/backend.state";
+import {CommonModule} from "@angular/common";
+import {SharedModule} from "../shared/shared.module";
+import {CoreModule} from "../core/core.module";
 
 
 @Component({
     selector: 'app-code-editor-python',
+    standalone: true,
     templateUrl: './code-editor-python.page.html',
-    styleUrls: ['./code-editor-python.page.scss']
+    styleUrls: ['./code-editor-python.page.scss'],
+    imports: [
+        CommonModule,
+        SharedModule,
+        CoreModule
+    ]
 })
 export class CodeEditorPythonPage implements AfterViewInit {
 

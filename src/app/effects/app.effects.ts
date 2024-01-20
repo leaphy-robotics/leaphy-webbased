@@ -13,6 +13,7 @@ import { CodeEditorType } from '../domain/code-editor.type';
 })
 
 export class AppEffects {
+
     constructor(
         private appState: AppState,
         private translate: TranslateService,

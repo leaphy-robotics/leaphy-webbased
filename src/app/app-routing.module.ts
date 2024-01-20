@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {CodeEditorPythonPage} from "./modules/code-editor-python/code-editor-python.page";
-import {CodeEditorPythonModule} from "./modules/code-editor-python/code-editor-python.module";
 import {DriverIssuesEnglishPage} from "./modules/driver-issues-english/driver-issues.page";
-import {DriverIssuesDutchModule} from "./modules/driver-issues-dutch/driver-issues.module";
 import {DriverIssuesDutchPage} from "./modules/driver-issues-dutch/driver-issues.page";
+import {BlocklyEditorPage} from "./modules/blockly-editor/blockly-editor.page";
+import {CodeEditorCppPage} from "./modules/code-editor-cpp/code-editor-cpp.page";
 
 
 const routes: Routes = [
     { path: 'blocks', children: [{
             path: '',
-            loadChildren: () => import('./modules/blockly-editor/blockly-editor.module').then(m => m.BlocklyEditorModule)
+            component: BlocklyEditorPage
         }]},
     { path: 'cppEditor', children: [{
             path: '',
-            loadChildren: () => import('./modules/code-editor-cpp/code-editor-cpp.module').then(m => m.CodeEditorCppModule)
+            component: CodeEditorCppPage
         }]},
     { path: 'pythonEditor', children: [{
             path: '',

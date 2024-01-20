@@ -25,10 +25,13 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { NgChartsModule  } from 'ng2-charts';
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {TerminalComponent} from "./components/terminal/terminal.component";
+import {NgTerminalModule} from "ng-terminal";
 
 @NgModule({
-    declarations: [ButtonBarComponent, SerialOutputComponent, SerialWindowComponent],
+    declarations: [TerminalComponent, ButtonBarComponent, SerialOutputComponent, SerialWindowComponent],
     imports: [
+        NgTerminalModule,
         CommonModule,
         FormsModule,
         TranslateModule,
@@ -50,6 +53,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
         DragDropModule
     ],
     exports: [
+        TerminalComponent,
         FormsModule,
         ButtonBarComponent,
         SerialOutputComponent,

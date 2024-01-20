@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { UploadPythonDialog } from './upload-python.dialog';
+import { ConnectPythonDialog } from './connect-python.dialog';
 
 describe('NameFileComponent', () => {
-  let component: UploadPythonDialog;
-  let fixture: ComponentFixture<UploadPythonDialog>;
+  let component: ConnectPythonDialog;
+  let fixture: ComponentFixture<ConnectPythonDialog>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ UploadPythonDialog ]
+      declarations: [ ConnectPythonDialog ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UploadPythonDialog);
+    fixture = TestBed.createComponent(ConnectPythonDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

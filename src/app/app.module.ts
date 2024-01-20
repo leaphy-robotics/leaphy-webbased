@@ -18,8 +18,6 @@ import { RobotWiredEffects } from './effects/robot.wired.effects';
 import { CoreModule } from './modules/core/core.module';
 
 import { MatomoModule } from 'ngx-matomo';
-import { NgTerminalModule } from 'ng-terminal';
-import {TerminalComponent} from "./modules/terminal/terminal.component";
 import {CodeEditorEffects} from "./effects/code-editor.effects";
 
 export function createTranslateLoader(http: HttpClient) {
@@ -31,10 +29,8 @@ export function createTranslateLoader(http: HttpClient) {
 @NgModule({
     declarations: [
         AppComponent,
-        TerminalComponent,
     ],
     imports: [
-        NgTerminalModule,
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
@@ -73,9 +69,7 @@ export function createTranslateLoader(http: HttpClient) {
                 ], useFactory: () => () => null, multi: true
         }
     ],
-    exports: [
-        TerminalComponent
-    ],
+    exports: [],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

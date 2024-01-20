@@ -8,34 +8,62 @@ import {CodeEditorType} from "../../../../domain/code-editor.type";
 import {PythonUploaderService} from "../../../../services/python-uploader/PythonUploader.service";
 
 @Component({
-    selector: 'upload-python',
-    templateUrl: './upload-python.dialog.html',
-    styleUrls: ['./upload-python.dialog.scss']
+    selector: 'connect-python',
+    templateUrl: './connect-python.dialog.html',
+    styleUrls: ['./connect-python.dialog.scss']
 })
-export class UploadPythonDialog {
+export class ConnectPythonDialog {
     statusMessage: string = '';
     progressBarWidth: number = 0;
     protected readonly document = document;
     public uploading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public firmwareWriting: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     public uploadFailed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public didUpload: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     constructor(
-        public dialogRef: MatDialogRef<UploadPythonDialog>,
+        public dialogRef: MatDialogRef<ConnectPythonDialog>,
         private dialogState: DialogState,
         private translate: TranslateService,
-        private upload: PythonUploaderService
+        private upload: PythonUploaderService,
+        private robotWiredState: RobotWiredState,
     ) {}
 
-    public async startUpload() {
+    public async makePythonRobotConnection() {
         this.dialogState.setIsSerialOutputListening(false);
+        this.uploading.next(true);
+        this.onUpdate('CONNECTING');
         this.progressBarWidth += 25;
 
         if ('serial' in navigator && 'showDirectoryPicker' in window) {
+            try {
+                await this.upload.connect();
+            } catch (error) {
+                if (error.message === 'No device selected') {
+                    this.onUpdate('NO_DEVICE_SELECTED');
+                    this.onError('No device selected')
+                } else if (error.message === 'Signature mismatch') {
+                    this.onUpdate("SIGNATURE_MISMATCH");
+                    this.onError('Signature mismatch')
+                } else {
+                    console.log(error);
+                }
+                setTimeout(() => {
+                    this.showReturnOptions()
+                }, 1);
+                return
+            }
+            this.progressBarWidth += 25;
+            await this.upload.installStandardLibraries();
+            this.progressBarWidth += 25;
         } else {
             this.onUpdate('NO_SERIAL_SUPPORT')
             this.showReturnOptions();
         }
+
+        this.onUpdate('CONNECTED');
+        this.showReturnOptions();
+        this.robotWiredState.setPythonDeviceConnected(true);
     }
 
     public async startFlash() {
@@ -55,7 +83,7 @@ export class UploadPythonDialog {
             return
         }
         try {
-            this.progressBarWidth += 100;
+            this.progressBarWidth += 50;
             await this.upload.flash();
         } catch (error) {
             this.onUpdate("SIGNATURE_MISMATCH");
@@ -80,14 +108,9 @@ export class UploadPythonDialog {
     }
 
     showReturnOptions() {
-        document.getElementById("return-options").classList.remove("hidden");
-        document.getElementById("return-options").classList.add("return-options");
-        if (this.uploadFailed) {
-            console.log("upload failed");
-            document.getElementById("helpEnvironment").classList.remove("hidden");
-            document.getElementById("end-status").classList.add("failed-upload");
-        }
-        document.getElementById("end-status").classList.remove("hidden");
+        this.uploading.next(false);
+        this.firmwareWriting.next(false);
+        this.didUpload.next(true);
     }
 
     returnBlockEnvironment() {

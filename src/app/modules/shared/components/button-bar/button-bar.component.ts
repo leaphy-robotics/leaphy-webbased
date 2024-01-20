@@ -17,7 +17,6 @@ export class ButtonBarComponent {
         public appState: AppState,
         public blocklyState: BlocklyEditorState,
         public dialogState: DialogState,
-        public robotWiredState: RobotWiredState,
         public dialog: MatDialog
     ) {
     }
