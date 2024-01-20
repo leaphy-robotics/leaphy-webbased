@@ -18,7 +18,7 @@ export class PythonUploaderService {
 
     constructor(private robotWiredState: RobotWiredState) {
         this.robotWiredState = robotWiredState
-        fetch('https://raw.githubusercontent.com/leaphy-robotics/leaphy-micropython/firmware/firmware.uf2').then((response) => {
+        fetch('https://raw.githubusercontent.com/leaphy-robotics/leaphy-firmware/main/micropython/firmware.uf2').then((response) => {
             response.blob().then((blob) => {
                 this.firmware = blob;
             });
