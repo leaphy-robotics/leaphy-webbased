@@ -130,7 +130,7 @@ export class BlocklyEditorEffects {
                 const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
                 const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
                 toolboxElement.prepend(leaphyRobotCategory);
-                if (robotType.showLeaphyExtra) {
+                if (robotType.showLeaphyActuators) {
                     const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_extra`);
                     toolboxElement.appendChild(leaphyExtraCategory);
                 }

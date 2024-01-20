@@ -3,7 +3,7 @@
     "productName": "Leaphy Webbased",
     "author": "Leaphy Robotics",
     "description": "Build Leaphy Arduino programs",
-    "version": "1.8.2",
+    "version": "2.0.0",
     "license": "GPLv3",
     "main": "src/main.ts",
     "scripts": {
@@ -49,6 +49,7 @@
         "ng-terminal": "^6.0.0-beta",
         "ng2-charts": "3.0.11",
         "ngx-matomo": "1.1.0",
+        "papaparse": "^5.4.1",
         "prismjs": "^1.28.0",
         "rxjs": "~7.5.5",
         "stream-browserify": "^3.0.0",

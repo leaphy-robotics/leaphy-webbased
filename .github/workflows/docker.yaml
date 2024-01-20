@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - v*
+    branches:
+      - main
   workflow_dispatch: {}
 
 jobs:
@@ -20,10 +22,28 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push PROD Docker image
+        if: github.ref_type == 'tag'
         uses: docker/build-push-action@v4.0.0
         with:
           file: Dockerfile
           context: .
           push: true
-          tags: ghcr.io/leaphy-robotics/leaphy-webbased/leaphy-webbased:latest
+          tags: ghcr.io/leaphy-robotics/leaphy-webbased/leaphy-webbased:prod
+
+      - name: Build and push TEST Docker image
+        if: github.ref_type == 'branch'
+        uses: docker/build-push-action@v4.0.0
+        with:
+          file: Dockerfile
+          context: .
+          push: true
+          tags: ghcr.io/leaphy-robotics/leaphy-webbased/leaphy-webbased:main
+
+      - name: Clean up old images
+        uses: actions/delete-package-versions@v4
+        with:
+          package-name: 'leaphy-webbased/leaphy-webbased'
+          package-type: 'container'
+          min-versions-to-keep: 5
+          delete-only-untagged-versions: 'true'
