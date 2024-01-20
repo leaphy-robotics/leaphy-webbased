@@ -46,12 +46,10 @@ export class HeaderComponent {
         const url = 'https://api.github.com/repos/leaphy-robotics/leaphy-firmware/contents/drivers';
         const response = await fetch(url);
         const data = await response.json();
-        console.log(data);
         const files = [];
         for (const file of data) {
             files.push(file.download_url);
         }
-        console.log(files);
         const zip = new JSZip();
         const promises = [];
         for (const file of files) {
