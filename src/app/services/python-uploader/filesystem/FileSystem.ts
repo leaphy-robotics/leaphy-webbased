@@ -89,8 +89,8 @@ async function ls(writer: WritableStreamDefaultWriter, reader: ReadableStreamDef
     const lsCommand = `import os
 import json
 def ls(path):
-    if path[-1] != '/':
-        path += '/'
+    if path[-1] == '/':
+        path = path[:-1]
     dirContent = []
     for entry in os.listdir(path):
         stat = os.stat(path + entry)
