@@ -1,5 +1,5 @@
 <div class="sidenav-buttons">
-    <button mat-fab [attr.data-label]="'READ_CODE' | translate"
+    <button *ngIf="(appState.codeEditor$ | async) !== CodeEditorType.Python" mat-fab [attr.data-label]="'READ_CODE' | translate"
             [ngClass]="{'active': (appState.codeEditor$ | async) === 1 && (blocklyState.isSideNavOpen$ | async)}"
             (click)="onSideNavToggled()" [disabled]="(appState.codeEditor$ | async) !== 1">
         <mat-icon>code</mat-icon>

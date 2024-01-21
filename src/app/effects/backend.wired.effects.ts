@@ -21,14 +21,15 @@ import {PythonUploaderService} from "../services/python-uploader/PythonUploader.
 
 
 const fileExtensions = [
-	".l_flitz",
-	".l_flitz_nano",
-	".l_original",
-	".l_click",
-	".l_uno",
-	".l_nano",
-	".l_wifi",
-	".ino",
+    ".l_flitz_uno",
+    ".l_flitz_nano",
+    ".l_original_uno",
+    ".l_click",
+    ".l_uno",
+    ".l_nano",
+    ".l_wifi",
+    ".ino",
+    ".py",
 ]
 
 @Injectable({
@@ -106,68 +107,18 @@ export class BackendWiredEffects {
 				// When a workspace project is being loaded, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
 					.pipe(withLatestFrom(this.appState.codeEditor$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Beginner))
+					.pipe(filter(([status]) => status === WorkspaceStatus.Finding))
 					.pipe(withLatestFrom(this.appState.selectedRobotType$))
 					.subscribe(([, robotType]) => {
 						this.send('restore-workspace', robotType.id);
 					});
 
-				// When a code project is being loaded, relay the command to Electron
-				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditor$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.CPP))
-					.subscribe(() => {
-						this.send('restore-workspace-code', AppState.genericRobotType.id);
-					});
-
-				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditor$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Finding && codeEditorType === CodeEditorType.Python))
-					.subscribe(() => {
-						this.send('restore-workspace-code', AppState.microPythonRobotType.id);
-					});
-
-
-				// When an existing project's workspace is being saved, relay the command to Electron
-				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditor$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Saving && codeEditorType === CodeEditorType.Beginner))
-					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.workspaceXml$))
-					.pipe(filter(([, projectFilePath,]) => !!projectFilePath))
-					.subscribe(([, projectFilePath, workspaceXml,]) => {
-						const payload = { projectFilePath, data: workspaceXml };
-						this.send('save-workspace', payload);
-					});
-
-				// When an existing project's code is being saved, relay the command to Electron
-				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditor$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.Saving && codeEditorType === CodeEditorType.CPP))
-					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.code$))
-					.pipe(filter(([, projectFilePath,]) => !!projectFilePath))
-					.subscribe(([, projectFilePath, code]) => {
-						const payload = { projectFilePath, data: code };
-						this.send('save-workspace', payload);
-					});
-
 				// When the workspace is being saved as a new project, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
 					.pipe(withLatestFrom(this.appState.codeEditor$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.SavingAs && codeEditorType === CodeEditorType.Beginner))
-					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.workspaceXml$, this.appState.selectedRobotType$))
-					.subscribe(([, projectFilePath, workspaceXml, robotType]) => {
-						const payload = { projectFilePath, data: workspaceXml, extension: robotType.id };
-						this.send('save-workspace-as', payload);
-					});
-
-				// When the code is being saved as a new project, relay the command to Electron
-				this.blocklyEditorState.workspaceStatus$
-					.pipe(withLatestFrom(this.appState.codeEditor$))
-					.pipe(filter(([status, codeEditorType]) => status === WorkspaceStatus.SavingAs && codeEditorType === CodeEditorType.CPP))
-					.pipe(withLatestFrom(this.blocklyEditorState.projectFilePath$, this.blocklyEditorState.code$))
-					.subscribe(([, projectFilePath, code]) => {
-						const payload = { projectFilePath, data: code, extension: AppState.genericRobotType.id };
-						this.send('save-workspace-as', payload);
+					.pipe(filter(([status]) => status === WorkspaceStatus.SavingAs))
+					.subscribe(() => {
+						this.send('save-workspace-as');
 					});
 
 				// When the workspace is being temporarily saved, relay the command to Electron
@@ -217,8 +168,8 @@ export class BackendWiredEffects {
 						a.click();
 						window.URL.revokeObjectURL(url);
 						a.remove();
-					} else {
-						const data = this.blocklyEditorState.code;
+					} else if (this.appState.getCurrentEditor() == CodeEditorType.CPP) {
+						const data = this.codeEditorState.getCode();
 						const blob = new Blob([data], { type: 'text/plain' });
 						const url = window.URL.createObjectURL(blob);
 						const a = document.createElement('a');
@@ -229,7 +180,19 @@ export class BackendWiredEffects {
 						window.URL.revokeObjectURL(url);
 						// delete a after it is clicked
 						a.remove();
-					}
+					} else if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+                        const data = this.codeEditorState.getCode();
+                        const blob = new Blob([data], { type: 'text/plain' });
+                        const url = window.URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = name + '.py';
+
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        // delete a after it is clicked
+                        a.remove();
+                    }
 				})
 				break;
 			case 'compile':
@@ -285,12 +248,19 @@ export class BackendWiredEffects {
 							return;
 
 						if (file.name.endsWith('.ino')) {
-							this.backEndState.setBackendMessage({
-								event: 'WORKSPACE_RESTORING',
-								message: 'WORKSPACE_RESTORING',
-								payload: { projectFilePath: file.path, data, type: 'advanced' },
-								displayTimeout: 2000
-							});
+                            this.backEndState.setBackendMessage({
+                                event: 'WORKSPACE_RESTORING',
+                                message: 'WORKSPACE_RESTORING',
+                                payload: {projectFilePath: file.path, data, type: 'advanced'},
+                                displayTimeout: 2000
+                            });
+                        } else if (file.name.endsWith('.py')) {
+                            this.backEndState.setBackendMessage({
+                                event: 'WORKSPACE_RESTORING',
+                                message: 'WORKSPACE_RESTORING',
+                                payload: { projectFilePath: file.path, data, type: 'python' },
+                                displayTimeout: 2000
+                            });
 						} else {
 							this.backEndState.setBackendMessage({
 								event: 'WORKSPACE_RESTORING',

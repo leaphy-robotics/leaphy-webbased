@@ -118,22 +118,23 @@ export class BlocklyEditorEffects {
                 for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {
                     Blockly.Blocks[name] = block;
                 }
-                config.theme = Blockly.Theme.defineTheme('leaphy', {
+                const LeaphyTheme = Blockly.Theme.defineTheme('leaphy', {
                     'blockStyles': defaultBlockStyles,
                     'categoryStyles': categoryStyles,
                     'componentStyles': componentStyles,
                     name: 'leaphy',
-                });
+                })
+                config.theme = LeaphyTheme;
                 const parser = new DOMParser();
                 const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
                 const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
                 const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
                 const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
-                toolboxElement.prepend(leaphyRobotCategory);
                 if (robotType.showLeaphyActuators) {
-                    const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_extra`);
-                    toolboxElement.appendChild(leaphyExtraCategory);
+                    const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_actuators`);
+                    toolboxElement.prepend(leaphyExtraCategory);
                 }
+                toolboxElement.prepend(leaphyRobotCategory);
                 const serializer = new XMLSerializer();
                 const toolboxXmlString = serializer.serializeToString(toolboxXmlDoc);
                 config.toolbox = toolboxXmlString;
@@ -338,7 +339,7 @@ export class BlocklyEditorEffects {
                             this.appState.setSelectedCodeEditor(CodeEditorType.Python);
                             this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(AppState.genericRobotType);
+                            this.appState.setSelectedRobotType(AppState.microPythonRobotType);
                             return;
                         }
                         this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')]);
