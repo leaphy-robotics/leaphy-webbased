@@ -29,5 +29,5 @@ Any pull requests to master will be rejected, unless it is a hotfix.
 ## Issues
 
 All issues that involve webbased should be reported on the [Leaphy Easybloqs Webbased GitHub](https://github.com/leaphy-robotics/leaphy-webbased/issues) page.
-Issues that involve the blocks should be reported on the [Leaphy Blockly GitHub](https://github.com/leaphy-robotics/leaphy-blocks/issues) page.
+Issues that involve the blocks should be reported on the [Leaphy Blocks GitHub](https://github.com/leaphy-robotics/leaphy-blocks/issues) page.
 
