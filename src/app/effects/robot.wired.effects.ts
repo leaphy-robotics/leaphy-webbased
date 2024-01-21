@@ -3,14 +3,14 @@ import { filter } from 'rxjs/operators';
 import { BackEndState } from '../state/backend.state';
 import { RobotWiredState } from '../state/robot.wired.state';
 import {DialogState} from "../state/dialog.state";
-import ArduinoWebserial from "../services/webserial/ArduinoWebserial";
+import ArduinoUploader from "../services/arduino-uploader/ArduinoUploader";
 
 @Injectable({
     providedIn: 'root',
 })
 
 export class RobotWiredEffects {
-    private webserial: ArduinoWebserial;
+    private webserial: ArduinoUploader;
     private logBuffer: string = "";
 
     constructor(
@@ -18,7 +18,7 @@ export class RobotWiredEffects {
         private backEndState: BackEndState,
         private dialogState: DialogState,
     ) {
-        this.webserial = new ArduinoWebserial(this.robotWiredState);
+        this.webserial = new ArduinoUploader(this.robotWiredState);
         this.backEndState.backEndMessages$
             .pipe(filter(message => !!message))
             .subscribe(message => {
@@ -32,6 +32,8 @@ export class RobotWiredEffects {
         this.dialogState.isSerialOutputListening$
             .pipe(filter(isListening => !!isListening))
             .subscribe(async () => {
+                if (this.robotWiredState.getPythonDeviceConnected())
+                    return;
                 const robotWiredState = this.robotWiredState;
 
                 const writableStream = new WritableStream({

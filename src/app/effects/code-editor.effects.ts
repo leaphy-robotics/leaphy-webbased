@@ -1,12 +1,12 @@
 import {Injectable} from "@angular/core";
 import {filter, withLatestFrom} from "rxjs/operators";
 import {BlocklyEditorState} from "../state/blockly-editor.state";
-import {CodeEditorState} from "../state/code-editor.state";
-
 import * as ace from "ace-builds";
 import {BackEndState} from "../state/backend.state";
+import {CodeEditorState} from "../state/code-editor.state";
+import {AppState} from "../state/app.state";
+import {CodeEditorType} from "../domain/code-editor.type";
 import {BackendWiredEffects} from "./backend.wired.effects";
-import {WorkspaceStatus} from "../domain/workspace.status";
 
 @Injectable({
     providedIn: 'root',
@@ -14,18 +14,31 @@ import {WorkspaceStatus} from "../domain/workspace.status";
 
 // Defines the effects on the Editor that different state changes have
 export class CodeEditorEffects {
-    constructor(private codeEditorState: CodeEditorState, private blocklyState: BlocklyEditorState, private backEndState: BackEndState, private backEndWiredEffects: BackendWiredEffects) {
+
+    constructor(
+        private blocklyState: BlocklyEditorState,
+        private backEndState: BackEndState,
+        private codeEditorState: CodeEditorState,
+        private appState: AppState,
+        private backEndWiredEffects: BackendWiredEffects
+    ) {
 
         this.codeEditorState.aceElement$
-            .pipe(filter(element => !!element))
+            .pipe(
+                filter(element => !!element))
             .subscribe(element => {
                 ace.config.set("fontSize", "14px");
                 //ace.config.set('basePath', 'https://unpkg.com/ace-builds@1.4.12/src-noconflict');
                 const aceEditor = ace.edit(element.nativeElement);
                 aceEditor.setTheme('ace/theme/solarized_light');
-                aceEditor.session.setMode('ace/mode/c_cpp');
+                if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+                    aceEditor.session.setMode('ace/mode/python');
+                } else if (this.appState.getCurrentEditor() == CodeEditorType.CPP) {
+                    aceEditor.session.setMode('ace/mode/c_cpp');
+                }
                 aceEditor.setOptions({
-                    enableBasicAutocompletion: true
+                    enableBasicAutocompletion: true,
+                    enableLiveAutocompletion: true
                 });
                 this.codeEditorState.setAceEditor(aceEditor);
             });
@@ -36,24 +49,19 @@ export class CodeEditorEffects {
             .pipe(filter(aceEditor => !!aceEditor))
             .pipe(withLatestFrom(this.blocklyState.code$, this.codeEditorState.code$))
             .subscribe(([aceEditor, blocklyCode, editorCode]) => {
-                const startingCode = blocklyCode ? blocklyCode : editorCode;
+
+                const startingCode = this.codeEditorState.getCode();
                 aceEditor.session.setValue(startingCode);
                 this.codeEditorState.setOriginalCode(startingCode);
                 this.codeEditorState.setCode(startingCode);
-
-                if (this.blocklyState.workspaceStatus == WorkspaceStatus.Clean) {
-                  this.backEndWiredEffects.send('restore-workspace-temp', -1, aceEditor);
-                }
+                this.backEndWiredEffects.send('restore-workspace-temp', this.appState.getSelectedRobotType().id);
 
                 aceEditor.on("change", () => {
                     const changedCode = aceEditor.getValue();
                     this.codeEditorState.setCode(changedCode)
                     this.blocklyState.setCode(changedCode);
                 });
-
-
             });
-
         // React to the backend message and set the ACE Editor code
         // React to messages received from the Backend
         this.backEndState.backEndMessages$
@@ -74,6 +82,15 @@ export class CodeEditorEffects {
                         break;
                     default:
                         break;
+                }
+            });
+
+        this.appState.codeEditor$
+            .subscribe(codeEditor => {
+                if (codeEditor == CodeEditorType.Python) {
+                    this.codeEditorState.setCode(this.codeEditorState.pythonProgram);
+                } else if (codeEditor == CodeEditorType.CPP) {
+                    this.codeEditorState.setCode(this.codeEditorState.originalProgram);
                 }
             });
     }

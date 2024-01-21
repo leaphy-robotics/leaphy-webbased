@@ -1,16 +1,37 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import {CodeEditorPythonPage} from "./modules/code-editor-python/code-editor-python.page";
+import {DriverIssuesEnglishPage} from "./modules/driver-issues-english/driver-issues.page";
+import {DriverIssuesDutchPage} from "./modules/driver-issues-dutch/driver-issues.page";
+import {BlocklyEditorPage} from "./modules/blockly-editor/blockly-editor.page";
+import {CodeEditorCppPage} from "./modules/code-editor-cpp/code-editor-cpp.page";
 
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./modules/blockly-editor/blockly-editor.module').then(m => m.BlocklyEditorModule) },
-  { path: 'advanced', loadChildren: () => import('./modules/code-editor/code-editor.module').then(m => m.CodeEditorModule) },
-  { path: 'en/driverissues', loadChildren: () => import('./modules/driver-issues-english/driver-issues.module').then(m => m.DriverIssuesEnglishModule) },
-  { path: 'nl/driverissues', loadChildren: () => import('./modules/driver-issues-dutch/driver-issues.module').then(m => m.DriverIssuesDutchModule) },
+    { path: 'blocks', children: [{
+            path: '',
+            component: BlocklyEditorPage
+        }]},
+    { path: 'cppEditor', children: [{
+            path: '',
+            component: CodeEditorCppPage
+        }]},
+    { path: 'pythonEditor', children: [{
+            path: '',
+            component: CodeEditorPythonPage
+        }]},
+    { path: 'en', children: [{
+            path: 'driverissues',
+            component: DriverIssuesEnglishPage
+        }]},
+    { path: 'nl', children: [{
+            path: 'driverissues',
+            component: DriverIssuesDutchPage
+        }]}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }

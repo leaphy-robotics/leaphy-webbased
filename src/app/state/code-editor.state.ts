@@ -1,14 +1,13 @@
-import { ElementRef, Injectable } from "@angular/core";
-import { Ace } from "ace-builds";
-import { BehaviorSubject, Observable } from "rxjs";
-import { filter, map, tap, withLatestFrom } from "rxjs/operators";
+import {ElementRef, Injectable,} from "@angular/core";
+import {Ace} from "ace-builds";
+import {BehaviorSubject, Observable} from "rxjs";
+import {map, withLatestFrom} from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
 })
-export class CodeEditorState {
-
-    private originalProgram =`void leaphyProgram() {
+export class CodeEditorState  {
+    public readonly originalProgram = `void leaphyProgram() {
 }
 
 void setup() {
@@ -17,28 +16,31 @@ void setup() {
 
 void loop() {
 
-}`
+}`;
 
-    constructor(){
-        this.isDirty$ = this.code$
-            .pipe(withLatestFrom(this.originalCode$))
-            .pipe(map(([code, original]) => code !== original))
-    }
+    public readonly pythonProgram = `from leaphymicropython.utils.pins import set_pwm`;
 
-    private aceElementSubject$ = new BehaviorSubject<ElementRef<HTMLElement>>(null);
-    public aceElement$ = this.aceElementSubject$.asObservable();
+    private aceElementSubject$: BehaviorSubject<ElementRef<HTMLElement>> = new BehaviorSubject<ElementRef<HTMLElement>>(null);
+    public aceElement$: Observable<ElementRef<HTMLElement>> = this.aceElementSubject$.asObservable();
 
-    private aceEditorSubject$ = new BehaviorSubject<Ace.Editor>(null);
-    public aceEditor$ = this.aceEditorSubject$.asObservable();
+    private aceEditorSubject$: BehaviorSubject<Ace.Editor> = new BehaviorSubject<Ace.Editor>(null);
+    public aceEditor$: Observable<Ace.Editor> = this.aceEditorSubject$.asObservable();
 
-    private originalCodeSubject$ = new BehaviorSubject<string>(this.originalProgram);
-    public originalCode$ = this.originalCodeSubject$.asObservable();
+    private startCodeSubject$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    public startCode$: Observable<string>;
 
-    private codeSubject$ = new BehaviorSubject<string>(this.originalProgram);
-
-    public code$ = this.codeSubject$.asObservable();
+    private codeSubject$: BehaviorSubject<string> = new BehaviorSubject<string>('');
+    public code$: Observable<string> = this.codeSubject$.asObservable();
 
     public isDirty$: Observable<boolean>;
+
+
+    constructor() {
+
+        this.isDirty$ = this.code$
+            .pipe(withLatestFrom(this.startCode$))
+            .pipe(map(([code, original]) => code !== original))
+    }
 
     public setAceElement(element: ElementRef<HTMLElement>) {
         this.aceElementSubject$.next(element);
@@ -49,15 +51,18 @@ void loop() {
     }
 
     public setOriginalCode(program: string){
-        this.originalCodeSubject$.next(program);
+        this.startCodeSubject$.next(program);
     }
 
     public setCode(program: string){
         this.codeSubject$.next(program);
     }
 
-    public getCode(): string {
-        return this.codeSubject$.getValue();
+    public getCode(){
+        return this.codeSubject$.value;
     }
 
+    public getAceEditor(){
+        return this.aceEditorSubject$.value;
+    }
 }
