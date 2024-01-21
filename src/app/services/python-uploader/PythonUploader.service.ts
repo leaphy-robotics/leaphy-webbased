@@ -53,7 +53,7 @@ export class PythonUploaderService {
         this.robotWiredState.addToUploadLog('Connecting to device');
         let port: SerialPort;
         try {
-            port = await navigator.serial.requestPort({filters: [{usbVendorId: 11914}, {usbVendorId: 9025}]});
+            port = await navigator.serial.requestPort({filters: [{usbVendorId: 11914}]});
         } catch (error) {
             console.log(error)
             throw new Error('No device selected')

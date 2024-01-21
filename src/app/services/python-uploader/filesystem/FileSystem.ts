@@ -85,7 +85,6 @@ async function mkdir(writer: WritableStreamDefaultWriter, reader: ReadableStream
 }
 
 async function ls(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string): Promise<{name: string, isDir: boolean}[]> {
-    console.log("ls: " + path);
     const lsCommand = `import os
 import json
 def ls(path):
