@@ -120,9 +120,7 @@ export class PackageManager {
                 writer.releaseLock();
                 reader.releaseLock();
                 return json['version'] === version;
-            } catch (error) {
-                console.log(error);
-            }
+            } catch (error) {}
         }
         writer.releaseLock();
         reader.releaseLock();

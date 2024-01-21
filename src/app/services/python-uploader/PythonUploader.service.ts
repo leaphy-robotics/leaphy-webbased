@@ -1,11 +1,8 @@
 import {RobotWiredState} from "../../state/robot.wired.state";
-import {sendCommand, exitReplMode, enterReplMode, readResponse} from "./comms/BoardCommunication";
+import {sendCommand, enterReplMode, readResponse} from "./comms/BoardCommunication";
 import {put, get, ls, rm, rmdir} from "./filesystem/FileSystem";
 import {Injectable, InjectionToken} from "@angular/core";
 import {PackageManager} from "./mip/PackageManager";
-
-const SERIAL_OPTIONS = new InjectionToken<{baudRate: number}>('serialOptions');
-
 
 @Injectable({
     providedIn: 'root'
@@ -44,7 +41,7 @@ export class PythonUploaderService {
             throw new Error('Not connected')
         const writer = this.port.writable.getWriter();
         await sendCommand(writer, '\u0003');
-        if (this.robotWiredState.getPythonCodeRunning()) {
+        if (!this.robotWiredState.getPythonCodeRunning()) {
             const reader = this.port.readable.getReader();
             await readResponse(reader);
             reader.releaseLock()

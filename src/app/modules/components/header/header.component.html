@@ -58,7 +58,7 @@
                     <button mat-flat-button *ngIf="(appState.selectedRobotType$ | async) === AppState.microPythonRobotType" (click)="onConnectClicked()">
                         {{ "CONNECT_PYTHON_ROBOT" | translate }}
                     </button>
-                    <button mat-flat-button *ngIf="(robotWiredState.isPythonDeviceConnected$ | async) === true" (click)="onRunClicked()">
+                    <button mat-flat-button *ngIf="(robotWiredState.isPythonDeviceConnected$ | async) === true" (click)="onRunClicked()" [disabled]="(robotWiredState.isPythonCodeRunning$ | async) === true">
                         {{ "RUN_CODE" | translate }}
                     </button>
                 </ng-container>

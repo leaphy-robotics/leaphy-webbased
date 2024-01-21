@@ -31,6 +31,7 @@ export class TerminalComponent implements AfterViewInit {
                 if (input === '\u0003') {
                     // Send keyboard interrupt to Python code
                     this.pythonUploader.sendKeyboardInterrupt();
+                    this.abortController.abort("Successfully aborted");
                 }
                 return;
             }
@@ -93,13 +94,15 @@ export class TerminalComponent implements AfterViewInit {
 
                 const child = this.child;
                 const decoder = new TextDecoder("utf-8");
-                const encoder = new TextEncoder();
                 const EOF = 0x04;
                 let readingStdOut = false;
                 let readingStdErr = false;
                 let done = false;
                 const writableStream = new WritableStream({
                     write: async (c) => {
+                        if (done) {
+                            return;
+                        }
                         function decode(chunk: Uint8Array) {
                             let overFlowChunk = new Uint8Array();
 
@@ -114,9 +117,10 @@ export class TerminalComponent implements AfterViewInit {
                                 if (readingStdErr) {
                                     // chop everything after the EOF
                                     //chunkString = chunkString.slice(0, chunkString.lastIndexOf(decoder.decode(new Uint8Array([EOF]))));
-                                    chunk = chunk.slice(0, chunk.lastIndexOf(EOF));
+                                    chunk = chunk.slice(0, chunk.indexOf(EOF));
                                     done = true;
-                                } else {
+                                } else if (readingStdOut) {
+                                    readingStdErr = true;
                                     // chop everything after the first EOF and throw it in the overflow chunk
                                     overFlowChunk = chunk.slice(chunk.indexOf(EOF) + 1);
                                     //chunkString = chunkString.slice(0, chunkString.indexOf(decoder.decode(new Uint8Array([EOF]))));
@@ -125,14 +129,16 @@ export class TerminalComponent implements AfterViewInit {
                             }
 
 
-                            if (readingStdErr) {
-                                child.write('\x1b[31m' + decoder.decode(chunk) + '\x1b[0m');
-                            } else if (readingStdOut) {
+                            if (readingStdOut) {
                                 child.write(decoder.decode(chunk));
+                                if (readingStdErr) {
+                                    readingStdOut = false;
+                                }
+                            } else if (readingStdErr) {
+                                child.write('\x1b[31m' + decoder.decode(chunk) + '\x1b[0m');
                             }
 
                             if (overFlowChunk.length > 0) {
-                                readingStdErr = true;
                                 decode(overFlowChunk);
                             }
                         }
@@ -140,7 +146,6 @@ export class TerminalComponent implements AfterViewInit {
                         decode(c);
 
                         if (done) {
-                            console.log('Done');
                             this.robotWireState.setPythonCodeRunning(false);
                         }
                     },
@@ -160,6 +165,10 @@ export class TerminalComponent implements AfterViewInit {
                         console.log('Device disconnected');
                     } else if (error.toString().includes('Running code done')) {
                         console.log('Running code done');
+                    } else if (error.toString().includes('Successfully aborted')) {
+                        this.child.write('\x1b[31m' + 'Keyboard interrupt' + '\x1b[0m');
+                        this.abortController = null;
+                        this.robotWireState.setPythonCodeRunning(false);
                     } else {
                         this.robotWireState.setSerialPort(null);
                         console.error('Error while piping stream:', error);
