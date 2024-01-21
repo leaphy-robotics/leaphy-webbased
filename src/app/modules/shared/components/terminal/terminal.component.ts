@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {FunctionsUsingCSI, NgTerminal} from "ng-terminal";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
 import {PythonUploaderService} from "../../../../services/python-uploader/PythonUploader.service";
+import {DialogState} from "../../../../state/dialog.state";
 
 @Component({
     selector: 'app-terminal',
@@ -17,7 +18,8 @@ export class TerminalComponent implements AfterViewInit {
     constructor(
         private robotWireState: RobotWiredState,
         private pythonUploader: PythonUploaderService,
-    ) {}
+        private dialogState: DialogState
+) {}
 
 
     ngAfterViewInit() {
@@ -27,11 +29,13 @@ export class TerminalComponent implements AfterViewInit {
             if (!this.robotWireState.getPythonDeviceConnected()) {
                 return;
             }
-            if (this.robotWireState.getPythonCodeRunning()) {
+            if (this.robotWireState.getPythonSerialMonitorListening()) {
                 if (input === '\u0003') {
                     // Send keyboard interrupt to Python code
-                    this.pythonUploader.sendKeyboardInterrupt();
-                    this.abortController.abort("Successfully aborted");
+                    (async () => {
+                        this.abortController.abort("Successfully aborted");
+                        this.robotWireState.addToUploadLog('Kill signal sent');
+                    })();
                 }
                 return;
             }
@@ -87,9 +91,12 @@ export class TerminalComponent implements AfterViewInit {
             }
         });
 
-        this.robotWireState.isPythonCodeRunning$.subscribe(async (isRunning) => {
+        this.robotWireState.isPythonSerialMonitorListening$.subscribe(async (isRunning) => {
+            if (!this.robotWireState.getPythonDeviceConnected()) {
+                return;
+            }
             if (isRunning) {
-                var port = this.robotWireState.getSerialPort();
+                const port = this.robotWireState.getSerialPort();
                 const abortController = new AbortController();
 
                 const child = this.child;
@@ -146,6 +153,7 @@ export class TerminalComponent implements AfterViewInit {
                         decode(c);
 
                         if (done) {
+                            this.robotWireState.setPythonSerialMonitorListening(false);
                             this.robotWireState.setPythonCodeRunning(false);
                         }
                     },
@@ -158,6 +166,7 @@ export class TerminalComponent implements AfterViewInit {
 
                 pipePromise.catch((error) => {
                     if (error.toString().includes('Upload started')) {
+                        this.robotWireState.setPythonSerialMonitorListening(false);
                         this.robotWireState.setPythonCodeRunning(false);
                         console.log('Stream aborted');
                     } else if (error.toString().includes('The device has been lost.')) {
@@ -168,22 +177,15 @@ export class TerminalComponent implements AfterViewInit {
                     } else if (error.toString().includes('Successfully aborted')) {
                         this.child.write('\x1b[31m' + 'Keyboard interrupt' + '\x1b[0m');
                         this.abortController = null;
+                        this.robotWireState.setPythonSerialMonitorListening(false);
                         this.robotWireState.setPythonCodeRunning(false);
+                        this.pythonUploader.sendKeyboardInterrupt();
                     } else {
                         this.robotWireState.setSerialPort(null);
                         console.error('Error while piping stream:', error);
                     }
-                }).then(
-                    async () => {
-                        if (port == null) {
-                            port = this.robotWireState.getSerialPort();
-                        }
-                        await port.close();
-                        await port.open({baudRate: 115200});
-                    }
-                );
+                })
             } else {
-
                 if (this.abortController !== null) {
                     this.abortController.abort("Running code done");
                     this.abortController = null;

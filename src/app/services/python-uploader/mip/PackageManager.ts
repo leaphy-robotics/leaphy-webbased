@@ -71,13 +71,11 @@ export class PackageManager {
             // get a list of all the .dist-info folders
             for (const file of response) {
                 if (file['name'].endsWith('.dist-info')) {
-                    console.log('Deleting folder: ' + file['name']);
                     await rmdir(writer, reader, '/lib/' + file['name'], true);
                 }
             }
 
             for (const file of content) {
-                console.log('Uploading file: ' + file['name']);
                 await rm(writer, reader, file['name']);
                 await put(writer, reader, file['name'], file['content'])
             }
@@ -92,7 +90,6 @@ export class PackageManager {
     }
 
     public async checkLibraryVersion(version: string, name: string) {
-        console.log('Checking version: ' + version + ' ' + name);
         if (!this.serialPort) {
             throw new Error('No device selected');
         }
@@ -114,9 +111,7 @@ export class PackageManager {
                 const response = await get(writer, reader, name + '.json');
 
                 // decode response
-                console.log(response);
                 const json = JSON.parse(atob(response));
-                console.log(json['version'] + ' ' + version);
                 writer.releaseLock();
                 reader.releaseLock();
                 return json['version'] === version;

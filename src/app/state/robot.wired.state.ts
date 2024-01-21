@@ -25,6 +25,9 @@ export class RobotWiredState {
     private isPythonDeviceConnectedSubject$ = new BehaviorSubject<boolean>(false);
     public isPythonDeviceConnected$: Observable<boolean> = this.isPythonDeviceConnectedSubject$.asObservable();
 
+    public isPythonSerialMonitorListeningSubject$ = new BehaviorSubject<boolean>(false);
+    public isPythonSerialMonitorListening$: Observable<boolean> = this.isPythonSerialMonitorListeningSubject$.asObservable();
+
     private serialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
     public serialData$: Observable<{ time: Date, data: string }[]> = this.serialDataSubject$
         .pipe(filter(output => !!output))
@@ -110,6 +113,14 @@ export class RobotWiredState {
 
     public getPythonDeviceConnected(): boolean {
         return this.isPythonDeviceConnectedSubject$.getValue();
+    }
+
+    public setPythonSerialMonitorListening(isListening: boolean): void {
+        this.isPythonSerialMonitorListeningSubject$.next(isListening);
+    }
+
+    public getPythonSerialMonitorListening(): boolean {
+        return this.isPythonSerialMonitorListeningSubject$.getValue();
     }
 
     private readonly poisonPill: string = "caaa61a6-a666-4c0b-83b4-ebc75b08fecb"

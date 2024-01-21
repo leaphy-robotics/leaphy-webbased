@@ -32,7 +32,6 @@ export class UploadDialog {
     }
 
     public async startUpload(source_code: string, board: string, libraries: string) {
-        console.log("Starting upload");
         this.dialogState.setIsSerialOutputListening(false);
 
         function makeRequest(source_code, board, libraries) {

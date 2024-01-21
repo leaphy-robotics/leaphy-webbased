@@ -11,7 +11,7 @@ export class DialogState {
     public isSerialOutputWindowOpen$ = this.isSerialOutputWindowOpenSubject$.asObservable()
         .pipe(distinctUntilChanged());
 
-    private isSerialOutputListeningSubject$ = new BehaviorSubject(true);
+    private isSerialOutputListeningSubject$ = new BehaviorSubject(false);
     public isSerialOutputListening$ = this.isSerialOutputListeningSubject$.asObservable();
 
     private isSerialGraphOutputSelectedSubject$ = new BehaviorSubject(false);

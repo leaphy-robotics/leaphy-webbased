@@ -1,8 +1,9 @@
 import {RobotWiredState} from "../../state/robot.wired.state";
 import {sendCommand, enterReplMode, readResponse} from "./comms/BoardCommunication";
 import {put, get, ls, rm, rmdir} from "./filesystem/FileSystem";
-import {Injectable, InjectionToken} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {PackageManager} from "./mip/PackageManager";
+import {DialogState} from "../../state/dialog.state";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +13,6 @@ export class PythonUploaderService {
     port: SerialPort = null
     private firmware: Blob = null
     private packageManager: PackageManager = new PackageManager();
-    private isPythonCodeRunning = false;
 
     constructor(private robotWiredState: RobotWiredState) {
         this.robotWiredState = robotWiredState
@@ -23,51 +23,54 @@ export class PythonUploaderService {
         });
     }
 
-    private async setPythonCodeRunning(use: boolean, runSerialMonitor = false) {
-        if (use == false) {
-            await this.sendKeyboardInterrupt();
-        }
-        if (this.robotWiredState.getPythonCodeRunning() === use) {
+
+    private async setPythonCodeRunning(isRunning: boolean) {
+        if (this.robotWiredState.getPythonCodeRunning() === isRunning && isRunning) {
             throw new Error('There is already a program running')
         }
-        this.isPythonCodeRunning = use;
-        if (runSerialMonitor) {
-            this.robotWiredState.setPythonCodeRunning(use);
+
+        if (!isRunning) {
+            this.robotWiredState.setPythonSerialMonitorListening(false);
         }
+        this.robotWiredState.setPythonCodeRunning(isRunning);
     }
 
     async sendKeyboardInterrupt() {
+        this.robotWiredState.addToUploadLog('Sending keyboard interrupt');
         if (this.port === null)
             throw new Error('Not connected')
         const writer = this.port.writable.getWriter();
         await sendCommand(writer, '\u0003');
-        if (!this.robotWiredState.getPythonCodeRunning()) {
-            const reader = this.port.readable.getReader();
-            await readResponse(reader);
-            reader.releaseLock()
-        }
+        const reader = this.port.readable.getReader();
+        await readResponse(reader);
+        reader.releaseLock()
         writer.releaseLock()
-
+        this.robotWiredState.addToUploadLog('Keyboard interrupt sent');
     }
 
     async connect() {
-
+        await this.setPythonCodeRunning(false);
+        this.robotWiredState.addToUploadLog('Connecting to device');
         let port: SerialPort;
         try {
-            port = await navigator.serial.requestPort({filters: [{usbVendorId: 11914}]});
+            port = await navigator.serial.requestPort({filters: [{usbVendorId: 11914}, {usbVendorId: 9025}]});
         } catch (error) {
             console.log(error)
             throw new Error('No device selected')
         }
-        if (port === this.port)
-            return
         try {
             await port.open({baudRate: 115200});
         } catch (error) {
-            console.log(error)
-            throw new Error('Connecting to device')
+            if (error.toString().includes('The port is already open.')) {
+                // wait for abortController to be set to null
+                await this.sendKeyboardInterrupt();
+            }
+            else {
+                console.log(error)
+                throw new Error('Connecting to device')
+            }
         }
-        await this.setPythonCodeRunning(true, false)
+        await this.setPythonCodeRunning(true)
         this.port = port
         const writer = this.port.writable.getWriter();
         const reader = this.port.readable.getReader();
@@ -79,11 +82,13 @@ export class PythonUploaderService {
         this.packageManager.port = port;
         this.robotWiredState.setSerialPort(port);
         try {
-            await this.setPythonCodeRunning(false)
+            await this.setPythonCodeRunning(false);
         } catch (error) {}
+        this.robotWiredState.addToUploadLog('Connected to device');
     }
 
     async connectInBootMode() {
+        this.robotWiredState.addToUploadLog('Connecting to device in boot mode');
         let device: FileSystemDirectoryHandle;
         try {
             // @ts-ignore
@@ -95,9 +100,11 @@ export class PythonUploaderService {
         if (device === this.drive)
             return
         this.drive = device
+        this.robotWiredState.addToUploadLog('Connected to device in boot mode');
     }
 
     async flash() {
+        this.robotWiredState.addToUploadLog('Flashing firmware');
         if (!(await PythonUploaderService.checkFilesystem(this.drive)))
             throw new Error('Not a valid device')
         const file = await this.drive.getFileHandle('firmware.uf2', {create: true});
@@ -105,21 +112,31 @@ export class PythonUploaderService {
         const writable = await file.createWritable();
         await writable.write({type: 'write', data: this.firmware, position: 0});
         await writable.close();
+        this.robotWiredState.addToUploadLog('Firmware flashed');
     }
 
     async runCode(code: string) {
-        await this.setPythonCodeRunning(true, true)
+        this.robotWiredState.addToUploadLog('Running code');
+        await this.setPythonCodeRunning(true)
+        this.robotWiredState.setPythonSerialMonitorListening(true);
         if (this.port === null)
             throw new Error('Not connected')
         const writer = this.port.writable.getWriter();
         await sendCommand(writer, code);
         writer.releaseLock();
+        this.robotWiredState.addToUploadLog('Code running');
     }
 
+    /**
+     * Install the standard library from leaphy
+     */
     async installStandardLibraries() {
         await this.setPythonCodeRunning(true)
         this.packageManager.port = this.port;
+        this.robotWiredState.addToUploadLog('Installing standard libraries');
         await this.packageManager.flashLibrary('github:leaphy-robotics/leaphy-micropython/package.json');
+        this.robotWiredState.addToUploadLog('Standard libraries installed');
+        await this.setPythonCodeRunning(false);
     }
 
     /**
