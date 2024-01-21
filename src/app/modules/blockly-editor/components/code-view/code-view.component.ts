@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { BlocklyEditorState } from 'src/app/state/blockly-editor.state';
 
 @Component({

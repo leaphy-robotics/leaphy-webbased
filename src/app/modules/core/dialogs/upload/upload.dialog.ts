@@ -1,12 +1,12 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {TranslateService} from "@ngx-translate/core";
-import ArduinoWebserial from "../../../../services/webserial/ArduinoWebserial";
+import ArduinoUploader from "../../../../services/arduino-uploader/ArduinoUploader";
 import {DialogState} from "../../../../state/dialog.state";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
 
 @Component({
-    selector: 'upload-information',
+    selector: 'upload',
     templateUrl: './upload.dialog.html',
     styleUrls: ['./upload.dialog.scss']
 })
@@ -15,7 +15,7 @@ export class UploadDialog {
     progressBarWidth: number = 0;
     uploadFailed: boolean = false;
     protected readonly document = document;
-    private upload = new ArduinoWebserial(this.robotWiredState);
+    private upload = new ArduinoUploader(this.robotWiredState);
 
     constructor(
         public dialogRef: MatDialogRef<UploadDialog>,
@@ -32,7 +32,6 @@ export class UploadDialog {
     }
 
     public async startUpload(source_code: string, board: string, libraries: string) {
-        console.log("Starting upload");
         this.dialogState.setIsSerialOutputListening(false);
 
         function makeRequest(source_code, board, libraries) {
@@ -89,11 +88,7 @@ export class UploadDialog {
 
             try {
                 if (this.robotWiredState.getSerialPort() !== null) {
-                    this.dialogState.setIsSerialOutputListening(false);
                     this.robotWiredState.getAbortController().abort("Upload started");
-                    while (this.robotWiredState.getIsSerialOutputStillListening()) {
-                        await new Promise(r => setTimeout(r, 1000));
-                    }
                     this.upload.port = this.robotWiredState.getSerialPort();
 
                 } else {

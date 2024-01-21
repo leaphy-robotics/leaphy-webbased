@@ -15,12 +15,18 @@ export class RobotWiredState {
     private abortControllerSubject$: BehaviorSubject<AbortController> = new BehaviorSubject(null);
     public abortController$: Observable<AbortController> = this.abortControllerSubject$.asObservable();
 
-    private isSerialOutputStillListening$ = new BehaviorSubject(false);
-    public isSerialOutputStillListening = this.isSerialOutputStillListening$.asObservable();
-
     // Upload log, a Log of list of strings
     private uploadLogSubject$ = new BehaviorSubject<string[]>([]);
     public uploadLog$: Observable<string[]> = this.uploadLogSubject$.asObservable();
+
+    private isPythonCodeRunningSubject$ = new BehaviorSubject<boolean>(false);
+    public isPythonCodeRunning$: Observable<boolean> = this.isPythonCodeRunningSubject$.asObservable();
+
+    private isPythonDeviceConnectedSubject$ = new BehaviorSubject<boolean>(false);
+    public isPythonDeviceConnected$: Observable<boolean> = this.isPythonDeviceConnectedSubject$.asObservable();
+
+    public isPythonSerialMonitorListeningSubject$ = new BehaviorSubject<boolean>(false);
+    public isPythonSerialMonitorListening$: Observable<boolean> = this.isPythonSerialMonitorListeningSubject$.asObservable();
 
     private serialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
     public serialData$: Observable<{ time: Date, data: string }[]> = this.serialDataSubject$
@@ -85,14 +91,6 @@ export class RobotWiredState {
         return this.abortControllerSubject$.getValue();
     }
 
-    public setIsSerialOutputStillListening(isListening: boolean): void {
-        this.isSerialOutputStillListening$.next(isListening);
-    }
-
-    public getIsSerialOutputStillListening(): boolean {
-        return this.isSerialOutputStillListening$.getValue();
-    }
-
     public addToUploadLog(log: string): void {
         this.uploadLogSubject$.next([...this.uploadLogSubject$.getValue(), log]);
     }
@@ -101,8 +99,28 @@ export class RobotWiredState {
         this.uploadLogSubject$.next([]);
     }
 
-    public getUploadLog(): string[] {
-        return this.uploadLogSubject$.getValue();
+    public setPythonCodeRunning(isRunning: boolean): void {
+        this.isPythonCodeRunningSubject$.next(isRunning);
+    }
+
+    public getPythonCodeRunning(): boolean {
+        return this.isPythonCodeRunningSubject$.getValue();
+    }
+
+    public setPythonDeviceConnected(isConnected: boolean): void {
+        this.isPythonDeviceConnectedSubject$.next(isConnected);
+    }
+
+    public getPythonDeviceConnected(): boolean {
+        return this.isPythonDeviceConnectedSubject$.getValue();
+    }
+
+    public setPythonSerialMonitorListening(isListening: boolean): void {
+        this.isPythonSerialMonitorListeningSubject$.next(isListening);
+    }
+
+    public getPythonSerialMonitorListening(): boolean {
+        return this.isPythonSerialMonitorListeningSubject$.getValue();
     }
 
     private readonly poisonPill: string = "caaa61a6-a666-4c0b-83b4-ebc75b08fecb"

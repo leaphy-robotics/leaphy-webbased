@@ -1,0 +1,36 @@
+<div>
+    <div class="watermark-container">
+        <img class="mx-auto d-block watermark" ngSrc="../../../../assets/leaphy.svg" height="8" width="8">
+    </div>
+    <div class="row">
+        <div class="col align-self-center text-center" style="margin-top:5%;">
+            <h3>{{ "SELECT_ROBOT_START_PROJECT" | translate }}</h3>
+        </div>
+    </div>
+    <div class="row robot-row">
+        <div class="col col-md-auto col-sm-6 text-center zoomed" *ngFor="let robot of appState.availableRobotTypes$ | async"
+             (click)="onRobotSelected(robot)">
+            <button class="btn shadow-sm btn-primary robot-button"
+                    [ngClass]="{'selected': (appState.selectedRobotType$ | async) === robot}">
+                <img class="imgcenter" src="./assets/{{robot.svgname}}">
+            </button>
+            <p class="robot-name">{{robot.name}}</p>
+        </div>
+    </div>
+    <div class="row robot-row">
+        <div class="col col-md-auto col-sm-6 text-center zoomed"
+             (click)="onRobotSelected(AppState.genericRobotType)">
+            <button class="btn shadow-sm btn-primary robot-button">
+                <img class="imgcenter" src="./assets/{{AppState.genericRobotType.svgname}}">
+            </button>
+            <p class="robot-name">{{AppState.genericRobotType.name}}</p>
+        </div>
+        <div class="col col-md-auto col-sm-6 text-center zoomed"
+             (click)="onRobotSelected(AppState.microPythonRobotType)">
+            <button class="btn shadow-sm btn-primary robot-button">
+                <img class="imgcenter" src="./assets/{{AppState.microPythonRobotType.svgname}}">
+            </button>
+            <p class="robot-name">{{AppState.microPythonRobotType.name}}</p>
+        </div>
+    </div>
+</div>

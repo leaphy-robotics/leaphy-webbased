@@ -11,68 +11,65 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { BackendWiredEffects } from './effects/backend.wired.effects';
-import { BackEndCloudEffects } from './effects/backend.cloud.effects';
 import { BlocklyEditorEffects } from './effects/blockly-editor.effects';
-import { CodeEditorEffects } from './effects/code-editor.effects';
 import { DialogEffects } from './effects/dialog.effects';
-import { RobotCloudEffects } from './effects/robot.cloud.effects';
 import { AppEffects } from './effects/app.effects';
 import { RobotWiredEffects } from './effects/robot.wired.effects';
 import { CoreModule } from './modules/core/core.module';
 
 import { MatomoModule } from 'ngx-matomo';
+import {CodeEditorEffects} from "./effects/code-editor.effects";
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+    return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
 
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient]
-      }
-    }),
-    MatomoModule.forRoot({
-      scriptUrl: 'https://leaphyeasybloqs.com/matomo/matomo.js',
-      trackers: [
+    declarations: [
+        AppComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: createTranslateLoader,
+                deps: [HttpClient]
+            }
+        }),
+        MatomoModule.forRoot({
+            scriptUrl: 'https://leaphyeasybloqs.com/matomo/matomo.js',
+            trackers: [
+                {
+                    trackerUrl: 'https://leaphyeasybloqs.com/matomo/matomo.php',
+                    siteId: 1
+                }
+            ],
+            routeTracking: {
+                enable: true
+            }
+        }), CoreModule
+    ],
+    providers: [
+        // Initialize the Effects on startup
         {
-          trackerUrl: 'https://leaphyeasybloqs.com/matomo/matomo.php',
-          siteId: 1
+            provide: APP_INITIALIZER, deps:
+                [
+                    AppEffects,
+                    BackendWiredEffects,
+                    BlocklyEditorEffects,
+                    DialogEffects,
+                    CodeEditorEffects,
+                    RobotWiredEffects
+                ], useFactory: () => () => null, multi: true
         }
-      ],
-      routeTracking: {
-        enable: true
-      }
-    }),    CoreModule
-  ],
-  providers: [
-    // Initialize the Effects on startup
-    {
-      provide: APP_INITIALIZER, deps:
-        [
-          AppEffects,
-          BackendWiredEffects,
-          BackEndCloudEffects,
-          BlocklyEditorEffects,
-          CodeEditorEffects,
-          DialogEffects,
-          RobotCloudEffects,
-          RobotWiredEffects
-        ], useFactory: () => () => null, multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
+    ],
+    exports: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
