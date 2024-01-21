@@ -1,4 +1,4 @@
-import {get, ls, put, rm, rmdir} from "../filesystem/FileSystem";
+import {get, ls, mkdir, put, rm, rmdir} from "../filesystem/FileSystem";
 
 
 export class PackageManager {
@@ -51,6 +51,9 @@ export class PackageManager {
         if (!url) {
             throw new Error('No url provided');
         } else if (url.startsWith('github:')) {
+            const writer = this.serialPort.writable.getWriter();
+            const reader = this.serialPort.readable.getReader();
+            mkdir(writer, reader, '/lib');
             let json = JSON.parse(await PackageManager.fetchMipUrl(url));
             const version = json['version'];
             if (await this.checkLibraryVersion(version, PackageManager.getLibraryName(url))) {
@@ -64,8 +67,6 @@ export class PackageManager {
                 content.push({name: '/lib/' + file[0], content: response});
             }
 
-            const writer = this.serialPort.writable.getWriter();
-            const reader = this.serialPort.readable.getReader();
             // get a list of .dist-info files in the lib folder and delete them
             const response = await ls(writer, reader, '/lib');
             // get a list of all the .dist-info folders
