@@ -53,7 +53,9 @@ export class PackageManager {
         } else if (url.startsWith('github:')) {
             const writer = this.serialPort.writable.getWriter();
             const reader = this.serialPort.readable.getReader();
-            mkdir(writer, reader, '/lib');
+            try {
+                await mkdir(writer, reader, '/lib');
+            } catch (error) {}
             let json = JSON.parse(await PackageManager.fetchMipUrl(url));
             const version = json['version'];
             if (await this.checkLibraryVersion(version, PackageManager.getLibraryName(url))) {

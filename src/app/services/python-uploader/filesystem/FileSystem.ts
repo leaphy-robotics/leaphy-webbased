@@ -82,6 +82,7 @@ async function mkdir(writer: WritableStreamDefaultWriter, reader: ReadableStream
     if (failed) {
         throw new Error(stdErr);
     }
+    return stdOut;
 }
 
 async function ls(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string): Promise<{name: string, isDir: boolean}[]> {
