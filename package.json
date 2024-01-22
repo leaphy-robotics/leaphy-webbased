@@ -3,7 +3,7 @@
     "productName": "Leaphy Webbased",
     "author": "Leaphy Robotics",
     "description": "Build Leaphy Arduino programs",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "license": "GPLv3",
     "main": "src/main.ts",
     "scripts": {
