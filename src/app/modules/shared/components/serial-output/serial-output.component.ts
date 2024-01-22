@@ -52,12 +52,13 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
 
   private subscribeToSerialData() {
     interface SerialData {
+      date: Date;
       time: Date;
       data: string;
     }
 
     this.serialDataSubscription = this.robotWiredState.serialData$.subscribe((data: SerialData[]) => {
-      this.serialDataAsJSON = data.map(item => ({ time: item.time, data: item.data.trim() }));
+      this.serialDataAsJSON = data.map(item => ({date:item.time.toLocaleDateString(), time: item.time.toLocaleTimeString(), data: item.data.trim() }));
     });
   }
 
