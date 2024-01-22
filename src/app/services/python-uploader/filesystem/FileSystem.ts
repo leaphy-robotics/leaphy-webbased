@@ -93,7 +93,7 @@ def ls(path):
         path = path[:-1]
     dirContent = []
     for entry in os.listdir(path):
-        stat = os.stat(path + entry)
+        stat = os.stat(path + "/" + entry)
         if (stat[0] & 0x4000) != 0:
             dirContent.append({'name': entry, 'isDir': True})
         elif (stat[0] & 0x8000) != 0:
@@ -103,7 +103,7 @@ print(ls("${path}"))`;
     await sendCommand(writer, lsCommand);
     const { stdOut, stdErr, failed } = await readResponse(reader);
     if (failed) {
-        throw new Error(stdErr);
+        throw new Error(stdErr + "'\nWhile getting: " + path);
     }
     console.log(stdOut);
     return JSON.parse(stdOut);
@@ -117,7 +117,7 @@ async function rm(writer: WritableStreamDefaultWriter, reader: ReadableStreamDef
     await sendCommand(writer, rmCommand);
     const { stdOut, stdErr, failed } = await readResponse(reader);
     if (failed) {
-        throw new Error(stdErr);
+        throw new Error(stdErr + "while getting: " + path);
     }
 }
 
