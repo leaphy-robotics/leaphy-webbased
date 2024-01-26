@@ -50,6 +50,12 @@ class Arduino {
      * @param callback A callback function to call when the upload status changes.
      */
     async upload(program: string, callback = (message: string) => {}) {
+        if (this.robotWiredState.getAbortController() != null) {
+            this.robotWiredState.getAbortController().abort("Upload started");
+            this.robotWiredState.setAbortController(null);
+            await delay(1000);
+        }
+
         if (this.isUploading)
             throw new Error('Arduino is already uploading')
         this.robotWiredState.clearUploadLog()
