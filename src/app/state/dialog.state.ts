@@ -7,6 +7,10 @@ import { distinctUntilChanged } from 'rxjs/operators';
 })
 export class DialogState {
 
+    private isLibraryManagerWindowOpenSubject$ = new BehaviorSubject(false);
+    public isLibraryManagerWindowOpen$ = this.isLibraryManagerWindowOpenSubject$.asObservable()
+        .pipe(distinctUntilChanged());
+
     private isSerialOutputWindowOpenSubject$ = new BehaviorSubject(false);
     public isSerialOutputWindowOpen$ = this.isSerialOutputWindowOpenSubject$.asObservable()
         .pipe(distinctUntilChanged());
@@ -41,5 +45,13 @@ export class DialogState {
 
     public getIsSerialOutputWindowOpen() {
         return this.isSerialOutputWindowOpenSubject$.getValue();
+    }
+
+    public setIsLibraryManagerWindowOpen(isOpen: boolean) {
+        this.isLibraryManagerWindowOpenSubject$.next(isOpen);
+    }
+
+    public getIsLibraryManagerWindowOpen() {
+        return this.isLibraryManagerWindowOpenSubject$.getValue();
     }
 }

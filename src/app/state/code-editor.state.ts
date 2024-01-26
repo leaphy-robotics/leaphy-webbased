@@ -2,6 +2,7 @@ import {ElementRef, Injectable,} from "@angular/core";
 import {Ace} from "ace-builds";
 import {BehaviorSubject, Observable} from "rxjs";
 import {map, withLatestFrom} from "rxjs/operators";
+import {InstalledLibrary, Library} from "src/app/domain/library-manager.types";
 
 @Injectable({
     providedIn: 'root'
@@ -31,6 +32,9 @@ void loop() {
 
     private codeSubject$: BehaviorSubject<string> = new BehaviorSubject<string>('');
     public code$: Observable<string> = this.codeSubject$.asObservable();
+
+    private libraryCacheSubject$: BehaviorSubject<Library[]> = new BehaviorSubject<Library[]>([]);
+    private InstalledLibraries$: BehaviorSubject<InstalledLibrary[]> = new BehaviorSubject<InstalledLibrary[]>([]);
 
     public isDirty$: Observable<boolean>;
 
@@ -64,5 +68,21 @@ void loop() {
 
     public getAceEditor(){
         return this.aceEditorSubject$.value;
+    }
+
+    public setLibraryCache(cache: Library[]){
+        this.libraryCacheSubject$.next(cache);
+    }
+
+    public getLibraryCache(){
+        return this.libraryCacheSubject$.value;
+    }
+
+    public setInstalledLibraries(libraries: InstalledLibrary[]){
+        this.InstalledLibraries$.next(libraries);
+    }
+
+    public getInstalledLibraries(){
+        return this.InstalledLibraries$.value;
     }
 }
