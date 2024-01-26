@@ -3,7 +3,7 @@
         {{ "LIBRARY_MANAGER" | translate}}
         <div id="button-container">
             <form #filterForm="ngForm" (ngSubmit)="filter(filterForm.value.filter)">
-                <input type="text" placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}" name="filter" ngModel>
+                <input type="text" placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}" name="filter" ngModel autocomplete="off">
             </form>
             <button mat-stroked-button class="icon-button" (click)="close()">
                 <mat-icon>close</mat-icon>

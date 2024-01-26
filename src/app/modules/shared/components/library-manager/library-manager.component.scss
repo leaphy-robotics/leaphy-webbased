@@ -47,6 +47,9 @@ input {
     outline: 0;
     height: 35px;
 }
+input::placeholder {
+    color: var(--leaphy-color-light);
+}
 
 .library-manager {
     max-height: 50vh;
