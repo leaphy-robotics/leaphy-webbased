@@ -71,7 +71,6 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
         }
             
         let filename = 'serial_monitor_export.csv'
-        console.log(dataJson);
 
         const csv = unparse(dataJson, {
             header: true
