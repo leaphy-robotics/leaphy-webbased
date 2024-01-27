@@ -8,6 +8,7 @@ import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/conf
 import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/language-select.dialog';
 import {SerialOutputComponent} from "../modules/shared/components/serial-output/serial-output.component";
 import {AppState} from "../state/app.state";
+import {LibraryManagerComponent} from "../modules/shared/components/library-manager/library-manager.component";
 
 @Injectable({
     providedIn: 'root',
@@ -42,6 +43,20 @@ export class DialogEffects {
                     hasBackdrop: false,
                 }).afterClosed().subscribe(() => {
                     this.dialogState.setIsSerialOutputWindowOpen(false);
+                });
+            });
+
+
+        // If the isLibraryManagerWindowOpen is set to true open the dialog
+        this.dialogState.isLibraryManagerWindowOpen$
+            .subscribe(() => {
+                if (this.dialogState.getIsLibraryManagerWindowOpen() !== true)
+                    return;
+                this.dialog.open(LibraryManagerComponent, {
+                    width: "800px",
+                    disableClose: true,
+                }).afterClosed().subscribe(() => {
+                    this.dialogState.setIsLibraryManagerWindowOpen(false);
                 });
             });
 
