@@ -77,6 +77,9 @@ export class BackendWiredEffects {
 					.subscribe(([status, code, robotType]) => {
 						switch (status) {
 							case SketchStatus.Sending:
+                                const libraries = [...robotType.libs];
+                                libraries.push(...codeEditorState.getInstalledLibraries().map(lib => `${lib.name}@${lib.version}`));
+
 								const payload = {
 									code,
 									fqbn: robotType.fqbn,
@@ -84,7 +87,7 @@ export class BackendWiredEffects {
 									core: robotType.core,
 									name: robotType.name,
 									board: robotType.board,
-									libs: robotType.libs
+									libs: libraries
 								};
 								this.send('compile', payload);
 								break;
