@@ -1,4 +1,4 @@
-import {readResponse, sendCommand, enterReplMode, exitReplMode} from "../comms/BoardCommunication";
+import {readResponse, sendCommand} from "../comms/BoardCommunication";
 
 async function dirExists(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string) {
     const dirExistsCommand = `import os; print(os.stat("${path}")[0] & 0x4000 != 0)`;
@@ -144,4 +144,4 @@ async function rmdir(writer: WritableStreamDefaultWriter, reader: ReadableStream
     }
 }
 
-export { dirExists, exists, put, rm, rmdir, get, ls, mkdir,  }
+export { dirExists, exists, put, rm, rmdir, get, ls, mkdir }

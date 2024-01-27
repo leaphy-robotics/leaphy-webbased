@@ -55,9 +55,7 @@ export class DialogEffects {
             });
 
         const language = localStorage.getItem('currentLanguage');
-        if (language) {
-            //console.log('Language is set to ' + language);
-        } else {
+        if (!language) {
             const languageDialogRef = this.dialog.open(LanguageSelectDialog, {
                 width: '450px',
                 disableClose: true,

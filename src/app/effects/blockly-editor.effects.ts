@@ -1,35 +1,35 @@
-import { Injectable } from '@angular/core';
-import { BlocklyEditorState } from '../state/blockly-editor.state';
-import { SketchStatus } from '../domain/sketch.status';
-import { BackEndState } from '../state/backend.state';
-import { ConnectionStatus } from '../domain/connection.status';
-import { filter, pairwise, withLatestFrom } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { combineLatest, Observable } from 'rxjs';
-import { WorkspaceStatus } from '../domain/workspace.status';
-import { AppState } from '../state/app.state';
-import { CodeEditorType } from '../domain/code-editor.type';
+import {Injectable} from '@angular/core';
+import {BlocklyEditorState} from '../state/blockly-editor.state';
+import {SketchStatus} from '../domain/sketch.status';
+import {BackEndState} from '../state/backend.state';
+import {filter, pairwise, withLatestFrom} from 'rxjs/operators';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {combineLatest, Observable} from 'rxjs';
+import {WorkspaceStatus} from '../domain/workspace.status';
+import {AppState} from '../state/app.state';
+import {CodeEditorType} from '../domain/code-editor.type';
 import {BackendWiredEffects} from "./backend.wired.effects";
 import * as Blockly from 'blockly/core';
 import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
 import getBlocks from "@leaphy-robotics/leaphy-blocks/blocks/blocks";
-import {CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
-    LIST_MODES_MUTATOR_MIXIN,
-    LIST_MODES_MUTATOR_EXTENSION,
-    IS_DIVISIBLEBY_MUTATOR_MIXIN,
-    IS_DIVISIBLE_MUTATOR_EXTENSION,
-    MATH_TOOLTIPS_BY_OP,
-    LOGIC_TOOLTIPS_BY_OP,
-    LOGIC_COMPARE_EXTENSION,
-    TEXT_QUOTES_EXTENSION,
+import {
     APPEND_STATEMENT_INPUT_STACK,
     CONTROLS_IF_MUTATOR_MIXIN,
     CONTROLS_IF_TOOLTIP_EXTENSION,
+    CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
+    IS_DIVISIBLE_MUTATOR_EXTENSION,
+    IS_DIVISIBLEBY_MUTATOR_MIXIN,
+    LIST_MODES_MUTATOR_EXTENSION,
+    LIST_MODES_MUTATOR_MIXIN,
+    LOGIC_COMPARE_EXTENSION,
+    LOGIC_TOOLTIPS_BY_OP,
+    MATH_TOOLTIPS_BY_OP,
+    TEXT_QUOTES_EXTENSION,
     WHILE_UNTIL_TOOLTIPS
 } from "@leaphy-robotics/leaphy-blocks/blocks/extensions";
-import {defaultBlockStyles, categoryStyles, componentStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
-import {LeaphyCategory} from "../services/Toolbox/Category";
-import {LeaphyToolbox} from "../services/Toolbox/Toolbox";
+import {categoryStyles, componentStyles, defaultBlockStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
+import {LeaphyCategory} from "../services/toolbox/category";
+import {LeaphyToolbox} from "../services/toolbox/toolbox";
 
 const Extensions = Blockly.Extensions;
 
@@ -118,13 +118,12 @@ export class BlocklyEditorEffects {
                 for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {
                     Blockly.Blocks[name] = block;
                 }
-                const LeaphyTheme = Blockly.Theme.defineTheme('leaphy', {
+                config.theme = Blockly.Theme.defineTheme('leaphy', {
                     'blockStyles': defaultBlockStyles,
                     'categoryStyles': categoryStyles,
                     'componentStyles': componentStyles,
                     name: 'leaphy',
-                })
-                config.theme = LeaphyTheme;
+                });
                 const parser = new DOMParser();
                 const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
                 const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
@@ -222,22 +221,6 @@ export class BlocklyEditorEffects {
             .pipe(filter(([, workspace]) => !!workspace))
             .subscribe(([redo, workspace]) => workspace.undo(redo));
 
-        // Changes in ConnectionStatus result in changes in SketchStatus
-        this.backEndState.connectionStatus$
-            .subscribe(connectionStatus => {
-                switch (connectionStatus) {
-                    case ConnectionStatus.Disconnected:
-                    case ConnectionStatus.ConnectedToBackend:
-                    case ConnectionStatus.WaitForRobot:
-                        this.blocklyState.setSketchStatus(SketchStatus.UnableToSend);
-                        break;
-                    case ConnectionStatus.PairedWithRobot:
-                        this.blocklyState.setSketchStatus(SketchStatus.ReadyToSend);
-                        break;
-                    default:
-                        break;
-                }
-            });
 
         // When Advanced CodeEditor is Selected, set the workspace status to SavingTemp and hide the sideNav
         this.appState.codeEditor$

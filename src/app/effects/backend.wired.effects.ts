@@ -3,7 +3,6 @@ import { BlocklyEditorState } from '../state/blockly-editor.state';
 import { filter, withLatestFrom } from 'rxjs/operators';
 import { BackEndState } from '../state/backend.state';
 import { SketchStatus } from '../domain/sketch.status';
-import { ConnectionStatus } from '../domain/connection.status';
 import { AppState } from '../state/app.state';
 import { WorkspaceStatus } from '../domain/workspace.status';
 import { CodeEditorType } from '../domain/code-editor.type';
@@ -67,9 +66,6 @@ export class BackendWiredEffects {
 					throw e;
 				}
 
-				// If that worked, set the backend Connection status
-				this.backEndState.setConnectionStatus(ConnectionStatus.ConnectedToBackend);
-
 				// When the sketch status is set to sending, send a compile request to backend
 				this.blocklyEditorState.sketchStatus$
 					.pipe(withLatestFrom(this.blocklyEditorState.code$, this.appState.selectedRobotType$))
@@ -99,6 +95,7 @@ export class BackendWiredEffects {
                                         }
                                     }
                                 });
+                                break;
 							default:
 								break;
 						}
