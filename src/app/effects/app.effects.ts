@@ -77,7 +77,10 @@ export class AppEffects {
                 })
             });
 
-        this.appState.releaseInfo$.subscribe(releaseInfo => {
+        this.appState.releaseInfo$
+            .pipe(filter(releaseInfo => !!releaseInfo))
+            // make sure that the
+            .subscribe(releaseInfo => {
             if (!releaseInfo) {
                 return;
             }
