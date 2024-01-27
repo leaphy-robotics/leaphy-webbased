@@ -10,7 +10,7 @@ import { CodeEditorType } from '../domain/code-editor.type';
 import {LocalStorageService} from "../services/localstorage.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ChangeLogDialog} from "../modules/core/dialogs/change-log/change-log.dialog";
-const showdown = require('showdown');
+import showdown from "showdown";
 
 @Injectable({
     providedIn: 'root',
