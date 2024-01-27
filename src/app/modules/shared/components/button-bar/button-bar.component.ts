@@ -26,6 +26,10 @@ export class ButtonBarComponent {
         this.dialogState.setIsSerialOutputWindowOpen(true);
     }
 
+    public onShowLibraryManagerClicked() {
+        this.dialogState.setIsLibraryManagerWindowOpen(true);
+    }
+
     protected readonly AppState = AppState;
     protected readonly CodeEditorType = CodeEditorType;
 }

@@ -10,6 +10,11 @@
         <mat-icon>article</mat-icon>
     </button>
 
+
+    <button *ngIf="(appState.codeEditor$ | async) === CodeEditorType.CPP" mat-fab [attr.data-label]="'LIBRARY_MANAGER' | translate" (click)="onShowLibraryManagerClicked()">
+        <mat-icon>library_books</mat-icon>
+    </button>
+
 </div>
 <app-serial-window
     *ngIf="dialogState.isSerialOutputWindowOpen$ | async"
