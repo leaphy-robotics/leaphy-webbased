@@ -51,12 +51,22 @@ export class AppState {
         'l_nano': AppState.arduinoNanoRobotType,
         'l_micropython': AppState.microPythonRobotType
     }
+
+    private releaseInfoSubject$ = new BehaviorSubject<any>(null);
+    public releaseInfo$: Observable<any> = this.releaseInfoSubject$.asObservable();
+
+
     /* eslint-enable max-len */
 
     private defaultLanguage = new Language('nl', 'Nederlands')
     private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
 
     constructor(private localStorage: LocalStorageService, private dialog: MatDialog) {
+
+        (async () => {
+            this.releaseInfoSubject$.next(await fetch("https://api.github.com/repos/leaphy-robotics/leaphy-webbased/releases/latest").then(response => response.json()));
+        })();
+
         this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
         this.isDesktop$ = this.isDesktopSubject$.asObservable();
         this.availableRobotTypes$ = this.isDesktop$
