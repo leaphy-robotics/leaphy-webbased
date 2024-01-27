@@ -15,6 +15,7 @@ import {RobotWiredState} from 'src/app/state/robot.wired.state';
 import {MatDialogRef} from "@angular/material/dialog";
 import {unparse} from 'papaparse';
 
+
 @Component({
     selector: 'app-serial-output',
     templateUrl: './serial-output.component.html',
@@ -45,24 +46,31 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
         let data = document.getElementsByClassName("output-item")
         let dataArr = [];
         for (let i = 0; i < data.length; i++) {
-            let row = data[i].getElementsByTagName('td');
-            let rowData = [];
-            for (let j = 0; j < row.length; j++) {
-                rowData.push(row[j].innerHTML);
-            }
-            dataArr.push(rowData);
+            let time = data[i].getElementsByClassName("output-time")[0].innerHTML;
+            let outputData = data[i].getElementsByClassName("output-data")[0].innerHTML;
+            let outputDataArr = outputData.split(",");
+            outputDataArr.unshift(time);
+            dataArr.push(outputDataArr);
         }
         // convert to json
         let dataJson = [];
         for (let i = 0; i < dataArr.length; i++) {
-            let dataObj = {};
-            for (let j = 0; j < dataArr[i].length; j++) {
-                dataObj[dataArr[0][j]] = dataArr[i][j];
-            }
-            dataJson.push(dataObj);
+            // create a new date from the time which is just the hour, minute, second, and millisecond by getting the current date and setting the time
+            let newDate = new Date();
+            let timeArr = dataArr[i][0].split(":");
+            newDate.setHours(timeArr[0]);
+            newDate.setMinutes(timeArr[1]);
+            newDate.setSeconds(timeArr[2]);
+            newDate.setMilliseconds(timeArr[3]);
+        
+            dataJson.push({
+                date: newDate.toLocaleDateString(),
+                time: newDate.toLocaleTimeString(),
+                data: dataArr[i].slice(1)
+            })
         }
+            
         let filename = 'serial_monitor_export.csv'
-        console.log(dataJson);
 
         const csv = unparse(dataJson, {
             header: true
