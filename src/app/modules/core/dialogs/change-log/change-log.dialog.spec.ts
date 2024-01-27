@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { SelectRobotTypeDialog } from './robot-select.dialog';
+import { ChangeLogDialog } from './change-log.dialog';
 
-describe('RobotSelectComponent', () => {
-  let component: SelectRobotTypeDialog;
-  let fixture: ComponentFixture<SelectRobotTypeDialog>;
+describe('ChangeLogDialog Component', () => {
+  let component: ChangeLogDialog;
+  let fixture: ComponentFixture<ChangeLogDialog>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SelectRobotTypeDialog ]
+      declarations: [ ChangeLogDialog ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SelectRobotTypeDialog);
+    fixture = TestBed.createComponent(ChangeLogDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

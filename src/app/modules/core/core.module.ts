@@ -19,6 +19,7 @@ import {DragDropModule} from "@angular/cdk/drag-drop";
 import { SelectRobotTypeDialog } from './dialogs/robot-select/robot-select.dialog';
 import {ConnectPythonDialog} from "./dialogs/connect-python/connect-python.dialog";
 import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
+import {ChangeLogDialog} from "./dialogs/change-log/change-log.dialog";
 
 @NgModule({
     declarations: [
@@ -36,6 +37,7 @@ import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
         UploadDialog,
         ConnectPythonDialog,
         DebugInformationDialog,
+        ChangeLogDialog,
         InfoDialog
     ],
     imports: [
