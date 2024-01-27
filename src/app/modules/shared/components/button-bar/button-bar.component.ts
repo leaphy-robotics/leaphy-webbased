@@ -3,8 +3,6 @@ import { MatDialog } from "@angular/material/dialog";
 import { BlocklyEditorState } from "src/app/state/blockly-editor.state";
 import { AppState } from "src/app/state/app.state";
 import { DialogState } from "src/app/state/dialog.state";
-import { RobotWiredState } from "src/app/state/robot.wired.state";
-import {AppComponent} from "../../../../app.component";
 import {CodeEditorType} from "../../../../domain/code-editor.type";
 
 @Component({
@@ -22,10 +20,6 @@ export class ButtonBarComponent {
     }
     public onSideNavToggled() {
         this.blocklyState.setIsSideNavOpenToggled();
-    }
-
-    public isSerialMonitorAvailable() {
-        return this.appState.getSelectedRobotType() !== AppState.microPythonRobotType;
     }
 
     public onShowSerialOutputClicked() {

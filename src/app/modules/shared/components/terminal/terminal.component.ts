@@ -2,7 +2,6 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {FunctionsUsingCSI, NgTerminal} from "ng-terminal";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
 import {PythonUploaderService} from "../../../../services/python-uploader/PythonUploader.service";
-import {DialogState} from "../../../../state/dialog.state";
 
 @Component({
     selector: 'app-terminal',
@@ -18,7 +17,6 @@ export class TerminalComponent implements AfterViewInit {
     constructor(
         private robotWireState: RobotWiredState,
         private pythonUploader: PythonUploaderService,
-        private dialogState: DialogState
 ) {}
 
 

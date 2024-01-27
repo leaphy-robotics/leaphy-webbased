@@ -1,10 +1,8 @@
-import {Responses} from "../../arduino-uploader/stk500";
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder("utf-8");
 
 const REPL = 0x01;
-const LEAVE_REPL = 0x02;
 const EOF = 0x04;
 const RAW_END_OF_RESPONSE= 62;
 
@@ -33,7 +31,7 @@ async function readResponse(reader: ReadableStreamDefaultReader<Uint8Array>, tim
         if (fullReadResponse[fullReadResponse.length - 1] === RAW_END_OF_RESPONSE) {
             fullReadResponse = fullReadResponse.slice(0, fullReadResponse.length - 1);
             stdOut = decoder.decode(fullReadResponse.slice(0, fullReadResponse.indexOf(EOF)));
-            stdErr = decoder.decode(fullReadResponse.slice(fullReadResponse.indexOf(EOF), fullReadResponse.lastIndexOf(EOF) -1));
+            stdErr = decoder.decode(fullReadResponse.slice(fullReadResponse.indexOf(EOF), fullReadResponse.lastIndexOf(EOF) - 1));
             break;
         }
     }
@@ -44,12 +42,7 @@ async function readResponse(reader: ReadableStreamDefaultReader<Uint8Array>, tim
     } else {
         stdOut = stdOut.slice(2)
     }
-    return { stdOut, stdErr, failed };
+    return {stdOut, stdErr, failed};
 }
 
-async function exitReplMode(writer: WritableStreamDefaultWriter) {
-    const exitReplMode = new Uint8Array([LEAVE_REPL]);
-    await writer.write(exitReplMode);
-}
-
-export { enterReplMode, sendCommand, readResponse, exitReplMode }
+export { enterReplMode, sendCommand, readResponse }

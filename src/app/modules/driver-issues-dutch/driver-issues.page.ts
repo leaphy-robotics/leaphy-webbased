@@ -1,4 +1,4 @@
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'driver-issues-dutch-page',
@@ -7,12 +7,5 @@ import { Component, ElementRef } from '@angular/core';
 })
 export class DriverIssuesDutchPage {
 
-  constructor(private elementRef: ElementRef) { }
-
-  scrollTo(targetId: string): void {
-    const targetElement = this.elementRef.nativeElement.querySelector(`#${targetId}`);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
+  constructor() { }
 }

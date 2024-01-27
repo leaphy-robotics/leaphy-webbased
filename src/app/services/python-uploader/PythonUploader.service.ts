@@ -3,7 +3,6 @@ import {sendCommand, enterReplMode, readResponse} from "./comms/BoardCommunicati
 import {put, get, ls, rm, rmdir} from "./filesystem/FileSystem";
 import {Injectable} from "@angular/core";
 import {PackageManager} from "./mip/PackageManager";
-import {DialogState} from "../../state/dialog.state";
 
 @Injectable({
     providedIn: 'root'

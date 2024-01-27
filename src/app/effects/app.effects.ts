@@ -27,7 +27,7 @@ export class AppEffects {
             .subscribe(language => this.translate.use(language.code));
 
 
-        // When the editor change has been confirmed, toggle the codeeditor
+        // When the editor change has been confirmed, toggle the code-editor
         this.appState.isCodeEditorToggleConfirmed$
             .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.codeEditor$))
             .subscribe(([, codeEditorType]) => {
@@ -53,7 +53,6 @@ export class AppEffects {
                         await this.router.navigate(['/pythonEditor'], { skipLocationChange: true });
                         break;
                     default:
-                        //await this.router.navigate(['']);
                         break;
                 }
                 this.appState.setIsCodeEditorToggleConfirmed(false);
