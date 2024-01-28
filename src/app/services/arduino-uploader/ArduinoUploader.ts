@@ -434,6 +434,8 @@ class Arduino {
                     if (this.port == null) {
                         return;
                     }
+                    this.writeStream.releaseLock();
+
                     await this.port.close();
                     await this.port.open({baudRate: 115200});
                 }
