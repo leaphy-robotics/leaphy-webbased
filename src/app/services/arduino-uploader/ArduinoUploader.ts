@@ -400,7 +400,6 @@ class Arduino {
         this.port = this.robotWiredState.getSerialPort();
 
         try {
-            console.log(this.port)
             if (this.port.readable.locked) {
                 await this.port.readable.cancel();
                 this.port.readable.getReader().releaseLock();
