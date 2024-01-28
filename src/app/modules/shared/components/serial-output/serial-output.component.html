@@ -29,7 +29,7 @@
         </canvas>
     </div>
     <div class="serial-output" style="max-height: 50vh" [hidden]="dialogState.isSerialGraphOutputSelected$ | async"  #content>
-        <div class="output-item" *ngFor="let item of (robotWiredState.serialData$ | async)" #messages>
+        <div class="output-item" *ngFor="let item of serialData" #messages>
             <div class="output-time">{{item.time | date:'HH:mm:ss:SSS'}}</div>
             <pre class="output-data">{{item.data}}</pre>
         </div>

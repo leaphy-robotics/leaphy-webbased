@@ -1,5 +1,5 @@
 import {
-    AfterViewInit,
+    AfterViewInit, ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ElementRef,
@@ -19,27 +19,31 @@ import {unparse} from 'papaparse';
 @Component({
     selector: 'app-serial-output',
     templateUrl: './serial-output.component.html',
-    styleUrls: ['./serial-output.component.scss']
+    styleUrls: ['./serial-output.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SerialOutputComponent implements AfterViewInit, OnInit {
 
     @ViewChildren('messages') messages: QueryList<any>;
     @ViewChild('content') content: ElementRef;
 
+    public serialData: { time: Date, data: string }[] = [];
+
 
     constructor(
         public robotWiredState: RobotWiredState,
         public dialogState: DialogState,
         private changeDetectorRef: ChangeDetectorRef,
-        private dialog: MatDialogRef<SerialOutputComponent>
+        private dialog: MatDialogRef<SerialOutputComponent>,
     ) {
     }
 
 
     ngOnInit(): void {
-        this.robotWiredState.serialData$.subscribe(() => {
-            this.changeDetectorRef.detectChanges();
+        this.robotWiredState.serialData$.subscribe(serialData => {
+            this.serialData = serialData;
             this.scrollToBottom();
+            this.changeDetectorRef.detectChanges();
         });
     }
 
