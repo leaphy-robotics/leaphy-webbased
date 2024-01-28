@@ -42,6 +42,10 @@ export class RobotWiredState {
         }, []));
 
 
+    private serialWriteSubject$ = new BehaviorSubject<WritableStreamDefaultWriter<Uint8Array>>(null);
+    public serialWrite$: Observable<WritableStreamDefaultWriter<Uint8Array>> = this.serialWriteSubject$.asObservable();
+
+
     public serialChartDataSets$: Observable<ChartDataset[]> = this.serialData$
         .pipe(map(data => {
             const dataSets: ChartDataset[] = data.reduce((sets, item) => {
@@ -69,6 +73,14 @@ export class RobotWiredState {
 
     public setIncomingSerialData(data: { time: Date, data: string }): void {
         this.serialDataSubject$.next(data);
+    }
+
+    public setSerialWrite(data: WritableStreamDefaultWriter<Uint8Array>): void {
+        this.serialWriteSubject$.next(data);
+    }
+
+    public getSerialWrite(): WritableStreamDefaultWriter<Uint8Array> {
+        return this.serialWriteSubject$.getValue();
     }
 
     public clearSerialData(): void {

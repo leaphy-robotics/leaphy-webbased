@@ -50,6 +50,13 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
     }
   }
 
+  public async write(data: string) {
+    const writer = this.robotWiredState.getSerialWrite();
+    if (!writer) return;
+
+    await writer.write(new TextEncoder().encode(`${data}\n`));
+  }
+
   private subscribeToSerialData() {
     interface SerialData {
       date: Date;
@@ -71,7 +78,7 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    
+
     const link = document.createElement('a');
     if (link.download !== undefined) {
       const url = URL.createObjectURL(blob);

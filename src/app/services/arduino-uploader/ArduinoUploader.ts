@@ -391,21 +391,22 @@ class Arduino {
 
     /**
      * Serial monitor system
-     * @param writableStream The stream to write to
+     * @param outputStream The stream to write to
      */
-    async serialMonitor(writableStream: WritableStream) {
+    async serialMonitor(outputStream: WritableStream) {
         if (this.robotWiredState.getSerialPort() == null) {
             return;
         }
         this.port = this.robotWiredState.getSerialPort();
 
         try {
+            console.log(this.port)
             if (this.port.readable.locked) {
                 await this.port.readable.cancel();
                 this.port.readable.getReader().releaseLock();
             }
             await this.port.close();
-            await this.port.open({baudRate: 115200, flowControl: "hardware", bufferSize: 1024});
+            await this.port.open({baudRate: 115200, bufferSize: 1024});
             const abortController = new AbortController();
 
             const readableStream = this.port.readable;
@@ -414,12 +415,13 @@ class Arduino {
             this.writeStream = this.port.writable.getWriter();
             await this.clearReadBuffer();
             this.readStream.releaseLock();
-            this.writeStream.releaseLock();
-            const pipePromise = readableStream.pipeTo(writableStream, { signal: abortController.signal });
+
+            this.robotWiredState.setSerialWrite(this.writeStream);
+            const pipePromise = readableStream.pipeTo(outputStream, { signal: abortController.signal });
 
             pipePromise.catch((error) => {
                 if (error.toString().includes('Upload started')) {
-                    writableStream.abort("Upload started")
+                    outputStream.abort("Upload started")
                     console.log('Stream aborted');
                 } else if (error.toString().includes('The device has been lost.')) {
                     this.robotWiredState.setSerialPort(null);
