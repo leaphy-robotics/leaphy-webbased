@@ -1,4 +1,4 @@
-import {MatDialogRef} from "@angular/material/dialog";
+import {MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {DialogState} from "src/app/state/dialog.state";
 import {Component} from "@angular/core";
 import {CodeEditorState} from "src/app/state/code-editor.state";

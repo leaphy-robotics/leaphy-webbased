@@ -12,7 +12,7 @@ import {ChartOptions} from 'chart.js';
 import 'chartjs-adapter-moment';
 import {DialogState} from 'src/app/state/dialog.state';
 import {RobotWiredState} from 'src/app/state/robot.wired.state';
-import {MatDialogRef} from "@angular/material/dialog";
+import {MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
 import {unparse} from 'papaparse';
 
 

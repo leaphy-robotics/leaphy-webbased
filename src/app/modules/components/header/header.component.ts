@@ -9,7 +9,7 @@ import {Language} from 'src/app/domain/language';
 import {Router} from "@angular/router";
 import {CodeEditorType} from "../../../domain/code-editor.type";
 import {RobotWiredState} from "../../../state/robot.wired.state";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatLegacySnackBar as MatSnackBar} from "@angular/material/legacy-snack-bar";
 import JSZip from 'jszip';
 
 @Component({

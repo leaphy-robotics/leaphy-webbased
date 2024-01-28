@@ -7,7 +7,7 @@ import { AppState } from '../state/app.state';
 import { WorkspaceStatus } from '../domain/workspace.status';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { NameFileDialog } from "../modules/core/dialogs/name-file/name-file.dialog";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { VariableDialog } from "../modules/core/dialogs/variable/variable.dialog";
 import { UploadDialog } from "../modules/core/dialogs/upload/upload.dialog";
 import { Router } from "@angular/router";

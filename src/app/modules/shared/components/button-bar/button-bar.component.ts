@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
 import { BlocklyEditorState } from "src/app/state/blockly-editor.state";
 import { AppState } from "src/app/state/app.state";
 import { DialogState } from "src/app/state/dialog.state";
