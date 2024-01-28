@@ -33,7 +33,7 @@ export class LeaphyBlocklyComponent implements AfterViewInit {
             })
 
             const backpack = new Backpack(workspace, {
-                allowEmptyBackpackOpen: true
+                allowEmptyBackpackOpen: false
             });
             backpack.setContents(JSON.parse(localStorage.getItem('backpack')) || []);
             workspace.addChangeListener((event: Blockly.Events.Abstract) => {
