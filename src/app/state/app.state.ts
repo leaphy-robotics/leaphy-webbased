@@ -5,7 +5,6 @@ import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
-import packageJson from '../../../package.json';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
 
@@ -51,12 +50,18 @@ export class AppState {
         'l_nano': AppState.arduinoNanoRobotType,
         'l_micropython': AppState.microPythonRobotType
     }
+
+    public releaseInfoSubject$ = new BehaviorSubject<any>(null);
+    public releaseInfo$: Observable<any> = this.releaseInfoSubject$.asObservable();
+
+
     /* eslint-enable max-len */
 
     private defaultLanguage = new Language('nl', 'Nederlands')
     private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
 
     constructor(private localStorage: LocalStorageService, private dialog: MatDialog) {
+
         this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
         this.isDesktop$ = this.isDesktopSubject$.asObservable();
         this.availableRobotTypes$ = this.isDesktop$
@@ -72,10 +77,9 @@ export class AppState {
 
         this.canChangeCodeEditor$ = this.selectedRobotType$
             .pipe(filter(robotType => !!robotType))
-            .pipe(map(robotType => robotType !== AppState.genericRobotType))
+            .pipe(map(robotType => robotType !== AppState.genericRobotType));
 
-        this.packageJsonVersionSubject$ = new BehaviorSubject(packageJson.version);
-        this.packageJsonVersion$ = this.packageJsonVersionSubject$.asObservable();
+
     }
 
     private isDesktopSubject$: BehaviorSubject<boolean>;
@@ -105,9 +109,6 @@ export class AppState {
     public codeEditor$ = this.codeEditorSubject$.asObservable();
 
     public canChangeCodeEditor$: Observable<boolean>;
-
-    private packageJsonVersionSubject$: BehaviorSubject<string>;
-    public packageJsonVersion$: Observable<string>;
 
     public setSelectedRobotType(robotType: RobotType) {
         // Intercept flitz robots and ask what type of flitz robot: nano, or uno

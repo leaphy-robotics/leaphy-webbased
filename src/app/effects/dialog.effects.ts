@@ -7,6 +7,7 @@ import { InfoDialog } from '../modules/core/dialogs/info/info.dialog';
 import { ConfirmEditorDialog } from '../modules/core/dialogs/confirm-editor/confirm-editor.dialog';
 import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/language-select.dialog';
 import {SerialOutputComponent} from "../modules/shared/components/serial-output/serial-output.component";
+import {AppState} from "../state/app.state";
 import {LibraryManagerComponent} from "../modules/shared/components/library-manager/library-manager.component";
 
 @Injectable({
@@ -17,6 +18,7 @@ import {LibraryManagerComponent} from "../modules/shared/components/library-mana
 export class DialogEffects {
 
     constructor(
+        private appState: AppState,
         private dialogState: DialogState,
         private dialog: MatDialog,
     ) {
@@ -80,8 +82,16 @@ export class DialogEffects {
                 this.dialog.open(CreditsDialog, {
                     width: '800px',
                     disableClose: true,
+                }).afterClosed().subscribe(() => {
+                    (async () => {
+                        this.appState.releaseInfoSubject$.next(await fetch("https://api.github.com/repos/leaphy-robotics/leaphy-webbased/releases/latest").then(response => response.json()));
+                    })();
                 });
             });
+        } else {
+            (async () => {
+                this.appState.releaseInfoSubject$.next(await fetch("https://api.github.com/repos/leaphy-robotics/leaphy-webbased/releases/latest").then(response => response.json()));
+            })();
         }
     }
 }
