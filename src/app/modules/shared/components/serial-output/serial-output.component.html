@@ -34,4 +34,8 @@
             <pre class="output-data">{{item.data}}</pre>
         </div>
     </div>
+
+    <form #sendForm="ngForm" (ngSubmit)="write(sendForm.value.data); sendForm.reset()">
+        <input class="serial-prompt" [placeholder]="'SERIAL_PROMPT_PLACEHOLDER' | translate" type="text" name="data" ngModel>
+    </form>
 </div>

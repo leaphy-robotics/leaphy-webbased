@@ -36,7 +36,7 @@ export class RobotWiredEffects {
                     return;
                 const robotWiredState = this.robotWiredState;
 
-                const writableStream = new WritableStream({
+                const outputStream = new WritableStream({
                     start: async () => {
                         this.logBuffer = "";
                     },
@@ -70,7 +70,7 @@ export class RobotWiredEffects {
                     },
                 });
 
-                this.webserial.serialMonitor(writableStream);
+                this.webserial.serialMonitor(outputStream);
             });
     }
 

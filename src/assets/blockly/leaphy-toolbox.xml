@@ -24,6 +24,11 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
 		</block>
+        <block type="leaphy_serial_available">
+        </block>
+        <sep gap="8"></sep>
+        <block type="leaphy_serial_read_line">
+        </block>
 	</category>
 	<category id="l_flitz_uno" toolboxitemid="l_flitz_uno" name="%{BKY_LEAPHY_FLITZ_CATEGORY}" categorystyle="leaphy_category">
 		<block type="leaphy_flitz_read_stomach_sensor">
@@ -165,6 +170,11 @@
 		</block>
 		<block type="leaphy_original_get_distance">
 		</block>
+        <block type="leaphy_serial_available">
+        </block>
+        <sep gap="8"></sep>
+        <block type="leaphy_serial_read_line">
+        </block>
 	</category>
 	<category id="l_uno" toolboxitemid="l_uno_sensors" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
 		<sep gap="8"></sep>
@@ -187,9 +197,13 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_rgb_color">
 		</block>
-		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
 		</block>
+        <sep gap="8"></sep>
+        <block type="leaphy_serial_available">
+        </block>
+        <block type="leaphy_serial_read_line">
+        </block>
 	</category>
 	<category id="l_wifi" toolboxitemid="l_wifi" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
 	</category>
@@ -875,6 +889,11 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
 		</block>
+        <block type="leaphy_serial_available">
+        </block>
+        <sep gap="8"></sep>
+        <block type="leaphy_serial_read_line">
+        </block>
 	</category>
 	<category id="l_nano_actuators" toolboxitemid="l_nano_actuators" name="%{BKY_ACTUATOREN_CATEGORY}" categorystyle="leaphy_category">
 		<block type="leaphy_original_set_led">

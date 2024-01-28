@@ -32,13 +32,23 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
         public dialogState: DialogState,
         private changeDetectorRef: ChangeDetectorRef,
         private dialog: MatDialogRef<SerialOutputComponent>
-    ) { }
+    ) {
+    }
+
 
     ngOnInit(): void {
         this.robotWiredState.serialData$.subscribe(() => {
             this.changeDetectorRef.detectChanges();
             this.scrollToBottom();
         });
+    }
+
+
+    public async write(data: string) {
+        const writer = this.robotWiredState.getSerialWrite();
+        if (!writer) return;
+
+        await writer.write(new TextEncoder().encode(`${data}\n`));
     }
 
 
@@ -62,21 +72,21 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
             newDate.setMinutes(timeArr[1]);
             newDate.setSeconds(timeArr[2]);
             newDate.setMilliseconds(timeArr[3]);
-        
+
             dataJson.push({
                 date: newDate.toLocaleDateString(),
                 time: newDate.toLocaleTimeString(),
                 data: dataArr[i].slice(1)
             })
         }
-            
+
         let filename = 'serial_monitor_export.csv'
 
         const csv = unparse(dataJson, {
             header: true
         });
 
-        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
 
         const link = document.createElement('a');
         if (link.download !== undefined) {
@@ -86,7 +96,8 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }}
+        }
+    }
 
     ngAfterViewInit() {
         //https://stackoverflow.com/a/45655337/1056283

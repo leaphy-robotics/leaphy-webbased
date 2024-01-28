@@ -1,7 +1,5 @@
 #container {
   width: 100%;
-  height: calc(100% - 64px);
-  max-height: 50vh;
 }
 
 #header:hover {
@@ -68,4 +66,16 @@
 .serial-output-backdrop {
   pointer-events: all; /* Allow interaction with elements behind the dialog */
   background-color: rgba(0, 0, 0, 0.5); /* Customize the backdrop color if needed */
+}
+
+.serial-prompt {
+    background: var(--leaphy-color-primary);
+    color: var(--leaphy-color-light);
+    border: none;
+    width: 100%;
+    padding: 5px;
+}
+
+.serial-prompt::placeholder {
+    color: var(--leaphy-color-light);
 }

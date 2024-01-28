@@ -41,6 +41,7 @@
     "WORKSPACE_SAVE_CANCELLED": "Saving project cancelled",
     "WORKSPACE_SAVED": "Project saved",
     "SERIAL_OUTPUT": "Show output on screen",
+    "SERIAL_PROMPT_PLACEHOLDER": "Send message to robot...",
     "LIBRARY_MANAGER": "Library manager",
     "ATTRIBUTION": "by",
     "INSTALL_LIBRARY": "Install",
