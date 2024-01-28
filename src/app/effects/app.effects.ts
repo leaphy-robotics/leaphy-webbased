@@ -3,12 +3,12 @@ import { AppState } from '../state/app.state';
 import { TranslateService } from '@ngx-translate/core';
 import { BackEndState } from '../state/backend.state';
 import { filter, withLatestFrom } from 'rxjs/operators';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { StatusMessageDialog } from '../modules/core/dialogs/status-message/status-message.dialog';
 import { Router } from '@angular/router';
 import { CodeEditorType } from '../domain/code-editor.type';
 import {LocalStorageService} from "../services/localstorage.service";
-import {MatLegacyDialog as MatDialog} from "@angular/material/legacy-dialog";
+import {MatDialog} from "@angular/material/dialog";
 import {ChangeLogDialog} from "../modules/core/dialogs/change-log/change-log.dialog";
 import showdown from "showdown";
 

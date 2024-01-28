@@ -52,13 +52,13 @@
                 </button>
 
                 <ng-container *ngIf="this.appState.selectedRobotType$ | async">
-                    <button mat-flat-button *ngIf="(appState.selectedRobotType$ | async) !== AppState.microPythonRobotType" (click)="onRunClicked()">
+                    <button color="primary" mat-flat-button class="text-color-white" *ngIf="(appState.selectedRobotType$ | async) !== AppState.microPythonRobotType" (click)="onRunClicked()">
                         {{ "UPLOAD" | translate }}
                     </button>
-                    <button mat-flat-button *ngIf="(appState.selectedRobotType$ | async) === AppState.microPythonRobotType" (click)="onConnectClicked()">
+                    <button color="primary" mat-flat-button class="text-color-white" *ngIf="(appState.selectedRobotType$ | async) === AppState.microPythonRobotType" (click)="onConnectClicked()">
                         {{ "CONNECT_PYTHON_ROBOT" | translate }}
                     </button>
-                    <button mat-flat-button *ngIf="(robotWiredState.isPythonDeviceConnected$ | async) === true" (click)="onRunClicked()" [disabled]="(robotWiredState.isPythonCodeRunning$ | async) === true">
+                    <button color="primary" mat-flat-button class="text-color-white" *ngIf="(robotWiredState.isPythonDeviceConnected$ | async) === true" (click)="onRunClicked()" [disabled]="(robotWiredState.isPythonCodeRunning$ | async) === true">
                         {{ "RUN_CODE" | translate }}
                     </button>
                 </ng-container>
@@ -67,7 +67,7 @@
     </div>
 </mat-toolbar>
 
-<mat-menu #projectMenu="matMenu" class="matmenus">
+<mat-menu #projectMenu="matMenu" class="matmenus font-size-menu" >
     <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onNewProjectClicked()">
         <mat-icon>insert_drive_file</mat-icon>
         <span>{{ "NEW" | translate }}</span>

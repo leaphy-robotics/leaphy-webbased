@@ -7,7 +7,7 @@ import { AppState } from '../state/app.state';
 import { WorkspaceStatus } from '../domain/workspace.status';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { NameFileDialog } from "../modules/core/dialogs/name-file/name-file.dialog";
-import { MatLegacyDialog as MatDialog } from "@angular/material/legacy-dialog";
+import { MatDialog } from "@angular/material/dialog";
 import { VariableDialog } from "../modules/core/dialogs/variable/variable.dialog";
 import { UploadDialog } from "../modules/core/dialogs/upload/upload.dialog";
 import { Router } from "@angular/router";
@@ -326,8 +326,7 @@ export class BackendWiredEffects {
 				}
 				break;
 			case 'restore-workspace-code':
-				const robot = args[0];
-				if (robot == AppState.microPythonRobotType.id) {
+				if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
 					this.dialog.open(FileExplorerDialog, {
                         width: '75vw', disableClose: true,
                     }).afterClosed().subscribe((result) => {

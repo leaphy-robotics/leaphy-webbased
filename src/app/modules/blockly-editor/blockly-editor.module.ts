@@ -12,6 +12,5 @@ import { SharedModule } from '../shared/shared.module';
         SharedModule
     ],
     exports: [LeaphyBlocklyComponent, CodeViewComponent],
-    entryComponents: []
 })
 export class BlocklyEditorModule { }

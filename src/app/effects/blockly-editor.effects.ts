@@ -30,6 +30,13 @@ import {
 import {categoryStyles, componentStyles, defaultBlockStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
 import {LeaphyCategory} from "../services/toolbox/category";
 import {LeaphyToolbox} from "../services/toolbox/toolbox";
+import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
+import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
+
+const translationsMap = {
+    en: translationsEn.default,
+    nl: translationsNl.default,
+}
 
 const Extensions = Blockly.Extensions;
 
@@ -92,8 +99,9 @@ export class BlocklyEditorEffects {
         this.appState.currentLanguage$
             .pipe(filter(language => !!language))
             .subscribe(async language => {
-                const translations = await import(`node_modules/@leaphy-robotics/leaphy-blocks/msg/js/${language.code}.js`);
-                Blockly.setLocale(translations.default);
+                // import translations from the language file @leaphy-robotics/leaphy-blocks/msg/js/${language.code}.js
+                const translations = translationsMap[language.code];
+                Blockly.setLocale(translations);
             });
 
         // When the language is changed, save the workspace temporarily

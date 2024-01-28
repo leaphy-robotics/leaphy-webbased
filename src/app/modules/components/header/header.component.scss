@@ -135,3 +135,18 @@ button mat-icon + span {
   border-top-color: #000000;
   animation: spinner 0.8s linear infinite;
 }
+
+.mat-toolbar {
+    color: white !important;
+    font-size: 14px !important;
+}
+
+.text-color-white {
+    color: white !important;
+}
+
+.font-size-menu {
+   button {
+       font-size: 12px !important;
+   }
+}

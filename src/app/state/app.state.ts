@@ -5,7 +5,7 @@ import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
 
 @Injectable({

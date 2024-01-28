@@ -15,12 +15,11 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser",
+                    "builder": "@angular-devkit/build-angular:browser-esbuild",
                     "options": {
                         "outputPath": "dist/",
                         "index": "src/index.html",
                         "main": "src/main.ts",
-                        "polyfills": "src/polyfills.ts",
                         "tsConfig": "tsconfig.app.json",
                         "aot": true,
                         "assets": [
@@ -45,7 +44,8 @@
                         "styles": [
                             "node_modules/bootstrap/dist/css/bootstrap.min.css",
                             "node_modules/@fortawesome/fontawesome-free/css/all.css",
-                            "src/styles.scss"
+                            "src/styles.scss",
+                            "src/theme.scss"
                         ],
                         "scripts": [
                             "./node_modules/jquery/dist/jquery.min.js",
@@ -115,7 +115,6 @@
                     "builder": "@angular-devkit/build-angular:karma",
                     "options": {
                         "main": "src/test.ts",
-                        "polyfills": "src/polyfills.ts",
                         "tsConfig": "tsconfig.spec.json",
                         "karmaConfig": "karma.conf.js",
                         "assets": [
@@ -124,6 +123,7 @@
                         ],
                         "styles": [
                             "src/styles.scss",
+                            "src/theme.scss",
                             "./node_modules/bootstrap/@fortawesome/fontawesome-free/css/all.css"
                         ],
                         "scripts": []
@@ -153,9 +153,10 @@
             }
         }
     },
-    "defaultProject": "leaphy-client",
     "cli": {
-        "defaultCollection": "@angular-eslint/schematics",
-        "analytics": "6d8c3839-2848-4328-b7fb-a10f9273fdfc"
+      "analytics": "6d8c3839-2848-4328-b7fb-a10f9273fdfc",
+        "schematicCollections": [
+          "@angular-eslint/schematics"
+        ]
     }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { filter } from 'rxjs/operators';
 import { DialogState } from '../state/dialog.state';
 import { CreditsDialog } from '../modules/core/dialogs/credits/credits.dialog';

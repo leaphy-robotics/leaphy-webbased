@@ -53,7 +53,8 @@ export function createTranslateLoader(http: HttpClient) {
             routeTracking: {
                 enable: true
             }
-        }), CoreModule
+        }),
+        CoreModule
     ],
     providers: [
         // Initialize the Effects on startup

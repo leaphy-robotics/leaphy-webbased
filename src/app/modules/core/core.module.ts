@@ -44,9 +44,8 @@ import {ChangeLogDialog} from "./dialogs/change-log/change-log.dialog";
         CommonModule,
         SharedModule,
         NgOptimizedImage,
-        DragDropModule
+        DragDropModule,
     ],
-    entryComponents: [ConfirmEditorDialog, StatusMessageDialog, CreditsDialog, LanguageSelectDialog, InfoDialog],
     exports: [
         HeaderComponent,
         StartComponent,

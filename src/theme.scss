@@ -1,0 +1,32 @@
+@use '@angular/material' as mat;
+@include mat.core();
+
+$light-mode-palette: (
+    50: transparent,
+    100: #b2dfdb,
+    200: #80cbc4,
+    300: #4db6ac,
+    400: #26a69a,
+    500: #009688,
+    600: #00897b,
+    700: #00796b,
+    800: #00695c,
+    900: #004d40,
+    A100: #32a5a9,
+    contrast: ()
+);
+
+$leaphy-color-accent: mat.define-palette($light-mode-palette, 50);
+$leaphy-color-primary: mat.define-palette($light-mode-palette, A100);
+$leaphy-color-warn: mat.define-palette($light-mode-palette, 900);
+
+$light-mode: mat.define-light-theme((
+    color: (
+        primary: $leaphy-color-primary,
+        accent: $leaphy-color-accent,
+        warn: $leaphy-color-warn,
+    ),
+    typography: mat.define-legacy-typography-config(),
+));
+
+@include mat.all-component-themes($light-mode);

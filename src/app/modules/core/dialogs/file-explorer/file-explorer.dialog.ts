@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { AppState } from 'src/app/state/app.state';
 import {PythonUploaderService} from "../../../../services/python-uploader/PythonUploader.service";
 import {BackEndState} from "../../../../state/backend.state";

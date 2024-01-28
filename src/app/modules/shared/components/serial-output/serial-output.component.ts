@@ -12,7 +12,7 @@ import {ChartOptions} from 'chart.js';
 import 'chartjs-adapter-moment';
 import {DialogState} from 'src/app/state/dialog.state';
 import {RobotWiredState} from 'src/app/state/robot.wired.state';
-import {MatLegacyDialogRef as MatDialogRef} from "@angular/material/legacy-dialog";
+import {MatDialogRef} from "@angular/material/dialog";
 import {unparse} from 'papaparse';
 
 
@@ -62,14 +62,14 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
             newDate.setMinutes(timeArr[1]);
             newDate.setSeconds(timeArr[2]);
             newDate.setMilliseconds(timeArr[3]);
-        
+
             dataJson.push({
                 date: newDate.toLocaleDateString(),
                 time: newDate.toLocaleTimeString(),
                 data: dataArr[i].slice(1)
             })
         }
-            
+
         let filename = 'serial_monitor_export.csv'
 
         const csv = unparse(dataJson, {
