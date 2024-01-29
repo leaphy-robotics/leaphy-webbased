@@ -83,6 +83,15 @@ mat-button-toggle {
   width: 35px;
   height: 35px;
   min-width: auto;
+  align-content: center;
+
+  mat-icon {
+    width: 100%;
+    height: 100%;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 #user-mode-toggle {
@@ -137,16 +146,16 @@ button mat-icon + span {
 }
 
 .mat-toolbar {
-    color: white !important;
-    font-size: 14px !important;
+  color: white !important;
+  font-size: 14px !important;
 }
 
 .text-color-white {
-    color: white !important;
+  color: white !important;
 }
 
 .font-size-menu {
-   button {
-       font-size: 12px !important;
-   }
+  button {
+    font-size: 12px !important;
+  }
 }
