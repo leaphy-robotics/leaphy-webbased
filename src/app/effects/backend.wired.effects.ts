@@ -260,7 +260,7 @@ export class BackendWiredEffects {
 			case 'open-log-file':
 				// Open a module to view the log file so .op
 				this.dialog.open(DebugInformationDialog, {
-					width: '450px', disableClose: false,
+					disableClose: false,
 				});
 				break;
 			case 'restore-workspace':
