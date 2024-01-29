@@ -1470,6 +1470,11 @@
     "@babel/helper-validator-identifier" "^7.22.15"
     to-fast-properties "^2.0.0"
 
+"@blockly/workspace-backpack@^5.3.3":
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/@blockly/workspace-backpack/-/workspace-backpack-5.3.3.tgz#e5af9abe41080aa0d0754b1a1220e938a273dbe7"
+  integrity sha512-xUbLabn0DJN0pxBnWjXFJ8BxcFtFQ4O6JDo12FLFSkTZXTg+UGrne9Uhww2MwOVrOCBSDoNLQop9LWYjUpHS/w==
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz"
@@ -1749,10 +1754,10 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
-"@leaphy-robotics/leaphy-blocks@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.8.0.tgz#8989c392ab98660286a4a3497f4cfdd03b92ca38"
-  integrity sha512-IA86KJRI9+strLsaycHZoScsQCP4JtuiplIHk3VrlwJ6mRqFjwLe58x1Aq9JzgURVRCnbsTkw+WeZjBP3wokOw==
+"@leaphy-robotics/leaphy-blocks@1.8.1":
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.8.1.tgz#a1920b3d5bbe8fb967366f1b3d52f36cb59eaaec"
+  integrity sha512-a2MTTNXFMbWqQMPibaOj6aomtkvOOMS3W1/75iZhGnNQ5DUES/Lv0tw4ksVgKFh0dHI9A8ICoUlQskjMmRc7SA==
   dependencies:
     blockly "^10.1.3"
     typescript "4.3.2"
