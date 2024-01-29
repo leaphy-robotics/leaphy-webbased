@@ -18,6 +18,7 @@ import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-exp
 import {CodeEditorState} from "../state/code-editor.state";
 import {PythonUploaderService} from "../services/python-uploader/PythonUploader.service";
 import {LocationSelectDialog} from "../modules/core/dialogs/location-select/location-select.dialog";
+import {PythonFile} from "../domain/python-file.type";
 
 
 const fileExtensions = [
@@ -252,8 +253,12 @@ export class BackendWiredEffects {
                 }
 				// @ts-ignore
 				const response = await window.showOpenFilePicker();
-				const file: File = await response[0].getFile();
-				const content = await file.text();
+				const file: FileSystemFileHandle = await response[0];
+				let content : any = await file.getFile();
+                content = await content.text();
+				// create writable and destroy it
+				const writable = await file.createWritable();
+				writable.close();
 
 
 				if (!fileExtensions.includes(file.name.substring(file.name.lastIndexOf('.'))))
@@ -299,14 +304,15 @@ export class BackendWiredEffects {
 				const workspaceTemp = sessionStorage.getItem('workspace');
 				const robotType = sessionStorage.getItem('robotType');
 				const type = sessionStorage.getItem('type');
+				this.blocklyState.setProjectFileHandle(null);
+				this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
 				if (type == 'beginner' && this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
 					if (robotType != this.appState.getSelectedRobotType().id) {
 						return;
 					}
 					try {
 						this.blocklyState.setWorkspaceXml(workspaceTemp);
-						this.blocklyState.setProjectFileHandle(null);
-						this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+
 					} catch (error) {
 						console.log('Error:', error.message);
 					}
@@ -327,21 +333,45 @@ export class BackendWiredEffects {
 						console.log('Error:', error.message);
 					}
 				}
+
+				// remove the entries from session storage
+				sessionStorage.removeItem('workspace');
+				sessionStorage.removeItem('robotType');
+				sessionStorage.removeItem('type');
+
 				break;
 			case 'restore-workspace-code':
 				if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
 					this.dialog.open(FileExplorerDialog, {
                         width: '75vw', disableClose: true,
-                    }).afterClosed().subscribe((result) => {
-                        if (result) {
-                            console.log(this.codeEditorState.getAceEditor());
-                            console.log(this.codeEditorState.getAceEditor().session);
-                            this.codeEditorState.getAceEditor().session.setValue(result);
-                            this.codeEditorState.setOriginalCode(result);
-                            this.codeEditorState.setCode(result);
+                    }).afterClosed().subscribe(async (fileName) =>  {
+                        if (fileName) {
+							const content = await this.uploaderService.runFileSystemCommand('get', fileName);
+                            this.codeEditorState.getAceEditor().session.setValue(content);
+                            this.codeEditorState.setOriginalCode(content);
+                            this.codeEditorState.setCode(content);
+							this.blocklyState.setProjectFileHandle(new PythonFile(fileName));
                         }
                     });
 				}
+				break;
+            case 'save-workspace':
+                if (this.blocklyState.getProjectFileHandle()) {
+                    console.log(this.blocklyState.getProjectFileHandle());
+                    const file = this.blocklyState.getProjectFileHandle();
+	                if (file instanceof PythonFile) {
+		                return
+	                }
+	                const writable = await file.createWritable();
+                    if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+                        await writable.write({type: 'write', data: this.blocklyState.workspaceXml, position: 0});
+                    } else {
+                        await writable.write({type: 'write', data: this.codeEditorState.getCode(), position: 0});
+                    }
+                    await writable.close();
+                } else {
+                    await this.send('save-workspace-as');
+                }
 				break;
 			default:
 				console.log(channel);

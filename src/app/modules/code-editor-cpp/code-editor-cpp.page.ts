@@ -4,6 +4,8 @@ import {BackendWiredEffects} from "../../effects/backend.wired.effects";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
 import {CoreModule} from "../core/core.module";
+import {PythonFile} from "../../domain/python-file.type";
+import {BlocklyEditorState} from "../../state/blockly-editor.state";
 
 
 @Component({
@@ -21,13 +23,28 @@ export class CodeEditorCppPage implements AfterViewInit {
 
     @ViewChild("editor") private editor: ElementRef<HTMLElement>;
 
-    constructor(private backendWiredEffects: BackendWiredEffects, private codeEditorState: CodeEditorState) {}
+    constructor(
+        private backendWiredEffects: BackendWiredEffects,
+        private codeEditorState: CodeEditorState,
+        private blocklyState: BlocklyEditorState
+    ) {}
 
     ngAfterViewInit(): void {
         this.codeEditorState.setAceElement(this.editor);
 
-        window.addEventListener("beforeunload", () => {
-            this.backendWiredEffects.send('save-workspace-temp', {data: this.codeEditorState.getCode()})
+        window.addEventListener("beforeunload", async () => {
+            if (this.blocklyState.getProjectFileHandle()) {
+                const file = this.blocklyState.getProjectFileHandle();
+                if (!(file instanceof PythonFile)) {
+                    const currentContent = await (await file.getFile()).text();
+                    if (currentContent == this.codeEditorState.getCode()) {
+                        return;
+                    }
+                    this.backendWiredEffects.send('save-workspace', {data: this.codeEditorState.getCode()});
+                }
+            } else {
+                this.backendWiredEffects.send('save-workspace-temp', {data: this.codeEditorState.getCode()});
+            }
         });
     }
 }

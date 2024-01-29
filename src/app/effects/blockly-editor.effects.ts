@@ -331,7 +331,6 @@ export class BlocklyEditorEffects {
                             this.appState.setSelectedRobotType(AppState.genericRobotType);
                             return;
                         } else if (message.payload.type == 'python') {
-                            console.log(message.payload.data as string)
                             this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
                             this.codeEditorState.setOriginalCode(message.payload.data as string);
                             this.codeEditorState.setCode(message.payload.data as string);

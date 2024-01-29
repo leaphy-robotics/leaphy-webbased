@@ -9,6 +9,7 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-c";
 import "prismjs/components/prism-cpp";
 import "prismjs/components/prism-arduino";
+import {PythonFile} from "../domain/python-file.type";
 
 declare var Prism: any;
 
@@ -87,7 +88,7 @@ export class BlocklyEditorState {
     private workspaceXmlSubject$ = new BehaviorSubject(null);
     public workspaceXml$ = this.workspaceXmlSubject$.asObservable();
 
-    private projectFileHandleSubject$ = new BehaviorSubject<File>(null);
+    private projectFileHandleSubject$ = new BehaviorSubject<FileSystemFileHandle | PythonFile>(null);
     public projectFileHandle$ = this.projectFileHandleSubject$.asObservable();
 
     private undoSubject$ = new BehaviorSubject<boolean>(false);
@@ -139,8 +140,17 @@ export class BlocklyEditorState {
         this.workspaceXmlSubject$.next(workspaceXml);
     }
 
-    public setProjectFileHandle(path: File) {
+    public setProjectFileHandle(path: FileSystemFileHandle | PythonFile) {
+        if (path instanceof PythonFile) {
+            console.log("Setting project file handle to: " + path.path);
+        } else if (path === null) {
+            console.log("Setting project file handle to null");
+        }
         this.projectFileHandleSubject$.next(path);
+    }
+
+    public getProjectFileHandle(): FileSystemFileHandle | PythonFile {
+        return this.projectFileHandleSubject$.getValue();
     }
 
     public setUndo(redo: boolean) {

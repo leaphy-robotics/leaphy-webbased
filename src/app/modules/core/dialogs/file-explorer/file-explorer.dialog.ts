@@ -51,8 +51,13 @@ export class FileExplorerDialog {
     }
 
     public async openFile(filename: string) {
-        filename = this.currentPath + '/' + filename;
-        const content = await this.upload.runFileSystemCommand('get', filename);
-        this.dialogRef.close(content);
+
+        if (filename[-1] == '/') {
+            filename = this.currentPath + '/' + filename;
+        } else {
+            filename = this.currentPath + filename;
+        }
+        console.log(filename)
+        this.dialogRef.close(filename);
     }
 }

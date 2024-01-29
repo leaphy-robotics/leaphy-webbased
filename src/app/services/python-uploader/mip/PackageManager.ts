@@ -83,8 +83,23 @@ export class PackageManager {
             }
 
             for (const file of content) {
-                await rm(writer, reader, file['name']);
-                await put(writer, reader, file['name'], file['content'])
+                const filename = file['name'];
+                let content = file['content'];
+                await rm(writer, reader, filename);
+                if (filename.endsWith('.py') || filename.endsWith('.py/')) {
+                    // make a post request with the content in base64 to minify the code, https://webservice.leaphyeasybloqs.com/compile/cpp' then write the returned base64 to the file
+                    const response = await fetch('https://webservice.leaphyeasybloqs.com/minify/python', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({source_code: btoa(content), filename: filename}),
+                    });
+                    const json = await response.json();
+                    content = atob(json['source_code']);
+                }
+                // make sure the dir above exists and above that
+                await put(writer, reader, filename, content)
             }
             await rm(writer, reader, '/lib/' + PackageManager.getLibraryName(url) + '.json');
             json = {version: version}
