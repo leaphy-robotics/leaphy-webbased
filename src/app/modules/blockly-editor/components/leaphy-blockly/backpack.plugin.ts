@@ -53,5 +53,12 @@ Backpack.prototype.initFlyout = function() {
     parentNode?.appendChild(this.flyout_?.createDom(Blockly.utils.Svg.SVG));
     this.flyout_.init(this.workspace_);
 }
+Backpack.prototype.addBlock = function(block: Blockly.Block) {
+    if (block.type === 'leaphy_start') {
+        return this.addBlocks(block.getChildren(false));
+    }
+
+    this.addItem(this.blockToJsonString(block));
+}
 
 export { Backpack };
