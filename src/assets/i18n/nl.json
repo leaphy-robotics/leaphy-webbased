@@ -41,6 +41,7 @@
     "WORKSPACE_SAVE_CANCELLED": "Project opslaan geannuleerd",
     "WORKSPACE_SAVED": "Project opgeslagen",
     "SERIAL_OUTPUT": "Toon output op scherm",
+    "SERIAL_PROMPT_PLACEHOLDER": "Stuur bericht naar robot...",
     "LIBRARY_MANAGER": "Bibliotheek beheer",
     "ATTRIBUTION": "door",
     "INSTALL_LIBRARY": "Installeer",
