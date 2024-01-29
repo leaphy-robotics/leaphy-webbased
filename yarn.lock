@@ -1659,7 +1659,7 @@
 "@blockly/workspace-backpack@^5.3.3":
   version "5.3.3"
   resolved "https://registry.yarnpkg.com/@blockly/workspace-backpack/-/workspace-backpack-5.3.3.tgz#e5af9abe41080aa0d0754b1a1220e938a273dbe7"
-  integrity sha512-xUbLabn0DJN0pxBnWjXFJ8BxcFtFQ4O6JDo12FLFSkTZXTg+UGrne9Uhww2MwOVrOCBSDoNLQop9LWYjUpHS/w=
+  integrity sha512-xUbLabn0DJN0pxBnWjXFJ8BxcFtFQ4O6JDo12FLFSkTZXTg+UGrne9Uhww2MwOVrOCBSDoNLQop9LWYjUpHS/w==
 
 "@colors/colors@1.5.0":
   version "1.5.0"
