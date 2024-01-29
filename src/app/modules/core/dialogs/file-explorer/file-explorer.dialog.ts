@@ -57,7 +57,6 @@ export class FileExplorerDialog {
         } else {
             filename = this.currentPath + filename;
         }
-        console.log(filename)
         this.dialogRef.close(filename);
     }
 }

@@ -19,6 +19,7 @@ import {CodeEditorState} from "../state/code-editor.state";
 import {PythonUploaderService} from "../services/python-uploader/PythonUploader.service";
 import {LocationSelectDialog} from "../modules/core/dialogs/location-select/location-select.dialog";
 import {PythonFile} from "../domain/python-file.type";
+import {RobotWiredState} from "../state/robot.wired.state";
 
 
 const fileExtensions = [
@@ -49,6 +50,7 @@ export class BackendWiredEffects {
         private dialog: MatDialog,
         private codeEditorState: CodeEditorState,
         private uploaderService: PythonUploaderService,
+        private robotWiredState: RobotWiredState
     ) {
 		// Only set up these effects when we're in Desktop mode
 		this.appState.isDesktop$
@@ -158,6 +160,20 @@ export class BackendWiredEffects {
 	public async send(channel: string, ...args): Promise<void> {
 		switch (channel) {
 			case 'save-workspace-as':
+				let onPythonRobot = false;
+				if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+					const result = await this.dialog.open(LocationSelectDialog, {
+						width: '75vw', disableClose: true,
+						data: {options: ["THIS_COMPUTER", "MICROCONTROLLER"]}
+					}).afterClosed().toPromise();
+
+					if (result) {
+						if (result == "Robot") {
+							onPythonRobot = true;
+						}
+					}
+				}
+
 				const fileNamesDialogRef = this.dialog.open(NameFileDialog, {
 					width: '450px', disableClose: true,
 				});
@@ -189,17 +205,27 @@ export class BackendWiredEffects {
 						// delete a after it is clicked
 						a.remove();
 					} else if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
-                        const data = this.codeEditorState.getCode();
-                        const blob = new Blob([data], { type: 'text/plain' });
-                        const url = window.URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = name + '.py';
+						if (onPythonRobot) {
+							if (!this.robotWiredState.getSerialPort()) {
+								this.uploaderService.connect().then(() => {
+									this.uploaderService.runFileSystemCommand('put', name + '.py', this.codeEditorState.getCode());
+								});
+							} else {
+								this.uploaderService.runFileSystemCommand('put', name + '.py', this.codeEditorState.getCode());
+							}
+						} else {
+							const data = this.codeEditorState.getCode();
+							const blob = new Blob([data], {type: 'text/plain'});
+							const url = window.URL.createObjectURL(blob);
+							const a = document.createElement('a');
+							a.href = url;
+							a.download = name + '.py';
 
-                        a.click();
-                        window.URL.revokeObjectURL(url);
-                        // delete a after it is clicked
-                        a.remove();
+							a.click();
+							window.URL.revokeObjectURL(url);
+							// delete a after it is clicked
+							a.remove();
+						}
                     }
 				})
 				break;

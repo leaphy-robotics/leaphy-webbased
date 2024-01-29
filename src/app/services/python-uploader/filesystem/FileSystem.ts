@@ -84,7 +84,6 @@ print(ls("${path}"))`;
     if (failed) {
         throw new Error(stdErr + "'\nWhile getting: " + path);
     }
-    console.log(stdOut);
     return JSON.parse(stdOut);
 }
 

@@ -141,11 +141,6 @@ export class BlocklyEditorState {
     }
 
     public setProjectFileHandle(path: FileSystemFileHandle | PythonFile) {
-        if (path instanceof PythonFile) {
-            console.log("Setting project file handle to: " + path.path);
-        } else if (path === null) {
-            console.log("Setting project file handle to null");
-        }
         this.projectFileHandleSubject$.next(path);
     }
 
