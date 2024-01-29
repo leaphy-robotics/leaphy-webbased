@@ -76,10 +76,9 @@
         <mat-icon>folder</mat-icon>
         <span>{{ "OPEN" | translate }}</span>
     </button>
-    <span mat-menu-item disabled *ngIf="blocklyState.projectName$ | async as projectName">{{ projectName }}</span>
     <button mat-menu-item [disabled]="
       (appState.selectedRobotType$ | async) === null ||
-      (blocklyState.projectFilePath$ | async) === null
+      (blocklyState.projectFileHandle$ | async) === null
     " (click)="onSaveWorkspaceClicked()">
         <mat-icon>save</mat-icon>
         <span>{{ "SAVE" | translate }}</span>

@@ -87,17 +87,8 @@ export class BlocklyEditorState {
     private workspaceXmlSubject$ = new BehaviorSubject(null);
     public workspaceXml$ = this.workspaceXmlSubject$.asObservable();
 
-    private projectFilePathSubject$ = new BehaviorSubject<string>(null);
-    public projectFilePath$ = this.projectFilePathSubject$.asObservable();
-
-    public projectName$ = this.projectFilePath$
-        .pipe(
-            map((filePath) => {
-                if(!filePath) return '';
-                const fileName = filePath.replace(/^.*[\\\/]/, "");
-                return fileName.substring(0, fileName.lastIndexOf(".")) || fileName;
-            })
-        );
+    private projectFileHandleSubject$ = new BehaviorSubject<File>(null);
+    public projectFileHandle$ = this.projectFileHandleSubject$.asObservable();
 
     private undoSubject$ = new BehaviorSubject<boolean>(false);
     public undo$ = this.undoSubject$.asObservable();
@@ -148,8 +139,8 @@ export class BlocklyEditorState {
         this.workspaceXmlSubject$.next(workspaceXml);
     }
 
-    public setProjectFilePath(path: string) {
-        this.projectFilePathSubject$.next(path);
+    public setProjectFileHandle(path: File) {
+        this.projectFileHandleSubject$.next(path);
     }
 
     public setUndo(redo: boolean) {

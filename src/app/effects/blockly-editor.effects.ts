@@ -32,6 +32,7 @@ import {LeaphyCategory} from "../services/toolbox/category";
 import {LeaphyToolbox} from "../services/toolbox/toolbox";
 import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
 import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
+import {CodeEditorState} from "../state/code-editor.state";
 
 const translationsMap = {
     en: translationsEn.default,
@@ -52,6 +53,7 @@ export class BlocklyEditorEffects {
         private backEndState: BackEndState,
         private backEndWiredEffects: BackendWiredEffects,
         private appState: AppState,
+        private codeEditorState: CodeEditorState,
         private http: HttpClient,
     ) {
         // Variables:
@@ -217,6 +219,7 @@ export class BlocklyEditorEffects {
             .pipe(filter(status => status === WorkspaceStatus.Restoring))
             .pipe(withLatestFrom(this.blocklyState.workspaceXml$, this.blocklyState.workspace$))
             .subscribe(async ([, workspaceXml, workspace]) => {
+                if (!workspace) return;
                 workspace.clear();
                 const xml = Blockly.utils.xml.textToDom(workspaceXml);
                 Blockly.Xml.domToWorkspace(xml, workspace);
@@ -272,13 +275,13 @@ export class BlocklyEditorEffects {
 
         // When the code editor is changed, clear the projectFilePath
         this.appState.codeEditor$
-            .subscribe(() => this.blocklyState.setProjectFilePath(''));
+            .subscribe(() => this.blocklyState.setProjectFileHandle(null));
 
         // When an new project is being saved, reset the WorkspaceStatus to SavingAs
         this.blocklyState.workspaceStatus$
             .pipe(filter(status => status === WorkspaceStatus.Saving))
             .pipe(withLatestFrom(
-                this.blocklyState.projectFilePath$
+                this.blocklyState.projectFileHandle$
             ))
             .pipe(filter(([, projectFilePath]) => !projectFilePath))
             .subscribe(() => {
@@ -310,7 +313,7 @@ export class BlocklyEditorEffects {
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
                         break;
                     case 'WORKSPACE_SAVED':
-                        this.blocklyState.setProjectFilePath(message.payload);
+                        this.blocklyState.setProjectFileHandle(message.payload);
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
                         break;
                     case 'WORKSPACE_SAVED_TEMP':
@@ -319,23 +322,28 @@ export class BlocklyEditorEffects {
                     case 'WORKSPACE_RESTORING':
                         console.log("WORKSPACE_RESTORING");
                         if (message.payload.type == 'advanced') {
-                            this.blocklyState.setCode(message.payload.data as string);
+                            this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
+                            this.codeEditorState.setOriginalCode(message.payload.data as string);
+                            this.codeEditorState.setCode(message.payload.data as string);
                             this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
-                            this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
+                            this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
                             this.appState.setSelectedRobotType(AppState.genericRobotType);
                             return;
                         } else if (message.payload.type == 'python') {
-                            this.blocklyState.setCode(message.payload.data as string);
+                            console.log(message.payload.data as string)
+                            this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
+                            this.codeEditorState.setOriginalCode(message.payload.data as string);
+                            this.codeEditorState.setCode(message.payload.data as string);
                             this.appState.setSelectedCodeEditor(CodeEditorType.Python);
-                            this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
+                            this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
                             this.appState.setSelectedRobotType(AppState.microPythonRobotType);
                             return;
                         }
                         this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')]);
                         this.blocklyState.setWorkspaceXml(message.payload.data as string);
-                        this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
+                        this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
                         break;
                     default:

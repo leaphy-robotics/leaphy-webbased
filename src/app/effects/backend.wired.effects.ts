@@ -17,6 +17,7 @@ import {ConnectPythonDialog} from "../modules/core/dialogs/connect-python/connec
 import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
 import {CodeEditorState} from "../state/code-editor.state";
 import {PythonUploaderService} from "../services/python-uploader/PythonUploader.service";
+import {LocationSelectDialog} from "../modules/core/dialogs/location-select/location-select.dialog";
 
 
 const fileExtensions = [
@@ -121,6 +122,13 @@ export class BackendWiredEffects {
 						this.send('save-workspace-as');
 					});
 
+				this.blocklyEditorState.workspaceStatus$
+					.pipe(withLatestFrom(this.appState.codeEditor$))
+					.pipe(filter(([status]) => status === WorkspaceStatus.Saving))
+					.subscribe(() => {
+						this.send('save-workspace');
+					});
+
 				// When the workspace is being temporarily saved, relay the command to Electron
 				this.blocklyEditorState.workspaceStatus$
 					.pipe(filter(status => status === WorkspaceStatus.SavingTemp))
@@ -137,8 +145,7 @@ export class BackendWiredEffects {
 				// When the user clicks help, open the default OS browser with the leaphy Forum
 				this.appState.showHelpPage$
 					.pipe(filter(show => !!show))
-					.subscribe(() => this.send('open-browser-page', "https://discord.com/invite/Yeg7Kkrq5W"));
-
+					.subscribe(() => window.open("https://discord.com/invite/Yeg7Kkrq5W", '_blank').focus());
 				// When the user clicks to view the log, relay to backend to open the file in default text editor
 				this.backEndState.isViewLogClicked$
 					.pipe(filter(isClicked => !!isClicked))
@@ -230,55 +237,51 @@ export class BackendWiredEffects {
 				});
 				break;
 			case 'restore-workspace':
-                const input = document.createElement('input');
-                input.type = 'file';
-				// add a list of extensions to accept
-				input.accept = fileExtensions.join(',');
+                if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+	                const result = await this.dialog.open(LocationSelectDialog, {
+		                width: '75vw', disableClose: true,
+		                data: {options: ["THIS_COMPUTER", "MICROCONTROLLER"]}
+	                }).afterClosed().toPromise();
 
-				input.onchange = e => {
-					// @ts-ignore
-                    const file = e.target.files[0];
+                    if (result) {
+                        if (result == "Robot") {
+                            this.send('restore-workspace-code');
+                            return;
+                        }
+                    }
+                }
+				// @ts-ignore
+				const response = await window.showOpenFilePicker();
+				const file: File = await response[0].getFile();
+				const content = await file.text();
 
-                    const reader = new FileReader();
-                    reader.readAsText(file, 'UTF-8');
 
-					reader.onload = readerEvent => {
-						const data = readerEvent.target.result; // this is the content!
-						if (!fileExtensions.includes(file.name.substring(file.name.lastIndexOf('.'))))
-							return;
+				if (!fileExtensions.includes(file.name.substring(file.name.lastIndexOf('.'))))
+					return;
 
-						if (file.name.endsWith('.ino')) {
-                            this.backEndState.setBackendMessage({
-                                event: 'WORKSPACE_RESTORING',
-                                message: 'WORKSPACE_RESTORING',
-                                payload: {projectFilePath: file.path, data, type: 'advanced'},
-                                displayTimeout: 2000
-                            });
-                        } else if (file.name.endsWith('.py')) {
-                            this.backEndState.setBackendMessage({
-                                event: 'WORKSPACE_RESTORING',
-                                message: 'WORKSPACE_RESTORING',
-                                payload: { projectFilePath: file.path, data, type: 'python' },
-                                displayTimeout: 2000
-                            });
-						} else {
-							this.backEndState.setBackendMessage({
-								event: 'WORKSPACE_RESTORING',
-								message: 'WORKSPACE_RESTORING',
-								payload: { projectFilePath: file.path, data, type: 'beginner', extension: file.name.substring(file.name.lastIndexOf('.')) },
-								displayTimeout: 2000
-							});
-						}
-					}
-
+				if (file.name.endsWith('.ino')) {
+                    this.backEndState.setBackendMessage({
+                        event: 'WORKSPACE_RESTORING',
+                        message: 'WORKSPACE_RESTORING',
+                        payload: {projectFilePath: file, data: content, type: 'advanced'},
+                        displayTimeout: 2000
+                    });
+                } else if (file.name.endsWith('.py')) {
+                    this.backEndState.setBackendMessage({
+                        event: 'WORKSPACE_RESTORING',
+                        message: 'WORKSPACE_RESTORING',
+                        payload: { projectFilePath: file, data: content, type: 'python' },
+                        displayTimeout: 2000
+                    });
+				} else {
+					this.backEndState.setBackendMessage({
+						event: 'WORKSPACE_RESTORING',
+						message: 'WORKSPACE_RESTORING',
+						payload: { projectFilePath: file, data: content, type: 'beginner', extension: file.name.substring(file.name.lastIndexOf('.')) },
+						displayTimeout: 2000
+					});
 				}
 
-				input.click();
-
-				break;
-			case 'open-browser-page':
-				const url = args[0];
-				window.open(url, '_blank').focus();
 				break;
 			case 'save-workspace-temp':
 				const data = args[0].data;
@@ -302,7 +305,7 @@ export class BackendWiredEffects {
 					}
 					try {
 						this.blocklyState.setWorkspaceXml(workspaceTemp);
-						this.blocklyState.setProjectFilePath('');
+						this.blocklyState.setProjectFileHandle(null);
 						this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
 					} catch (error) {
 						console.log('Error:', error.message);
@@ -336,7 +339,6 @@ export class BackendWiredEffects {
                             this.codeEditorState.getAceEditor().session.setValue(result);
                             this.codeEditorState.setOriginalCode(result);
                             this.codeEditorState.setCode(result);
-                            console.log("result: " + result);
                         }
                     });
 				}

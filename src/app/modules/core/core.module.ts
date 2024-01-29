@@ -20,12 +20,14 @@ import { SelectRobotTypeDialog } from './dialogs/robot-select/robot-select.dialo
 import {ConnectPythonDialog} from "./dialogs/connect-python/connect-python.dialog";
 import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
 import {ChangeLogDialog} from "./dialogs/change-log/change-log.dialog";
+import {LocationSelectDialog} from "./dialogs/location-select/location-select.dialog";
 
 @NgModule({
     declarations: [
         ConfirmEditorDialog,
         HeaderComponent,
         RobotSelectionComponent,
+        LocationSelectDialog,
         StartComponent,
         StatusMessageDialog,
         CreditsDialog,
@@ -50,6 +52,7 @@ import {ChangeLogDialog} from "./dialogs/change-log/change-log.dialog";
         HeaderComponent,
         StartComponent,
         RobotSelectionComponent,
+        LocationSelectDialog,
         ConfirmEditorDialog,
         StatusMessageDialog,
         CreditsDialog,
