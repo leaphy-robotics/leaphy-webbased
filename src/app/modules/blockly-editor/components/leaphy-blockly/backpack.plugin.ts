@@ -1,7 +1,6 @@
 import { Backpack as BaseBackpack } from '@blockly/workspace-backpack';
 import Blockly from "blockly/core";
 
-// TODO: Use inheritance on a newer typescript version
 export class Backpack extends BaseBackpack {
     constructor(workspace: Blockly.WorkspaceSvg) {
         super(workspace, {
