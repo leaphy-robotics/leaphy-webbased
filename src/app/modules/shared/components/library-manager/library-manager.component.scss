@@ -66,10 +66,9 @@ input::placeholder {
 }
 
 .library-manager {
-    max-height: 50vh;
+    max-height: 55vh;
     display: flex;
     flex-direction: column;
-    gap: 15px;
     padding-top: 10px;
     overflow-y: auto;
 }
