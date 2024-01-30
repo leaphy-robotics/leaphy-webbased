@@ -220,6 +220,7 @@ export class BlocklyEditorEffects {
             .pipe(withLatestFrom(this.blocklyState.workspaceXml$, this.blocklyState.workspace$))
             .subscribe(async ([, workspaceXml, workspace]) => {
                 if (!workspace) return;
+                if (!workspaceXml) return;
                 workspace.clear();
                 const xml = Blockly.utils.xml.textToDom(workspaceXml);
                 Blockly.Xml.domToWorkspace(xml, workspace);
