@@ -25,16 +25,27 @@ export class LeaphyBlocklyComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.blocklyState.setBlocklyElement(this.blockContent.nativeElement);
         this.blocklyState.workspace$.subscribe(workspace => {
+            workspace.addChangeListener((event: any) => {
+                // @ts-ignore
+                if (!(event.type === "toolbox_item_select")) {return}
 
-            const backpack = new Backpack(workspace);
-            backpack.setContents(JSON.parse(localStorage.getItem('backpack')) || []);
-            workspace.addChangeListener((event: Blockly.Events.Abstract) => {
-                if (!(event instanceof BackpackChange)) return;
+                workspace.resize();
+            })
 
-                localStorage.setItem('backpack', JSON.stringify(backpack.getContents()));
-            });
+            if (!workspace.backpack) {
+                const backpack = new Backpack(workspace);
+                workspace.backpack = backpack;
 
-            backpack.init();
+
+                backpack.setContents(JSON.parse(localStorage.getItem('backpack')) || []);
+                workspace.addChangeListener((event: Blockly.Events.Abstract) => {
+                    if (!(event instanceof BackpackChange)) return;
+
+                    localStorage.setItem('backpack', JSON.stringify(backpack.getContents()));
+                });
+
+                backpack.init();
+            }
         })
     }
 }

@@ -50,7 +50,6 @@ export class Backpack extends BaseBackpack {
 
         this.left_ =
             metrics.absoluteMetrics.left +
-            (toolbox.getFlyout().isVisible() ? toolbox.getFlyout().getWidth() : 0) +
             this.MARGIN_HORIZONTAL_;
 
         this.top_ =
@@ -59,6 +58,8 @@ export class Backpack extends BaseBackpack {
             this.HEIGHT_ -
             this.MARGIN_VERTICAL_ -
             15;
+
+        console.log(this.left_, this.top_);
 
         if (this.svgGroup_) {
             this.svgGroup_.setAttribute(

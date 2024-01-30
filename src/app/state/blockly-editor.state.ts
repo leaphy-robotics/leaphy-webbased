@@ -133,6 +133,7 @@ export class BlocklyEditorState {
     }
 
     public setWorkspace(workspace: any) {
+        workspace.resize();
         this.workspaceSubject$.next(workspace);
     }
 
