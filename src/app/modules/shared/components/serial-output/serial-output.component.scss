@@ -1,73 +1,77 @@
 #container {
-  width: 100%;
-  height: calc(100% - 64px);
-  max-height: 60vh;
+    width: 100%;
+    height: calc(100% - 64px);
+    max-height: 60vh;
 }
 
 #header:hover {
-  cursor: grab;
+    cursor: grab;
 }
 
 #header {
-  background-color: var(--leaphy-color-primary);
-  color: var(--leaphy-color-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 10px;
-  width: 100%;
+    background-color: var(--leaphy-color-primary);
+    color: var(--leaphy-color-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    width: 100%;
 }
 
 .serial-output {
-  width: 100%;
-  height: calc(100% + 29px);
-  margin: 0;
-  overflow-y: scroll;
-  background-color: aliceblue;
+    width: 100%;
+    height: calc(100% + 29px);
+    margin: 0;
+    overflow-y: scroll;
+    background-color: aliceblue;
 }
 
 [mat-stroked-button],
 [mat-flat-button] {
-  color: var(--leaphy-color-light);
-  font-size: 12px;
-  font-weight: normal;
+    color: var(--leaphy-color-light);
+    font-size: 12px;
+    font-weight: normal;
 }
 
 .mode-selected {
-  color: var(--leaphy-color-secundary);
+    color: var(--leaphy-color-secundary);
 }
 
 .icon-button {
-  padding: 0;
-  width: 35px;
-  height: 35px;
-  min-width: auto;
+    padding: 0;
+    width: 35px;
+    height: 35px;
+    min-width: auto;
+
+    mat-icon {
+        margin-left: auto;
+    }
 }
 
 .output-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: right;
-  align-items: center;
-  width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    width: 100%;
 }
 
 .output-time {
-  color: lightgrey;
-  padding-left: 5px;
-  padding-right: 5px;
-  border-right: 1px solid lightgrey;
+    color: lightgrey;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-right: 1px solid lightgrey;
 }
 
 .output-data {
-  flex: 1 0 auto;
-  padding-left: 5px;
-  color: var(--leaphy-color-secundary);
+    flex: 1 0 auto;
+    padding-left: 5px;
+    color: var(--leaphy-color-secundary);
 }
 
 .serial-output-backdrop {
-  pointer-events: all; /* Allow interaction with elements behind the dialog */
-  background-color: rgba(0, 0, 0, 0.5); /* Customize the backdrop color if needed */
+    pointer-events: all; /* Allow interaction with elements behind the dialog */
+    background-color: rgba(0, 0, 0, 0.5); /* Customize the backdrop color if needed */
 }
 
 .serial-prompt {
