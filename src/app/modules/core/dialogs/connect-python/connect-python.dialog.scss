@@ -3,7 +3,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 20vh;
+    height: 25vh;
 }
 
 .hidden {
@@ -11,8 +11,11 @@
 }
 
 #error-message {
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
     color: red;
-    width: 100%;
+    width: fit-content;
 }
 
 .block-environment {
@@ -89,9 +92,21 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 75%;
 }
 
 .failed-upload {
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
     color: red;
+    width: fit-content;
+    height: fit-content;
+}
+
+#end-status {
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
 }

@@ -14,7 +14,7 @@
         <button class="upload" (click)="makePythonRobotConnection()">{{ "CONNECT_PYTHON_ROBOT" | translate }}</button>
         <a class="firmware" (click)="flashFirmware()">{{ "FLASH_FIRMWARE" | translate }}</a>
     </ng-container>
-    <div id="return-options" *ngIf="didUpload | async">
+    <div id="return-options" class="return-options" *ngIf="didUpload | async">
         <button class="block-environment" (click)="returnBlockEnvironment()">{{ "LEAVE_UPLOADING" | translate }}</button>
         <button id="helpEnvironment" class="help-environment" *ngIf="uploadFailed | async" (click)="returnHelpEnvironment()">{{ "UPLOADING_ISSUE_HELP" | translate }}</button>
     </div>
