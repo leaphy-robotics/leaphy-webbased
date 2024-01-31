@@ -7,6 +7,7 @@ import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
+import { version } from '../../../package.json';
 
 @Injectable({
     providedIn: 'root'
@@ -53,6 +54,9 @@ export class AppState {
 
     public releaseInfoSubject$ = new BehaviorSubject<any>(null);
     public releaseInfo$: Observable<any> = this.releaseInfoSubject$.asObservable();
+
+    public releaseVersionSubject$ = new BehaviorSubject<string>(version);
+    public releaseVersion$: Observable<string> = this.releaseVersionSubject$.asObservable();
 
 
     /* eslint-enable max-len */
@@ -173,5 +177,9 @@ export class AppState {
 
     public getSelectedRobotType(): RobotType {
         return this.selectedRobotTypeSubject$.getValue();
+    }
+
+    public getReleaseVersion(): string {
+        return this.releaseVersionSubject$.getValue();
     }
 }

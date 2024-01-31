@@ -77,62 +77,64 @@ export class AppEffects {
                 })
             });
 
+
         this.appState.releaseInfo$
             .pipe(filter(releaseInfo => !!releaseInfo))
-            // make sure that the
             .subscribe(releaseInfo => {
-            if (!releaseInfo) {
-                return;
-            }
-            try {
-                this.localStorage.fetch('releaseVersion');
-            } catch (e) {
-                this.localStorage.store('releaseVersion', '');
-            }
-            if (releaseInfo?.name != this.localStorage.fetch('releaseVersion')) {
-                let releaseNotes = releaseInfo?.body;
-                // convert all the urls to links
-                // first find the urls
-                let urls = releaseNotes.match(/(https?:\/\/[^\s]+)/g);
-                // then replace them with links
-                if (urls) {
-                    // to prevent infinite loops we want to know the index of the last url we replaced
-                    let lastUrlIndex = 0;
-                    urls.forEach(url => {
-                        const link = `<a href="${url}" target="_blank">${url}</a>`;
-                        releaseNotes = releaseNotes.substring(0, releaseNotes.indexOf(url, lastUrlIndex)) + link + releaseNotes.substring(releaseNotes.indexOf(url, lastUrlIndex) + url.length);
-                        lastUrlIndex = releaseNotes.indexOf(link, lastUrlIndex) + link.length;
-                    });
+                const releaseVersion = this.appState.getReleaseVersion();
+                if (!releaseVersion) {
+                    return;
                 }
-                // turn the @mentions into links
-                // first find the @mentions
-                let mentions = releaseNotes.match(/@(\w+)/g);
-                // then replace them with links
-                if (mentions) {
-                    mentions.forEach(mention => {
-                        const username = mention.substring(1);
-                        releaseNotes = releaseNotes.replaceAll(mention, `<a href="https://github.com/${username}" target="_blank">${mention}</a>`);
-                    });
+                try {
+                    this.localStorage.fetch('releaseVersion');
+                } catch (e) {
+                    this.localStorage.store('releaseVersion', '');
                 }
 
-
-                // convert markdown to html
-                const converter = new showdown.Converter();
-                releaseNotes = converter.makeHtml(releaseNotes);
-
-
-
-
-                this.dialog.open(ChangeLogDialog, {
-                    data: {
-                        title: releaseInfo?.name,
-                        message: releaseNotes,
-                        type: 'info'
+                if (releaseVersion != this.localStorage.fetch('releaseVersion')) {
+                    let releaseNotes = releaseInfo["body"]
+                    // convert all the urls to links
+                    // first find the urls
+                    let urls = releaseNotes.match(/(https?:\/\/[^\s]+)/g);
+                    // then replace them with links
+                    if (urls) {
+                        // to prevent infinite loops we want to know the index of the last url we replaced
+                        let lastUrlIndex = 0;
+                        urls.forEach(url => {
+                            const link = `<a href="${url}" target="_blank">${url}</a>`;
+                            releaseNotes = releaseNotes.substring(0, releaseNotes.indexOf(url, lastUrlIndex)) + link + releaseNotes.substring(releaseNotes.indexOf(url, lastUrlIndex) + url.length);
+                            lastUrlIndex = releaseNotes.indexOf(link, lastUrlIndex) + link.length;
+                        });
                     }
-                });
+                    // turn the @mentions into links
+                    // first find the @mentions
+                    let mentions = releaseNotes.match(/@(\w+)/g);
+                    // then replace them with links
+                    if (mentions) {
+                        mentions.forEach(mention => {
+                            const username = mention.substring(1);
+                            releaseNotes = releaseNotes.replaceAll(mention, `<a href="https://github.com/${username}" target="_blank">${mention}</a>`);
+                        });
+                    }
 
-            }
-            this.localStorage.store('releaseVersion', releaseInfo?.name);
-        })
+
+                    // convert markdown to html
+                    const converter = new showdown.Converter();
+                    releaseNotes = converter.makeHtml(releaseNotes);
+
+
+
+
+                    this.dialog.open(ChangeLogDialog, {
+                        data: {
+                            title: releaseVersion,
+                            message: releaseNotes,
+                            type: 'info'
+                        }
+                    });
+
+                }
+                this.localStorage.store('releaseVersion', releaseVersion);
+            })
     }
 }

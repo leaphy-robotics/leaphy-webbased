@@ -1,5 +1,5 @@
 <div id="start-container">
-    <div class="version-number">{{ (appState.releaseInfo$ | async)?.name }}</div>
+    <div class="version-number">{{ (appState.releaseVersion$ | async) }}</div>
     <div>
         <app-robot-selection></app-robot-selection>
     </div>
