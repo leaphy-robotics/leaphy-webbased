@@ -65,8 +65,6 @@ export class Backpack extends BaseBackpack {
             this.MARGIN_VERTICAL_ -
             15;
 
-        console.log(this.left_, this.top_);
-
         if (this.svgGroup_) {
             this.svgGroup_.setAttribute(
                 'transform',
