@@ -18,13 +18,13 @@ export class AppState {
         'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor'
     ]
     private static leaphyOriginalRobotType = new RobotType('l_original_uno', 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, true, false
     );
     private static leaphyFlitzRobotType = new RobotType('l_flitz_uno', 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries, true, false
+        AppState.defaultLibraries, true, false, false
     );
     private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', 'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
-        AppState.defaultLibraries, true, false
+        AppState.defaultLibraries, true, false, false
     );
     private static leaphyClickRobotType = new RobotType('l_click', 'Leaphy Click', 'click.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries
@@ -39,7 +39,7 @@ export class AppState {
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
     public static microPythonRobotType = new RobotType('l_micropython', 'MicroPython', 'micropython.svg', 'MicroPython', '', 'bin', '',
-        [], true, false);
+        [], true, false, false);
 
     public static idToRobotType = {
         'l_original_uno': AppState.leaphyOriginalRobotType,
