@@ -10,6 +10,7 @@ export class RobotType {
         public libs: string[],
         public isWired: boolean = true,
         public showLeaphyActuators: boolean = true,
+        public showLeaphyOperators: boolean = true,
         public showCodeOnStart: boolean = false
     ) { }
 }
