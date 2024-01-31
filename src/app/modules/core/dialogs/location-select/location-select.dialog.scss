@@ -1,5 +1,4 @@
 .container {
-    height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,7 +13,7 @@
     padding-bottom: 10px;
   }
 
-  .robots{
+  .options{
     display: flex;
     flex-direction: column;
     width: 200px;
@@ -24,14 +23,14 @@
       margin-bottom: 15px;
     }
   }
-  .robot {
+  .option {
     //display: flex;
     align-items: center;
     margin-top: 10px;
     margin-bottom: 10px;
-    height: 10vh;
+    height: fit-content;
 
-    .robot-name{
+    .option-name{
       width: 100%;
       align-content: center;
       flex: 1

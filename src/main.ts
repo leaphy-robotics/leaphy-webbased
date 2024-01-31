@@ -1,3 +1,7 @@
+import 'zone.js';
+import { Buffer } from "buffer";
+(window as any).Buffer = Buffer;
+
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 

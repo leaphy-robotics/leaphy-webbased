@@ -9,6 +9,7 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-c";
 import "prismjs/components/prism-cpp";
 import "prismjs/components/prism-arduino";
+import {PythonFile} from "../domain/python-file.type";
 
 declare var Prism: any;
 
@@ -87,17 +88,8 @@ export class BlocklyEditorState {
     private workspaceXmlSubject$ = new BehaviorSubject(null);
     public workspaceXml$ = this.workspaceXmlSubject$.asObservable();
 
-    private projectFilePathSubject$ = new BehaviorSubject<string>(null);
-    public projectFilePath$ = this.projectFilePathSubject$.asObservable();
-
-    public projectName$ = this.projectFilePath$
-        .pipe(
-            map((filePath) => {
-                if(!filePath) return '';
-                const fileName = filePath.replace(/^.*[\\\/]/, "");
-                return fileName.substring(0, fileName.lastIndexOf(".")) || fileName;
-            })
-        );
+    private projectFileHandleSubject$ = new BehaviorSubject<FileSystemFileHandle | PythonFile>(null);
+    public projectFileHandle$ = this.projectFileHandleSubject$.asObservable();
 
     private undoSubject$ = new BehaviorSubject<boolean>(false);
     public undo$ = this.undoSubject$.asObservable();
@@ -141,6 +133,7 @@ export class BlocklyEditorState {
     }
 
     public setWorkspace(workspace: any) {
+        workspace.resize();
         this.workspaceSubject$.next(workspace);
     }
 
@@ -148,8 +141,12 @@ export class BlocklyEditorState {
         this.workspaceXmlSubject$.next(workspaceXml);
     }
 
-    public setProjectFilePath(path: string) {
-        this.projectFilePathSubject$.next(path);
+    public setProjectFileHandle(path: FileSystemFileHandle | PythonFile) {
+        this.projectFileHandleSubject$.next(path);
+    }
+
+    public getProjectFileHandle(): FileSystemFileHandle | PythonFile {
+        return this.projectFileHandleSubject$.getValue();
     }
 
     public setUndo(redo: boolean) {

@@ -5,7 +5,6 @@ import {PortalModule} from '@angular/cdk/portal';
 
 import { ButtonBarComponent } from './components/button-bar/button-bar.component';
 import { SerialOutputComponent } from './components/serial-output/serial-output.component';
-import { SerialWindowComponent } from './components/serial-window/serial-window.component';
 import { LibraryManagerComponent } from './components/library-manager/library-manager.component';
 
 import { TranslateModule } from '@ngx-translate/core';
@@ -30,7 +29,7 @@ import {TerminalComponent} from "./components/terminal/terminal.component";
 import {NgTerminalModule} from "ng-terminal";
 
 @NgModule({
-    declarations: [TerminalComponent, ButtonBarComponent, SerialOutputComponent, SerialWindowComponent, LibraryManagerComponent],
+    declarations: [TerminalComponent, ButtonBarComponent, SerialOutputComponent, LibraryManagerComponent],
     imports: [
         NgTerminalModule,
         CommonModule,
@@ -59,7 +58,6 @@ import {NgTerminalModule} from "ng-terminal";
         ButtonBarComponent,
         SerialOutputComponent,
         LibraryManagerComponent,
-        SerialWindowComponent,
         TranslateModule,
         MatIconModule,
         MatSidenavModule,
@@ -75,6 +73,5 @@ import {NgTerminalModule} from "ng-terminal";
         MatTooltipModule,
         MatSnackBarModule
     ],
-    entryComponents:[SerialOutputComponent, SerialWindowComponent, LibraryManagerComponent]
 })
 export class SharedModule { }

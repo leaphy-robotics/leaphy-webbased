@@ -25,24 +25,27 @@ export class LeaphyBlocklyComponent implements AfterViewInit {
     ngAfterViewInit() {
         this.blocklyState.setBlocklyElement(this.blockContent.nativeElement);
         this.blocklyState.workspace$.subscribe(workspace => {
-            // Resize the workspace when toolbox is opened or closed.
-            workspace.addChangeListener((event: Blockly.Events.Abstract) => {
-                if (!event.isUiEvent) return;
+            workspace.addChangeListener((event: any) => {
+                // @ts-ignore
+                if (!(event.type === "toolbox_item_select")) {return}
 
                 workspace.resize();
             })
 
-            const backpack = new Backpack(workspace, {
-                allowEmptyBackpackOpen: false
-            });
-            backpack.setContents(JSON.parse(localStorage.getItem('backpack')) || []);
-            workspace.addChangeListener((event: Blockly.Events.Abstract) => {
-                if (!(event instanceof BackpackChange)) return;
+            if (!workspace.backpack) {
+                const backpack = new Backpack(workspace);
+                workspace.backpack = backpack;
 
-                localStorage.setItem('backpack', JSON.stringify(backpack.getContents()));
-            });
 
-            backpack.init();
+                backpack.setContents(JSON.parse(localStorage.getItem('backpack')) || []);
+                workspace.addChangeListener((event: Blockly.Events.Abstract) => {
+                    if (!(event instanceof BackpackChange)) return;
+
+                    localStorage.setItem('backpack', JSON.stringify(backpack.getContents()));
+                });
+
+                backpack.init();
+            }
         })
     }
 }

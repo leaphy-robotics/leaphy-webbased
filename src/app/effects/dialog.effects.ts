@@ -53,7 +53,6 @@ export class DialogEffects {
                 if (this.dialogState.getIsLibraryManagerWindowOpen() !== true)
                     return;
                 this.dialog.open(LibraryManagerComponent, {
-                    width: "800px",
                     disableClose: true,
                 }).afterClosed().subscribe(() => {
                     this.dialogState.setIsLibraryManagerWindowOpen(false);

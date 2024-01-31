@@ -1,5 +1,5 @@
 <mat-toolbar class="shadow-sm header-container" id="header-container">
-    <img src="../../../../assets/leaphy-logo.svg" class="header-logo" width="300" height="24"/>
+    <img src="assets/leaphy-logo.svg" class="header-logo" width="300" height="24"/>
     <div class="flex-header">
         <div class="flex-buttons">
             <!-- Add ngIf to check for URL ending with "driverissues" -->
@@ -52,13 +52,13 @@
                 </button>
 
                 <ng-container *ngIf="this.appState.selectedRobotType$ | async">
-                    <button mat-flat-button *ngIf="(appState.selectedRobotType$ | async) !== AppState.microPythonRobotType" (click)="onRunClicked()">
+                    <button color="primary" mat-flat-button class="text-color-white" *ngIf="(appState.selectedRobotType$ | async) !== AppState.microPythonRobotType" (click)="onRunClicked()">
                         {{ "UPLOAD" | translate }}
                     </button>
-                    <button mat-flat-button *ngIf="(appState.selectedRobotType$ | async) === AppState.microPythonRobotType" (click)="onConnectClicked()">
+                    <button color="primary" mat-flat-button class="text-color-white" *ngIf="(appState.selectedRobotType$ | async) === AppState.microPythonRobotType" (click)="onConnectClicked()">
                         {{ "CONNECT_PYTHON_ROBOT" | translate }}
                     </button>
-                    <button mat-flat-button *ngIf="(robotWiredState.isPythonDeviceConnected$ | async) === true" (click)="onRunClicked()" [disabled]="(robotWiredState.isPythonCodeRunning$ | async) === true">
+                    <button color="primary" mat-flat-button class="text-color-white" *ngIf="(robotWiredState.isPythonDeviceConnected$ | async) === true" (click)="onRunClicked()" [disabled]="(robotWiredState.isPythonCodeRunning$ | async) === true">
                         {{ "RUN_CODE" | translate }}
                     </button>
                 </ng-container>
@@ -67,7 +67,7 @@
     </div>
 </mat-toolbar>
 
-<mat-menu #projectMenu="matMenu" class="matmenus">
+<mat-menu #projectMenu="matMenu" class="matmenus font-size-menu" >
     <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onNewProjectClicked()">
         <mat-icon>insert_drive_file</mat-icon>
         <span>{{ "NEW" | translate }}</span>
@@ -76,10 +76,9 @@
         <mat-icon>folder</mat-icon>
         <span>{{ "OPEN" | translate }}</span>
     </button>
-    <span mat-menu-item disabled *ngIf="blocklyState.projectName$ | async as projectName">{{ projectName }}</span>
     <button mat-menu-item [disabled]="
       (appState.selectedRobotType$ | async) === null ||
-      (blocklyState.projectFilePath$ | async) === null
+      (blocklyState.projectFileHandle$ | async) === null
     " (click)="onSaveWorkspaceClicked()">
         <mat-icon>save</mat-icon>
         <span>{{ "SAVE" | translate }}</span>

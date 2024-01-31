@@ -1,32 +1,36 @@
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 25vh;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
 #error-message {
-  color: red;
-  width: 100%;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    color: red;
+    width: fit-content;
 }
 
 .block-environment {
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  margin-top: 10px;
-  align-self: center;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+    align-self: center;
 
-  background-color: var(--leaphy-color-primary);
-  color: white;
+    background-color: var(--leaphy-color-primary);
+    color: white;
 }
 
 .block-environment:hover {
@@ -65,32 +69,44 @@
 }
 
 .help-environment {
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: bold;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-  margin-top: 10px;
-  align-self: center;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+    align-self: center;
 
-  background-color: var(--leaphy-color-secundary);
-  color: white;
+    background-color: var(--leaphy-color-secundary);
+    color: white;
 }
 
 .help-environment:hover {
-  background-color: var(--leaphy-color-dark);
+    background-color: var(--leaphy-color-dark);
 }
 
 .return-options {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 75%;
 }
 
 .failed-upload {
-  color: red;
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    color: red;
+    width: fit-content;
+    height: fit-content;
+}
+
+#end-status {
+    margin-top: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
 }

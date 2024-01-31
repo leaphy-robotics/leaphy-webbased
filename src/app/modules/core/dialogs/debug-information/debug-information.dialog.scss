@@ -3,6 +3,8 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  height: 70vh;
+  width: 50vh;
 }
 
 .upload-log-item {
@@ -10,8 +12,7 @@
   flex-direction: row;
   justify-content: right;
   align-items: center;
-  max-width: 100%;
-  width: 100%;
+  width: 50vh;
   height: fit-content;
   border-bottom: 1px solid black;
 }
@@ -25,7 +26,7 @@
 }
 
 .upload-log {
-  width: 100%;
+  width: 50vh;
   height: 50vh;
   margin: 0;
   overflow-y: scroll;
@@ -33,7 +34,7 @@
 }
 
 .device-information {
-  width: 100%;
+  width: 50vh;
   height: fit-content;
   margin: 0;
   background-color: lightgray;
@@ -50,7 +51,7 @@
   justify-content: space-between;
   align-items: center;
   padding-left: 10px;
-  width: 100%;
+  width: 50vh;
 }
 
 #device-information {
@@ -60,5 +61,8 @@
   justify-content: space-between;
   align-items: center;
   padding-left: 10px;
-  width: 100%;
+  width: 50vh;
+}
+.device-specification {
+  margin-left: 10px;
 }

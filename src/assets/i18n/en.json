@@ -97,5 +97,7 @@
     "CONNECT_PYTHON_ROBOT": "Connect Python robot",
     "RUN_CODE": "Run code",
     "CONNECTING": "Connecting to robot...",
-    "CONNECTED": "Connected"
+    "CONNECTED": "Connected",
+    "THIS_COMPUTER": "This computer",
+    "MICROCONTROLLER": "Robot"
 }

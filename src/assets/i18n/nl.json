@@ -97,5 +97,7 @@
     "CONNECT_PYTHON_ROBOT": "Verbind met Python robot",
     "RUN_CODE": "Code uitvoeren",
     "CONNECTING": "Verbinden met robot...",
-    "CONNECTED": "Verbonden"
+    "CONNECTED": "Verbonden",
+    "THIS_COMPUTER": "Deze computer",
+    "MICROCONTROLLER": "Robot"
 }
