@@ -4,7 +4,7 @@ import Blockly from "blockly/core";
 export class Backpack extends BaseBackpack {
     constructor(workspace: Blockly.WorkspaceSvg) {
         super(workspace, {
-            allowEmptyBackpackOpen: true,
+            allowEmptyBackpackOpen: false,
         });
     }
 
@@ -38,11 +38,17 @@ export class Backpack extends BaseBackpack {
     }
     override addBlock(block: Blockly.Block) {
         if (block.type === 'leaphy_start') {
-            return this.addBlocks(block.getChildren(false));
+            this.addBlocks(block.getChildren(false));
+            block.getChildren(false).forEach((child) => {
+                setTimeout(() => child.dispose(undefined), 0);
+            });
+
+            return;
         }
 
         // @ts-ignore
         this.addItem(this.blockToJsonString(block));
+        setTimeout(() => block.dispose(undefined), 0);
     }
 
     override position(metrics: Blockly.MetricsManager.UiMetrics, savedPositions: Blockly.utils.Rect[]) {
@@ -58,8 +64,6 @@ export class Backpack extends BaseBackpack {
             this.HEIGHT_ -
             this.MARGIN_VERTICAL_ -
             15;
-
-        console.log(this.left_, this.top_);
 
         if (this.svgGroup_) {
             this.svgGroup_.setAttribute(
