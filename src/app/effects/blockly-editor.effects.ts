@@ -21,11 +21,10 @@ import {
     IS_DIVISIBLEBY_MUTATOR_MIXIN,
     LIST_MODES_MUTATOR_EXTENSION,
     LIST_MODES_MUTATOR_MIXIN,
-    LOGIC_COMPARE_EXTENSION,
     LOGIC_TOOLTIPS_BY_OP,
     MATH_TOOLTIPS_BY_OP,
     TEXT_QUOTES_EXTENSION,
-    WHILE_UNTIL_TOOLTIPS
+    WHILE_UNTIL_TOOLTIPS,
 } from "@leaphy-robotics/leaphy-blocks/blocks/extensions";
 import {categoryStyles, componentStyles, defaultBlockStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
 import {LeaphyCategory} from "../services/toolbox/category";
@@ -82,7 +81,6 @@ export class BlocklyEditorEffects {
         //
         Extensions.register('text_quotes', TEXT_QUOTES_EXTENSION)
         Extensions.register('appendStatementInputStack', APPEND_STATEMENT_INPUT_STACK)
-        Extensions.register('logic_compare', LOGIC_COMPARE_EXTENSION);
         // // Tooltip extensions
         Extensions.register('controls_whileUntil_tooltip', Extensions.buildTooltipForDropdown('MODE', WHILE_UNTIL_TOOLTIPS));
         Extensions.register(
