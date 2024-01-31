@@ -37,7 +37,6 @@ export class Backpack extends BaseBackpack {
         this.flyout_.init(this.workspace_);
     }
     override addBlock(block: Blockly.Block) {
-        console.log(block)
         if (block.type === 'leaphy_start') {
             this.addBlocks(block.getChildren(false));
             block.getChildren(false).forEach((child) => {
