@@ -11,6 +11,8 @@ import { AppState } from '../state/app.state';
 import { CodeEditorType } from '../domain/code-editor.type';
 import {BackendWiredEffects} from "./backend.wired.effects";
 import * as Blockly from 'blockly/core';
+import 'blockly/blockly';
+import 'blockly/blocks';
 import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
 import getBlocks from "@leaphy-robotics/leaphy-blocks/blocks/blocks";
 import {CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
@@ -31,7 +33,6 @@ import {defaultBlockStyles, categoryStyles, componentStyles} from "@leaphy-robot
 import {LeaphyCategory} from "../services/Toolbox/Category";
 import {LeaphyToolbox} from "../services/Toolbox/Toolbox";
 
-import * as libraryBlocks from 'blockly/blocks';
 var Extensions = Blockly.Extensions;
 
 @Injectable({
@@ -84,11 +85,8 @@ export class BlocklyEditorEffects {
             ))
             .subscribe(([[[element, config], robotType], baseToolboxXml, leaphyToolboxXml, startWorkspaceXml]) => {
                 const leaphyBlocks = getBlocks(this.appState.getSelectedRobotType().id);
-                Blockly.defineBlocksWithJsonArray(leaphyBlocks.block)
+                Blockly.defineBlocksWithJsonArray(leaphyBlocks.block);
                 for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {
-                  Blockly.Blocks[name] = block;
-                }
-                for (const [name, block] of Object.entries(libraryBlocks)) {
                     Blockly.Blocks[name] = block;
                 }
                 const LeaphyTheme = Blockly.Theme.defineTheme('leaphy', {
