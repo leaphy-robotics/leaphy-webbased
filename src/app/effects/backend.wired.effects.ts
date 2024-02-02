@@ -122,7 +122,7 @@ export class BackendWiredEffects {
                     .pipe(withLatestFrom(this.appState.codeEditor$))
                     .pipe(filter(([status]) => status === WorkspaceStatus.SavingAs))
                     .subscribe(() => {
-                        this.send('save-workspace-as');
+                        this.send('save-workspace-as', { extension: AppState.genericRobotType.id });
                     });
 
                 this.blocklyEditorState.workspaceStatus$
