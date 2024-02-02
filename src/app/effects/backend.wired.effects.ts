@@ -50,7 +50,8 @@ export class BackendWiredEffects {
         private dialog: MatDialog,
         private codeEditorState: CodeEditorState,
         private uploaderService: PythonUploaderService,
-        private robotWiredState: RobotWiredState
+        private robotWiredState: RobotWiredState,
+        private uploadService: PythonUploaderService
     ) {
         // Only set up these effects when we're in Desktop mode
         this.appState.isDesktop$
@@ -383,7 +384,8 @@ export class BackendWiredEffects {
                     console.log(this.blocklyState.getProjectFileHandle());
                     const file = this.blocklyState.getProjectFileHandle();
                     if (file instanceof PythonFile) {
-                        return
+                        await this.uploadService.runFileSystemCommand('put', file.path, this.codeEditorState.getCode());
+                        return;
                     }
                     const writable = await file.createWritable();
                     if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
