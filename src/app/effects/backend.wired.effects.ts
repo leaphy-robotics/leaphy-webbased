@@ -283,10 +283,6 @@ export class BackendWiredEffects {
                 const file: FileSystemFileHandle = await response[0];
                 let content : any = await file.getFile();
                 content = await content.text();
-                // create writable and destroy it
-                const writable = await file.createWritable();
-                writable.close();
-
 
                 if (!fileExtensions.includes(file.name.substring(file.name.lastIndexOf('.'))))
                     return;
