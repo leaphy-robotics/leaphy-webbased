@@ -32,6 +32,7 @@ import {LeaphyToolbox} from "../services/toolbox/toolbox";
 import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
 import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
+import {RobotType} from "../domain/robot.type";
 
 const translationsMap = {
     en: translationsEn.default,
@@ -132,23 +133,7 @@ export class BlocklyEditorEffects {
                     'componentStyles': componentStyles,
                     name: 'leaphy',
                 });
-                const parser = new DOMParser();
-                const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
-                const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
-                const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
-                const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
-                if (robotType.showLeaphyOperators) {
-                    toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_numbers"))
-                } else {
-                    toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_operators"))
-                }
-                if (robotType.showLeaphyActuators) {
-                    const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_actuators`);
-                    toolboxElement.prepend(leaphyExtraCategory);
-                }
-                toolboxElement.prepend(leaphyRobotCategory);
-                const serializer = new XMLSerializer();
-                const toolboxXmlString = serializer.serializeToString(toolboxXmlDoc);
+                const toolboxXmlString = this.loadToolBox(baseToolboxXml, leaphyToolboxXml, robotType);
                 config.toolbox = toolboxXmlString;
                 // @ts-ignore
                 const workspace = Blockly.inject(element, config);
@@ -182,14 +167,7 @@ export class BlocklyEditorEffects {
                 this.getXmlContent('./assets/blockly/leaphy-start.xml'),
             ))
             .subscribe(([[robotType, workspace], baseToolboxXml, leaphyToolboxXml, startWorkspaceXml]) => {
-                const parser = new DOMParser();
-                const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
-                const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
-                const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
-                const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
-                toolboxElement.prepend(leaphyRobotCategory);
-                const serializer = new XMLSerializer();
-                const toolboxXmlString = serializer.serializeToString(toolboxXmlDoc);
+                const toolboxXmlString = this.loadToolBox(baseToolboxXml, leaphyToolboxXml, robotType);
                 this.blocklyState.setToolboxXml(toolboxXmlString);
 
                 workspace.clear();
@@ -354,6 +332,26 @@ export class BlocklyEditorEffects {
                         break;
                 }
             });
+    }
+
+    private loadToolBox(baseToolboxXml: string, leaphyToolboxXml: string, robotType: RobotType) : string {
+        const parser = new DOMParser();
+        const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
+        const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
+        const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
+        const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
+        if (robotType.showLeaphyOperators) {
+            toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_numbers"))
+        } else {
+            toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_operators"))
+        }
+        if (robotType.showLeaphyActuators) {
+            const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_actuators`);
+            toolboxElement.prepend(leaphyExtraCategory);
+        }
+        toolboxElement.prepend(leaphyRobotCategory);
+        const serializer = new XMLSerializer();
+        return serializer.serializeToString(toolboxXmlDoc);
     }
 
     private getXmlContent(path: string): Observable<string> {

@@ -50,7 +50,8 @@ export class BackendWiredEffects {
         private dialog: MatDialog,
         private codeEditorState: CodeEditorState,
         private uploaderService: PythonUploaderService,
-        private robotWiredState: RobotWiredState
+        private robotWiredState: RobotWiredState,
+        private uploadService: PythonUploaderService
     ) {
         // Only set up these effects when we're in Desktop mode
         this.appState.isDesktop$
@@ -121,8 +122,9 @@ export class BackendWiredEffects {
                 this.blocklyEditorState.workspaceStatus$
                     .pipe(withLatestFrom(this.appState.codeEditor$))
                     .pipe(filter(([status]) => status === WorkspaceStatus.SavingAs))
-                    .subscribe(() => {
-                        this.send('save-workspace-as');
+                    .pipe(withLatestFrom(this.appState.selectedRobotType$))
+                    .subscribe(([, robotType]) => {
+                        this.send('save-workspace-as', { extension: robotType.id });
                     });
 
                 this.blocklyEditorState.workspaceStatus$
@@ -282,10 +284,6 @@ export class BackendWiredEffects {
                 const file: FileSystemFileHandle = await response[0];
                 let content : any = await file.getFile();
                 content = await content.text();
-                // create writable and destroy it
-                const writable = await file.createWritable();
-                writable.close();
-
 
                 if (!fileExtensions.includes(file.name.substring(file.name.lastIndexOf('.'))))
                     return;
@@ -386,7 +384,8 @@ export class BackendWiredEffects {
                     console.log(this.blocklyState.getProjectFileHandle());
                     const file = this.blocklyState.getProjectFileHandle();
                     if (file instanceof PythonFile) {
-                        return
+                        await this.uploadService.runFileSystemCommand('put', file.path, this.codeEditorState.getCode());
+                        return;
                     }
                     const writable = await file.createWritable();
                     if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
