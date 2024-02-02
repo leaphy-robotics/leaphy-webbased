@@ -56,6 +56,7 @@ export class Backpack extends BaseBackpack {
 
         this.left_ =
             metrics.absoluteMetrics.left +
+            (!toolbox.getFlyout().isVisible() ? -toolbox.getFlyout().getWidth() : 0) +
             this.MARGIN_HORIZONTAL_;
 
         this.top_ =
