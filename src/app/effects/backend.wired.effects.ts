@@ -121,8 +121,9 @@ export class BackendWiredEffects {
                 this.blocklyEditorState.workspaceStatus$
                     .pipe(withLatestFrom(this.appState.codeEditor$))
                     .pipe(filter(([status]) => status === WorkspaceStatus.SavingAs))
-                    .subscribe(() => {
-                        this.send('save-workspace-as', { extension: AppState.genericRobotType.id });
+                    .pipe(withLatestFrom(this.appState.selectedRobotType$))
+                    .subscribe(([, robotType]) => {
+                        this.send('save-workspace-as', { extension: robotType.id });
                     });
 
                 this.blocklyEditorState.workspaceStatus$
