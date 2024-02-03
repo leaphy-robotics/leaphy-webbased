@@ -61,30 +61,6 @@ export class UploadDialog {
             });
         }
 
-        this.onUpdate('COMPILATION_STARTED');
-        const response = await makeRequest(source_code, board, libraries).catch(error => {
-            this.onUpdate('COMPILATION_FAILED');
-            if (!error.toString().startsWith("Error: Request failed: 500 ")) {
-                console.error(error);
-                return;
-            }
-            // make the printed red text
-            console.log('%c' + error.toString().replace("Error: Request failed: 500 ", ""), 'color: red');
-
-            // remove the last 4 lines of the error message
-            const errorLines = error.toString().replace("Error: Request failed: 500 ", "").split("\n");
-            errorLines.splice(errorLines.length - 5, 5);
-            const errorString = errorLines.join("\n");
-            this.onError(errorString);
-            this.showReturnOptions();
-        });
-        if (response === undefined) {
-            return;
-        }
-        const hex = response['hex']; // Extract the "hex" property from the response
-        this.onUpdate('COMPILATION_COMPLETE');
-        this.progressBarWidth += 25;
-
         if ('serial' in navigator) {
 
             try {
@@ -111,6 +87,31 @@ export class UploadDialog {
                 }
                 return;
             }
+
+            this.onUpdate('COMPILATION_STARTED');
+            const response = await makeRequest(source_code, board, libraries).catch(error => {
+                this.onUpdate('COMPILATION_FAILED');
+                if (!error.toString().startsWith("Error: Request failed: 500 ")) {
+                    console.error(error);
+                    return;
+                }
+                // make the printed red text
+                console.log('%c' + error.toString().replace("Error: Request failed: 500 ", ""), 'color: red');
+
+                // remove the last 4 lines of the error message
+                const errorLines = error.toString().replace("Error: Request failed: 500 ", "").split("\n");
+                errorLines.splice(errorLines.length - 5, 5);
+                const errorString = errorLines.join("\n");
+                this.onError(errorString);
+                this.showReturnOptions();
+            });
+            if (response === undefined) {
+                return;
+            }
+            const hex = response['hex']; // Extract the "hex" property from the response
+            this.onUpdate('COMPILATION_COMPLETE');
+            this.progressBarWidth += 25;
+
             this.onUpdate('UPDATE_STARTED')
             try {
                 await this.upload.upload(hex, (message: string) => {
