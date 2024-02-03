@@ -216,5 +216,6 @@
         </block>
     </category>
     <category id="l_variables" toolboxitemid="l_variables" name="%{BKY_LEAPHY_VARIABLES_CATEGORY}" categorystyle="variables_category" custom="VARIABLE"></category>
+    <category id="l_lists" toolboxitemid="l_lists" name="%{BKY_LEAPHY_LISTS_CATEGORY}" categorystyle="lists_category" custom="LISTS"></category>
     <category id="l_functions" toolboxitemid="l_functions" name="%{BKY_LEAPHY_FUNCTIONS_CATEGORY}" categorystyle="functions_category" custom="PROCEDURE"></category>
 </xml>

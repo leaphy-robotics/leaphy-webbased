@@ -1,4 +1,20 @@
+interface Features {
+    showLeaphyActuators: boolean;
+    showLeaphyOperators: boolean;
+    showLeaphyLists: boolean;
+    showCodeOnStart: boolean;
+}
+
+const DEFAULTS: Features = {
+    showLeaphyActuators: true,
+    showLeaphyOperators: true,
+    showLeaphyLists: false,
+    showCodeOnStart: false
+};
+
 export class RobotType {
+    public features: Features;
+
     constructor(
         public id: string,
         public name: string,
@@ -9,8 +25,8 @@ export class RobotType {
         public core: string,
         public libs: string[],
         public isWired: boolean = true,
-        public showLeaphyActuators: boolean = true,
-        public showLeaphyOperators: boolean = true,
-        public showCodeOnStart: boolean = false
-    ) { }
+        features?: Partial<Features>
+    ) {
+        this.features = Object.assign({}, DEFAULTS, features||{});
+    }
 }
