@@ -4,6 +4,7 @@ import {TranslateService} from "@ngx-translate/core";
 import ArduinoUploader from "../../../../services/arduino-uploader/ArduinoUploader";
 import {DialogState} from "../../../../state/dialog.state";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
+import {environment} from "src/environments/environment";
 
 @Component({
     selector: 'upload',
@@ -37,7 +38,8 @@ export class UploadDialog {
         function makeRequest(source_code, board, libraries) {
             return new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', 'https://webservice.leaphyeasybloqs.com/compile/cpp', true);
+                // @ts-ignore
+                xhr.open('POST', `${environment.webbased}/compile/cpp`, true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
 
                 xhr.onload = () => {
