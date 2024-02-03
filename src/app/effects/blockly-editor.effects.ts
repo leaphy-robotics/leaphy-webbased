@@ -25,7 +25,9 @@ import {
     MATH_TOOLTIPS_BY_OP,
     TEXT_QUOTES_EXTENSION,
     WHILE_UNTIL_TOOLTIPS,
+    LIST_SELECT_EXTENSION,
 } from "@leaphy-robotics/leaphy-blocks/blocks/extensions";
+import { LISTS } from "@leaphy-robotics/leaphy-blocks/categories/all";
 import {categoryStyles, componentStyles, defaultBlockStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
 import {LeaphyCategory} from "../services/toolbox/category";
 import {LeaphyToolbox} from "../services/toolbox/toolbox";
@@ -60,6 +62,8 @@ export class BlocklyEditorEffects {
         Extensions.registerMixin(
             'contextMenu_variableSetterGetter',
             CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
+        // Lists:
+        Extensions.register('list_select_extension', LIST_SELECT_EXTENSION);
         // // Math:
         Extensions.registerMutator(
             'math_is_divisibleby_mutator', IS_DIVISIBLEBY_MUTATOR_MIXIN,
@@ -138,6 +142,7 @@ export class BlocklyEditorEffects {
                 // @ts-ignore
                 const workspace = Blockly.inject(element, config);
                 const toolbox = workspace.getToolbox();
+                workspace.registerToolboxCategoryCallback('LISTS', LISTS);
                 toolbox.getFlyout().autoClose = false;
                 const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
                 Blockly.Xml.domToWorkspace(xml, workspace);
@@ -149,7 +154,7 @@ export class BlocklyEditorEffects {
                 toolbox.selectItemByPosition(0);
                 toolbox.refreshTheme();
 
-                setTimeout(() => this.blocklyState.setIsSideNavOpen(robotType.showCodeOnStart), 200);
+                setTimeout(() => this.blocklyState.setIsSideNavOpen(robotType.features.showCodeOnStart), 200);
             });
 
         // When a new project is started, reset the blockly code
@@ -340,14 +345,17 @@ export class BlocklyEditorEffects {
         const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
         const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
         const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
-        if (robotType.showLeaphyOperators) {
+        if (robotType.features.showLeaphyOperators) {
             toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_numbers"))
         } else {
             toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_operators"))
         }
-        if (robotType.showLeaphyActuators) {
+        if (robotType.features.showLeaphyActuators) {
             const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_actuators`);
             toolboxElement.prepend(leaphyExtraCategory);
+        }
+        if (!robotType.features.showLeaphyLists) {
+            toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_lists"))
         }
         toolboxElement.prepend(leaphyRobotCategory);
         const serializer = new XMLSerializer();
