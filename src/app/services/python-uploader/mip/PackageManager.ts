@@ -89,7 +89,7 @@ export class PackageManager {
                 await rm(writer, reader, filename);
                 if (filename.endsWith('.py') || filename.endsWith('.py/')) {
                     // make a post request with the content in base64 to minify the code, https://webservice.leaphyeasybloqs.com/compile/cpp' then write the returned base64 to the file
-                    const response = await fetch(`${environment.webbased}/minify/python`, {
+                    const response = await fetch(`${environment.backend}/minify/python`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

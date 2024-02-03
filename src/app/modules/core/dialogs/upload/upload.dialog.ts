@@ -38,7 +38,7 @@ export class UploadDialog {
         function makeRequest(source_code, board, libraries) {
             return new Promise((resolve, reject) => {
                 const xhr = new XMLHttpRequest();
-                xhr.open('POST', `${environment.webbased}/compile/cpp`, true);
+                xhr.open('POST', `${environment.backend}/compile/cpp`, true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
 
                 xhr.onload = () => {

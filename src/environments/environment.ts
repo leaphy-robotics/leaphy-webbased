@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    webbased: 'https://webservice.leaphyeasybloqs.com',
+    backend: 'https://webservice.leaphyeasybloqs.com',
 };
 
 /*
