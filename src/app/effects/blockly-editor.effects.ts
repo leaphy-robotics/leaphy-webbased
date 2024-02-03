@@ -21,13 +21,13 @@ import {
     IS_DIVISIBLEBY_MUTATOR_MIXIN,
     LIST_MODES_MUTATOR_EXTENSION,
     LIST_MODES_MUTATOR_MIXIN,
+    LIST_SELECT_EXTENSION,
     LOGIC_TOOLTIPS_BY_OP,
     MATH_TOOLTIPS_BY_OP,
     TEXT_QUOTES_EXTENSION,
     WHILE_UNTIL_TOOLTIPS,
-    LIST_SELECT_EXTENSION,
 } from "@leaphy-robotics/leaphy-blocks/blocks/extensions";
-import { LISTS } from "@leaphy-robotics/leaphy-blocks/categories/all";
+import {LISTS} from "@leaphy-robotics/leaphy-blocks/categories/all";
 import {categoryStyles, componentStyles, defaultBlockStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
 import {LeaphyCategory} from "../services/toolbox/category";
 import {LeaphyToolbox} from "../services/toolbox/toolbox";
