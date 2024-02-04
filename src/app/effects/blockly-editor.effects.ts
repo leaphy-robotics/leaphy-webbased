@@ -264,17 +264,6 @@ export class BlocklyEditorEffects {
         this.appState.codeEditor$
             .subscribe(() => this.blocklyState.setProjectFileHandle(null));
 
-        // When an new project is being saved, reset the WorkspaceStatus to SavingAs
-        this.blocklyState.workspaceStatus$
-            .pipe(filter(status => status === WorkspaceStatus.Saving))
-            .pipe(withLatestFrom(
-                this.blocklyState.projectFileHandle$
-            ))
-            .pipe(filter(([, projectFilePath]) => !projectFilePath))
-            .subscribe(() => {
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingAs);
-            });
-
         // React to messages received from the Backend
         this.backEndState.backEndMessages$
             .pipe(filter(message => !!message))
