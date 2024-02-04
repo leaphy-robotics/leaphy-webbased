@@ -5,6 +5,7 @@ import ArduinoUploader from "../../../../services/arduino-uploader/ArduinoUpload
 import {DialogState} from "../../../../state/dialog.state";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
 import {environment} from "src/environments/environment";
+import {AppState} from "../../../../state/app.state";
 
 @Component({
     selector: 'upload',
@@ -16,12 +17,13 @@ export class UploadDialog {
     progressBarWidth: number = 0;
     uploadFailed: boolean = false;
     protected readonly document = document;
-    private upload = new ArduinoUploader(this.robotWiredState);
+    private upload = new ArduinoUploader(this.robotWiredState, this.appState);
 
     constructor(
         public dialogRef: MatDialogRef<UploadDialog>,
         private dialogState: DialogState,
         private robotWiredState: RobotWiredState,
+        private appState: AppState,
         private translate: TranslateService,
         @Inject(MAT_DIALOG_DATA) public data: any
     ) {

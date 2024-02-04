@@ -1,3 +1,5 @@
+import BaseProtocol from "../services/arduino-uploader/protocols/base";
+
 interface Features {
     showLeaphyActuators: boolean;
     showLeaphyOperators: boolean;
@@ -17,6 +19,7 @@ export class RobotType {
 
     constructor(
         public id: string,
+        public protocol: typeof BaseProtocol,
         public name: string,
         public svgname: string,
         public board: string,

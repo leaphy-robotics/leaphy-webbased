@@ -4,6 +4,7 @@ import { BackEndState } from '../state/backend.state';
 import { RobotWiredState } from '../state/robot.wired.state';
 import {DialogState} from "../state/dialog.state";
 import ArduinoUploader from "../services/arduino-uploader/ArduinoUploader";
+import {AppState} from "../state/app.state";
 
 @Injectable({
     providedIn: 'root',
@@ -14,11 +15,12 @@ export class RobotWiredEffects {
     private logBuffer: string = "";
 
     constructor(
+        private appState: AppState,
         private robotWiredState: RobotWiredState,
         private backEndState: BackEndState,
         private dialogState: DialogState,
     ) {
-        this.webserial = new ArduinoUploader(this.robotWiredState);
+        this.webserial = new ArduinoUploader(this.robotWiredState, this.appState);
         this.backEndState.backEndMessages$
             .pipe(filter(message => !!message))
             .subscribe(message => {
