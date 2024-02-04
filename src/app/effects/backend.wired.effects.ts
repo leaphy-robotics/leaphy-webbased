@@ -183,9 +183,6 @@ export class BackendWiredEffects {
                 fileNamesDialogRef.afterClosed().subscribe((name: string) => {
                     if (name == null)
                         return
-
-
-
                     if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
                         const data = this.blocklyEditorState.workspaceXml;
                         const blob = new Blob([data], { type: 'text/plain' });
@@ -340,7 +337,7 @@ export class BackendWiredEffects {
                         event: 'WORKSPACE_RESTORING',
                         message: 'WORKSPACE_RESTORING',
                         payload: { projectFilePath: null, data: workspaceTemp, type: 'beginner', extension: robotType },
-                        displayTimeout: 2000
+                        displayTimeout: 1000
                     });
                 } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.CPP) {
                     try {
