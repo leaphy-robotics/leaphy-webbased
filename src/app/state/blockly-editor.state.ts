@@ -76,6 +76,7 @@ export class BlocklyEditorState {
             wheel: true,
         },
         renderer: "zelos",
+        media: "media",
     });
     public blocklyConfig$ = this.blocklyConfigSubject$.asObservable();
 
