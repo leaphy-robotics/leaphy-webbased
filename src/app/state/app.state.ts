@@ -153,7 +153,6 @@ export class AppState {
                 }
                 this.selectedRobotTypeSubject$.next(robotType);
             });
-
         } else {
             this.selectedRobotTypeSubject$.next(robotType);
         }
