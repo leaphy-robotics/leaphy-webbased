@@ -44,11 +44,19 @@ export default class Stk500v2 extends BaseProtocol {
 
                         await this.flash(hex.parse(program).data, 256)
 
-                        this.exitProgrammingMode(err => {
+                        this.exitProgrammingMode(async err => {
                             if (err) reject(err)
 
                             this.uploader.writeStream = this.parser.writer
                             this.uploader.readStream = this.parser.reader
+                            await this.parser.writer.abort()
+                            await this.parser.reader.cancel()
+
+                            // Reset the Arduino
+                            try {
+                                await this.reset(115200);
+                            } catch (error) {}
+
                             callback("UPDATE_COMPLETE")
                             resolve()
                         })
