@@ -1,17 +1,17 @@
-import { Injectable } from '@angular/core';
-import { BlocklyEditorState } from '../state/blockly-editor.state';
-import { filter, withLatestFrom } from 'rxjs/operators';
-import { BackEndState } from '../state/backend.state';
-import { SketchStatus } from '../domain/sketch.status';
-import { AppState } from '../state/app.state';
-import { WorkspaceStatus } from '../domain/workspace.status';
-import { CodeEditorType } from '../domain/code-editor.type';
-import { NameFileDialog } from "../modules/core/dialogs/name-file/name-file.dialog";
-import { MatDialog } from "@angular/material/dialog";
-import { VariableDialog } from "../modules/core/dialogs/variable/variable.dialog";
-import { UploadDialog } from "../modules/core/dialogs/upload/upload.dialog";
-import { Router } from "@angular/router";
-import { DebugInformationDialog } from "../modules/core/dialogs/debug-information/debug-information.dialog";
+import {Injectable} from '@angular/core';
+import {BlocklyEditorState} from '../state/blockly-editor.state';
+import {filter, withLatestFrom} from 'rxjs/operators';
+import {BackEndState} from '../state/backend.state';
+import {SketchStatus} from '../domain/sketch.status';
+import {AppState} from '../state/app.state';
+import {WorkspaceStatus} from '../domain/workspace.status';
+import {CodeEditorType} from '../domain/code-editor.type';
+import {NameFileDialog} from "../modules/core/dialogs/name-file/name-file.dialog";
+import {MatDialog} from "@angular/material/dialog";
+import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
+import {UploadDialog} from "../modules/core/dialogs/upload/upload.dialog";
+import {Router} from "@angular/router";
+import {DebugInformationDialog} from "../modules/core/dialogs/debug-information/debug-information.dialog";
 import * as Blockly from 'blockly/core';
 import {ConnectPythonDialog} from "../modules/core/dialogs/connect-python/connect-python.dialog";
 import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
@@ -329,17 +329,16 @@ export class BackendWiredEffects {
                 const robotType = sessionStorage.getItem('robotType');
                 const type = sessionStorage.getItem('type');
                 this.blocklyState.setProjectFileHandle(null);
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
                 if (type == 'beginner' && this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
                     if (robotType != this.appState.getSelectedRobotType().id) {
                         return;
                     }
-                    try {
-                        this.blocklyState.setWorkspaceXml(workspaceTemp);
-
-                    } catch (error) {
-                        console.log('Error:', error.message);
-                    }
+                    this.backEndState.setBackendMessage({
+                        event: 'WORKSPACE_RESTORING',
+                        message: 'WORKSPACE_RESTORING',
+                        payload: { projectFilePath: null, data: workspaceTemp, type: 'beginner', extension: robotType },
+                        displayTimeout: 1000
+                    });
                 } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.CPP) {
                     try {
                         this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
@@ -395,7 +394,7 @@ export class BackendWiredEffects {
                     }
                     await writable.close();
                 } else {
-                    await this.send('save-workspace-as');
+                    await this.send('save-workspace-as', { extension: this.appState.getSelectedRobotType().id });
                 }
                 break;
             default:
