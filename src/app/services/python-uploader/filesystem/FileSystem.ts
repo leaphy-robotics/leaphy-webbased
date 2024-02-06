@@ -27,6 +27,14 @@ async function exists(writer: WritableStreamDefaultWriter, reader: ReadableStrea
 }
 
 async function put(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, filename: string, content: string) {
+    // make sure the dir above exists and above that
+    let dirs = filename.split('/');
+    for (let i = 0; i < dirs.length - 1; i++) {
+        const dir = dirs.slice(0, i + 1).join('/');
+        if (!await dirExists(writer, reader, dir)) {
+            await mkdir(writer, reader, dir);
+        }
+    }
     content = btoa(content);
     const writeCommand = `import binascii; f = open("${filename}", "w"); f.write(binascii.a2b_base64("${content}")); f.close()`;
     await sendCommand(writer, writeCommand);
