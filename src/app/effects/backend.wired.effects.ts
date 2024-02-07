@@ -29,6 +29,7 @@ const fileExtensions = [
     ".l_click",
     ".l_uno",
     ".l_nano",
+    ".l_mega",
     ".l_wifi",
     ".ino",
     ".py",
