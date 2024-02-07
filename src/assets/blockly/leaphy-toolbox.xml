@@ -205,7 +205,7 @@
         <block type="leaphy_serial_read_line">
         </block>
 	</category>
-    <category id="l_mega" toolboxitemid="l_uno_sensors" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
+    <category id="l_mega" toolboxitemid="l_mega_sensors" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
         <sep gap="8"></sep>
         <block type="digital_read">
         </block>
@@ -893,7 +893,7 @@
 		<block type="leaphy_display_display">
 		</block>
 	</category>
-    <category id="l_mega_actuators" toolboxitemid="l_uno_actuators" name="%{BKY_ACTUATOREN_CATEGORY}" categorystyle="leaphy_category">
+    <category id="l_mega_actuators" toolboxitemid="l_mega_actuators" name="%{BKY_ACTUATOREN_CATEGORY}" categorystyle="leaphy_category">
         <block type="leaphy_original_set_led">
             <value name="LED_RED">
                 <shadow type="math_number">

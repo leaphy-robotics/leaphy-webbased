@@ -58,7 +58,7 @@ export class AppState {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         });
-    private static arduinoMegaRobotType = new RobotType('l_mega', Stk500v2, 'Arduino Mega', 'nano.svg', 'Arduino MEGA', 'arduino:avr:mega', 'hex', 'arduino:avr',
+    private static arduinoMegaRobotType = new RobotType('l_mega', Stk500v2, 'Arduino Mega', 'mega.svg', 'Arduino MEGA', 'arduino:avr:mega', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
         })
