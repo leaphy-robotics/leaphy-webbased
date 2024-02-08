@@ -17,6 +17,10 @@
         height: 60px;
         color: white;
 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         &:disabled {
             color: var(--leaphy-color-dark);
         }
