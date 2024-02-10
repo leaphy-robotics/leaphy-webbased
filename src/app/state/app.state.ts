@@ -17,7 +17,7 @@ import Stk500v2 from "../services/arduino-uploader/protocols/stk500v2";
 export class AppState {
     /* eslint-disable max-len */
     private static defaultLibraries = [
-        'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor', 'List'
+        'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor', 'List', 'Adafruit SGP30 Sensor'
     ]
     private static leaphyOriginalRobotType = new RobotType('l_original_uno', Stk500v1, 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
