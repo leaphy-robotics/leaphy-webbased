@@ -19,6 +19,9 @@
 		<block type="leaphy_compass_degrees">
 		</block>
 		<sep gap="8"></sep>
+        <block type="leaphy_gas_sensor">
+		</block>
+		<sep gap="8"></sep>
 		<block type="leaphy_i2c_rgb_color">
 		</block>
 		<sep gap="8"></sep>
@@ -163,6 +166,9 @@
 		<block type="leaphy_compass_degrees">
 		</block>
 		<sep gap="8"></sep>
+        <block type="leaphy_gas_sensor">
+		</block>
+		<sep gap="8"></sep>
 		<block type="leaphy_i2c_rgb_color">
 		</block>
 		<sep gap="8"></sep>
@@ -195,6 +201,9 @@
 		<block type="leaphy_compass_degrees">
 		</block>
 		<sep gap="8"></sep>
+        <block type="leaphy_gas_sensor">
+		</block>
+		<sep gap="8"></sep>
 		<block type="leaphy_i2c_rgb_color">
 		</block>
 		<block type="leaphy_i2c_gesture">
@@ -223,6 +232,9 @@
         <sep gap="8"></sep>
         <block type="leaphy_compass_degrees">
         </block>
+		<sep gap="8"></sep>
+        <block type="leaphy_gas_sensor">
+		</block>
         <sep gap="8"></sep>
         <block type="leaphy_i2c_rgb_color">
         </block>
@@ -1113,6 +1125,7 @@
         </block>
     </category>
 	<category id="l_nano" toolboxitemid="l_nano_sensors" name="%{BKY_SENSOREN_CATEGORY}" categorystyle="leaphy_category">
+	    <block type="i2c_use_channel"></block>
 		<block type="leaphy_original_get_distance">
 		</block>
 		<sep gap="8"></sep>
@@ -1130,6 +1143,9 @@
 		</block>
 		<sep gap="8"></sep>
 		<block type="leaphy_compass_degrees">
+		</block>
+		<sep gap="8"></sep>
+        <block type="leaphy_gas_sensor">
 		</block>
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_rgb_color">
@@ -1361,5 +1377,7 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_display_display">
 		</block>
+	    <block type="i2c_use_channel"></block>
+		<sep gap="8"></sep>
 	</category>
 </xml>
