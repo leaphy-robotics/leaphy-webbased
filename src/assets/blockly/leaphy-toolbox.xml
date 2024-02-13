@@ -1150,6 +1150,9 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_rgb_color">
 		</block>
+        <sep gap="8"></sep>
+        <block type="leaphy_tof_get_distance">
+        </block>
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
 		</block>
