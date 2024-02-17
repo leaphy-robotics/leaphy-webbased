@@ -25,6 +25,9 @@
 		<block type="leaphy_i2c_rgb_color">
 		</block>
 		<sep gap="8"></sep>
+        <block type="leaphy_tof_get_distance">
+        </block>
+		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
 		</block>
         <block type="leaphy_serial_available">
@@ -176,6 +179,9 @@
 		</block>
 		<block type="leaphy_original_get_distance">
 		</block>
+		<sep gap="8"></sep>
+        <block type="leaphy_tof_get_distance">
+        </block>
         <block type="leaphy_serial_available">
         </block>
         <sep gap="8"></sep>
@@ -206,9 +212,12 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_rgb_color">
 		</block>
+		<sep gap="8"></sep>
+        <block type="leaphy_tof_get_distance">
+        </block>
 		<block type="leaphy_i2c_gesture">
 		</block>
-        <sep gap="8"></sep>
+		<sep gap="8"></sep>
         <block type="leaphy_serial_available">
         </block>
         <block type="leaphy_serial_read_line">
@@ -237,6 +246,9 @@
 		</block>
         <sep gap="8"></sep>
         <block type="leaphy_i2c_rgb_color">
+        </block>
+        <sep gap="8"></sep>
+        <block type="leaphy_tof_get_distance">
         </block>
         <block type="leaphy_i2c_gesture">
         </block>
