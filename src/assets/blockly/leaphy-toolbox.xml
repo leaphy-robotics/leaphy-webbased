@@ -28,6 +28,9 @@
         <block type="leaphy_tof_get_distance">
         </block>
 		<sep gap="8"></sep>
+        <block type="leaphy_get_air_pressure">
+        </block>
+		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
 		</block>
         <block type="leaphy_serial_available">
@@ -177,10 +180,14 @@
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
 		</block>
+		<sep gap="8"></sep>
 		<block type="leaphy_original_get_distance">
 		</block>
 		<sep gap="8"></sep>
         <block type="leaphy_tof_get_distance">
+        </block>
+		<sep gap="8"></sep>
+        <block type="leaphy_get_air_pressure">
         </block>
         <block type="leaphy_serial_available">
         </block>
@@ -215,8 +222,11 @@
 		<sep gap="8"></sep>
         <block type="leaphy_tof_get_distance">
         </block>
+		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
 		</block>
+        <block type="leaphy_get_air_pressure">
+        </block>
 		<sep gap="8"></sep>
         <block type="leaphy_serial_available">
         </block>
@@ -250,7 +260,10 @@
         <sep gap="8"></sep>
         <block type="leaphy_tof_get_distance">
         </block>
+        <sep gap="8"></sep>
         <block type="leaphy_i2c_gesture">
+        </block>
+        <block type="leaphy_get_air_pressure">
         </block>
         <sep gap="8"></sep>
         <block type="leaphy_serial_available">
@@ -1164,6 +1177,9 @@
 		</block>
         <sep gap="8"></sep>
         <block type="leaphy_tof_get_distance">
+        </block>
+		<sep gap="8"></sep>
+        <block type="leaphy_get_air_pressure">
         </block>
 		<sep gap="8"></sep>
 		<block type="leaphy_i2c_gesture">
