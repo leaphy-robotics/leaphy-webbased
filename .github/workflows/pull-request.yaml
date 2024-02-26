@@ -21,7 +21,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install node modules
-        run: yarn workspaces focus --all --production
+        run: yarn install --frozen-lockfile
 
       - name: Run linter
         run: yarn lint
