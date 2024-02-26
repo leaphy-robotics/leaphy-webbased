@@ -19,9 +19,15 @@ jobs:
         with:
           node-version: '18.x'
           registry-url: 'https://registry.npmjs.org'
+      
+      - name: Install latest Yarn
+        run: corepack prepare yarn@stable --activate
 
+      - name: Activate latest Yarn
+        run: yarn set version stable
+      
       - name: Install node modules
-        run: yarn install --immutable
+        run: yarn install --immutable --immutable-cache --check-cache
 
       - name: Run linter
         run: yarn lint

@@ -93,5 +93,8 @@
     "crypto": false,
     "fs": false,
     "path": false
+  },
+  "engines": {
+    "yarn": "4.1.0"
   }
 }
