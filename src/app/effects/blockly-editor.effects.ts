@@ -328,6 +328,38 @@ export class BlocklyEditorEffects {
             });
     }
 
+    private parseCategory(root: Document, category: HTMLElement, robotType: RobotType,) : HTMLElement {
+        // Remove blocks that aren't in robots list
+        Array.from(category.querySelectorAll('block'))
+            .filter(block => {
+                const robots = block.querySelector('robots');
+                if (!robots) return false;
+
+                block.removeChild(robots);
+                return !robots.querySelector(robotType.id);
+            })
+            .forEach(block => block.remove());
+
+        // Add separator between groups
+        Array.from(category.querySelectorAll('group'))
+            .forEach(group => {
+                const items = Array.from(group.querySelectorAll('block'))
+                    .map((block, index, array) => {
+                        if (index === array.length - 1) return block
+
+                        const separator = root.createElement('sep')
+                        separator.setAttribute('gap', '8')
+                        return [block, separator]
+                    })
+                    .flat()
+
+                group.before(...items)
+                group.remove()
+            })
+
+        return category
+    }
+
     private loadToolBox(baseToolboxXml: string, leaphyToolboxXml: string, robotType: RobotType) : string {
         const parser = new DOMParser();
         const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
@@ -340,13 +372,23 @@ export class BlocklyEditorEffects {
             toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_operators"))
         }
         if (robotType.features.showLeaphyActuators) {
-            const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_actuators`);
-            toolboxElement.prepend(leaphyExtraCategory);
+            const leaphyExtraCategory = leaphyCategories.getElementById("l_actuators");
+            leaphyExtraCategory.setAttribute("toolboxitemid", `${robotType.id}_actuators`)
+
+            toolboxElement.prepend(this.parseCategory(leaphyCategories, leaphyExtraCategory, robotType));
+        }
+        if (robotType.features.showLeaphySensors) {
+            const leaphySensorCategory = leaphyCategories.getElementById("l_sensors");
+            leaphySensorCategory.setAttribute("toolboxitemid", `${robotType.id}_sensors`);
+
+            toolboxElement.prepend(this.parseCategory(leaphyCategories, leaphySensorCategory, robotType));
         }
         if (!robotType.features.showLeaphyLists) {
             toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_lists"))
         }
-        toolboxElement.prepend(leaphyRobotCategory);
+        if (leaphyRobotCategory) {
+            toolboxElement.prepend(leaphyRobotCategory);
+        }
         const serializer = new XMLSerializer();
         return serializer.serializeToString(toolboxXmlDoc);
     }

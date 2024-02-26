@@ -26,6 +26,7 @@ const fileExtensions = [
     ".l_flitz_uno",
     ".l_flitz_nano",
     ".l_original_uno",
+    ".l_original_nano",
     ".l_click",
     ".l_uno",
     ".l_nano",

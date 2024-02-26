@@ -3,6 +3,7 @@ import BaseProtocol from "../services/arduino-uploader/protocols/base";
 interface Features {
     showLeaphyActuators: boolean;
     showLeaphyOperators: boolean;
+    showLeaphySensors: boolean;
     showLeaphyLists: boolean;
     showCodeOnStart: boolean;
 }
@@ -10,6 +11,7 @@ interface Features {
 const DEFAULTS: Features = {
     showLeaphyActuators: true,
     showLeaphyOperators: true,
+    showLeaphySensors: false,
     showLeaphyLists: false,
     showCodeOnStart: false
 };
@@ -32,4 +34,15 @@ export class RobotType {
     ) {
         this.features = Object.assign({}, DEFAULTS, features||{});
     }
+}
+
+interface RobotSelectorOption {
+    name: string,
+    icon: string,
+    robot: RobotType,
+}
+
+export interface RobotSelector {
+    intercept: RobotType,
+    choices: RobotSelectorOption[],
 }
