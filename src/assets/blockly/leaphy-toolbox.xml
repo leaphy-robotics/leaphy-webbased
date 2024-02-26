@@ -3,6 +3,7 @@
         <block type="i2c_use_channel">
             <robots>
                 <l_nano/>
+                <l_original_nano/>
             </robots>
         </block>
 
@@ -295,6 +296,7 @@
         <block type="i2c_use_channel">
             <robots>
                 <l_nano/>
+                <l_original_nano/>
             </robots>
         </block>
     </category>
