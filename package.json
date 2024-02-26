@@ -89,9 +89,10 @@
     "forge": "./forge.config.js"
   },
   "browser": {
-    "crypto": false,
     "constants": false,
+    "crypto": false,
     "fs": false,
     "path": false
-  }
+  },
+  "packageManager": "yarn@4.1.0"
 }
