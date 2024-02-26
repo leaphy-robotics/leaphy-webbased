@@ -32,6 +32,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@angular-devkit/architect@npm:^0.1702.1":
+  version: 0.1702.1
+  resolution: "@angular-devkit/architect@npm:0.1702.1"
+  dependencies:
+    "@angular-devkit/core": "npm:17.2.1"
+    rxjs: "npm:7.8.1"
+  checksum: 10c0/ff7f0849dad9e8ee5a92c8707dfacd9266ba65dfe083e5e9e11f1c50c658bc6771179edb412e2181d15d41747eb9c8bc42b2c41b5ed1e22f52d2b5771fc74b5d
+  languageName: node
+  linkType: hard
+
 "@angular-devkit/build-angular@npm:^16.2.12":
   version: 16.2.12
   resolution: "@angular-devkit/build-angular@npm:16.2.12"
@@ -168,6 +178,25 @@ __metadata:
     chokidar:
       optional: true
   checksum: 10c0/2d36050bf7df2afe8126beec64d44cf045a8874598f2a843c6299cc62f8473ea38dbcc5f8594fbdfd70f0d1ffffa1afd803424a5d900eca2701748e0c19a3a97
+  languageName: node
+  linkType: hard
+
+"@angular-devkit/core@npm:17.2.1":
+  version: 17.2.1
+  resolution: "@angular-devkit/core@npm:17.2.1"
+  dependencies:
+    ajv: "npm:8.12.0"
+    ajv-formats: "npm:2.1.1"
+    jsonc-parser: "npm:3.2.1"
+    picomatch: "npm:4.0.1"
+    rxjs: "npm:7.8.1"
+    source-map: "npm:0.7.4"
+  peerDependencies:
+    chokidar: ^3.5.2
+  peerDependenciesMeta:
+    chokidar:
+      optional: true
+  checksum: 10c0/f458293f6627ff1ad47caed2677617179bb2ac2f38ea26cbe108a6fad83a3b9100a8657b2b8f41681ca63649b2fe031a525dbb8ed9b9c148acce0fc19098a435
   languageName: node
   linkType: hard
 
@@ -8937,6 +8966,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsonc-parser@npm:3.2.1":
+  version: 3.2.1
+  resolution: "jsonc-parser@npm:3.2.1"
+  checksum: 10c0/ada66dec143d7f9cb0e2d0d29c69e9ce40d20f3a4cb96b0c6efb745025ac7f9ba647d7ac0990d0adfc37a2d2ae084a12009a9c833dbdbeadf648879a99b9df89
+  languageName: node
+  linkType: hard
+
 "jsonfile@npm:^4.0.0":
   version: 4.0.0
   resolution: "jsonfile@npm:4.0.0"
@@ -9117,6 +9153,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "leaphy_webbased@workspace:."
   dependencies:
+    "@angular-devkit/architect": "npm:^0.1702.1"
     "@angular-devkit/build-angular": "npm:^16.2.12"
     "@angular-eslint/builder": "npm:13.5.0"
     "@angular-eslint/eslint-plugin": "npm:13.5.0"
@@ -10788,6 +10825,13 @@ __metadata:
   version: 2.3.1
   resolution: "picomatch@npm:2.3.1"
   checksum: 10c0/26c02b8d06f03206fc2ab8d16f19960f2ff9e81a658f831ecb656d8f17d9edc799e8364b1f4a7873e89d9702dff96204be0fa26fe4181f6843f040f819dac4be
+  languageName: node
+  linkType: hard
+
+"picomatch@npm:4.0.1":
+  version: 4.0.1
+  resolution: "picomatch@npm:4.0.1"
+  checksum: 10c0/a036a085b18b376493e8ccef155bb03c65a2be7203582b717bb0498d1446e6a80f7f86a36e07877590abd0431f26c64c6154058c31f4f46105d3686a34fa3cf6
   languageName: node
   linkType: hard
 
