@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { RobotType } from '../domain/robot.type';
+import {RobotSelector, RobotType} from '../domain/robot.type';
 import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
@@ -24,6 +24,14 @@ export class AppState {
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: false,
+            showLeaphySensors: true,
+        },
+    );
+    private static leaphyOriginalNanoRobotType = new RobotType('l_original_nano', Stk500v1, 'Original Nano', 'orig.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+            showLeaphyActuators: true,
+            showLeaphyOperators: true,
+            showLeaphySensors: true,
         },
     );
     private static leaphyFlitzRobotType = new RobotType('l_flitz_uno', Stk500v1, 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
@@ -39,11 +47,14 @@ export class AppState {
         },
     );
     private static leaphyClickRobotType = new RobotType('l_click', Stk500v1, 'Leaphy Click', 'click.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries
+        AppState.defaultLibraries, true, {
+            showLeaphySensors: true,
+        }
     );
     private static arduinoUnoRobotType = new RobotType('l_uno', Stk500v1, 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
+            showLeaphySensors: true,
         }
     );
     public static genericRobotType = new RobotType('l_code', Stk500v1, 'Leaphy C++', "c++.svg", 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
@@ -52,6 +63,7 @@ export class AppState {
     private static arduinoNanoRobotType = new RobotType('l_nano', Stk500v1, 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
+            showLeaphySensors: true,
         }
     );
     public static microPythonRobotType = new RobotType('l_micropython', Stk500v1, 'MicroPython', 'micropython.svg', 'MicroPython', '', 'bin', '',
@@ -62,10 +74,12 @@ export class AppState {
     private static arduinoMegaRobotType = new RobotType('l_mega', Stk500v2, 'Arduino Mega', 'mega.svg', 'Arduino MEGA', 'arduino:avr:mega', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
+            showLeaphySensors: true,
         })
 
     public static idToRobotType = {
         'l_original_uno': AppState.leaphyOriginalRobotType,
+        'l_original_nano': AppState.leaphyOriginalNanoRobotType,
         'l_flitz_uno': AppState.leaphyFlitzRobotType,
         'l_click': AppState.leaphyClickRobotType,
         'l_uno': AppState.arduinoUnoRobotType,
@@ -75,6 +89,39 @@ export class AppState {
         'l_micropython': AppState.microPythonRobotType,
         'l_mega': AppState.arduinoMegaRobotType
     }
+
+    private static robotSelectors: RobotSelector[] = [
+        {
+            intercept: AppState.leaphyFlitzRobotType,
+            choices: [
+                {
+                    name: 'Flitz Uno',
+                    icon: 'flitz.svg',
+                    robot: AppState.leaphyFlitzRobotType,
+                },
+                {
+                    name: 'Flitz Nano',
+                    icon: 'flitz.svg',
+                    robot: AppState.leaphyFlitzNanoRobotType,
+                }
+            ]
+        },
+        {
+            intercept: AppState.leaphyOriginalRobotType,
+            choices: [
+                {
+                    name: 'Original Uno',
+                    icon: 'orig.svg',
+                    robot: AppState.leaphyOriginalRobotType,
+                },
+                {
+                    name: 'Original Nano',
+                    icon: 'orig.svg',
+                    robot: AppState.leaphyOriginalNanoRobotType,
+                }
+            ]
+        }
+    ]
 
     public releaseInfoSubject$ = new BehaviorSubject<any>(null);
     public releaseInfo$: Observable<any> = this.releaseInfoSubject$.asObservable();
@@ -139,24 +186,22 @@ export class AppState {
     public canChangeCodeEditor$: Observable<boolean>;
 
     public setSelectedRobotType(robotType: RobotType) {
-        // Intercept flitz robots and ask what type of flitz robot: nano, or uno
-        if (robotType === AppState.leaphyFlitzRobotType) {
-            this.dialog.open(SelectRobotTypeDialog, {
-                width: '250px',
-                data: { boardTypes: ["Flitz Uno", "Flitz Nano"], icons: ["flitz.svg", "flitz.svg"] }
-            }).afterClosed().subscribe((result: string) => {
-                if (result === "Flitz Uno") {
-                    robotType = AppState.leaphyFlitzRobotType;
-                } else if (result === "Flitz Nano") {
-                    robotType = AppState.leaphyFlitzNanoRobotType;
-                } else {
-                    return;
-                }
-                this.selectedRobotTypeSubject$.next(robotType);
-            });
-        } else {
-            this.selectedRobotTypeSubject$.next(robotType);
-        }
+        // Intercept robots and ask what type of robot: nano, or uno
+        const selector = AppState.robotSelectors.find(({ intercept }) => intercept === robotType);
+        if (!selector) return this.selectedRobotTypeSubject$.next(robotType);
+
+        this.dialog.open(SelectRobotTypeDialog, {
+            width: '250px',
+            data: {
+                boardTypes: selector.choices.map(({ name }) => name),
+                icons: selector.choices.map(({ icon }) => icon)
+            }
+        }).afterClosed().subscribe((result: string) => {
+            const selected = selector.choices.find(({ name }) => name === result)
+
+            if (!selected) return;
+            this.selectedRobotTypeSubject$.next(selected.robot);
+        });
     }
 
     public setChangedLanguage(language: Language) {
