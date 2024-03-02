@@ -145,12 +145,19 @@ export class UploadDialog {
     }
 
     showReturnOptions() {
-        document.getElementById("return-options").classList.remove("hidden");
-        document.getElementById("upload-progress-bar").classList.add("hidden");
-        document.getElementById("return-options").classList.add("return-options");
-        if (this.uploadFailed) {
-            document.getElementById("upload-status").classList.add("failed-upload");
-            document.getElementById("helpEnviroment").classList.remove("hidden");
+        try {
+            document.getElementById("return-options").classList.remove("hidden");
+            document.getElementById("upload-progress-bar").classList.add("hidden");
+            document.getElementById("return-options").classList.add("return-options");
+            if (this.uploadFailed) {
+                document.getElementById("upload-status").classList.add("failed-upload");
+                document.getElementById("helpEnviroment").classList.remove("hidden");
+            }
+        } catch (error) {
+            console.error(error);
+            console.warn("Failed to show action buttons on build-in dialog, using native alert() function!");
+            alert(this.statusMessage);
+            this.returnBlockEnvironment();
         }
     }
 
@@ -165,8 +172,13 @@ export class UploadDialog {
     }
 
     onError(error: string) {
-        document.getElementById("error-message").innerText = error;
-        document.getElementById("error-message").classList.remove("hidden");
-        this.uploadFailed = true;
+        try {
+            document.getElementById("error-message").innerText = error;
+            document.getElementById("error-message").classList.remove("hidden");
+            this.uploadFailed = true;
+        } catch (error) {
+            console.error(error);
+            console.warn("Failed to show error message string in build-in dialog!");
+        }
     }
 }
