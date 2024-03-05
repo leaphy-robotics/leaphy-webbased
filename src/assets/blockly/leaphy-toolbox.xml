@@ -293,12 +293,20 @@
             </block>
         </group>
 
-        <block type="i2c_use_channel">
-            <robots>
-                <l_nano/>
-                <l_original_nano/>
-            </robots>
-        </block>
+        <group>
+            <block type="i2c_list_devices">
+                <robots>
+                    <l_nano/>
+                    <l_original_nano/>
+                </robots>
+            </block>
+            <block type="i2c_use_channel">
+                <robots>
+                    <l_nano/>
+                    <l_original_nano/>
+                </robots>
+            </block>
+        </group>
     </category>
     <category id="l_flitz_uno" toolboxitemid="l_flitz_uno" name="%{BKY_LEAPHY_FLITZ_CATEGORY}"
               categorystyle="leaphy_category">
