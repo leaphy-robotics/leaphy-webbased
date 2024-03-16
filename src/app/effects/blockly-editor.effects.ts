@@ -10,6 +10,7 @@ import {AppState} from '../state/app.state';
 import {CodeEditorType} from '../domain/code-editor.type';
 import {BackendWiredEffects} from "./backend.wired.effects";
 import * as Blockly from 'blockly/core';
+import '@blockly/field-bitmap'
 import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
 import getBlocks from "@leaphy-robotics/leaphy-blocks/blocks/blocks";
 import {
