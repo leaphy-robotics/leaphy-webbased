@@ -318,7 +318,7 @@ export class BlocklyEditorEffects {
                             this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
                             this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(AppState.genericRobotType);
+                            this.appState.setSelectedRobotType(AppState.genericRobotType, true);
                             return;
                         } else if (message.payload.type == 'python') {
                             this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
@@ -327,10 +327,10 @@ export class BlocklyEditorEffects {
                             this.appState.setSelectedCodeEditor(CodeEditorType.Python);
                             this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(AppState.microPythonRobotType);
+                            this.appState.setSelectedRobotType(AppState.microPythonRobotType, true);
                             return;
                         }
-                        this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')]);
+                        this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);
                         this.blocklyState.setWorkspaceXml(message.payload.data as string);
                         this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);

@@ -185,10 +185,10 @@ export class AppState {
 
     public canChangeCodeEditor$: Observable<boolean>;
 
-    public setSelectedRobotType(robotType: RobotType) {
+    public setSelectedRobotType(robotType: RobotType, skipPopup: boolean = false) {
         // Intercept robots and ask what type of robot: nano, or uno
         const selector = AppState.robotSelectors.find(({ intercept }) => intercept === robotType);
-        if (!selector) return this.selectedRobotTypeSubject$.next(robotType);
+        if (!selector || skipPopup) return this.selectedRobotTypeSubject$.next(robotType);
 
         this.dialog.open(SelectRobotTypeDialog, {
             width: '250px',
