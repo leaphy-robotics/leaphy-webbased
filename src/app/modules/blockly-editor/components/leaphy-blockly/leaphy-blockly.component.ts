@@ -35,6 +35,7 @@ export class LeaphyBlocklyComponent implements AfterViewInit {
             if (!workspace.backpack) {
                 const backpack = new Backpack(workspace);
                 workspace.backpack = backpack;
+                Blockly.registry.unregister(Blockly.registry.Type.SERIALIZER, "backpack")
 
 
                 backpack.setContents(JSON.parse(localStorage.getItem('backpack')) || []);
