@@ -24,7 +24,7 @@ export class BlocklyEditorPage {
         private blocklyEditorState: BlocklyEditorState
     ) {
         window.addEventListener("beforeunload", async (event) => {
-            await this.backendWiredEffects.send('save-workspace-temp', {data: this.blocklyEditorState.workspaceXml})
+            await this.backendWiredEffects.send('save-workspace-temp', {data: this.blocklyEditorState.workspaceJSON})
         });
     }
 }

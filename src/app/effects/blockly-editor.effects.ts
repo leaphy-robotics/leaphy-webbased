@@ -205,14 +205,14 @@ export class BlocklyEditorEffects {
                 workspace.addChangeListener(Blockly.Events.disableOrphans);
                 workspace.addChangeListener(async () => {
                     this.blocklyState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
-                    this.blocklyState.setWorkspaceXml(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
+                    this.blocklyState.setWorkspaceJSON(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
                 });
             });
 
         // When the WorkspaceStatus is set to loading, load in the latest workspace XML
         this.blocklyState.workspaceStatus$
             .pipe(filter(status => status === WorkspaceStatus.Restoring))
-            .pipe(withLatestFrom(this.blocklyState.workspaceXml$, this.blocklyState.workspace$))
+            .pipe(withLatestFrom(this.blocklyState.workspaceJSON$, this.blocklyState.workspace$))
             .subscribe(async ([, workspaceXml, workspace]) => {
                 if (!workspace) return;
                 if (!workspaceXml) return;
@@ -331,7 +331,7 @@ export class BlocklyEditorEffects {
                             return;
                         }
                         this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);
-                        this.blocklyState.setWorkspaceXml(message.payload.data as string);
+                        this.blocklyState.setWorkspaceJSON(message.payload.data as string);
                         this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
                         break;

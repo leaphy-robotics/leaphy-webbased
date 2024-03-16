@@ -86,8 +86,8 @@ export class BlocklyEditorState {
     private workspaceSubject$ = new BehaviorSubject<any>(null);
     public workspace$ = this.workspaceSubject$.asObservable();
 
-    private workspaceXmlSubject$ = new BehaviorSubject(null);
-    public workspaceXml$ = this.workspaceXmlSubject$.asObservable();
+    private workspaceJSONSubject$ = new BehaviorSubject(null);
+    public workspaceJSON$ = this.workspaceJSONSubject$.asObservable();
 
     private projectFileHandleSubject$ = new BehaviorSubject<FileSystemFileHandle | PythonFile>(null);
     public projectFileHandle$ = this.projectFileHandleSubject$.asObservable();
@@ -138,8 +138,8 @@ export class BlocklyEditorState {
         this.workspaceSubject$.next(workspace);
     }
 
-    public setWorkspaceXml(workspaceXml: any) {
-        this.workspaceXmlSubject$.next(workspaceXml);
+    public setWorkspaceJSON(workspaceXml: any) {
+        this.workspaceJSONSubject$.next(workspaceXml);
     }
 
     public setProjectFileHandle(path: FileSystemFileHandle | PythonFile) {
@@ -175,7 +175,7 @@ export class BlocklyEditorState {
         return this.codeSubject$.getValue();
     }
 
-    get workspaceXml(): string {
-        return this.workspaceXmlSubject$.getValue();
+    get workspaceJSON(): string {
+        return this.workspaceJSONSubject$.getValue();
     }
 }
