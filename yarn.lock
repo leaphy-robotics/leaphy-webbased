@@ -1444,6 +1444,11 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@blockly/field-bitmap@^4.0.13":
+  version "4.0.13"
+  resolved "https://registry.yarnpkg.com/@blockly/field-bitmap/-/field-bitmap-4.0.13.tgz#3f716eea52582bb69f40273236a1ff198755ef58"
+  integrity sha512-DrbqRUy0TgTwjo0pcuXBLOafZ3qFipn1SSKPKjMP5F9JSJMAprnbhYC3OI1maY5Rs9x3ndGFdKpmw19XkqJHcA==
+
 "@blockly/workspace-backpack@^5.3.3":
   version "5.3.3"
   resolved "https://registry.yarnpkg.com/@blockly/workspace-backpack/-/workspace-backpack-5.3.3.tgz#e5af9abe41080aa0d0754b1a1220e938a273dbe7"
