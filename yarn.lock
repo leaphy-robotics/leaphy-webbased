@@ -1828,10 +1828,10 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
-"@leaphy-robotics/leaphy-blocks@^1.16.0":
-  version "1.16.0"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.16.0.tgz#9f9cd0382834bb46abc6f3a7b571db129d0748ad"
-  integrity sha512-mGL3NUbX5CWkDTDvnJeLTPViFZCS/f/XLaGicOojA2kfeWpqu7YPd+ft2ghdklyuy8TQr8C+1Dn9ssGGr8mCbA==
+"@leaphy-robotics/leaphy-blocks@1.17.0":
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.17.0.tgz#a6b5e129bd611aef8c23e2bcfe5e19467d27859f"
+  integrity sha512-HHulLpjP5U0M56fX9NkFE8nfLh2jJf7vphF1IU1WDgQjjTfptkNDKLXgovyUnIaW3DALS0RDnKioLMhvtlat+A==
   dependencies:
     blockly "^10.1.3"
     typescript "4.3.2"
