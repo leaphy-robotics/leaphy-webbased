@@ -106,6 +106,32 @@
                 </value>
             </block>
 
+            <block type="leaphy_original_servo_set">
+                <value name="SPEED">
+                    <shadow type="math_number">
+                        <field name="NUM">
+                            100
+                        </field>
+                    </shadow>
+                </value>
+                <robots>
+                    <l_original_nano/>
+                </robots>
+            </block>
+
+            <block type="leaphy_original_servo_move">
+                <value name="SPEED">
+                    <shadow type="math_number">
+                        <field name="NUM">
+                            100
+                        </field>
+                    </shadow>
+                </value>
+                <robots>
+                    <l_original_nano/>
+                </robots>
+            </block>
+
             <block type="leaphy_original_buzz">
                 <value name="FREQUENCY">
                     <shadow type="math_number">
