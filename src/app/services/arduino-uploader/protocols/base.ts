@@ -2,7 +2,6 @@ import {RobotWiredState} from "../../../state/robot.wired.state";
 import {clearReadBuffer, delay} from "../utils";
 import ArduinoUploader from "../ArduinoUploader";
 import {UploadState} from "../../../state/upload.state";
-import {ESPLoader} from "esptool-js";
 
 export default class BaseProtocol {
     constructor(
