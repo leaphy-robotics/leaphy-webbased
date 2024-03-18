@@ -1,6 +1,8 @@
 import {clearReadBuffer, delay} from './utils'
 import {RobotWiredState} from "../../state/robot.wired.state";
 import {AppState} from "../../state/app.state";
+import BaseProtocol from "./protocols/base";
+import {UploadState} from "../../state/upload.state";
 
 class Arduino {
     port: SerialPort = null
@@ -9,6 +11,7 @@ class Arduino {
     readStream = null
     writeStream: WritableStreamDefaultWriter = null
     robotWiredState: RobotWiredState
+    uploadState: UploadState
     appState: AppState
 
     /**
@@ -16,10 +19,12 @@ class Arduino {
      * @param serialOptions The options to use when opening the serial port.
      * @param appState The app state to use
      * @param robotWiredState The robot state to use
+     * @param uploadState The upload state to use
      */
-    constructor(robotWiredState: RobotWiredState, appState: AppState, serialOptions = { baudRate: 115200 }) {
+    constructor(robotWiredState: RobotWiredState, appState: AppState, uploadState: UploadState, serialOptions = { baudRate: 115200 }) {
         this.serialOptions = serialOptions
         this.robotWiredState = robotWiredState
+        this.uploadState = uploadState
         this.appState = appState
     }
 
@@ -27,9 +32,12 @@ class Arduino {
      * Open a connection to a user-selected Arduino.
      */
     async connect() {
-        var port;
+        let port: SerialPort;
         try {
-            port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}, {usbVendorId: 0x0403}]});
+            const ports = await navigator.serial.getPorts()
+
+            if (ports[0]) port = ports[0]
+            else port = await navigator.serial.requestPort();
         } catch (error) {
             console.log(error)
             throw new Error('No device selected')
@@ -42,6 +50,10 @@ class Arduino {
             console.log(error)
             throw new Error('Connecting to device')
         }
+        this.port = port
+    }
+
+    setPort(port: SerialPort) {
         this.port = port
     }
 
@@ -93,7 +105,16 @@ class Arduino {
                     this.writeStream.releaseLock();
 
                     await this.port.close();
-                    await this.port.open({baudRate: 115200});
+                    await this.port.open({baudRate: 115200})
+                        .catch(async () => {
+                            await delay(4000)
+
+                            const [port] = await navigator.serial.getPorts()
+                            this.robotWiredState.setSerialPort(port)
+                            this.setPort(port)
+
+                            await this.port.open({baudRate: 115200})
+                        })
                 }
             );
 
@@ -109,15 +130,15 @@ class Arduino {
         }
     }
 
-    async upload(program: string, callback = (message: string) => {}) {
+    async upload(program: Record<string, string>) {
         if (this.isUploading)
             throw new Error('Arduino is already uploading')
 
         const Uploader = this.appState.getSelectedRobotType().protocol
         this.isUploading = true
 
-        const upload = new Uploader(this.port, this.robotWiredState, this.serialOptions, this)
-        await upload.upload(program, callback)
+        const upload = new Uploader(this.port, this.robotWiredState, this.uploadState, this.serialOptions, this)
+        await upload.upload(program)
             .catch(async err => {
                 await this.close()
                 throw err
@@ -130,8 +151,8 @@ class Arduino {
      * @returns {Promise<void>}
      */
     async close() {
-        this.readStream.releaseLock();
-        this.writeStream.releaseLock();
+        this.readStream?.releaseLock();
+        this.writeStream?.releaseLock();
         this.readStream = null;
         this.writeStream = null;
         this.isUploading = false

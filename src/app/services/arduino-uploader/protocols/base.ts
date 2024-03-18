@@ -1,16 +1,19 @@
 import {RobotWiredState} from "../../../state/robot.wired.state";
 import {clearReadBuffer, delay} from "../utils";
 import ArduinoUploader from "../ArduinoUploader";
+import {UploadState} from "../../../state/upload.state";
+import {ESPLoader} from "esptool-js";
 
 export default class BaseProtocol {
     constructor(
         public port: SerialPort,
         public robotWiredState: RobotWiredState,
+        public uploadState: UploadState,
         public serialOptions: SerialOptions,
         public uploader: ArduinoUploader
     ) {}
 
-    async upload(_program: string, _callback = (_message: string) => {}) {
+    async upload(_program: Record<string, string>) {
         throw new Error("Not implemented")
     }
 
@@ -19,8 +22,8 @@ export default class BaseProtocol {
      * @returns {Promise<void>}
      */
     async reset(baudRate: number) {
-        await this.uploader.writeStream.releaseLock();
-        await this.uploader.readStream.releaseLock();
+        await this.uploader.writeStream?.releaseLock();
+        await this.uploader.readStream?.releaseLock();
         await this.port.close();
         await this.port.open({ baudRate: baudRate })
         this.uploader.readStream = this.port.readable.getReader();

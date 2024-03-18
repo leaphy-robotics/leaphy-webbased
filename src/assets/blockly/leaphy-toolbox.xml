@@ -3,7 +3,9 @@
         <block type="i2c_use_channel">
             <robots>
                 <l_nano/>
+                <l_nano_esp32/>
                 <l_original_nano/>
+                <l_original_nano_esp32/>
             </robots>
         </block>
 
@@ -12,7 +14,9 @@
                 <robots>
                     <l_original_uno/>
                     <l_original_nano/>
+                    <l_original_nano_esp32/>
                     <l_nano/>
+                    <l_nano_esp32/>
                 </robots>
             </block>
 
@@ -296,7 +300,9 @@
         <block type="i2c_use_channel">
             <robots>
                 <l_nano/>
+                <l_nano_esp32/>
                 <l_original_nano/>
+                <l_original_nano_esp32/>
             </robots>
         </block>
     </category>
