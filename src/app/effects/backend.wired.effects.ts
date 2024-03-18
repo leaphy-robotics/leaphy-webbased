@@ -139,7 +139,7 @@ export class BackendWiredEffects {
                 // When the workspace is being temporarily saved, relay the command to Electron
                 this.blocklyEditorState.workspaceStatus$
                     .pipe(filter(status => status === WorkspaceStatus.SavingTemp))
-                    .pipe(withLatestFrom(this.blocklyEditorState.workspaceXml$, this.appState.selectedRobotType$))
+                    .pipe(withLatestFrom(this.blocklyEditorState.workspaceJSON$, this.appState.selectedRobotType$))
                     .subscribe(([, workspaceXml, robotType]) => {
                         if (CodeEditorType.CPP == this.appState.getCurrentEditor() || CodeEditorType.Python == this.appState.getCurrentEditor()) {
                             this.send('save-workspace-temp', { data: workspaceXml, extension: robotType.id, type: 'advanced' });
@@ -186,7 +186,7 @@ export class BackendWiredEffects {
                     if (name == null)
                         return
                     if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
-                        const data = this.blocklyEditorState.workspaceXml;
+                        const data = this.blocklyEditorState.workspaceJSON;
                         const blob = new Blob([data], { type: 'text/plain' });
                         const url = window.URL.createObjectURL(blob);
                         const a = document.createElement('a');
@@ -390,7 +390,7 @@ export class BackendWiredEffects {
                     }
                     const writable = await file.createWritable();
                     if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
-                        await writable.write({type: 'write', data: this.blocklyState.workspaceXml, position: 0});
+                        await writable.write({type: 'write', data: this.blocklyState.workspaceJSON, position: 0});
                     } else {
                         await writable.write({type: 'write', data: this.codeEditorState.getCode(), position: 0});
                     }
