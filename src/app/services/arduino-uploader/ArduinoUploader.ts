@@ -37,7 +37,11 @@ class Arduino {
             const ports = await navigator.serial.getPorts()
 
             if (ports[0]) port = ports[0]
-            else port = await navigator.serial.requestPort();
+            else port = await navigator.serial.requestPort({
+                filters: this.robotWiredState.SUPPORTED_VENDORS.map(vendor => ({
+                    usbVendorId: vendor
+                }))
+            })
         } catch (error) {
             console.log(error)
             throw new Error('No device selected')

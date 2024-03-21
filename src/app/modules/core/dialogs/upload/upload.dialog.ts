@@ -125,7 +125,11 @@ export class UploadDialog {
 
     async reconnect() {
         try {
-            const port = await navigator.usb.requestDevice({ filters: [] })
+            const port = await navigator.usb.requestDevice({
+                filters: this.robotWiredState.SUPPORTED_VENDORS.map(vendor => ({
+                    vendorId: vendor
+                }))
+            })
             this.uploadState.connectUSB(port)
         } catch (e) {}
     }
