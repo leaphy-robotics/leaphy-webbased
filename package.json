@@ -34,6 +34,7 @@
     "@blockly/workspace-backpack": "^5.3.3",
     "@fortawesome/fontawesome-free": "^6.1.1",
     "@leaphy-robotics/leaphy-blocks": "1.19.0",
+    "@leaphy-robotics/dfu-util-wasm": "1.0.2",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
     "@serialport/parser-readline": "^10.3.0",
@@ -45,7 +46,6 @@
     "buffer": "^6.0.3",
     "chart.js": "^3.8.0",
     "chartjs-adapter-moment": "^1.0.0",
-    "dfu-next": "^1.0.0",
     "intel-hex": "^0.2.0",
     "jquery": "^3.5.1",
     "jszip": "^3.10.1",
@@ -59,7 +59,6 @@
     "showdown": "^2.1.0",
     "stream-browserify": "^3.0.0",
     "tslib": "^2.4.0",
-    "typed-emitter": "^2.1.0",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

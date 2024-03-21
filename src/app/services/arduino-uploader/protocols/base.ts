@@ -16,6 +16,24 @@ export default class BaseProtocol {
         throw new Error("Not implemented")
     }
 
+    waitForPort() {
+        return new Promise<SerialPort>((resolve, reject) => {
+            let attempts = 0
+            let interval = setInterval(async () => {
+                if (++attempts > 200) {
+                    clearInterval(interval)
+                    reject('Failed to reconnect')
+                }
+
+                const [port] = await navigator.serial.getPorts()
+                if (port) {
+                    clearInterval(interval)
+                    resolve(port)
+                }
+            }, 50)
+        })
+    }
+
     /**
      * Reset the Arduino.
      * @returns {Promise<void>}
