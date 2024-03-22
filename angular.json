@@ -44,6 +44,11 @@
                                 "glob": "**/*",
                                 "input": "./node_modules/@leaphy-robotics/dfu-util-wasm/build",
                                 "output": "./dfu-util"
+                            }m,
+                            {
+                                "glob": "**/*",
+                                "input": "./node_modules/@leaphy-robotics/picotool-wasm/build",
+                                "output": "./picotool"
                             }
                         ],
                         "styles": [

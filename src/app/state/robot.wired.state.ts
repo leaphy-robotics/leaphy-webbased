@@ -9,7 +9,7 @@ import { filter, map, scan } from 'rxjs/operators';
 })
 export class RobotWiredState {
 
-    public SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 2341]
+    public SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 0x2e8a]
 
     private serialPortSubject$: BehaviorSubject<SerialPort> = new BehaviorSubject(null);
     public serialPort$: Observable<SerialPort> = this.serialPortSubject$.asObservable();
