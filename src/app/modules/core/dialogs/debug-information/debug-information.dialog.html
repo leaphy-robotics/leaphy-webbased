@@ -20,7 +20,7 @@
     <div class="browser device-specification">Browser: {{browser}}</div>
     <div class="version-browser device-specification">Version {{browserVersion}}</div>
     <div *ngIf="serialPort" class="serial-device device-specification">Serial Port; Device ID: {{serialPort?.getInfo().usbProductId}}; USB Vendor ID: {{serialPort?.getInfo().usbVendorId}}</div>
-    <div class="supported-vendors device-specification">Supported Vendor IDs: 6790, 9025, 2341, 1027</div>
+    <div class="supported-vendors device-specification">Supported Vendor IDs: {{robotWiredState.SUPPORTED_VENDORS.join(", ")}}</div>
     <div class="web-serial-supported device-specification">Web Serial Supported: {{webSerialSupported}}</div>
   </div>
 </div>

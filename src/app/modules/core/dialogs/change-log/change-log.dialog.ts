@@ -13,7 +13,8 @@ export class ChangeLogDialog implements AfterViewInit {
         public dialogRef: MatDialogRef<ChangeLogDialog>
     ) {}
 
-    public onConfirm() {
+    public onConfirm(dontRepeat = false) {
+        localStorage.setItem("showReleaseNotes", dontRepeat ? "0" : "1")
         this.dialogRef.close();
     }
 

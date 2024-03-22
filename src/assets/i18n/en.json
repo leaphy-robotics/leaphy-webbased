@@ -101,5 +101,6 @@
     "THIS_COMPUTER": "This computer",
     "MICROCONTROLLER": "Robot",
     "RECONNECT": "Reconnect",
-    "RECONNECT_INFO": "Please reconnect your device"
+    "RECONNECT_INFO": "Please reconnect your device",
+    "DONT_SHOW": "Don't show again"
 }

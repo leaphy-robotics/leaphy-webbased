@@ -83,12 +83,14 @@ export class DialogEffects {
                     disableClose: true,
                 }).afterClosed().subscribe(() => {
                     (async () => {
+                        if (localStorage.getItem("showReleaseNotes") === "0") return
                         this.appState.releaseInfoSubject$.next(await fetch("https://api.github.com/repos/leaphy-robotics/leaphy-webbased/releases/latest").then(response => response.json()));
                     })();
                 });
             });
         } else {
             (async () => {
+                if (localStorage.getItem("showReleaseNotes") === "0") return
                 this.appState.releaseInfoSubject$.next(await fetch("https://api.github.com/repos/leaphy-robotics/leaphy-webbased/releases/latest").then(response => response.json()));
             })();
         }

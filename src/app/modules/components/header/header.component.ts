@@ -11,6 +11,7 @@ import {CodeEditorType} from "../../../domain/code-editor.type";
 import {RobotWiredState} from "../../../state/robot.wired.state";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import JSZip from 'jszip';
+import {BackEndMessage} from "../../../domain/backend.message";
 
 @Component({
     selector: 'app-header',
@@ -79,6 +80,13 @@ export class HeaderComponent {
                 this.robotWiredState.setSerialPort(port);
                 this.dialogState.setIsSerialOutputListening(true);
             }
+
+            this.backEndState.setBackendMessage({
+                event: 'CONNECTED',
+                message: 'CONNECTED',
+                payload: {},
+                displayTimeout: 2000
+            })
         }
     }
 

@@ -101,5 +101,6 @@
     "THIS_COMPUTER": "Deze computer",
     "MICROCONTROLLER": "Robot",
     "RECONNECT_INFO": "Maak opnieuw verbinding",
-    "RECONNECT": "Verbind opnieuw"
+    "RECONNECT": "Verbind opnieuw",
+    "DONT_SHOW": "Niet opnieuw tonen"
 }
