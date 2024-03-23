@@ -42,16 +42,13 @@ export default class Avrdude extends BaseProtocol {
         })
 
         const startAvrdude = avrdude.cwrap("startAvrdude", "number", ["string"])
-        let re = startAvrdude(args);
 
-        let race = await Promise.race([disconnectPromise, re])
+        let race = await Promise.race([disconnectPromise, startAvrdude(args)])
         // if the winner is the disconnect promise, then the port was disconnected and we should stop the other promise
         if (race.type) {
-            re = -2
-        } else {
-            // resolve the ZoneAwarePromise into the actual value
-            re = await re
+            race = -2
         }
+
 
         if (window["writeStream"])
             window["writeStream"].releaseLock();
@@ -62,8 +59,8 @@ export default class Avrdude extends BaseProtocol {
             this.robotWiredState.addToUploadLog(log[i]);
         }
 
-        if (re != 0) {
-            if (re == -2) {
+        if (race != 0) {
+            if (race == -2) {
                 throw new Error('Port disconnected')
             }
             throw new Error('Avrdude failed')
