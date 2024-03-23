@@ -5,6 +5,7 @@ export enum Board {
 
     L_ORIGINAL_ALL = 'l_original_*',
     L_ORIGINAL_UNO = 'l_original_uno',
+    L_ORIGINAL_NANO_ALL = 'l_original_nano_*',
     L_ORIGINAL_NANO = 'l_original_nano',
 
     L_FLITZ_ALL = 'l_flitz_*',
@@ -15,6 +16,7 @@ export enum Board {
 
     L_ARDUINO = 'l_arduino_*',
     L_UNO = 'l_uno',
+    L_NANO_ALL = 'l_nano_*',
     L_NANO = 'l_nano',
     L_MEGA = 'l_mega'
 }

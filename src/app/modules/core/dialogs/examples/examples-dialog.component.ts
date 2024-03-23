@@ -26,8 +26,10 @@ export class ExamplesDialog {
         return examples.filter(example => {
             if (example.boards.includes(Board.ALL)) return true
             if (example.boards.includes(Board.L_ORIGINAL_ALL) && id.startsWith('l_original')) return true
+            if (example.boards.includes(Board.L_ORIGINAL_NANO_ALL) && id.startsWith('l_original_nano')) return true
             if (example.boards.includes(Board.L_FLITZ_ALL) && id.startsWith('l_flitz')) return true
-            if (example.boards.includes(Board.L_ARDUINO) && ['l_nano', 'l_uno', 'l_mega'].includes(id)) return true
+            if (example.boards.includes(Board.L_NANO_ALL) && id.startsWith('l_nano')) return true
+            if (example.boards.includes(Board.L_ARDUINO) && ['l_nano', 'l_nano_esp32', 'l_nano_rp2040', 'l_uno', 'l_mega'].includes(id)) return true
 
             return example.boards.map(board => board as string).includes(id)
         })
