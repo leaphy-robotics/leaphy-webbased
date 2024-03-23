@@ -114,6 +114,12 @@ class Arduino {
                             await delay(4000)
 
                             const [port] = await navigator.serial.getPorts()
+                            if (!port) {
+                                this.port = null
+                                this.robotWiredState.setSerialPort(null)
+                                return
+                            }
+
                             this.robotWiredState.setSerialPort(port)
                             this.setPort(port)
 
