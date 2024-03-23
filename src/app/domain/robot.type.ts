@@ -24,6 +24,7 @@ export class RobotType {
         public protocol: typeof BaseProtocol,
         public name: string,
         public svgname: string,
+        public background: string,
         public fqbn: string,
         public core: string,
         public libs: string[],
@@ -34,13 +35,13 @@ export class RobotType {
     }
 }
 
-interface RobotSelectorOption {
+export interface RobotEntry {
     name: string,
     icon: string,
-    robot: RobotType,
+    robot: RobotType
 }
 
 export interface RobotSelector {
     intercept: RobotType,
-    choices: RobotSelectorOption[],
+    choices: RobotEntry[][],
 }

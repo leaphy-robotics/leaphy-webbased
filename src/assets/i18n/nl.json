@@ -102,5 +102,6 @@
     "MICROCONTROLLER": "Robot",
     "RECONNECT_INFO": "Maak opnieuw verbinding",
     "RECONNECT": "Verbind opnieuw",
-    "DONT_SHOW": "Niet opnieuw tonen"
+    "DONT_SHOW": "Niet opnieuw tonen",
+    "EXAMPLES": "Voorbeelden"
 }

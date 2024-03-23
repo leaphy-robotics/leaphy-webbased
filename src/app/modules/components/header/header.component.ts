@@ -169,6 +169,10 @@ export class HeaderComponent {
             this.router.navigate(['/pythonEditor'], { skipLocationChange: true });
     }
 
+    public onExamplesClicked() {
+        this.dialogState.setIsExamplesDialogVisible(true)
+    }
+
     protected readonly AppState = AppState;
 }
 

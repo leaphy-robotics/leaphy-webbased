@@ -21,6 +21,7 @@ import {ConnectPythonDialog} from "./dialogs/connect-python/connect-python.dialo
 import {FileExplorerDialog} from "./dialogs/file-explorer/file-explorer.dialog";
 import {ChangeLogDialog} from "./dialogs/change-log/change-log.dialog";
 import {LocationSelectDialog} from "./dialogs/location-select/location-select.dialog";
+import {ExamplesDialog} from "./dialogs/examples/examples-dialog.component";
 
 @NgModule({
     declarations: [
@@ -40,7 +41,8 @@ import {LocationSelectDialog} from "./dialogs/location-select/location-select.di
         ConnectPythonDialog,
         DebugInformationDialog,
         ChangeLogDialog,
-        InfoDialog
+        InfoDialog,
+        ExamplesDialog
     ],
     imports: [
         CommonModule,

@@ -27,6 +27,9 @@ export class DialogState {
     private isEditorTypeChangeConfirmationDialogVisibleSubject$ = new BehaviorSubject(false);
     public isEditorTypeChangeConfirmationDialogVisible$ = this.isEditorTypeChangeConfirmationDialogVisibleSubject$.asObservable();
 
+    public isExamplesDialogVisibleSubject$ = new BehaviorSubject(false);
+    public isExamplesDialogVisible$ = this.isExamplesDialogVisibleSubject$.asObservable()
+
     public setIsSerialOutputWindowOpen(isOpen: boolean) {
         this.isSerialOutputWindowOpenSubject$.next(isOpen);
     }
@@ -53,5 +56,9 @@ export class DialogState {
 
     public getIsLibraryManagerWindowOpen() {
         return this.isLibraryManagerWindowOpenSubject$.getValue();
+    }
+
+    public setIsExamplesDialogVisible(isVisible: boolean) {
+        this.isExamplesDialogVisibleSubject$.next(isVisible)
     }
 }
