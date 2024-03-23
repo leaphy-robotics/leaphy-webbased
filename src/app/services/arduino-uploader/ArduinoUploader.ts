@@ -3,6 +3,7 @@ import {RobotWiredState} from "../../state/robot.wired.state";
 import {AppState} from "../../state/app.state";
 import BaseProtocol from "./protocols/base";
 import {UploadState} from "../../state/upload.state";
+import Avrdude from "./protocols/avrdude";
 
 class Arduino {
     port: SerialPort = null
@@ -141,8 +142,13 @@ class Arduino {
     }
 
     async upload(program: Record<string, string>) {
+
+
         if (this.isUploading)
             throw new Error('Arduino is already uploading')
+
+        if (this.port == null)
+            throw new Error('No device selected')
 
         const Uploader = this.appState.getSelectedRobotType().protocol
         this.isUploading = true
@@ -161,10 +167,6 @@ class Arduino {
      * @returns {Promise<void>}
      */
     async close() {
-        this.readStream?.releaseLock();
-        this.writeStream?.releaseLock();
-        this.readStream = null;
-        this.writeStream = null;
         this.isUploading = false
     }
 

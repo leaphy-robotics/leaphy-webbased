@@ -32,6 +32,16 @@
                                 "output": "./media"
                             },
                             {
+                                "glob": "avrdude.wasm",
+                                "input": "./node_modules/@leaphy-robotics/avrdude-webassembly/",
+                                "output": "./"
+                            },
+                            {
+                                "glob": "avrdude.conf",
+                                "input": "./node_modules/@leaphy-robotics/avrdude-webassembly/",
+                                "output": "./"
+                            },
+                            {
                                 "glob": "en.json",
                                 "input": "./node_modules/@leaphy-robotics/leaphy-blocks/msg/json",
                                 "output": "./msg/json"

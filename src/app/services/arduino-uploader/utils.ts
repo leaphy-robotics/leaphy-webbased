@@ -1,7 +1,6 @@
 import {RobotWiredState} from "../../state/robot.wired.state";
 
 export const clearReadBuffer = async (robotWiredState: RobotWiredState, readStream: ReadableStreamDefaultReader<Uint8Array>) => {
-    robotWiredState.addToUploadLog("Clearing read buffer");
     const timeoutPromise = new Promise((resolve, _) => {
         setTimeout(() => {
             resolve("Timeout");
@@ -15,7 +14,6 @@ export const clearReadBuffer = async (robotWiredState: RobotWiredState, readStre
 
     let i = 1;
     while (true) {
-        robotWiredState.addToUploadLog("Attempt #" + i);
         const promise = new Promise(async (resolve, _) => {
             while (true) {
                 const result = await Promise.race([readStream.read(), timeoutPromise]);
@@ -32,7 +30,6 @@ export const clearReadBuffer = async (robotWiredState: RobotWiredState, readStre
             throw new Error('Timeout');
         i++;
     }
-    robotWiredState.addToUploadLog("Read buffer cleared");
 }
 
 export const includesAll = (values, array) => {
