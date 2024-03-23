@@ -1,4 +1,4 @@
-import {clearReadBuffer, delay} from './utils'
+import {clearReadBuffer} from './utils'
 import {RobotWiredState} from "../../state/robot.wired.state";
 import {AppState} from "../../state/app.state";
 
@@ -110,31 +110,56 @@ class Arduino {
     }
 
     async upload(program: string, callback = (message: string) => {}) {
+        let content = '';
+        fetch('/avrdude.conf')
+            .then(response => response.text())
+            .then(data => {
+                content = data;
+            });
+
         if (this.isUploading)
             throw new Error('Arduino is already uploading')
 
-        const Uploader = this.appState.getSelectedRobotType().protocol
+        if (this.port == null)
+            throw new Error('No device selected')
+
+        // import Module from @leaphy-robotics/avrdude-webassembly/avrdude.js
+        const Module = await import('@leaphy-robotics/avrdude-webassembly/avrdude.js')
+        const avrdude = await Module.default()
+        // get the protocol from the robot type
+        const protocol = this.appState.getSelectedRobotType().protocol.name
+        // get the part number from the robot type
+        const part = this.appState.getSelectedRobotType().micrcontoller
+
+        let args = "";
+
+        window["funcs"] = avrdude;
+        window["activePort"] = this.port;
+        avrdude.FS.writeFile('/tmp/avrdude.conf', content);
+        avrdude.FS.writeFile('/tmp/program.hex', program);
+
+        if (part == "atmega328p") {
+            args = "avrdude -P /dev/null -V -v -p atmega328p -c stk500v1 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i"
+        } else if (part == "atmega4809") {
+            args = "avrdude -P /dev/null -V -v -p atmega4809 -c jtag2updi -C /tmp/avrdude.conf -b 115200 -e -D -U flash:w:/tmp/program.hex:i \"-Ufuse2:w:0x01:m\" \"-Ufuse5:w:0xC9:m\" \"-Ufuse8:w:0x00:m\"";
+        } else if (part == "atmega2560") {
+            args = "avrdude -P /dev/null -V -v -p atmega2560 -c stk500v2 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i";
+        }
+
+        const avr = avrdude.cwrap("startAvrdude", "number", ["string"])
+        await avr(args);
+
+        if (window["writeStream"])
+            window["writeStream"].releaseLock();
+
+        const log = window["avrdudeLog"];
+        this.robotWiredState.clearUploadLog();
+        for (let i = 0; i < log.length; i++) {
+            this.robotWiredState.addToUploadLog(log[i]);
+        }
+
         this.isUploading = true
 
-        const upload = new Uploader(this.port, this.robotWiredState, this.serialOptions, this)
-        await upload.upload(program, callback)
-            .catch(async err => {
-                await this.close()
-                throw err
-            })
-        await this.close()
-    }
-
-    /**
-     * Clean up the connection
-     * @returns {Promise<void>}
-     */
-    async close() {
-        this.readStream.releaseLock();
-        this.writeStream.releaseLock();
-        this.readStream = null;
-        this.writeStream = null;
-        this.isUploading = false
     }
 
     /**

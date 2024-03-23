@@ -89,7 +89,6 @@ export class BackendWiredEffects {
                                     ext: robotType.ext,
                                     core: robotType.core,
                                     name: robotType.name,
-                                    board: robotType.board,
                                     libs: libraries
                                 };
                                 this.send('compile', payload);

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {RobotSelector, RobotType} from '../domain/robot.type';
+import {RobotSelector, RobotType, Stk500v1, Stk500v2} from '../domain/robot.type';
 import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
@@ -8,8 +8,7 @@ import { LocalStorageService } from '../services/localstorage.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
 import { version } from '../../../package.json';
-import Stk500v1 from '../services/arduino-uploader/protocols/stk500v1/index'
-import Stk500v2 from "../services/arduino-uploader/protocols/stk500v2";
+
 
 @Injectable({
     providedIn: 'root'
@@ -20,58 +19,136 @@ export class AppState {
         'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library',
         'Adafruit Unified Sensor', 'List', 'Adafruit SGP30 Sensor', 'Adafruit_VL53L0X', 'Adafruit BMP280 Library', 'TM1637', 'LedControl'
     ]
-    private static leaphyOriginalRobotType = new RobotType('l_original_uno', Stk500v1, 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyOriginalRobotType = new RobotType(
+        'l_original_uno', Stk500v1,
+        'Leaphy Original',
+        'orig.svg',
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: false,
             showLeaphySensors: true,
         },
     );
-    private static leaphyOriginalNanoRobotType = new RobotType('l_original_nano', Stk500v1, 'Original Nano', 'orig.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
+    private static leaphyOriginalNanoRobotType = new RobotType(
+        'l_original_nano',
+        Stk500v1,
+        'Original Nano',
+        'orig.svg',
+        'atmega328p',
+        'arduino:avr:nano',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
         },
     );
-    private static leaphyFlitzRobotType = new RobotType('l_flitz_uno', Stk500v1, 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyFlitzRobotType = new RobotType(
+        'l_flitz_uno',
+        Stk500v1,
+        'Leaphy Flitz',
+        'flitz.svg',
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
     );
-    private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', Stk500v1,'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
+    private static leaphyFlitzNanoRobotType = new RobotType(
+        'l_flitz_nano',
+        Stk500v1,
+        'Flitz Nano',
+        'flitz_nano.svg',
+        'atmega328p',
+        'arduino:avr:nano',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
     );
-    private static leaphyClickRobotType = new RobotType('l_click', Stk500v1, 'Leaphy Click', 'click.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyClickRobotType = new RobotType(
+        'l_click', Stk500v1,
+        'Leaphy Click',
+        'click.svg',
+         'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphySensors: true,
         }
     );
-    private static arduinoUnoRobotType = new RobotType('l_uno', Stk500v1, 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static arduinoUnoRobotType = new RobotType(
+        'l_uno',
+        Stk500v1,
+        'Arduino Uno',
+        'uno.svg',
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    public static genericRobotType = new RobotType('l_code', Stk500v1, 'Leaphy C++', "c++.svg", 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    public static genericRobotType = new RobotType(
+        'l_code',
+        Stk500v1,
+        'Leaphy C++',
+        "c++.svg",
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
     AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
-    private static arduinoNanoRobotType = new RobotType('l_nano', Stk500v1, 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
+
+    private static arduinoNanoRobotType = new RobotType(
+        'l_nano', Stk500v1,
+        'Arduino Nano',
+        'nano.svg',
+        'atmega328p',
+        'arduino:avr:nano',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    public static microPythonRobotType = new RobotType('l_micropython', Stk500v1, 'MicroPython', 'micropython.svg', 'MicroPython', '', 'bin', '',
+    public static microPythonRobotType = new RobotType(
+        'l_micropython',
+        Stk500v1,
+        'MicroPython',
+        'micropython.svg',
+        'MicroPython',
+        '',
+        'bin',
+        '',
         [], true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         });
-    private static arduinoMegaRobotType = new RobotType('l_mega', Stk500v2, 'Arduino Mega', 'mega.svg', 'Arduino MEGA', 'arduino:avr:mega', 'hex', 'arduino:avr',
+    private static arduinoMegaRobotType = new RobotType(
+        'l_mega',
+        Stk500v2,
+        'Arduino Mega',
+        'mega.svg',
+        'atmega2560',
+        'arduino:avr:mega',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,

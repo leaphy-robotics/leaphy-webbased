@@ -1,4 +1,6 @@
-import BaseProtocol from "../services/arduino-uploader/protocols/base";
+interface Protocol {
+    name: string;
+}
 
 interface Features {
     showLeaphyActuators: boolean;
@@ -16,15 +18,23 @@ const DEFAULTS: Features = {
     showCodeOnStart: false
 };
 
+export const Stk500v1: Protocol = {
+    name: "stk500v1",
+};
+
+export const Stk500v2: Protocol = {
+    name: "stk500v2",
+};
+
 export class RobotType {
     public features: Features;
 
     constructor(
         public id: string,
-        public protocol: typeof BaseProtocol,
+        public protocol: Protocol,
         public name: string,
         public svgname: string,
-        public board: string,
+        public micrcontoller: string,
         public fqbn: string,
         public ext: string,
         public core: string,
