@@ -3,6 +3,7 @@ import {RobotWiredState} from "../../state/robot.wired.state";
 import {AppState} from "../../state/app.state";
 import BaseProtocol from "./protocols/base";
 import {UploadState} from "../../state/upload.state";
+import Avrdude from "./protocols/avrdude";
 
 class Arduino {
     port: SerialPort = null
@@ -140,12 +141,68 @@ class Arduino {
         }
     }
 
+    async handControlToAvrdude(program: Record<string, string>) {
+        // import from /node_modules/@leaphy-robotics/avrdude-webassembly/avrdude.js
+        const Module = await import('@leaphy-robotics/avrdude-webassembly/avrdude.js')
+        const avrdude = await Module.default()
+        window["funcs"] = avrdude;
+        // check if port is open
+        if (this.port.readable || this.port.writable) {
+            await this.port.close()
+        }
+        await this.port.open({ baudRate: 115200 })
+        window["activePort"] = this.port
+        const avrdudeConfig = await fetch('/avrdude.conf').then(res => res.text())
+        avrdude.FS.writeFile('/tmp/avrdude.conf', avrdudeConfig)
+        avrdude.FS.writeFile('/tmp/program.hex', program['hex'])
+        let args = '';
+        // get board
+        const mcu = this.appState.getSelectedRobotType().micrcontroller
+        if (mcu == 'atmega328p') {
+            args = 'avrdude -P /dev/null -V -v -p atmega328p -c stk500v1 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i'
+        } else if (mcu == 'atmega2560') {
+            args = "avrdude -P /dev/null -V -v -p atmega2560 -c stk500v2 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i"
+        } else {
+            throw new Error('Unsupported microcontroller')
+        }
+
+        const startAvrdude = avrdude.cwrap("startAvrdude", "number", ["string"])
+        const re = await startAvrdude(args);
+
+        if (window["writeStream"])
+            window["writeStream"].releaseLock();
+
+        const log = window["avrdudeLog"];
+        this.robotWiredState.clearUploadLog();
+        for (let i = 0; i < log.length; i++) {
+            this.robotWiredState.addToUploadLog(log[i]);
+        }
+
+        if (re != 0) {
+            throw new Error('Avrdude failed')
+        }
+
+        return
+    }
+
     async upload(program: Record<string, string>) {
+
+
         if (this.isUploading)
             throw new Error('Arduino is already uploading')
 
+        if (this.port == null)
+            throw new Error('No device selected')
+
         const Uploader = this.appState.getSelectedRobotType().protocol
         this.isUploading = true
+
+        if (Uploader == Avrdude) {
+            window["avrdudeLog"] = ["Handing control to avrdude"]
+            await this.handControlToAvrdude(program)
+            this.isUploading = false
+            return
+        }
 
         const upload = new Uploader(this.port, this.robotWiredState, this.uploadState, this.serialOptions, this)
         await upload.upload(program)

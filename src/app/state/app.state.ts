@@ -8,8 +8,7 @@ import { LocalStorageService } from '../services/localstorage.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
 import { version } from '../../../package.json';
-import Stk500v1 from '../services/arduino-uploader/protocols/stk500v1/index'
-import Stk500v2 from "../services/arduino-uploader/protocols/stk500v2";
+import Avrdude from "../services/arduino-uploader/protocols/avrdude";
 import DFU from "../services/arduino-uploader/protocols/dfu";
 import Pico from "../services/arduino-uploader/protocols/pico";
 
@@ -22,84 +21,195 @@ export class AppState {
         'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library',
         'Adafruit Unified Sensor', 'List', 'Adafruit SGP30 Sensor', 'Adafruit_VL53L0X', 'Adafruit BMP280 Library', 'TM1637', 'LedControl'
     ]
-    private static leaphyOriginalRobotType = new RobotType('l_original_uno', Stk500v1, 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyOriginalRobotType = new RobotType(
+        'l_original_uno',
+        Avrdude,
+        'Leaphy Original',
+        'orig.svg',
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: false,
             showLeaphySensors: true,
         },
     );
-    private static leaphyOriginalNanoRobotType = new RobotType('l_original_nano', Stk500v1, 'Original Nano', 'orig.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
+    private static leaphyOriginalNanoRobotType = new RobotType(
+        'l_original_nano',
+        Avrdude,
+        'Original Nano',
+        'orig.svg',
+        'atmega328p',
+        'arduino:avr:nano',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
         },
     );
-    private static leaphyOriginalNanoESP32RobotType = new RobotType('l_original_nano_esp32', DFU, 'Original Nano ESP32', 'orig.svg', 'Arduino Nano ESP32', 'arduino:esp32:nano_nora', 'bin', 'arduino:esp32',
+    private static leaphyOriginalNanoESP32RobotType = new RobotType(
+        'l_original_nano_esp32',
+        DFU,
+        'Original Nano ESP32',
+        'orig.svg',
+        'NOT_SET', // for other uploaders then avrdude NOT_SET is used
+        'arduino:esp32:nano_nora',
+        'bin',
+        'arduino:esp32',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
         },
     );
-    private static leaphyOriginalNanoRP2040RobotType = new RobotType('l_original_nano_esp32', Pico, 'Original Nano RP2040', 'orig.svg', 'Arduino Nano RP2040', 'arduino:mbed_nano:nanorp2040connect', 'bin', 'arduino:mbed_nano',
+    private static leaphyOriginalNanoRP2040RobotType = new RobotType(
+        'l_original_nano_esp32',
+        Pico,
+        'Original Nano RP2040',
+        'orig.svg',
+        'NOT_SET', // for other uploaders then avrdude NOT_SET is used
+        'arduino:mbed_nano:nanorp2040connect',
+        'bin',
+        'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
         },
     );
-    private static leaphyFlitzRobotType = new RobotType('l_flitz_uno', Stk500v1, 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyFlitzRobotType = new RobotType(
+        'l_flitz_uno',
+        Avrdude,
+        'Leaphy Flitz',
+        'flitz.svg',
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
     );
-    private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', Stk500v1,'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
+    private static leaphyFlitzNanoRobotType = new RobotType(
+        'l_flitz_nano',
+        Avrdude,
+        'Flitz Nano',
+        'flitz_nano.svg',
+        'atmega328p',
+        'arduino:avr:nano',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
     );
-    private static leaphyClickRobotType = new RobotType('l_click', Stk500v1, 'Leaphy Click', 'click.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyClickRobotType = new RobotType(
+        'l_click',
+        Avrdude,
+        'Leaphy Click',
+        'click.svg',
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphySensors: true,
         }
     );
-    private static arduinoUnoRobotType = new RobotType('l_uno', Stk500v1, 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static arduinoUnoRobotType = new RobotType(
+        'l_uno',
+        Avrdude,
+        'Arduino Uno',
+        'uno.svg',
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    public static genericRobotType = new RobotType('l_code', Stk500v1, 'Leaphy C++', "c++.svg", 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+
+    public static genericRobotType = new RobotType(
+        'l_code',
+        Avrdude,
+        'Leaphy C++',
+        "c++.svg",
+        'atmega328p',
+        'arduino:avr:uno',
+        'hex',
+        'arduino:avr',
     AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
-    private static arduinoNanoRobotType = new RobotType('l_nano', Stk500v1, 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
+    private static arduinoNanoRobotType = new RobotType(
+        'l_nano',
+        Avrdude,
+        'Arduino Nano',
+        'nano.svg',
+        'atmega328p',
+        'arduino:avr:nano',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    private static arduinoNanoESP32RobotType = new RobotType('l_nano_esp32', DFU, 'Arduino Nano ESP32', 'nano.svg', 'Arduino NANO ESP32', 'arduino:esp32:nano_nora', 'bin', 'arduino:esp32',
+    private static arduinoNanoESP32RobotType = new RobotType(
+        'l_nano_esp32', DFU,
+        'Arduino Nano ESP32',
+        'nano.svg',
+        'NOT_SET',  // for other uploaders then avrdude NOT_SET is used
+        'arduino:esp32:nano_nora',
+        'bin',
+        'arduino:esp32',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    private static arduinoNanoRP2040RobotType = new RobotType('l_nano_rp2040', Pico, 'Arduino Nano RP2040', 'nano.svg', 'Arduino NANO RP2040', 'arduino:mbed_nano:nanorp2040connect', 'bin', 'arduino:mbed_nano',
+    private static arduinoNanoRP2040RobotType = new RobotType(
+        'l_nano_rp2040', Pico,
+        'Arduino Nano RP2040',
+        'nano.svg',
+        'NOT_SET',  // for other uploaders then avrdude NOT_SET is used
+        'arduino:mbed_nano:nanorp2040connect',
+        'bin',
+        'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    public static microPythonRobotType = new RobotType('l_micropython', Stk500v1, 'MicroPython', 'micropython.svg', 'MicroPython', '', 'bin', '',
+    public static microPythonRobotType = new RobotType(
+        'l_micropython',
+        Avrdude,
+        'MicroPython',
+        'micropython.svg',
+        'NOT_SET', // for other uploaders then avrdude NOT_SET is used
+        '',
+        'bin',
+        '',
         [], true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         });
-    private static arduinoMegaRobotType = new RobotType('l_mega', Stk500v2, 'Arduino Mega', 'mega.svg', 'Arduino MEGA', 'arduino:avr:mega', 'hex', 'arduino:avr',
+    private static arduinoMegaRobotType = new RobotType(
+        'l_mega',
+        Avrdude,
+        'Arduino Mega',
+        'mega.svg',
+        'atmega2560', // for other uploaders then avrdude NOT_SET is used
+        'arduino:avr:mega',
+        'hex',
+        'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,

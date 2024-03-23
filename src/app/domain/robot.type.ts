@@ -24,7 +24,7 @@ export class RobotType {
         public protocol: typeof BaseProtocol,
         public name: string,
         public svgname: string,
-        public board: string,
+        public micrcontroller: string,
         public fqbn: string,
         public ext: string,
         public core: string,
