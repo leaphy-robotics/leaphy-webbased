@@ -30,7 +30,7 @@ export class RobotType {
         public libs: string[],
         public isWired: boolean = true,
         features?: Partial<Features>,
-        public micrcontroller?: string
+        public microcontroller?: string
     ) {
         this.features = Object.assign({}, DEFAULTS, features||{});
     }

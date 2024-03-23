@@ -157,7 +157,7 @@ class Arduino {
         avrdude.FS.writeFile('/tmp/program.hex', program['hex'])
         let args = '';
         // get board
-        const mcu = this.appState.getSelectedRobotType().micrcontroller
+        const mcu = this.appState.getSelectedRobotType().microcontroller
         if (mcu == 'atmega328p') {
             args = 'avrdude -P /dev/null -V -v -p atmega328p -c stk500v1 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i'
         } else if (mcu == 'atmega2560') {
