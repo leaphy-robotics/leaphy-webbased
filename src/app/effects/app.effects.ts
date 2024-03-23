@@ -117,13 +117,9 @@ export class AppEffects {
                         });
                     }
 
-
                     // convert markdown to html
                     const converter = new showdown.Converter();
                     releaseNotes = converter.makeHtml(releaseNotes);
-
-
-
 
                     this.dialog.open(ChangeLogDialog, {
                         data: {

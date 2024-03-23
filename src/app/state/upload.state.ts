@@ -28,10 +28,6 @@ export class UploadState {
     private USBConnectingSubject$: BehaviorSubject<false|((port: USBDevice) => void)> = new BehaviorSubject(false)
     public USBConnecting$ = this.USBConnectingSubject$.asObservable()
 
-    public setProgress(progress: number) {
-        this.progressSubject$.next(progress)
-    }
-
     public addProgress(progress: number) {
         this.progressSubject$.next(this.progressSubject$.getValue() + progress)
     }

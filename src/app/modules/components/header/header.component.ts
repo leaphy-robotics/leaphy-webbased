@@ -12,6 +12,7 @@ import {RobotWiredState} from "../../../state/robot.wired.state";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import JSZip from 'jszip';
 import {BackEndMessage} from "../../../domain/backend.message";
+import {microPythonRobotType} from "../../../domain/robot.type";
 
 @Component({
     selector: 'app-header',
@@ -174,6 +175,7 @@ export class HeaderComponent {
     }
 
     protected readonly AppState = AppState;
+    protected readonly microPythonRobotType = microPythonRobotType;
 }
 
 

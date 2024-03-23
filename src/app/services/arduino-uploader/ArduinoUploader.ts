@@ -150,10 +150,10 @@ class Arduino {
         if (this.port == null)
             throw new Error('No device selected')
 
-        const Uploader = this.appState.getSelectedRobotType().protocol
+        const Uploader = this.appState.getSelectedRobotType().protocol.protocol
         this.isUploading = true
 
-        const upload = new Uploader(this.port, this.robotWiredState, this.uploadState, this.serialOptions, this)
+        const upload = new Uploader(this.port, this.robotWiredState, this.uploadState, this)
         await upload.upload(program)
             .catch(async err => {
                 await this.close()
@@ -166,7 +166,7 @@ class Arduino {
      * Clean up the connection
      * @returns {Promise<void>}
      */
-    async close() {
+    async close(): Promise<void> {
         this.isUploading = false
     }
 

@@ -35,7 +35,7 @@ import {LeaphyToolbox} from "../services/toolbox/toolbox";
 import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
 import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
-import {RobotType} from "../domain/robot.type";
+import {genericRobotType, microPythonRobotType, RobotType} from "../domain/robot.type";
 
 function isJSON(data: string) {
     try {
@@ -130,7 +130,7 @@ export class BlocklyEditorEffects {
         // When all prerequisites are there, Create a new workspace and open the codeview if needed
         combineLatest([this.blocklyState.blocklyElement$, this.blocklyState.blocklyConfig$])
             .pipe(withLatestFrom(this.appState.selectedRobotType$))
-            .pipe(filter(([[element, config], robotType]) => !!element && !!config && !!robotType && (robotType !== AppState.genericRobotType && robotType !== AppState.microPythonRobotType)))
+            .pipe(filter(([[element, config], robotType]) => !!element && !!config && !!robotType && (robotType !== genericRobotType && robotType !== microPythonRobotType)))
             .pipe(withLatestFrom(
                 this.getXmlContent('./assets/blockly/base-toolbox.xml'),
                 this.getXmlContent('./assets/blockly/leaphy-toolbox.xml'),
@@ -318,7 +318,7 @@ export class BlocklyEditorEffects {
                             this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
                             this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(AppState.genericRobotType, true);
+                            this.appState.setSelectedRobotType(genericRobotType, true);
                             return;
                         } else if (message.payload.type == 'python') {
                             this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
@@ -327,7 +327,7 @@ export class BlocklyEditorEffects {
                             this.appState.setSelectedCodeEditor(CodeEditorType.Python);
                             this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(AppState.microPythonRobotType, true);
+                            this.appState.setSelectedRobotType(microPythonRobotType, true);
                             return;
                         }
                         this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);
