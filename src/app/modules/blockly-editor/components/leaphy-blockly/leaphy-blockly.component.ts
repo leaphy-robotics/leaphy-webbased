@@ -33,7 +33,7 @@ export class LeaphyBlocklyComponent implements AfterViewInit {
         public blocklyState: BlocklyEditorState,
     ) {
         appState.selectedRobotType$.subscribe(robot => {
-            if (!robot.background) return this.background = null
+            if (!robot?.background) return this.background = null
             if (this.background) {
                 this.background.src = robot.background
             } else {
@@ -65,7 +65,6 @@ export class LeaphyBlocklyComponent implements AfterViewInit {
                 workspace.resize();
             })
 
-            this.updateSizing()
             workspace.addChangeListener(this.updateSizing.bind(this))
 
             if (!workspace.backpack) {
