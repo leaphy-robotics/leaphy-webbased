@@ -36,8 +36,22 @@ export default class Avrdude extends BaseProtocol {
         }
         const args = microcontrollersToArgs[mcu]
 
+        // create a promise that resolves when the port.ondisconnect event is fired
+        const disconnectPromise = new Promise((resolve) => {
+            this.port.ondisconnect = resolve
+        })
+
         const startAvrdude = avrdude.cwrap("startAvrdude", "number", ["string"])
-        const re = await startAvrdude(args);
+        let re = startAvrdude(args);
+
+        let race = await Promise.race([disconnectPromise, re])
+        // if the winner is the disconnect promise, then the port was disconnected and we should stop the other promise
+        if (race.type) {
+            re = -2
+        } else {
+            // resolve the ZoneAwarePromise into the actual value
+            re = await re
+        }
 
         if (window["writeStream"])
             window["writeStream"].releaseLock();
@@ -49,9 +63,12 @@ export default class Avrdude extends BaseProtocol {
         }
 
         if (re != 0) {
+            if (re == -2) {
+                throw new Error('Port disconnected')
+            }
             throw new Error('Avrdude failed')
         }
-
+        this.uploadState.setStatusMessage("UPDATE_COMPLETE")
         return
     }
 }
