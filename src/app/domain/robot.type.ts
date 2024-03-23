@@ -25,13 +25,11 @@ export class RobotType {
         public name: string,
         public svgname: string,
         public background: string,
-        public board: string,
         public fqbn: string,
-        public ext: string,
         public core: string,
         public libs: string[],
-        public isWired: boolean = true,
-        features?: Partial<Features>
+        features?: Partial<Features>,
+        public microcontroller?: string
     ) {
         this.features = Object.assign({}, DEFAULTS, features||{});
     }
