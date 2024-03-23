@@ -1,5 +1,12 @@
 import BaseProtocol from "../base";
 
+const supportedMicrocontrollers = ['atmega328p', 'atmega2560']
+
+const microcontrollersToArgs = {
+    'atmega328p': 'avrdude -P /dev/null -V -v -p atmega328p -c stk500v1 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i',
+    'atmega2560': 'avrdude -P /dev/null -V -v -p atmega2560 -c stk500v2 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i'
+}
+
 
 export default class Avrdude extends BaseProtocol {
 
@@ -16,16 +23,12 @@ export default class Avrdude extends BaseProtocol {
         const avrdudeConfig = await fetch('/avrdude.conf').then(res => res.text())
         avrdude.FS.writeFile('/tmp/avrdude.conf', avrdudeConfig)
         avrdude.FS.writeFile('/tmp/program.hex', response['hex'])
-        let args = '';
         // get board
         const mcu = this.uploader.appState.getSelectedRobotType().microcontroller
-        if (mcu == 'atmega328p') {
-            args = 'avrdude -P /dev/null -V -v -p atmega328p -c stk500v1 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i'
-        } else if (mcu == 'atmega2560') {
-            args = "avrdude -P /dev/null -V -v -p atmega2560 -c stk500v2 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i"
-        } else {
+        if (!supportedMicrocontrollers.includes(mcu)) {
             throw new Error('Unsupported microcontroller')
         }
+        const args = microcontrollersToArgs[mcu]
 
         const startAvrdude = avrdude.cwrap("startAvrdude", "number", ["string"])
         const re = await startAvrdude(args);
