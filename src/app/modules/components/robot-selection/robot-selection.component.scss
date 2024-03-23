@@ -17,12 +17,27 @@
     }
 }
 
+.selected {
+    border: 3px solid var(--leaphy-color-primary) !important;
+}
+
 .zoomed {
     transition: transform 0.1s;
 }
 
 .zoomed:hover {
     transform: scale(1.03);
+}
+
+.robot-selection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    height: calc(100vh - 64px);
+    width: 50vw;
 }
 
 .robot-row {

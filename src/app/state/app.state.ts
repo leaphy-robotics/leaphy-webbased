@@ -22,84 +22,84 @@ export class AppState {
         'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library',
         'Adafruit Unified Sensor', 'List', 'Adafruit SGP30 Sensor', 'Adafruit_VL53L0X', 'Adafruit BMP280 Library', 'TM1637', 'LedControl'
     ]
-    private static leaphyOriginalRobotType = new RobotType('l_original_uno', Stk500v1, 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyOriginalRobotType = new RobotType('l_original_uno', Stk500v1, 'Leaphy Original', 'orig.svg', 'orig_uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: false,
             showLeaphySensors: true,
         },
     );
-    private static leaphyOriginalNanoRobotType = new RobotType('l_original_nano', Stk500v1, 'Original Nano', 'orig.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
+    private static leaphyOriginalNanoRobotType = new RobotType('l_original_nano', Stk500v1, 'Original Nano', 'orig.svg', 'orig_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
         },
     );
-    private static leaphyOriginalNanoESP32RobotType = new RobotType('l_original_nano_esp32', DFU, 'Original Nano ESP32', 'orig.svg', 'Arduino Nano ESP32', 'arduino:esp32:nano_nora', 'bin', 'arduino:esp32',
+    private static leaphyOriginalNanoESP32RobotType = new RobotType('l_original_nano_esp32', DFU, 'Original Nano ESP32', 'orig.svg', 'orig_nano_esp32.svg', 'Arduino Nano ESP32', 'arduino:esp32:nano_nora', 'bin', 'arduino:esp32',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
         },
     );
-    private static leaphyOriginalNanoRP2040RobotType = new RobotType('l_original_nano_esp32', Pico, 'Original Nano RP2040', 'orig.svg', 'Arduino Nano RP2040', 'arduino:mbed_nano:nanorp2040connect', 'bin', 'arduino:mbed_nano',
+    private static leaphyOriginalNanoRP2040RobotType = new RobotType('l_original_nano_esp32', Pico, 'Original Nano RP2040', 'orig.svg', 'orig_nano_rp2040.svg', 'Arduino Nano RP2040', 'arduino:mbed_nano:nanorp2040connect', 'bin', 'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
         },
     );
-    private static leaphyFlitzRobotType = new RobotType('l_flitz_uno', Stk500v1, 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyFlitzRobotType = new RobotType('l_flitz_uno', Stk500v1, 'Leaphy Flitz', 'flitz.svg', 'flitz_uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
     );
-    private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', Stk500v1,'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
+    private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', Stk500v1,'Flitz Nano', 'flitz_nano.svg', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
     );
-    private static leaphyClickRobotType = new RobotType('l_click', Stk500v1, 'Leaphy Click', 'click.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static leaphyClickRobotType = new RobotType('l_click', Stk500v1, 'Leaphy Click', 'click.svg', null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphySensors: true,
         }
     );
-    private static arduinoUnoRobotType = new RobotType('l_uno', Stk500v1, 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    private static arduinoUnoRobotType = new RobotType('l_uno', Stk500v1, 'Arduino Uno', 'uno.svg', null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    public static genericRobotType = new RobotType('l_code', Stk500v1, 'Leaphy C++', "c++.svg", 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
+    public static genericRobotType = new RobotType('l_code', Stk500v1, 'Leaphy C++', "c++.svg", null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
     AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
     );
-    private static arduinoNanoRobotType = new RobotType('l_nano', Stk500v1, 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
+    private static arduinoNanoRobotType = new RobotType('l_nano', Stk500v1, 'Arduino Nano', 'nano.svg', null, 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    private static arduinoNanoESP32RobotType = new RobotType('l_nano_esp32', DFU, 'Arduino Nano ESP32', 'nano.svg', 'Arduino NANO ESP32', 'arduino:esp32:nano_nora', 'bin', 'arduino:esp32',
+    private static arduinoNanoESP32RobotType = new RobotType('l_nano_esp32', DFU, 'Arduino Nano ESP32', 'nano.svg', null, 'Arduino NANO ESP32', 'arduino:esp32:nano_nora', 'bin', 'arduino:esp32',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    private static arduinoNanoRP2040RobotType = new RobotType('l_nano_rp2040', Pico, 'Arduino Nano RP2040', 'nano.svg', 'Arduino NANO RP2040', 'arduino:mbed_nano:nanorp2040connect', 'bin', 'arduino:mbed_nano',
+    private static arduinoNanoRP2040RobotType = new RobotType('l_nano_rp2040', Pico, 'Arduino Nano RP2040', 'nano.svg', null, 'Arduino NANO RP2040', 'arduino:mbed_nano:nanorp2040connect', 'bin', 'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
     );
-    public static microPythonRobotType = new RobotType('l_micropython', Stk500v1, 'MicroPython', 'micropython.svg', 'MicroPython', '', 'bin', '',
+    public static microPythonRobotType = new RobotType('l_micropython', Stk500v1, 'MicroPython', 'micropython.svg', null, 'MicroPython', '', 'bin', '',
         [], true, {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         });
-    private static arduinoMegaRobotType = new RobotType('l_mega', Stk500v2, 'Arduino Mega', 'mega.svg', 'Arduino MEGA', 'arduino:avr:mega', 'hex', 'arduino:avr',
+    private static arduinoMegaRobotType = new RobotType('l_mega', Stk500v2, 'Arduino Mega', 'mega.svg', null, 'Arduino MEGA', 'arduino:avr:mega', 'hex', 'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
@@ -125,7 +125,7 @@ export class AppState {
     private static robotSelectors: RobotSelector[] = [
         {
             intercept: AppState.leaphyFlitzRobotType,
-            choices: [
+            choices: [[
                 {
                     name: 'Flitz Uno',
                     icon: 'flitz.svg',
@@ -136,36 +136,40 @@ export class AppState {
                     icon: 'flitz.svg',
                     robot: AppState.leaphyFlitzNanoRobotType,
                 }
-            ]
+            ]]
         },
         {
             intercept: AppState.leaphyOriginalRobotType,
             choices: [
-                {
-                    name: 'Original Uno',
-                    icon: 'orig.svg',
-                    robot: AppState.leaphyOriginalRobotType,
-                },
-                {
-                    name: 'Original Nano',
-                    icon: 'orig.svg',
-                    robot: AppState.leaphyOriginalNanoRobotType,
-                },
-                {
-                    name: 'Original Nano ESP32',
-                    icon: 'orig.svg',
-                    robot: AppState.leaphyOriginalNanoESP32RobotType,
-                },
-                {
-                    name: 'Original Nano RP2040',
-                    icon: 'orig.svg',
-                    robot: AppState.leaphyOriginalNanoRP2040RobotType,
-                },
+                [
+                    {
+                        name: 'Original Uno',
+                        icon: 'orig.svg',
+                        robot: AppState.leaphyOriginalRobotType,
+                    },
+                ],
+                [
+                    {
+                        name: 'Original Nano',
+                        icon: 'orig.svg',
+                        robot: AppState.leaphyOriginalNanoRobotType,
+                    },
+                    {
+                        name: 'Original Nano ESP32',
+                        icon: 'orig.svg',
+                        robot: AppState.leaphyOriginalNanoESP32RobotType,
+                    },
+                    {
+                        name: 'Original Nano RP2040',
+                        icon: 'orig.svg',
+                        robot: AppState.leaphyOriginalNanoRP2040RobotType,
+                    },
+                ]
             ]
         },
         {
             intercept: AppState.arduinoNanoRobotType,
-            choices: [
+            choices: [[
                 {
                     name: 'Arduino Nano',
                     icon: 'nano.svg',
@@ -181,7 +185,7 @@ export class AppState {
                     icon: 'nano.svg',
                     robot: AppState.arduinoNanoRP2040RobotType,
                 },
-            ]
+            ]]
         }
     ]
 
@@ -190,6 +194,9 @@ export class AppState {
 
     public releaseVersionSubject$ = new BehaviorSubject<string>(version);
     public releaseVersion$: Observable<string> = this.releaseVersionSubject$.asObservable();
+
+    private robotChoiceSubject$ = new BehaviorSubject<RobotSelector>(null)
+    public robotChoice$ = this.robotChoiceSubject$.asObservable()
 
 
     /* eslint-enable max-len */
@@ -204,7 +211,11 @@ export class AppState {
         this.availableRobotTypes$ = this.isDesktop$
             .pipe(map(isDesktop => {
                 if (isDesktop) {
-                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoNanoRobotType, AppState.arduinoUnoRobotType, AppState.arduinoMegaRobotType]
+                    return [
+                        [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType],
+                        [AppState.arduinoNanoRobotType, AppState.arduinoUnoRobotType, AppState.arduinoMegaRobotType],
+                        [AppState.genericRobotType, AppState.microPythonRobotType],
+                    ]
                 } else {}
             }));
 
@@ -222,7 +233,7 @@ export class AppState {
     private isDesktopSubject$: BehaviorSubject<boolean>;
     public isDesktop$: Observable<boolean>;
 
-    public availableRobotTypes$: Observable<RobotType[]>;
+    public availableRobotTypes$: Observable<RobotType[][]>;
 
     private selectedRobotTypeSubject$ = new BehaviorSubject<RobotType>(null);
     public selectedRobotType$ = this.selectedRobotTypeSubject$.asObservable();
@@ -252,18 +263,7 @@ export class AppState {
         const selector = AppState.robotSelectors.find(({ intercept }) => intercept === robotType);
         if (!selector || skipPopup) return this.selectedRobotTypeSubject$.next(robotType);
 
-        this.dialog.open(SelectRobotTypeDialog, {
-            width: '250px',
-            data: {
-                boardTypes: selector.choices.map(({ name }) => name),
-                icons: selector.choices.map(({ icon }) => icon)
-            }
-        }).afterClosed().subscribe((result: string) => {
-            const selected = selector.choices.find(({ name }) => name === result)
-
-            if (!selected) return;
-            this.selectedRobotTypeSubject$.next(selected.robot);
-        });
+        this.robotChoiceSubject$.next(selector)
     }
 
     public setChangedLanguage(language: Language) {
