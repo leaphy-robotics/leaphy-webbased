@@ -29,7 +29,8 @@ export class AppState {
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyActuators: true,
             showLeaphyOperators: false,
             showLeaphySensors: true,
@@ -44,7 +45,8 @@ export class AppState {
         'arduino:avr:nano',
         'hex',
         'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
@@ -59,7 +61,8 @@ export class AppState {
         'arduino:esp32:nano_nora',
         'bin',
         'arduino:esp32',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
@@ -73,7 +76,8 @@ export class AppState {
         'arduino:mbed_nano:nanorp2040connect',
         'bin',
         'arduino:mbed_nano',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
             showLeaphySensors: true,
@@ -88,7 +92,8 @@ export class AppState {
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
-        AppState.defaultLibraries, true, {
+        AppState.defaultLibraries,
+        {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
@@ -102,7 +107,8 @@ export class AppState {
         'arduino:avr:nano',
         'hex',
         'arduino:avr',
-        AppState.defaultLibraries, true, {
+        AppState.defaultLibraries,
+        {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
@@ -116,7 +122,8 @@ export class AppState {
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
-        AppState.defaultLibraries, true, {
+        AppState.defaultLibraries,
+        {
             showLeaphySensors: true,
         },
         'atmega328p',
@@ -129,7 +136,8 @@ export class AppState {
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyLists: true,
             showLeaphySensors: true,
         },
@@ -145,7 +153,6 @@ export class AppState {
         'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        true,
         {},
         'atmega328p'
     );
@@ -157,7 +164,8 @@ export class AppState {
         'arduino:avr:nano',
         'hex',
         'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyLists: true,
             showLeaphySensors: true,
         },
@@ -170,7 +178,8 @@ export class AppState {
         'arduino:esp32:nano_nora',
         'bin',
         'arduino:esp32',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
@@ -182,7 +191,8 @@ export class AppState {
         'arduino:mbed_nano:nanorp2040connect',
         'bin',
         'arduino:mbed_nano',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyLists: true,
             showLeaphySensors: true,
         }
@@ -195,7 +205,8 @@ export class AppState {
         '',
         'bin',
         '',
-        [], true, {
+        [],
+        {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         });
@@ -207,7 +218,8 @@ export class AppState {
         'arduino:avr:mega',
         'hex',
         'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        {
             showLeaphyLists: true,
             showLeaphySensors: true,
         },

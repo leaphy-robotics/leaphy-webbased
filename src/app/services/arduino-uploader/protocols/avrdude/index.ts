@@ -1,7 +1,13 @@
 import BaseProtocol from "../base";
 
+/*
+    * The following is a list of supported microcontrollers.
+ */
 const supportedMicrocontrollers = ['atmega328p', 'atmega2560']
 
+/*
+    * The following is a dictionary of microcontroller to avrdude arguments.
+ */
 const microcontrollersToArgs = {
     'atmega328p': 'avrdude -P /dev/null -V -v -p atmega328p -c stk500v1 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i',
     'atmega2560': 'avrdude -P /dev/null -V -v -p atmega2560 -c stk500v2 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i'

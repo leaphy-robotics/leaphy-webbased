@@ -28,7 +28,6 @@ export class RobotType {
         public ext: string,
         public core: string,
         public libs: string[],
-        public isWired: boolean = true,
         features?: Partial<Features>,
         public microcontroller?: string
     ) {
