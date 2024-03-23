@@ -147,13 +147,13 @@ export class AppState {
                         icon: 'orig.svg',
                         robot: AppState.leaphyOriginalRobotType,
                     },
-                ],
-                [
                     {
                         name: 'Original Nano',
                         icon: 'orig.svg',
                         robot: AppState.leaphyOriginalNanoRobotType,
                     },
+                ],
+                [
                     {
                         name: 'Original Nano ESP32',
                         icon: 'orig.svg',

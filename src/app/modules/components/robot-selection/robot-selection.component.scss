@@ -7,14 +7,20 @@
 .robot-button {
     background-color: #ffffff;
     border: solid 1px #f1f1f1;
-    width: 180px !important;
-    height: 180px !important;
+    width: 10vw;
+    max-width: 180px !important;
+    aspect-ratio: 1 / 1;
 
     &:hover,
     &:active {
         background-color: #ffffff !important;
         border: 3px solid var(--leaphy-color-primary) !important;
     }
+}
+
+.robot-button img {
+    max-width: 90%;
+    max-height: 90%;
 }
 
 .selected {
