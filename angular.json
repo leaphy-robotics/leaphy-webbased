@@ -25,6 +25,7 @@
                         "assets": [
                             "src/favicon.ico",
                             "src/assets",
+                            "src/examples",
                             {
                                 "glob": "**/*",
                                 "input": "./node_modules/@leaphy-robotics/leaphy-blocks/media",
