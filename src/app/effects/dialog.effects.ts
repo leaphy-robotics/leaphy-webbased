@@ -9,6 +9,7 @@ import { LanguageSelectDialog } from '../modules/core/dialogs/language-select/la
 import {SerialOutputComponent} from "../modules/shared/components/serial-output/serial-output.component";
 import {AppState} from "../state/app.state";
 import {LibraryManagerComponent} from "../modules/shared/components/library-manager/library-manager.component";
+import {ExamplesDialog} from "../modules/core/dialogs/examples/examples-dialog.component";
 
 @Injectable({
     providedIn: 'root',
@@ -22,6 +23,15 @@ export class DialogEffects {
         private dialogState: DialogState,
         private dialog: MatDialog,
     ) {
+        this.dialogState.isExamplesDialogVisible$
+            .pipe(filter(isVisible => !!isVisible))
+            .subscribe(() => {
+                this.dialog.open(ExamplesDialog, {
+                    width: "800px",
+                    disableClose: true,
+                })
+            })
+
         // When the info dialog visibility is set to true, open the dialog
         this.dialogState.isInfoDialogVisible$
             .pipe(filter(isVisible => !!isVisible))
