@@ -6,7 +6,6 @@ import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
 import { version } from '../../../package.json';
 import Avrdude from "../services/arduino-uploader/protocols/avrdude";
 import DFU from "../services/arduino-uploader/protocols/dfu";
@@ -26,6 +25,7 @@ export class AppState {
         Avrdude,
         'Leaphy Original',
         'orig.svg',
+        'orig_uno.svg',
         'arduino:avr:uno',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -41,6 +41,7 @@ export class AppState {
         Avrdude,
         'Original Nano',
         'orig.svg',
+        'orig_nano.svg',
         'arduino:avr:nano',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -56,6 +57,7 @@ export class AppState {
         DFU,
         'Original Nano ESP32',
         'orig.svg',
+        'orig_nano_esp32.svg',
         'arduino:esp32:nano_nora',
         'arduino:esp32',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -70,6 +72,7 @@ export class AppState {
         Pico,
         'Original Nano RP2040',
         'orig.svg',
+        'orig_nano_rp2040.svg',
         'arduino:mbed_nano:nanorp2040connect',
         'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -84,7 +87,7 @@ export class AppState {
         Avrdude,
         'Leaphy Flitz',
         'flitz.svg',
-
+        'flitz_uno.svg',
         'arduino:avr:uno',
         'arduino:avr',
         AppState.defaultLibraries,
@@ -98,6 +101,7 @@ export class AppState {
         'l_flitz_nano',
         Avrdude,
         'Flitz Nano',
+        'flitz_nano.svg',
         'flitz_nano.svg',
         'arduino:avr:nano',
         'arduino:avr',
@@ -113,6 +117,7 @@ export class AppState {
         Avrdude,
         'Leaphy Click',
         'click.svg',
+        null,
         'arduino:avr:uno',
         'arduino:avr',
         AppState.defaultLibraries,
@@ -126,6 +131,7 @@ export class AppState {
         Avrdude,
         'Arduino Uno',
         'uno.svg',
+        null,
         'arduino:avr:uno',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -141,6 +147,7 @@ export class AppState {
         Avrdude,
         'Leaphy C++',
         "c++.svg",
+        null,
         'arduino:avr:uno',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -152,6 +159,7 @@ export class AppState {
         Avrdude,
         'Arduino Nano',
         'nano.svg',
+        null,
         'arduino:avr:nano',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -165,6 +173,7 @@ export class AppState {
         'l_nano_esp32', DFU,
         'Arduino Nano ESP32',
         'nano.svg',
+        null,
         'arduino:esp32:nano_nora',
         'arduino:esp32',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -177,6 +186,7 @@ export class AppState {
         'l_nano_rp2040', Pico,
         'Arduino Nano RP2040',
         'nano.svg',
+        null,
         'arduino:mbed_nano:nanorp2040connect',
         'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -190,6 +200,7 @@ export class AppState {
         Avrdude,
         'MicroPython',
         'micropython.svg',
+        null,
         '',
         '',
         [],
@@ -202,6 +213,7 @@ export class AppState {
         Avrdude,
         'Arduino Mega',
         'mega.svg',
+        null,
         'arduino:avr:mega',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
@@ -232,7 +244,7 @@ export class AppState {
     private static robotSelectors: RobotSelector[] = [
         {
             intercept: AppState.leaphyFlitzRobotType,
-            choices: [
+            choices: [[
                 {
                     name: 'Flitz Uno',
                     icon: 'flitz.svg',
@@ -243,36 +255,40 @@ export class AppState {
                     icon: 'flitz.svg',
                     robot: AppState.leaphyFlitzNanoRobotType,
                 }
-            ]
+            ]]
         },
         {
             intercept: AppState.leaphyOriginalRobotType,
             choices: [
-                {
-                    name: 'Original Uno',
-                    icon: 'orig.svg',
-                    robot: AppState.leaphyOriginalRobotType,
-                },
-                {
-                    name: 'Original Nano',
-                    icon: 'orig.svg',
-                    robot: AppState.leaphyOriginalNanoRobotType,
-                },
-                {
-                    name: 'Original Nano ESP32',
-                    icon: 'orig.svg',
-                    robot: AppState.leaphyOriginalNanoESP32RobotType,
-                },
-                {
-                    name: 'Original Nano RP2040',
-                    icon: 'orig.svg',
-                    robot: AppState.leaphyOriginalNanoRP2040RobotType,
-                },
+                [
+                    {
+                        name: 'Original Uno',
+                        icon: 'orig.svg',
+                        robot: AppState.leaphyOriginalRobotType,
+                    },
+                ],
+                [
+                    {
+                        name: 'Original Nano',
+                        icon: 'orig.svg',
+                        robot: AppState.leaphyOriginalNanoRobotType,
+                    },
+                    {
+                        name: 'Original Nano ESP32',
+                        icon: 'orig.svg',
+                        robot: AppState.leaphyOriginalNanoESP32RobotType,
+                    },
+                    {
+                        name: 'Original Nano RP2040',
+                        icon: 'orig.svg',
+                        robot: AppState.leaphyOriginalNanoRP2040RobotType,
+                    },
+                ]
             ]
         },
         {
             intercept: AppState.arduinoNanoRobotType,
-            choices: [
+            choices: [[
                 {
                     name: 'Arduino Nano',
                     icon: 'nano.svg',
@@ -288,7 +304,7 @@ export class AppState {
                     icon: 'nano.svg',
                     robot: AppState.arduinoNanoRP2040RobotType,
                 },
-            ]
+            ]]
         }
     ]
 
@@ -297,6 +313,9 @@ export class AppState {
 
     public releaseVersionSubject$ = new BehaviorSubject<string>(version);
     public releaseVersion$: Observable<string> = this.releaseVersionSubject$.asObservable();
+
+    private robotChoiceSubject$ = new BehaviorSubject<RobotSelector>(null)
+    public robotChoice$ = this.robotChoiceSubject$.asObservable()
 
 
     /* eslint-enable max-len */
@@ -311,7 +330,11 @@ export class AppState {
         this.availableRobotTypes$ = this.isDesktop$
             .pipe(map(isDesktop => {
                 if (isDesktop) {
-                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoNanoRobotType, AppState.arduinoUnoRobotType, AppState.arduinoMegaRobotType]
+                    return [
+                        [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType],
+                        [AppState.arduinoNanoRobotType, AppState.arduinoUnoRobotType, AppState.arduinoMegaRobotType],
+                        [AppState.genericRobotType, AppState.microPythonRobotType],
+                    ]
                 } else {}
             }));
 
@@ -329,7 +352,7 @@ export class AppState {
     private isDesktopSubject$: BehaviorSubject<boolean>;
     public isDesktop$: Observable<boolean>;
 
-    public availableRobotTypes$: Observable<RobotType[]>;
+    public availableRobotTypes$: Observable<RobotType[][]>;
 
     private selectedRobotTypeSubject$ = new BehaviorSubject<RobotType>(null);
     public selectedRobotType$ = this.selectedRobotTypeSubject$.asObservable();
@@ -359,18 +382,7 @@ export class AppState {
         const selector = AppState.robotSelectors.find(({ intercept }) => intercept === robotType);
         if (!selector || skipPopup) return this.selectedRobotTypeSubject$.next(robotType);
 
-        this.dialog.open(SelectRobotTypeDialog, {
-            width: '250px',
-            data: {
-                boardTypes: selector.choices.map(({ name }) => name),
-                icons: selector.choices.map(({ icon }) => icon)
-            }
-        }).afterClosed().subscribe((result: string) => {
-            const selected = selector.choices.find(({ name }) => name === result)
-
-            if (!selected) return;
-            this.selectedRobotTypeSubject$.next(selected.robot);
-        });
+        this.robotChoiceSubject$.next(selector)
     }
 
     public setChangedLanguage(language: Language) {

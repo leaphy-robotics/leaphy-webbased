@@ -64,6 +64,8 @@
                 </ng-container>
             </ng-container>
         </div>
+
+        <div *ngIf="(this.appState.selectedRobotType$ | async) === null" class="version-number">{{ (appState.releaseVersion$ | async) }}</div>
     </div>
 </mat-toolbar>
 
@@ -86,6 +88,10 @@
     <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onSaveWorkspaceAsClicked()">
         <mat-icon>save</mat-icon>
         <span>{{ "SAVEAS" | translate }}</span>
+    </button>
+    <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onExamplesClicked()">
+        <mat-icon>school</mat-icon>
+        <span>{{ "EXAMPLES" | translate }}</span>
     </button>
 </mat-menu>
 
