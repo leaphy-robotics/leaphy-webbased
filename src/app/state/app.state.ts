@@ -26,7 +26,6 @@ export class AppState {
         Avrdude,
         'Leaphy Original',
         'orig.svg',
-        'atmega328p',
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
@@ -35,13 +34,13 @@ export class AppState {
             showLeaphyOperators: false,
             showLeaphySensors: true,
         },
+        'atmega328p'
     );
     private static leaphyOriginalNanoRobotType = new RobotType(
         'l_original_nano',
         Avrdude,
         'Original Nano',
         'orig.svg',
-        'atmega328p',
         'arduino:avr:nano',
         'hex',
         'arduino:avr',
@@ -50,13 +49,13 @@ export class AppState {
             showLeaphyOperators: true,
             showLeaphySensors: true,
         },
+        'atmega328p',
     );
     private static leaphyOriginalNanoESP32RobotType = new RobotType(
         'l_original_nano_esp32',
         DFU,
         'Original Nano ESP32',
         'orig.svg',
-        'NOT_SET', // for other uploaders then avrdude NOT_SET is used
         'arduino:esp32:nano_nora',
         'bin',
         'arduino:esp32',
@@ -71,7 +70,6 @@ export class AppState {
         Pico,
         'Original Nano RP2040',
         'orig.svg',
-        'NOT_SET', // for other uploaders then avrdude NOT_SET is used
         'arduino:mbed_nano:nanorp2040connect',
         'bin',
         'arduino:mbed_nano',
@@ -86,7 +84,7 @@ export class AppState {
         Avrdude,
         'Leaphy Flitz',
         'flitz.svg',
-        'atmega328p',
+
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
@@ -94,13 +92,13 @@ export class AppState {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
+        'atmega328p',
     );
     private static leaphyFlitzNanoRobotType = new RobotType(
         'l_flitz_nano',
         Avrdude,
         'Flitz Nano',
         'flitz_nano.svg',
-        'atmega328p',
         'arduino:avr:nano',
         'hex',
         'arduino:avr',
@@ -108,33 +106,34 @@ export class AppState {
             showLeaphyActuators: false,
             showLeaphyOperators: false,
         },
+        'atmega328p',
     );
     private static leaphyClickRobotType = new RobotType(
         'l_click',
         Avrdude,
         'Leaphy Click',
         'click.svg',
-        'atmega328p',
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
         AppState.defaultLibraries, true, {
             showLeaphySensors: true,
-        }
+        },
+        'atmega328p',
     );
     private static arduinoUnoRobotType = new RobotType(
         'l_uno',
         Avrdude,
         'Arduino Uno',
         'uno.svg',
-        'atmega328p',
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
-        }
+        },
+        'atmega328p',
     );
 
     public static genericRobotType = new RobotType(
@@ -142,31 +141,32 @@ export class AppState {
         Avrdude,
         'Leaphy C++',
         "c++.svg",
-        'atmega328p',
         'arduino:avr:uno',
         'hex',
         'arduino:avr',
-    AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
+        true,
+        {},
+        'atmega328p'
     );
     private static arduinoNanoRobotType = new RobotType(
         'l_nano',
         Avrdude,
         'Arduino Nano',
         'nano.svg',
-        'atmega328p',
         'arduino:avr:nano',
         'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
-        }
+        },
+        'atmega328p',
     );
     private static arduinoNanoESP32RobotType = new RobotType(
         'l_nano_esp32', DFU,
         'Arduino Nano ESP32',
         'nano.svg',
-        'NOT_SET',  // for other uploaders then avrdude NOT_SET is used
         'arduino:esp32:nano_nora',
         'bin',
         'arduino:esp32',
@@ -179,7 +179,6 @@ export class AppState {
         'l_nano_rp2040', Pico,
         'Arduino Nano RP2040',
         'nano.svg',
-        'NOT_SET',  // for other uploaders then avrdude NOT_SET is used
         'arduino:mbed_nano:nanorp2040connect',
         'bin',
         'arduino:mbed_nano',
@@ -193,7 +192,6 @@ export class AppState {
         Avrdude,
         'MicroPython',
         'micropython.svg',
-        'NOT_SET', // for other uploaders then avrdude NOT_SET is used
         '',
         'bin',
         '',
@@ -206,14 +204,15 @@ export class AppState {
         Avrdude,
         'Arduino Mega',
         'mega.svg',
-        'atmega2560', // for other uploaders then avrdude NOT_SET is used
         'arduino:avr:mega',
         'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyLists: true,
             showLeaphySensors: true,
-        })
+        },
+        'atmega2560',
+    )
 
     public static idToRobotType = {
         'l_original_uno': AppState.leaphyOriginalRobotType,

@@ -24,13 +24,13 @@ export class RobotType {
         public protocol: typeof BaseProtocol,
         public name: string,
         public svgname: string,
-        public micrcontroller: string,
         public fqbn: string,
         public ext: string,
         public core: string,
         public libs: string[],
         public isWired: boolean = true,
-        features?: Partial<Features>
+        features?: Partial<Features>,
+        public micrcontroller?: string
     ) {
         this.features = Object.assign({}, DEFAULTS, features||{});
     }

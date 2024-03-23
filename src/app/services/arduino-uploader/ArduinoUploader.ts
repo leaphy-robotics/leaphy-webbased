@@ -197,13 +197,6 @@ class Arduino {
         const Uploader = this.appState.getSelectedRobotType().protocol
         this.isUploading = true
 
-        if (Uploader == Avrdude) {
-            window["avrdudeLog"] = ["Handing control to avrdude"]
-            await this.handControlToAvrdude(program)
-            this.isUploading = false
-            return
-        }
-
         const upload = new Uploader(this.port, this.robotWiredState, this.uploadState, this.serialOptions, this)
         await upload.upload(program)
             .catch(async err => {
@@ -218,10 +211,6 @@ class Arduino {
      * @returns {Promise<void>}
      */
     async close() {
-        this.readStream?.releaseLock();
-        this.writeStream?.releaseLock();
-        this.readStream = null;
-        this.writeStream = null;
         this.isUploading = false
     }
 
