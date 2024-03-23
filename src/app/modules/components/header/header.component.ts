@@ -11,6 +11,7 @@ import {CodeEditorType} from "../../../domain/code-editor.type";
 import {RobotWiredState} from "../../../state/robot.wired.state";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import JSZip from 'jszip';
+import {BackEndMessage} from "../../../domain/backend.message";
 
 @Component({
     selector: 'app-header',
@@ -69,12 +70,23 @@ export class HeaderComponent {
 
     public async onChooseRobot() {
         if ('serial' in navigator) {
-            const port = await navigator.serial.requestPort({filters: [{usbVendorId: 0x1a86}, {usbVendorId: 9025}, {usbVendorId: 2341}, {usbVendorId: 0x0403}]})
+            const port = await navigator.serial.requestPort({
+                filters: this.robotWiredState.SUPPORTED_VENDORS.map(vendor => ({
+                    usbVendorId: vendor
+                }))
+            })
             if (port !== this.robotWiredState.getSerialPort()) {
                 await port.open({baudRate: 115200});
                 this.robotWiredState.setSerialPort(port);
                 this.dialogState.setIsSerialOutputListening(true);
             }
+
+            this.backEndState.setBackendMessage({
+                event: 'CONNECTED',
+                message: 'CONNECTED',
+                payload: {},
+                displayTimeout: 2000
+            })
         }
     }
 

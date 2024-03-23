@@ -10,6 +10,8 @@ import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robo
 import { version } from '../../../package.json';
 import Stk500v1 from '../services/arduino-uploader/protocols/stk500v1/index'
 import Stk500v2 from "../services/arduino-uploader/protocols/stk500v2";
+import DFU from "../services/arduino-uploader/protocols/dfu";
+import Pico from "../services/arduino-uploader/protocols/pico";
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +30,20 @@ export class AppState {
         },
     );
     private static leaphyOriginalNanoRobotType = new RobotType('l_original_nano', Stk500v1, 'Original Nano', 'orig.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+            showLeaphyActuators: true,
+            showLeaphyOperators: true,
+            showLeaphySensors: true,
+        },
+    );
+    private static leaphyOriginalNanoESP32RobotType = new RobotType('l_original_nano_esp32', DFU, 'Original Nano ESP32', 'orig.svg', 'Arduino Nano ESP32', 'arduino:esp32:nano_nora', 'bin', 'arduino:esp32',
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+            showLeaphyActuators: true,
+            showLeaphyOperators: true,
+            showLeaphySensors: true,
+        },
+    );
+    private static leaphyOriginalNanoRP2040RobotType = new RobotType('l_original_nano_esp32', Pico, 'Original Nano RP2040', 'orig.svg', 'Arduino Nano RP2040', 'arduino:mbed_nano:nanorp2040connect', 'bin', 'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
             showLeaphyActuators: true,
             showLeaphyOperators: true,
@@ -66,6 +82,18 @@ export class AppState {
             showLeaphySensors: true,
         }
     );
+    private static arduinoNanoESP32RobotType = new RobotType('l_nano_esp32', DFU, 'Arduino Nano ESP32', 'nano.svg', 'Arduino NANO ESP32', 'arduino:esp32:nano_nora', 'bin', 'arduino:esp32',
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+            showLeaphyLists: true,
+            showLeaphySensors: true,
+        }
+    );
+    private static arduinoNanoRP2040RobotType = new RobotType('l_nano_rp2040', Pico, 'Arduino Nano RP2040', 'nano.svg', 'Arduino NANO RP2040', 'arduino:mbed_nano:nanorp2040connect', 'bin', 'arduino:mbed_nano',
+        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']), true, {
+            showLeaphyLists: true,
+            showLeaphySensors: true,
+        }
+    );
     public static microPythonRobotType = new RobotType('l_micropython', Stk500v1, 'MicroPython', 'micropython.svg', 'MicroPython', '', 'bin', '',
         [], true, {
             showLeaphyActuators: false,
@@ -80,14 +108,18 @@ export class AppState {
     public static idToRobotType = {
         'l_original_uno': AppState.leaphyOriginalRobotType,
         'l_original_nano': AppState.leaphyOriginalNanoRobotType,
+        'l_original_nano_esp32': AppState.leaphyOriginalNanoESP32RobotType,
+        'l_original_nano_rp2040': AppState.leaphyOriginalNanoRP2040RobotType,
         'l_flitz_uno': AppState.leaphyFlitzRobotType,
         'l_click': AppState.leaphyClickRobotType,
         'l_uno': AppState.arduinoUnoRobotType,
         'l_code': AppState.genericRobotType,
         'l_flitz_nano': AppState.leaphyFlitzNanoRobotType,
         'l_nano': AppState.arduinoNanoRobotType,
+        'l_nano_esp32': AppState.arduinoNanoESP32RobotType,
+        'l_nano_rp2040': AppState.arduinoNanoRP2040RobotType,
         'l_micropython': AppState.microPythonRobotType,
-        'l_mega': AppState.arduinoMegaRobotType
+        'l_mega': AppState.arduinoMegaRobotType,
     }
 
     private static robotSelectors: RobotSelector[] = [
@@ -118,7 +150,37 @@ export class AppState {
                     name: 'Original Nano',
                     icon: 'orig.svg',
                     robot: AppState.leaphyOriginalNanoRobotType,
-                }
+                },
+                {
+                    name: 'Original Nano ESP32',
+                    icon: 'orig.svg',
+                    robot: AppState.leaphyOriginalNanoESP32RobotType,
+                },
+                {
+                    name: 'Original Nano RP2040',
+                    icon: 'orig.svg',
+                    robot: AppState.leaphyOriginalNanoRP2040RobotType,
+                },
+            ]
+        },
+        {
+            intercept: AppState.arduinoNanoRobotType,
+            choices: [
+                {
+                    name: 'Arduino Nano',
+                    icon: 'nano.svg',
+                    robot: AppState.arduinoNanoRobotType,
+                },
+                {
+                    name: 'Arduino Nano ESP32',
+                    icon: 'nano.svg',
+                    robot: AppState.arduinoNanoESP32RobotType,
+                },
+                {
+                    name: 'Arduino Nano RP2040',
+                    icon: 'nano.svg',
+                    robot: AppState.arduinoNanoRP2040RobotType,
+                },
             ]
         }
     ]

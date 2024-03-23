@@ -39,6 +39,16 @@
                                 "glob": "nl.json",
                                 "input": "./node_modules/@leaphy-robotics/leaphy-blocks/msg/json",
                                 "output": "./msg/json"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "./node_modules/@leaphy-robotics/dfu-util-wasm/build",
+                                "output": "./dfu-util"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "./node_modules/@leaphy-robotics/picotool-wasm/build",
+                                "output": "./picotool"
                             }
                         ],
                         "styles": [
@@ -124,7 +134,11 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "leaphy-client:build"
+                        "browserTarget": "leaphy-client:build",
+                        "headers": {
+                            "Cross-Origin-Embedder-Policy": "require-corp",
+                            "Cross-Origin-Opener-Policy": "same-origin"
+                        }
                     },
                     "configurations": {
                         "production": {

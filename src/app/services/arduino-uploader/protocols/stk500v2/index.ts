@@ -16,7 +16,8 @@ const defaultOptions = {
 export default class Stk500v2 extends BaseProtocol {
     parser = new Parser(this.port)
 
-    upload(program: string, callback = (message: string) => {}) {
+    upload(response: Record<string, string>) {
+        const program = response['hex']
         this.parser.addEventListener('log', (event) => {
             // @ts-ignore
             this.robotWiredState.addToUploadLog(event.detail)
@@ -25,20 +26,20 @@ export default class Stk500v2 extends BaseProtocol {
         return new Promise<void>(async (resolve, reject) => {
             this.sync(5, (err, data) => {
                 if (err) {
-                    callback("NOT_IN_SYNC")
+                    this.uploadState.setStatusMessage("NOT_IN_SYNC")
                     return reject(err)
                 }
 
                 this.getSignature(console.log)
                 this.verifySignature(new Uint8Array([30, 152, 1]), (err) => {
                     if (err) {
-                        callback("SIGNATURE_MISMATCH")
+                        this.uploadState.setStatusMessage("SIGNATURE_MISMATCH")
                         return reject(err)
                     }
 
                     this.enterProgrammingMode({}, async (err) => {
                         if (err) {
-                            callback("OPTIONS_NOT_ACCEPTED")
+                            this.uploadState.setStatusMessage("OPTIONS_NOT_ACCEPTED")
                             return reject(err)
                         }
 
@@ -57,7 +58,7 @@ export default class Stk500v2 extends BaseProtocol {
                                 await this.reset(115200);
                             } catch (error) {}
 
-                            callback("UPDATE_COMPLETE")
+                            this.uploadState.setStatusMessage("UPDATE_COMPLETE")
                             resolve()
                         })
                     })

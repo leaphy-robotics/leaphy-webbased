@@ -99,5 +99,8 @@
     "CONNECTING": "Connecting to robot...",
     "CONNECTED": "Connected",
     "THIS_COMPUTER": "This computer",
-    "MICROCONTROLLER": "Robot"
+    "MICROCONTROLLER": "Robot",
+    "RECONNECT": "Reconnect",
+    "RECONNECT_INFO": "Please reconnect your device",
+    "DONT_SHOW": "Don't show again"
 }

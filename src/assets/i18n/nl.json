@@ -99,5 +99,8 @@
     "CONNECTING": "Verbinden met robot...",
     "CONNECTED": "Verbonden",
     "THIS_COMPUTER": "Deze computer",
-    "MICROCONTROLLER": "Robot"
+    "MICROCONTROLLER": "Robot",
+    "RECONNECT_INFO": "Maak opnieuw verbinding",
+    "RECONNECT": "Verbind opnieuw",
+    "DONT_SHOW": "Niet opnieuw tonen"
 }
