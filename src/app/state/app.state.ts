@@ -27,7 +27,6 @@ export class AppState {
         'Leaphy Original',
         'orig.svg',
         'arduino:avr:uno',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {
@@ -43,7 +42,6 @@ export class AppState {
         'Original Nano',
         'orig.svg',
         'arduino:avr:nano',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {
@@ -59,7 +57,6 @@ export class AppState {
         'Original Nano ESP32',
         'orig.svg',
         'arduino:esp32:nano_nora',
-        'bin',
         'arduino:esp32',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {
@@ -74,7 +71,6 @@ export class AppState {
         'Original Nano RP2040',
         'orig.svg',
         'arduino:mbed_nano:nanorp2040connect',
-        'bin',
         'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {
@@ -90,7 +86,6 @@ export class AppState {
         'flitz.svg',
 
         'arduino:avr:uno',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries,
         {
@@ -105,7 +100,6 @@ export class AppState {
         'Flitz Nano',
         'flitz_nano.svg',
         'arduino:avr:nano',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries,
         {
@@ -120,7 +114,6 @@ export class AppState {
         'Leaphy Click',
         'click.svg',
         'arduino:avr:uno',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries,
         {
@@ -134,7 +127,6 @@ export class AppState {
         'Arduino Uno',
         'uno.svg',
         'arduino:avr:uno',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {
@@ -150,7 +142,6 @@ export class AppState {
         'Leaphy C++',
         "c++.svg",
         'arduino:avr:uno',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {},
@@ -162,7 +153,6 @@ export class AppState {
         'Arduino Nano',
         'nano.svg',
         'arduino:avr:nano',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {
@@ -176,7 +166,6 @@ export class AppState {
         'Arduino Nano ESP32',
         'nano.svg',
         'arduino:esp32:nano_nora',
-        'bin',
         'arduino:esp32',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {
@@ -189,7 +178,6 @@ export class AppState {
         'Arduino Nano RP2040',
         'nano.svg',
         'arduino:mbed_nano:nanorp2040connect',
-        'bin',
         'arduino:mbed_nano',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {
@@ -203,7 +191,6 @@ export class AppState {
         'MicroPython',
         'micropython.svg',
         '',
-        'bin',
         '',
         [],
         {
@@ -216,7 +203,6 @@ export class AppState {
         'Arduino Mega',
         'mega.svg',
         'arduino:avr:mega',
-        'hex',
         'arduino:avr',
         AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
         {

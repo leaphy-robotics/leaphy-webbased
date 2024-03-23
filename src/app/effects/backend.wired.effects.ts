@@ -90,7 +90,6 @@ export class BackendWiredEffects {
                                 const payload = {
                                     code,
                                     fqbn: robotType.fqbn,
-                                    ext: robotType.ext,
                                     core: robotType.core,
                                     name: robotType.name,
                                     libs: libraries

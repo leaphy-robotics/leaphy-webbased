@@ -25,7 +25,6 @@ export class RobotType {
         public name: string,
         public svgname: string,
         public fqbn: string,
-        public ext: string,
         public core: string,
         public libs: string[],
         features?: Partial<Features>,
