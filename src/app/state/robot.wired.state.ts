@@ -1,75 +1,88 @@
-import { Injectable } from '@angular/core';
-import { ChartDataset } from 'chart.js';
-import { ReplaySubject, BehaviorSubject, Observable} from 'rxjs';
-import { filter, map, scan } from 'rxjs/operators';
-
+import { Injectable } from "@angular/core";
+import { ChartDataset } from "chart.js";
+import { ReplaySubject, BehaviorSubject, Observable } from "rxjs";
+import { filter, map, scan } from "rxjs/operators";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root",
 })
 export class RobotWiredState {
+    public SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 0x2e8a];
 
-    public SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 0x2e8a]
+    private serialPortSubject$: BehaviorSubject<SerialPort> =
+        new BehaviorSubject(null);
 
-    private serialPortSubject$: BehaviorSubject<SerialPort> = new BehaviorSubject(null);
-
-    private abortControllerSubject$: BehaviorSubject<AbortController> = new BehaviorSubject(null);
+    private abortControllerSubject$: BehaviorSubject<AbortController> =
+        new BehaviorSubject(null);
 
     // Upload log, a Log of list of strings
     private uploadLogSubject$ = new BehaviorSubject<string[]>([]);
-    public uploadLog$: Observable<string[]> = this.uploadLogSubject$.asObservable();
+    public uploadLog$: Observable<string[]> =
+        this.uploadLogSubject$.asObservable();
 
     private isPythonCodeRunningSubject$ = new BehaviorSubject<boolean>(false);
-    public isPythonCodeRunning$: Observable<boolean> = this.isPythonCodeRunningSubject$.asObservable();
+    public isPythonCodeRunning$: Observable<boolean> =
+        this.isPythonCodeRunningSubject$.asObservable();
 
-    private isPythonDeviceConnectedSubject$ = new BehaviorSubject<boolean>(false);
-    public isPythonDeviceConnected$: Observable<boolean> = this.isPythonDeviceConnectedSubject$.asObservable();
+    private isPythonDeviceConnectedSubject$ = new BehaviorSubject<boolean>(
+        false,
+    );
+    public isPythonDeviceConnected$: Observable<boolean> =
+        this.isPythonDeviceConnectedSubject$.asObservable();
 
-    public isPythonSerialMonitorListeningSubject$ = new BehaviorSubject<boolean>(false);
-    public isPythonSerialMonitorListening$: Observable<boolean> = this.isPythonSerialMonitorListeningSubject$.asObservable();
+    public isPythonSerialMonitorListeningSubject$ =
+        new BehaviorSubject<boolean>(false);
+    public isPythonSerialMonitorListening$: Observable<boolean> =
+        this.isPythonSerialMonitorListeningSubject$.asObservable();
 
-    private serialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
-    public serialData$: Observable<{ time: Date, data: string }[]> = this.serialDataSubject$
-        .pipe(filter(output => !!output))
-        .pipe(scan((all, incoming) => {
-            if (incoming.data === this.poisonPill) {
-                return [];
-            }
-            if (all.length > 100) {
-                return all.slice(1).concat(incoming);
-            }
-            return all.concat(incoming);
-        }, []));
+    private serialDataSubject$ = new ReplaySubject<{
+        time: Date;
+        data: string;
+    }>();
+    public serialData$: Observable<{ time: Date; data: string }[]> =
+        this.serialDataSubject$.pipe(filter((output) => !!output)).pipe(
+            scan((all, incoming) => {
+                if (incoming.data === this.poisonPill) {
+                    return [];
+                }
+                if (all.length > 100) {
+                    return all.slice(1).concat(incoming);
+                }
+                return all.concat(incoming);
+            }, []),
+        );
 
+    private serialWriteSubject$ = new BehaviorSubject<
+        WritableStreamDefaultWriter<Uint8Array>
+    >(null);
 
-    private serialWriteSubject$ = new BehaviorSubject<WritableStreamDefaultWriter<Uint8Array>>(null);
+    public serialChartDataSets$: Observable<ChartDataset[]> =
+        this.serialData$.pipe(
+            map((data) => {
+                const dataSets: ChartDataset[] = data.reduce((sets, item) => {
+                    const [label, valueStr] = item.data.split(" = ");
 
-    public serialChartDataSets$: Observable<ChartDataset[]> = this.serialData$
-        .pipe(map(data => {
-            const dataSets: ChartDataset[] = data.reduce((sets, item) => {
-                const [label, valueStr] = item.data.split(' = ');
+                    // If it can't be parsed, move to next item
+                    if (!label || !valueStr) return sets;
 
-                // If it can't be parsed, move to next item
-                if (!label || !valueStr) return sets;
+                    const value = Number(valueStr);
 
-                const value = Number(valueStr);
+                    const dataPoint = { x: item.time, y: value };
+                    // Find the set with the label
+                    const labelSet = sets.find((s) => s.label === label);
 
-                const dataPoint = { x: item.time, y: value }
-                // Find the set with the label
-                const labelSet = sets.find(s => s.label === label);
+                    // If it's already there, push a data point into it
+                    if (labelSet) labelSet.data.push(dataPoint);
+                    // Else create the new dataset
+                    else sets.push({ label, data: [dataPoint] });
 
-                // If it's already there, push a data point into it
-                if (labelSet) labelSet.data.push(dataPoint)
-                // Else create the new dataset
-                else sets.push({ label, data: [dataPoint] });
+                    return sets;
+                }, []);
+                return dataSets;
+            }),
+        );
 
-                return sets;
-            }, [])
-            return dataSets;
-        }));
-
-
-    public setIncomingSerialData(data: { time: Date, data: string }): void {
+    public setIncomingSerialData(data: { time: Date; data: string }): void {
         this.serialDataSubject$.next(data);
     }
 
@@ -102,7 +115,10 @@ export class RobotWiredState {
     }
 
     public addToUploadLog(log: string): void {
-        this.uploadLogSubject$.next([...this.uploadLogSubject$.getValue(), log]);
+        this.uploadLogSubject$.next([
+            ...this.uploadLogSubject$.getValue(),
+            log,
+        ]);
     }
 
     public clearUploadLog(): void {
@@ -133,5 +149,6 @@ export class RobotWiredState {
         return this.isPythonSerialMonitorListeningSubject$.getValue();
     }
 
-    private readonly poisonPill: string = "caaa61a6-a666-4c0b-83b4-ebc75b08fecb"
+    private readonly poisonPill: string =
+        "caaa61a6-a666-4c0b-83b4-ebc75b08fecb";
 }

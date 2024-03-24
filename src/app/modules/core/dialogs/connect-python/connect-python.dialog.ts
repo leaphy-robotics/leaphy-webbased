@@ -1,25 +1,31 @@
-import {Component} from '@angular/core';
-import {MatDialogRef} from '@angular/material/dialog';
-import {TranslateService} from "@ngx-translate/core";
-import {DialogState} from "../../../../state/dialog.state";
-import {RobotWiredState} from "../../../../state/robot.wired.state";
-import {BehaviorSubject} from "rxjs";
-import {CodeEditorType} from "../../../../domain/code-editor.type";
-import {PythonUploaderService} from "../../../../services/python-uploader/PythonUploader.service";
+import { Component } from "@angular/core";
+import { MatDialogRef } from "@angular/material/dialog";
+import { TranslateService } from "@ngx-translate/core";
+import { DialogState } from "../../../../state/dialog.state";
+import { RobotWiredState } from "../../../../state/robot.wired.state";
+import { BehaviorSubject } from "rxjs";
+import { CodeEditorType } from "../../../../domain/code-editor.type";
+import { PythonUploaderService } from "../../../../services/python-uploader/PythonUploader.service";
 
 @Component({
-    selector: 'connect-python',
-    templateUrl: './connect-python.dialog.html',
-    styleUrls: ['./connect-python.dialog.scss']
+    selector: "connect-python",
+    templateUrl: "./connect-python.dialog.html",
+    styleUrls: ["./connect-python.dialog.scss"],
 })
 export class ConnectPythonDialog {
-    statusMessage: string = '';
+    statusMessage: string = "";
     progressBarWidth: number = 0;
     protected readonly document = document;
-    public uploading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    public firmwareWriting: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    public uploadFailed: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    public didUpload: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public uploading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+        false,
+    );
+    public firmwareWriting: BehaviorSubject<boolean> =
+        new BehaviorSubject<boolean>(false);
+    public uploadFailed: BehaviorSubject<boolean> =
+        new BehaviorSubject<boolean>(false);
+    public didUpload: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
+        false,
+    );
 
     constructor(
         public dialogRef: MatDialogRef<ConnectPythonDialog>,
@@ -32,69 +38,69 @@ export class ConnectPythonDialog {
     public async makePythonRobotConnection() {
         this.dialogState.setIsSerialOutputListening(false);
         this.uploading.next(true);
-        this.onUpdate('CONNECTING');
+        this.onUpdate("CONNECTING");
         this.progressBarWidth += 25;
 
-        if ('serial' in navigator && 'showDirectoryPicker' in window) {
+        if ("serial" in navigator && "showDirectoryPicker" in window) {
             try {
                 await this.upload.connect();
             } catch (error) {
-                if (error.message === 'No device selected') {
-                    this.onUpdate('NO_DEVICE_SELECTED');
-                    this.onError('No device selected')
-                } else if (error.message === 'Signature mismatch') {
+                if (error.message === "No device selected") {
+                    this.onUpdate("NO_DEVICE_SELECTED");
+                    this.onError("No device selected");
+                } else if (error.message === "Signature mismatch") {
                     this.onUpdate("SIGNATURE_MISMATCH");
-                    this.onError('Signature mismatch')
+                    this.onError("Signature mismatch");
                 } else {
                     console.log(error);
                 }
                 setTimeout(() => {
-                    this.showReturnOptions()
+                    this.showReturnOptions();
                 }, 1);
-                return
+                return;
             }
             this.progressBarWidth += 25;
             await this.upload.installStandardLibraries();
             this.progressBarWidth += 25;
         } else {
-            this.onUpdate('NO_SERIAL_SUPPORT')
+            this.onUpdate("NO_SERIAL_SUPPORT");
             this.showReturnOptions();
         }
 
-        this.onUpdate('CONNECTED');
+        this.onUpdate("CONNECTED");
         this.showReturnOptions();
         this.robotWiredState.setPythonDeviceConnected(true);
     }
 
     public async startFlash() {
         this.progressBarWidth += 50;
-        this.onUpdate('FLASHING');
+        this.onUpdate("FLASHING");
         try {
             await this.upload.connectInBootMode();
-        }  catch (error) {
-            if (error.message === 'No device selected') {
-                this.onUpdate('NO_DEVICE_SELECTED');
-                this.onError('No device selected')
+        } catch (error) {
+            if (error.message === "No device selected") {
+                this.onUpdate("NO_DEVICE_SELECTED");
+                this.onError("No device selected");
             }
             // wait to give angular time to update the UI
             setTimeout(() => {
-                this.showReturnOptions()
+                this.showReturnOptions();
             }, 1);
-            return
+            return;
         }
         try {
             this.progressBarWidth += 50;
             await this.upload.flash();
         } catch (error) {
             this.onUpdate("SIGNATURE_MISMATCH");
-            this.onError('Signature mismatch')
+            this.onError("Signature mismatch");
             setTimeout(() => {
-                this.showReturnOptions()
+                this.showReturnOptions();
             }, 1);
-            return
+            return;
         }
         this.progressBarWidth += 50;
-        this.onUpdate('FLASHED');
+        this.onUpdate("FLASHED");
         this.showReturnOptions();
     }
 
@@ -103,7 +109,8 @@ export class ConnectPythonDialog {
             this.progressBarWidth += parseInt(message.replace("%", ""));
         } else {
             const translation = this.translate.instant(message);
-            this.statusMessage = translation !== null ? translation : message.replace(/_/g, " ");
+            this.statusMessage =
+                translation !== null ? translation : message.replace(/_/g, " ");
         }
     }
 
