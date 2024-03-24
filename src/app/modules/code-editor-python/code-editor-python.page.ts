@@ -4,6 +4,7 @@ import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
 import {CoreModule} from "../core/core.module";
 import {WorkspaceService} from "../../services/workspace.service";
+import {MonacoEditorModule} from "ngx-monaco-editor-v2";
 
 
 @Component({
@@ -14,23 +15,24 @@ import {WorkspaceService} from "../../services/workspace.service";
     imports: [
         CommonModule,
         SharedModule,
-        CoreModule
+        CoreModule,
+        MonacoEditorModule
     ]
 })
 export class CodeEditorPythonPage implements AfterViewInit {
-
-    @ViewChild("editor") private editor: ElementRef<HTMLElement>;
+    editorOptions = {
+        language: 'python',
+        automaticLayout: true
+    }
 
     constructor(
-        private codeEditorState: CodeEditorState,
+        public codeEditorState: CodeEditorState,
         private workspaceService: WorkspaceService
     ) {}
 
     ngAfterViewInit(): void {
-        this.codeEditorState.setAceElement(this.editor);
-
-        window.addEventListener("beforeunload", async (event) => {
-            this.workspaceService.saveWorkspaceTemp(this.codeEditorState.getCode());
-        });
+        window.addEventListener("beforeunload", async () => {
+            await this.workspaceService.saveWorkspaceTemp(this.codeEditorState.getCode());
+        })
     }
 }

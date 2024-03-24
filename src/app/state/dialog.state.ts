@@ -24,9 +24,6 @@ export class DialogState {
     private isInfoDialogVisibleSubject$ = new BehaviorSubject(false);
     public isInfoDialogVisible$ = this.isInfoDialogVisibleSubject$.asObservable();
 
-    private isEditorTypeChangeConfirmationDialogVisibleSubject$ = new BehaviorSubject(false);
-    public isEditorTypeChangeConfirmationDialogVisible$ = this.isEditorTypeChangeConfirmationDialogVisibleSubject$.asObservable();
-
     public isExamplesDialogVisibleSubject$ = new BehaviorSubject(false);
     public isExamplesDialogVisible$ = this.isExamplesDialogVisibleSubject$.asObservable()
 

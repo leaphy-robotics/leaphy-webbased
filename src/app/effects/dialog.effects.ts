@@ -69,17 +69,6 @@ export class DialogEffects {
                 });
             });
 
-
-        // When the info dialog visibility is set to true, open the dialog
-        this.dialogState.isEditorTypeChangeConfirmationDialogVisible$
-            .pipe(filter(isVisible => !!isVisible))
-            .subscribe(() => {
-                this.dialog.open(ConfirmEditorDialog, {
-                    width: "450px",
-                    disableClose: true,
-                });
-            });
-
         const language = localStorage.getItem('currentLanguage');
         if (!language) {
             const languageDialogRef = this.dialog.open(LanguageSelectDialog, {

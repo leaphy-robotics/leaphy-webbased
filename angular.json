@@ -60,6 +60,11 @@
                                 "glob": "**/*",
                                 "input": "./node_modules/@leaphy-robotics/picotool-wasm/build",
                                 "output": "./picotool"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "node_modules/monaco-editor",
+                                "output": "/assets/monaco/"
                             }
                         ],
                         "styles": [
@@ -70,19 +75,7 @@
                         ],
                         "scripts": [
                             "./node_modules/jquery/dist/jquery.min.js",
-                            "./node_modules/bootstrap/dist/js/bootstrap.min.js",
-                            "./node_modules/prismjs/prism.js",
-                            "./node_modules/prismjs/components/prism-clike.js",
-                            "./node_modules/prismjs/components/prism-c.js",
-                            "./node_modules/prismjs/components/prism-cpp.js",
-                            "./node_modules/prismjs/components/prism-arduino.js",
-                            "./node_modules/ace-builds/src-min/ace.js",
-                            "./node_modules/ace-builds/src-min/mode-c_cpp.js",
-                            "./node_modules/ace-builds/src-min/mode-python.js",
-                            "./node_modules/ace-builds/src-min/theme-solarized_light.js",
-                            "./node_modules/ace-builds/src-min/ext-beautify.js",
-                            "./node_modules/ace-builds/src-min/ext-searchbox.js",
-                            "./node_modules/ace-builds/src-min/ext-language_tools.js"
+                            "./node_modules/bootstrap/dist/js/bootstrap.min.js"
                         ]
                     },
                     "configurations": {

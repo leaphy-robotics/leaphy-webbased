@@ -5,6 +5,7 @@ import {DriverIssuesEnglishPage} from "./modules/driver-issues-english/driver-is
 import {DriverIssuesDutchPage} from "./modules/driver-issues-dutch/driver-issues.page";
 import {BlocklyEditorPage} from "./modules/blockly-editor/blockly-editor.page";
 import {CodeEditorCppPage} from "./modules/code-editor-cpp/code-editor-cpp.page";
+import {MonacoEditorModule} from "ngx-monaco-editor-v2";
 
 
 const routes: Routes = [

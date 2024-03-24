@@ -18,6 +18,7 @@ import { CoreModule } from './modules/core/core.module';
 
 import { MatomoModule } from 'ngx-matomo';
 import {CodeEditorEffects} from "./effects/code-editor.effects";
+import {MonacoEditorModule} from "ngx-monaco-editor-v2";
 
 export function createTranslateLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -53,7 +54,8 @@ export function createTranslateLoader(http: HttpClient) {
                 enable: true
             }
         }),
-        CoreModule
+        CoreModule,
+        MonacoEditorModule.forRoot()
     ],
     providers: [
         // Initialize the Effects on startup
