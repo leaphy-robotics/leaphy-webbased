@@ -11,7 +11,6 @@ import {AppState} from "../state/app.state";
 import {PythonUploaderService} from "./python-uploader/PythonUploader.service";
 import {PythonFile} from "../domain/python-file.type";
 import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
-import {WorkspaceStatus} from "../domain/workspace.status";
 import {StatusMessageDialog} from "../modules/core/dialogs/status-message/status-message.dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import * as Blockly from "blockly/core";

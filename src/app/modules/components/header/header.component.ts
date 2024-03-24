@@ -1,7 +1,6 @@
 import {Component, HostListener} from '@angular/core';
 import {AppState} from 'src/app/state/app.state';
 import {BlocklyEditorState} from 'src/app/state/blockly-editor.state';
-import {WorkspaceStatus} from 'src/app/domain/workspace.status';
 import {DialogState} from 'src/app/state/dialog.state';
 import {Language} from 'src/app/domain/language';
 import {Router} from "@angular/router";

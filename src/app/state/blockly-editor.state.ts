@@ -1,6 +1,5 @@
 import { Injectable, ElementRef } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { WorkspaceStatus } from "../domain/workspace.status";
 import { LocalStorageService } from "../services/localstorage.service";
 import {PythonFile} from "../domain/python-file.type";
 

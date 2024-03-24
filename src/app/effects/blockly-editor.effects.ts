@@ -3,7 +3,6 @@ import {BlocklyEditorState} from '../state/blockly-editor.state';
 import {filter, pairwise, withLatestFrom} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {combineLatest, Observable} from 'rxjs';
-import {WorkspaceStatus} from '../domain/workspace.status';
 import {AppState} from '../state/app.state';
 import {CodeEditorType} from '../domain/code-editor.type';
 import * as Blockly from 'blockly/core';
