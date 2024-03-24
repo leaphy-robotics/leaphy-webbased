@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { BlocklyEditorState } from 'src/app/state/blockly-editor.state';
+import {CodeEditorState} from "../../../../state/code-editor.state";
 
 @Component({
   selector: 'app-code-view',
@@ -8,5 +8,5 @@ import { BlocklyEditorState } from 'src/app/state/blockly-editor.state';
 })
 export class CodeViewComponent {
 
-  constructor(public blocklyState: BlocklyEditorState) { }
+  constructor(public codeEditor: CodeEditorState) { }
 }

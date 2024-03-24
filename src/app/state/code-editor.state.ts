@@ -1,8 +1,14 @@
 import {ElementRef, Injectable,} from "@angular/core";
 import {Ace} from "ace-builds";
 import {BehaviorSubject, Observable} from "rxjs";
-import {map, withLatestFrom} from "rxjs/operators";
+import {filter, map, withLatestFrom} from "rxjs/operators";
 import {InstalledLibrary, Library} from "src/app/domain/library-manager.types";
+import "prismjs";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-c";
+import "prismjs/components/prism-cpp";
+import "prismjs/components/prism-arduino";
+declare var Prism: any;
 
 @Injectable({
     providedIn: 'root'
@@ -32,6 +38,12 @@ void loop() {
 
     private codeSubject$: BehaviorSubject<string> = new BehaviorSubject<string>('');
     public code$: Observable<string> = this.codeSubject$.asObservable();
+
+    public tokenizedCode$ = this.code$.pipe(filter((code) => !!code)).pipe(
+        map((code) => {
+            return Prism.highlight(code, Prism.languages.arduino);
+        })
+    );
 
     private libraryCacheSubject$: BehaviorSubject<Library[]> = new BehaviorSubject<Library[]>([]);
     private InstalledLibraries$: BehaviorSubject<InstalledLibrary[]> = new BehaviorSubject<InstalledLibrary[]>([]);

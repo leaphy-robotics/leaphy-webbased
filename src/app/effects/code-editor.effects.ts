@@ -8,6 +8,7 @@ import {AppState} from "../state/app.state";
 import {CodeEditorType} from "../domain/code-editor.type";
 import {BackendWiredEffects} from "./backend.wired.effects";
 
+
 @Injectable({
     providedIn: 'root',
 })
@@ -47,8 +48,8 @@ export class CodeEditorEffects {
         // When the Ace Editor is set, set it with the code, and update the blockly code with changes
         this.codeEditorState.aceEditor$
             .pipe(filter(aceEditor => !!aceEditor))
-            .pipe(withLatestFrom(this.blocklyState.code$, this.codeEditorState.code$))
-            .subscribe(([aceEditor, blocklyCode, editorCode]) => {
+            .pipe(withLatestFrom(this.codeEditorState.code$))
+            .subscribe(([aceEditor, editorCode]) => {
 
                 const startingCode = this.codeEditorState.getCode();
                 aceEditor.session.setValue(startingCode);
@@ -59,7 +60,6 @@ export class CodeEditorEffects {
                 aceEditor.on("change", () => {
                     const changedCode = aceEditor.getValue();
                     this.codeEditorState.setCode(changedCode)
-                    this.blocklyState.setCode(changedCode);
                 });
             });
         // React to the backend message and set the ACE Editor code

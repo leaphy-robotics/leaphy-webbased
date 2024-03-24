@@ -171,7 +171,7 @@ export class BlocklyEditorEffects {
         // When a new project is started, reset the blockly code
         this.appState.selectedRobotType$
             .pipe(filter(robotType => !robotType))
-            .subscribe(() => this.blocklyState.setCode(''))
+            .subscribe(() => this.codeEditorState.setCode(''))
 
         // When the robot selection changes, set the toolbox and initialWorkspace
         this.appState.selectedRobotType$
@@ -204,7 +204,7 @@ export class BlocklyEditorEffects {
                 workspace.clearUndo();
                 workspace.addChangeListener(Blockly.Events.disableOrphans);
                 workspace.addChangeListener(async () => {
-                    this.blocklyState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
+                    this.codeEditorState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
                     this.blocklyState.setWorkspaceJSON(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
                 });
             });
@@ -311,23 +311,18 @@ export class BlocklyEditorEffects {
                         break;
                     case 'WORKSPACE_RESTORING':
                         console.log("WORKSPACE_RESTORING");
-                        if (message.payload.type == 'advanced') {
+                        if (message.payload.type == 'advanced' || message.payload.type == 'python') {
                             this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
                             this.codeEditorState.setOriginalCode(message.payload.data as string);
                             this.codeEditorState.setCode(message.payload.data as string);
-                            this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+                            if (message.payload.type == 'advanced') {
+                                this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+                            } else if (message.payload.type == 'python') {
+                                this.appState.setSelectedCodeEditor(CodeEditorType.Python);
+                            }
                             this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
                             this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
                             this.appState.setSelectedRobotType(genericRobotType, true);
-                            return;
-                        } else if (message.payload.type == 'python') {
-                            this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
-                            this.codeEditorState.setOriginalCode(message.payload.data as string);
-                            this.codeEditorState.setCode(message.payload.data as string);
-                            this.appState.setSelectedCodeEditor(CodeEditorType.Python);
-                            this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
-                            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(microPythonRobotType, true);
                             return;
                         }
                         this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);

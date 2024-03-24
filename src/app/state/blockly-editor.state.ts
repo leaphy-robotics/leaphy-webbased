@@ -4,14 +4,8 @@ import { SketchStatus } from "../domain/sketch.status";
 import { map, filter } from "rxjs/operators";
 import { WorkspaceStatus } from "../domain/workspace.status";
 import { LocalStorageService } from "../services/localstorage.service";
-import "prismjs";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-c";
-import "prismjs/components/prism-cpp";
-import "prismjs/components/prism-arduino";
 import {PythonFile} from "../domain/python-file.type";
 
-declare var Prism: any;
 
 @Injectable({
     providedIn: "root",
@@ -27,15 +21,6 @@ export class BlocklyEditorState {
         this.isSoundOnSubject$ = new BehaviorSubject<boolean>(isSoundOn);
         this.isSoundOn$ = this.isSoundOnSubject$.asObservable();
     }
-
-    private codeSubject$ = new BehaviorSubject("");
-    public code$ = this.codeSubject$.asObservable();
-
-    public tokenizedCode$ = this.code$.pipe(filter((code) => !!code)).pipe(
-        map((code) => {
-            return Prism.highlight(code, Prism.languages.arduino);
-        })
-    );
 
     private sketchStatusSubject$: BehaviorSubject<SketchStatus> = new BehaviorSubject(
         SketchStatus.UnableToSend
@@ -104,10 +89,6 @@ export class BlocklyEditorState {
     private playSoundFunctionSubject$ = new BehaviorSubject<(name, opt_volume) => void>(null);
     public playSoundFunction$ = this.playSoundFunctionSubject$.asObservable();
 
-    public setCode(code: string): void {
-        this.codeSubject$.next(code);
-    }
-
     public setSketchStatus(status: SketchStatus) {
         this.sketchStatusSubject$.next(status);
     }
@@ -169,10 +150,6 @@ export class BlocklyEditorState {
 
     public setIsSideNavOpenToggled() {
         this.isSideNavOpenToggledSubject$.next(true);
-    }
-
-    get code(): string {
-        return this.codeSubject$.getValue();
     }
 
     get workspaceJSON(): string {

@@ -79,7 +79,7 @@ export class BackendWiredEffects {
 
                 // When the sketch status is set to sending, send a compile request to backend
                 this.blocklyEditorState.sketchStatus$
-                    .pipe(withLatestFrom(this.blocklyEditorState.code$, this.appState.selectedRobotType$))
+                    .pipe(withLatestFrom(this.codeEditorState.code$, this.appState.selectedRobotType$))
                     .pipe(filter(([, , robotType,]) => !!robotType))
                     .subscribe(([status, code, robotType]) => {
                         switch (status) {
@@ -236,7 +236,7 @@ export class BackendWiredEffects {
                 })
                 break;
             case 'compile':
-                const source_code = (this.appState.getCurrentEditor() == CodeEditorType.Beginner) ? this.blocklyEditorState.code : this.codeEditorState.getCode();
+                const source_code = this.codeEditorState.getCode();
                 const libraries = args[0].libs;
                 const board = args[0].fqbn;
 
