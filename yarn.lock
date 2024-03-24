@@ -1852,10 +1852,10 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
-"@leaphy-robotics/avrdude-webassembly@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/avrdude-webassembly/-/avrdude-webassembly-1.2.0.tgz#30d9058a689a6984e32612957447ba7e7bce35d7"
-  integrity sha512-uMOZGbeiH4pf0iv8xKct9HaJ11XOB8CE933i0v1f7nKHVFBg8lQjEUOgC0Xv6o1uQ9dYwe1ktbhhkNR75CzK6g==
+"@leaphy-robotics/avrdude-webassembly@^1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/avrdude-webassembly/-/avrdude-webassembly-1.2.1.tgz#828e6a3bfd657978e44e2b634631e3354c7288d6"
+  integrity sha512-NphMektJhcT8WaC4SvIziKf9Jc4IhCmNrWWUpjnI4I70CSpsOF9tkUA5yzLb78M7jc3y7Cakt6Jw7wPLqnM6+A==
 
 "@leaphy-robotics/dfu-util-wasm@1.0.2":
   version "1.0.2"
