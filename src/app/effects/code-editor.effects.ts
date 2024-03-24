@@ -1,12 +1,9 @@
 import {Injectable} from "@angular/core";
 import {filter, withLatestFrom} from "rxjs/operators";
-import {BlocklyEditorState} from "../state/blockly-editor.state";
 import * as ace from "ace-builds";
-import {BackEndState} from "../state/backend.state";
 import {CodeEditorState} from "../state/code-editor.state";
 import {AppState} from "../state/app.state";
 import {CodeEditorType} from "../domain/code-editor.type";
-import {WorkspaceEffects} from "./workspace.effects";
 import {WorkspaceService} from "../services/workspace.service";
 
 
@@ -18,11 +15,8 @@ import {WorkspaceService} from "../services/workspace.service";
 export class CodeEditorEffects {
 
     constructor(
-        private blocklyState: BlocklyEditorState,
-        private backEndState: BackEndState,
         private codeEditorState: CodeEditorState,
         private appState: AppState,
-        private backEndWiredEffects: WorkspaceEffects,
         private workspaceService: WorkspaceService
     ) {
 
@@ -51,7 +45,7 @@ export class CodeEditorEffects {
         this.codeEditorState.aceEditor$
             .pipe(filter(aceEditor => !!aceEditor))
             .pipe(withLatestFrom(this.codeEditorState.code$))
-            .subscribe(([aceEditor, editorCode]) => {
+            .subscribe(([aceEditor]) => {
 
                 const startingCode = this.codeEditorState.getCode();
                 aceEditor.session.setValue(startingCode);
@@ -63,28 +57,6 @@ export class CodeEditorEffects {
                     const changedCode = aceEditor.getValue();
                     this.codeEditorState.setCode(changedCode)
                 });
-            });
-        // React to the backend message and set the ACE Editor code
-        // React to messages received from the Backend
-        this.backEndState.applicationMessage$
-            .pipe(withLatestFrom(this.codeEditorState.aceEditor$))
-            .pipe(filter(([message,]) => !!message))
-            .subscribe(([message, aceEditor]) => {
-                switch (message.event) {
-                    case 'WORKSPACE_CODE_RESTORING':
-                        const code = message.payload.data as string;
-                        aceEditor.session.setValue(code);
-                        this.codeEditorState.setOriginalCode(code);
-                        this.codeEditorState.setCode(code);
-                        break;
-                    case 'WORKSPACE_SAVED':
-                        const savedCode = aceEditor.getValue();
-                        this.codeEditorState.setOriginalCode(savedCode);
-                        this.codeEditorState.setCode(savedCode);
-                        break;
-                    default:
-                        break;
-                }
             });
 
         this.appState.codeEditor$

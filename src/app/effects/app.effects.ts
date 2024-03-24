@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AppState } from '../state/app.state';
 import { TranslateService } from '@ngx-translate/core';
-import { BackEndState } from '../state/backend.state';
 import { filter, withLatestFrom } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { StatusMessageDialog } from '../modules/core/dialogs/status-message/status-message.dialog';
 import { Router } from '@angular/router';
 import { CodeEditorType } from '../domain/code-editor.type';
 import {LocalStorageService} from "../services/localstorage.service";
@@ -21,8 +19,6 @@ export class AppEffects {
     constructor(
         private appState: AppState,
         private translate: TranslateService,
-        private backEndState: BackEndState,
-        private snackBar: MatSnackBar,
         private router: Router,
         private localStorage: LocalStorageService,
         private dialog: MatDialog
@@ -65,17 +61,6 @@ export class AppEffects {
                 this.appState.setIsCodeEditorToggleConfirmed(false);
             });
 
-        // Show snackbar based on messages received from the Backend
-        this.backEndState.applicationMessage$
-            .pipe(filter(message => !!message && message.displayTimeout >= 0))
-            .subscribe(message => {
-                this.snackBar.openFromComponent(StatusMessageDialog, {
-                    duration: message.displayTimeout,
-                    horizontalPosition: 'center',
-                    verticalPosition: 'bottom',
-                    data: message
-                })
-            });
 
 
         this.appState.releaseInfo$
@@ -95,7 +80,7 @@ export class AppEffects {
                     let releaseNotes = releaseInfo["body"]
                     // convert all the urls to links
                     // first find the urls
-                    let urls = releaseNotes.match(/(https?:\/\/[^\s]+)/g);
+                    let urls = releaseNotes.match(/(https?:\/\/[\S]+)/g);
                     // then replace them with links
                     if (urls) {
                         // to prevent infinite loops we want to know the index of the last url we replaced

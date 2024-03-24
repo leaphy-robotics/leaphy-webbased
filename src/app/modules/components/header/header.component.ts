@@ -1,9 +1,7 @@
 import {Component, HostListener} from '@angular/core';
 import {AppState} from 'src/app/state/app.state';
-import {BackEndState} from 'src/app/state/backend.state';
 import {BlocklyEditorState} from 'src/app/state/blockly-editor.state';
 import {WorkspaceStatus} from 'src/app/domain/workspace.status';
-import {SketchStatus} from 'src/app/domain/sketch.status';
 import {DialogState} from 'src/app/state/dialog.state';
 import {Language} from 'src/app/domain/language';
 import {Router} from "@angular/router";
@@ -17,8 +15,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {UploadDialog} from "../../core/dialogs/upload/upload.dialog";
 import {CodeEditorState} from "../../../state/code-editor.state";
 import {PythonUploaderService} from "../../../services/python-uploader/PythonUploader.service";
-import ArduinoUploader from "../../../services/arduino-uploader/ArduinoUploader";
 import {ConnectPythonDialog} from "../../core/dialogs/connect-python/connect-python.dialog";
+import {StatusMessageDialog} from "../../core/dialogs/status-message/status-message.dialog";
 
 @Component({
     selector: 'app-header',
@@ -29,7 +27,6 @@ export class HeaderComponent {
 
     constructor(
         public appState: AppState,
-        public backEndState: BackEndState,
         public blocklyState: BlocklyEditorState,
         public dialogState: DialogState,
         public robotWiredState: RobotWiredState,
@@ -91,11 +88,11 @@ export class HeaderComponent {
                 this.dialogState.setIsSerialOutputListening(true);
             }
 
-            this.backEndState.setBackendMessage({
-                event: 'CONNECTED',
-                message: 'CONNECTED',
-                payload: {},
-                displayTimeout: 2000
+            this.snackBar.openFromComponent(StatusMessageDialog, {
+                duration: 2000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                data: { message: "CONNECTED" }
             })
         }
     }

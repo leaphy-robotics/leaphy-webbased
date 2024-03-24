@@ -2,7 +2,6 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {Component} from "@angular/core";
 import examples, {Board, Example} from "src/examples";
 import {AppState} from "../../../../state/app.state";
-import {BackEndState} from "../../../../state/backend.state";
 import {WorkspaceService} from "../../../../services/workspace.service";
 
 @Component({
@@ -16,7 +15,6 @@ export class ExamplesDialog {
 
     constructor(
         public appState: AppState,
-        public backEndState: BackEndState,
         private dialog: MatDialogRef<ExamplesDialog>,
         private workspaceService: WorkspaceService
     ) {

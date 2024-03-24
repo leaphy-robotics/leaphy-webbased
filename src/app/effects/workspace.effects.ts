@@ -1,20 +1,12 @@
 import {Injectable} from '@angular/core';
 import {BlocklyEditorState} from '../state/blockly-editor.state';
 import {filter, withLatestFrom} from 'rxjs/operators';
-import {BackEndState} from '../state/backend.state';
-import {SketchStatus} from '../domain/sketch.status';
 import {AppState} from '../state/app.state';
 import {WorkspaceStatus} from '../domain/workspace.status';
 import {CodeEditorType} from '../domain/code-editor.type';
 import {MatDialog} from "@angular/material/dialog";
 import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
-import {UploadDialog} from "../modules/core/dialogs/upload/upload.dialog";
-import {Router} from "@angular/router";
-import {DebugInformationDialog} from "../modules/core/dialogs/debug-information/debug-information.dialog";
 import * as Blockly from 'blockly/core';
-import {ConnectPythonDialog} from "../modules/core/dialogs/connect-python/connect-python.dialog";
-import {CodeEditorState} from "../state/code-editor.state";
-import {PythonUploaderService} from "../services/python-uploader/PythonUploader.service";
 import {WorkspaceService} from "../services/workspace.service";
 
 
@@ -24,13 +16,9 @@ import {WorkspaceService} from "../services/workspace.service";
 export class WorkspaceEffects {
 
     constructor(
-        private router: Router,
-        private backEndState: BackEndState,
         private appState: AppState,
         private blocklyEditorState: BlocklyEditorState,
         private dialog: MatDialog,
-        private codeEditorState: CodeEditorState,
-        private uploaderService: PythonUploaderService,
         private workspaceService: WorkspaceService
     ) {
         // Only set up these effects when we're in Desktop mode

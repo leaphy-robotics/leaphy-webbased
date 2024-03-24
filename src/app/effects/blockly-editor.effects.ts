@@ -1,7 +1,5 @@
 import {Injectable} from '@angular/core';
 import {BlocklyEditorState} from '../state/blockly-editor.state';
-import {SketchStatus} from '../domain/sketch.status';
-import {BackEndState} from '../state/backend.state';
 import {filter, pairwise, withLatestFrom} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {combineLatest, Observable} from 'rxjs';
@@ -36,7 +34,6 @@ import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
 import {genericRobotType, microPythonRobotType, RobotType} from "../domain/robot.type";
 import {WorkspaceService} from "../services/workspace.service";
-import {ConnectPythonDialog} from "../modules/core/dialogs/connect-python/connect-python.dialog";
 
 function isJSON(data: string) {
     try {
@@ -63,7 +60,6 @@ export class BlocklyEditorEffects {
 
     constructor(
         private blocklyState: BlocklyEditorState,
-        private backEndState: BackEndState,
         private appState: AppState,
         private codeEditorState: CodeEditorState,
         private http: HttpClient,
@@ -278,27 +274,6 @@ export class BlocklyEditorEffects {
         // When the code editor is changed, clear the projectFilePath
         this.appState.codeEditor$
             .subscribe(() => this.blocklyState.setProjectFileHandle(null));
-
-        // React to messages from all over the application
-        this.backEndState.applicationMessage$
-            .pipe(filter(message => !!message))
-            .subscribe(message => {
-                switch (message.event) {
-                    case 'WORKSPACE_SAVE_CANCELLED':
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    case 'WORKSPACE_SAVED':
-                        this.blocklyState.setProjectFileHandle(message.payload);
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    case 'WORKSPACE_SAVED_TEMP':
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    default:
-                        console.log('Unknown message received from application: ' + message.event);
-                        break;
-                }
-            });
     }
 
     private parseCategory(root: Document, category: HTMLElement, robotType: RobotType,) : HTMLElement {
