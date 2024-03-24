@@ -5,7 +5,7 @@ import {CodeEditorState} from "../state/code-editor.state";
 import {AppState} from "../state/app.state";
 import {CodeEditorType} from "../domain/code-editor.type";
 import {WorkspaceService} from "../services/workspace.service";
-import {genericRobotType} from "../domain/robot.type";
+import {genericRobotType} from "../domain/robots";
 
 
 @Injectable({

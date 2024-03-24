@@ -8,7 +8,7 @@ import {CodeEditorType} from "../../../domain/code-editor.type";
 import {RobotWiredState} from "../../../state/robot.wired.state";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import JSZip from 'jszip';
-import {microPythonRobotType} from "../../../domain/robot.type";
+import {microPythonRobotType} from "../../../domain/robots";
 import {DebugInformationDialog} from "../../core/dialogs/debug-information/debug-information.dialog";
 import {MatDialog} from "@angular/material/dialog";
 import {UploadDialog} from "../../core/dialogs/upload/upload.dialog";

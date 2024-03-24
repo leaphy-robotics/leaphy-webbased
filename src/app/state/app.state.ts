@@ -13,9 +13,8 @@ import {
     leaphyOriginalNanoRP2040RobotType,
     leaphyOriginalRobotType,
     microPythonRobotType,
-    RobotSelector,
-    RobotType
-} from '../domain/robot.type';
+} from '../domain/robots';
+import { RobotType, RobotSelector } from '../domain/robot.type';
 import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';

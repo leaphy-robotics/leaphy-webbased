@@ -31,7 +31,8 @@ import {LeaphyToolbox} from "../services/toolbox/toolbox";
 import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
 import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
-import {genericRobotType, microPythonRobotType, RobotType} from "../domain/robot.type";
+import {genericRobotType, microPythonRobotType} from "../domain/robots";
+import {RobotType} from "../domain/robot.type";
 import {WorkspaceService} from "../services/workspace.service";
 import {LocalStorageService} from "../services/localstorage.service";
 

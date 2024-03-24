@@ -3,7 +3,7 @@ import {CodeEditorType} from "../domain/code-editor.type";
 import {LocationSelectDialog} from "../modules/core/dialogs/location-select/location-select.dialog";
 import {NameFileDialog} from "../modules/core/dialogs/name-file/name-file.dialog";
 import {MatDialog} from "@angular/material/dialog";
-import {genericRobotType} from "../domain/robot.type";
+import {genericRobotType} from "../domain/robots";
 import {BlocklyEditorState} from "../state/blockly-editor.state";
 import {CodeEditorState} from "../state/code-editor.state";
 import {RobotWiredState} from "../state/robot.wired.state";
