@@ -1,6 +1,4 @@
 import Avrdude from "../services/arduino-uploader/protocols/avrdude";
-import DFU from "../services/arduino-uploader/protocols/dfu";
-import Pico from "../services/arduino-uploader/protocols/pico";
 import {BaseNano, BaseNanoESP32, BaseNanoRP2040, BaseUno, RobotType} from "./robot.type";
 
 const defaultLibraries = [
@@ -8,21 +6,6 @@ const defaultLibraries = [
     'Adafruit Unified Sensor', 'List', 'Adafruit SGP30 Sensor', 'Adafruit_VL53L0X', 'Adafruit BMP280 Library', 'TM1637', 'LedControl'
 ]
 
-// export const leaphyOriginalRobotType = new RobotType(
-//     'l_original_uno',
-//     {protocol: Avrdude, microcontroller: 'atmega328p'},
-//     'Leaphy Original',
-//     'orig.svg',
-//     'orig_uno.svg',
-//     'arduino:avr:uno',
-//     'arduino:avr',
-//     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-//     {
-//         showLeaphyActuators: true,
-//         showLeaphyOperators: false,
-//         showLeaphySensors: true,
-//     },
-// );
 export const leaphyOriginalRobotType = new BaseUno(
     'l_original_uno',
     'Leaphy Original',
@@ -37,21 +20,6 @@ export const leaphyOriginalRobotType = new BaseUno(
 );
 
 
-// export const leaphyOriginalNanoRobotType = new RobotType(
-//     'l_original_nano',
-//     {protocol: Avrdude, microcontroller: 'atmega328p'},
-//     'Original Nano',
-//     'orig.svg',
-//     'orig_nano.svg',
-//     'arduino:avr:nano',
-//     'arduino:avr',
-//     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-//     {
-//         showLeaphyActuators: true,
-//         showLeaphyOperators: true,
-//         showLeaphySensors: true,
-//     },
-// );
 export const leaphyOriginalNanoRobotType = new BaseNano(
     'l_original_nano',
     'Original Nano',
@@ -78,21 +46,6 @@ export const leaphyOriginalNanoESP32RobotType = new BaseNanoESP32(
     },
 )
 
-// export const leaphyOriginalNanoRP2040RobotType = new RobotType(
-//     'l_original_nano_esp32',
-//     {protocol: Pico},
-//     'Original Nano RP2040',
-//     'orig.svg',
-//     'orig_nano_rp2040.svg',
-//     'arduino:mbed_nano:nanorp2040connect',
-//     'arduino:mbed_nano',
-//     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-//     {
-//         showLeaphyActuators: true,
-//         showLeaphyOperators: true,
-//         showLeaphySensors: true,
-//     },
-// );
 export const leaphyOriginalNanoRP2040RobotType = new BaseNanoRP2040(
     'l_original_nano_rp2040',
     'Original Nano RP2040',
@@ -106,20 +59,6 @@ export const leaphyOriginalNanoRP2040RobotType = new BaseNanoRP2040(
     },
 )
 
-// export const leaphyFlitzRobotType = new RobotType(
-//     'l_flitz_uno',
-//     {protocol: Avrdude, microcontroller: 'atmega328p'},
-//     'Leaphy Flitz',
-//     'flitz.svg',
-//     'flitz_uno.svg',
-//     'arduino:avr:uno',
-//     'arduino:avr',
-//     defaultLibraries,
-//     {
-//         showLeaphyActuators: false,
-//         showLeaphyOperators: false,
-//     },
-// );
 export const leaphyFlitzRobotType = new BaseUno(
     'l_flitz_uno',
     'Leaphy Flitz',
@@ -132,20 +71,6 @@ export const leaphyFlitzRobotType = new BaseUno(
     },
 );
 
-// export const leaphyFlitzNanoRobotType = new RobotType(
-//     'l_flitz_nano',
-//     {protocol: Avrdude, microcontroller: 'atmega328p'},
-//     'Flitz Nano',
-//     'flitz_nano.svg',
-//     'flitz_nano.svg',
-//     'arduino:avr:nano',
-//     'arduino:avr',
-//     defaultLibraries,
-//     {
-//         showLeaphyActuators: false,
-//         showLeaphyOperators: false,
-//     },
-// );
 export const leaphyFlitzNanoRobotType = new BaseNano(
     'l_flitz_nano',
     'Flitz Nano',
@@ -158,19 +83,6 @@ export const leaphyFlitzNanoRobotType = new BaseNano(
     },
 );
 
-// export const leaphyClickRobotType = new RobotType(
-//     'l_click',
-//     {protocol: Avrdude, microcontroller: 'atmega328p'},
-//     'Leaphy Click',
-//     'click.svg',
-//     null,
-//     'arduino:avr:uno',
-//     'arduino:avr',
-//     defaultLibraries,
-//     {
-//         showLeaphySensors: true,
-//     },
-// );
 export const leaphyClickRobotType = new BaseUno(
     'l_click',
     'Leaphy Click',
@@ -182,20 +94,6 @@ export const leaphyClickRobotType = new BaseUno(
     },
 );
 
-// export const arduinoUnoRobotType = new RobotType(
-//     'l_uno',
-//     {protocol: Avrdude, microcontroller: 'atmega328p'},
-//     'Arduino Uno',
-//     'uno.svg',
-//     null,
-//     'arduino:avr:uno',
-//     'arduino:avr',
-//     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-//     {
-//         showLeaphyLists: true,
-//         showLeaphySensors: true,
-//     },
-// );
 export const arduinoUnoRobotType = new BaseUno(
     'l_uno',
     'Arduino Uno',
@@ -208,17 +106,6 @@ export const arduinoUnoRobotType = new BaseUno(
     },
 );
 
-// export const genericRobotType = new RobotType(
-//     'l_code',
-//     {protocol: Avrdude, microcontroller: 'atmega328p'},
-//     'Leaphy C++',
-//     "c++.svg",
-//     null,
-//     'arduino:avr:uno',
-//     'arduino:avr',
-//     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-//     {},
-// );
 export const genericRobotType = new BaseUno(
     'l_code',
     'Leaphy C++',
@@ -228,20 +115,6 @@ export const genericRobotType = new BaseUno(
     {},
 );
 
-// export const arduinoNanoRobotType = new RobotType(
-//     'l_nano',
-//     {protocol: Avrdude, microcontroller: 'atmega328p'},
-//     'Arduino Nano',
-//     'nano.svg',
-//     null,
-//     'arduino:avr:nano',
-//     'arduino:avr',
-//     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-//     {
-//         showLeaphyLists: true,
-//         showLeaphySensors: true,
-//     },
-// );
 export const arduinoNanoRobotType = new BaseNano(
     'l_nano',
     'Arduino Nano',
@@ -254,20 +127,6 @@ export const arduinoNanoRobotType = new BaseNano(
     },
 );
 
-// export const arduinoNanoESP32RobotType = new RobotType(
-//     'l_nano_esp32',
-//     {protocol: DFU},
-//     'Arduino Nano ESP32',
-//     'nano.svg',
-//     null,
-//     'arduino:esp32:nano_nora',
-//     'arduino:esp32',
-//     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-//     {
-//         showLeaphyLists: true,
-//         showLeaphySensors: true,
-//     }
-// );
 export const arduinoNanoESP32RobotType = new BaseNanoESP32(
     'l_nano_esp32',
     'Arduino Nano ESP32',
@@ -280,20 +139,6 @@ export const arduinoNanoESP32RobotType = new BaseNanoESP32(
     }
 );
 
-// export const arduinoNanoRP2040RobotType = new RobotType(
-//     'l_nano_rp2040',
-//     {protocol: Pico},
-//     'Arduino Nano RP2040',
-//     'nano.svg',
-//     null,
-//     'arduino:mbed_nano:nanorp2040connect',
-//     'arduino:mbed_nano',
-//     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-//     {
-//         showLeaphyLists: true,
-//         showLeaphySensors: true,
-//     }
-// );
 export const arduinoNanoRP2040RobotType = new BaseNanoRP2040(
     'l_nano_rp2040',
     'Arduino Nano RP2040',
