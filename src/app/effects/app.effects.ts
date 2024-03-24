@@ -9,6 +9,8 @@ import {MatDialog} from "@angular/material/dialog";
 import {ChangeLogDialog} from "../modules/core/dialogs/change-log/change-log.dialog";
 import showdown from "showdown";
 import {WorkspaceService} from "../services/workspace.service";
+import * as Blockly from "blockly/core";
+import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
 
 @Injectable({
     providedIn: 'root',
@@ -126,5 +128,24 @@ export class AppEffects {
                 }
             })
 
+        this.appState.isDesktop$
+            .pipe(filter(isDesktop => !!isDesktop))
+            .subscribe(() => {
+                try {
+                    Blockly.dialog.setPrompt((msg, defaultValue, callback) => {
+                        this.dialog.open(VariableDialog, {
+                            width: '400px',
+                            data: { name: defaultValue }
+                        }).afterClosed().subscribe(result => {
+                            callback(result);
+                        });
+                    });
+                } catch (e) {
+                    console.log(e);
+                    throw e;
+                }
+            });
     }
+
+
 }
