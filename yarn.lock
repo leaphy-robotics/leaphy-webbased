@@ -7303,6 +7303,13 @@ ngx-matomo@2.0.0:
     "@angular/router" ">=16.0.0 <17.0.0"
     rxjs "^7.5.0"
 
+ngx-monaco-editor-v2@16.0.1:
+  version "16.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-monaco-editor-v2/-/ngx-monaco-editor-v2-16.0.1.tgz#5ac93821fb9124d914b399beb4da4c1b30546905"
+  integrity sha512-fhvqiQUtzEB3o6W1PrMzZkAM7N9owhoXiUF5Go/Bl/nOL90O22el+TUhszTz1o24ZQnPQZeNKhN7O+u/jVAWtg==
+  dependencies:
+    tslib "^2.1.0"
+
 nice-napi@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/nice-napi/-/nice-napi-1.0.2.tgz#dc0ab5a1eac20ce548802fc5686eaa6bc654927b"

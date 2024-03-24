@@ -1,10 +1,11 @@
 <div id="container">
-    <monaco-editor
+    <ngx-monaco-editor
         class="monaco-editor"
-        [code]="codeEditorState.code$ | async"
-        (codeChange)="codeEditorState.setCode($event)"
-        language="python"
+        [options]="editorOptions"
+        [ngModel]="codeEditorState.code$ | async"
+        (ngModelChange)="codeEditorState.setCode($event)"
     />
+
     <app-button-bar></app-button-bar>
     <app-terminal class="terminal" #terminal></app-terminal>
 </div>

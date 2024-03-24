@@ -1,5 +1,5 @@
-<monaco-editor
+<ngx-monaco-editor
     class="code-view"
-    [code]="codeEditor.code$ | async"
-    readonly="true"
+    [ngModel]="codeEditor.code$ | async"
+    [options]="editorOptions"
 />
