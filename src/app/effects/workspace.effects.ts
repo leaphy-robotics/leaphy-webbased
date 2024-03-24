@@ -6,7 +6,6 @@ import {SketchStatus} from '../domain/sketch.status';
 import {AppState} from '../state/app.state';
 import {WorkspaceStatus} from '../domain/workspace.status';
 import {CodeEditorType} from '../domain/code-editor.type';
-import {NameFileDialog} from "../modules/core/dialogs/name-file/name-file.dialog";
 import {MatDialog} from "@angular/material/dialog";
 import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
 import {UploadDialog} from "../modules/core/dialogs/upload/upload.dialog";
@@ -14,12 +13,8 @@ import {Router} from "@angular/router";
 import {DebugInformationDialog} from "../modules/core/dialogs/debug-information/debug-information.dialog";
 import * as Blockly from 'blockly/core';
 import {ConnectPythonDialog} from "../modules/core/dialogs/connect-python/connect-python.dialog";
-import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
 import {CodeEditorState} from "../state/code-editor.state";
 import {PythonUploaderService} from "../services/python-uploader/PythonUploader.service";
-import {LocationSelectDialog} from "../modules/core/dialogs/location-select/location-select.dialog";
-import {PythonFile} from "../domain/python-file.type";
-import {RobotWiredState} from "../state/robot.wired.state";
 import {WorkspaceService} from "../services/workspace.service";
 
 
@@ -30,7 +25,7 @@ import {WorkspaceService} from "../services/workspace.service";
 })
 
 // Defines the effects on the Electron environment that different state changes have
-export class BackendWiredEffects {
+export class WorkspaceEffects {
 
     constructor(
         private router: Router,
@@ -60,7 +55,7 @@ export class BackendWiredEffects {
                     throw e;
                 }
 
-                // When the sketch status is set to sending, send a compile request to backend
+                // When the sketch status is set to sending
                 this.blocklyEditorState.sketchStatus$
                     .pipe(withLatestFrom(this.codeEditorState.code$, this.appState.selectedRobotType$))
                     .pipe(filter(([, , robotType,]) => !!robotType))
@@ -111,16 +106,15 @@ export class BackendWiredEffects {
                         }
                     });
 
-                // When a workspace project is being loaded, relay the command to Electron
+                // When a workspace project is being loaded
                 this.blocklyEditorState.workspaceStatus$
                     .pipe(withLatestFrom(this.appState.codeEditor$))
                     .pipe(filter(([status]) => status === WorkspaceStatus.Finding))
-                    .pipe(withLatestFrom(this.appState.selectedRobotType$))
-                    .subscribe(([, robotType]) => {
+                    .subscribe(([,]) => {
                         workspaceService.restoreWorkspace();
                     });
 
-                // When the workspace is being saved as a new project, relay the command to Electron
+                // When the workspace is being saved as a new project
                 this.blocklyEditorState.workspaceStatus$
                     .pipe(withLatestFrom(this.appState.codeEditor$))
                     .pipe(filter(([status]) => status === WorkspaceStatus.SavingAs))
@@ -136,7 +130,7 @@ export class BackendWiredEffects {
                         workspaceService.saveWorkspace();
                     });
 
-                // When the workspace is being temporarily saved, relay the command to Electron
+                // When the workspace is being temporarily saved
                 this.blocklyEditorState.workspaceStatus$
                     .pipe(filter(status => status === WorkspaceStatus.SavingTemp))
                     .pipe(withLatestFrom(this.blocklyEditorState.workspaceJSON$, this.appState.selectedRobotType$))
@@ -146,15 +140,6 @@ export class BackendWiredEffects {
                         } else {
                             this.workspaceService.saveWorkspaceTemp(workspaceXml);
                         }
-                    });
-
-                // When the user clicks to view the log, relay to backend to open the file in default text editor
-                this.backEndState.isViewLogClicked$
-                    .pipe(filter(isClicked => !!isClicked))
-                    .subscribe(() => {
-                        this.dialog.open(DebugInformationDialog, {
-                            disableClose: false,
-                        });
                     });
             });
     }

@@ -6,7 +6,7 @@ import {BackEndState} from "../state/backend.state";
 import {CodeEditorState} from "../state/code-editor.state";
 import {AppState} from "../state/app.state";
 import {CodeEditorType} from "../domain/code-editor.type";
-import {BackendWiredEffects} from "./backend.wired.effects";
+import {WorkspaceEffects} from "./workspace.effects";
 import {WorkspaceService} from "../services/workspace.service";
 
 
@@ -22,7 +22,7 @@ export class CodeEditorEffects {
         private backEndState: BackEndState,
         private codeEditorState: CodeEditorState,
         private appState: AppState,
-        private backEndWiredEffects: BackendWiredEffects,
+        private backEndWiredEffects: WorkspaceEffects,
         private workspaceService: WorkspaceService
     ) {
 

@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
-import { BackendWiredEffects } from './effects/backend.wired.effects';
+import { WorkspaceEffects } from './effects/workspace.effects';
 import { BlocklyEditorEffects } from './effects/blockly-editor.effects';
 import { DialogEffects } from './effects/dialog.effects';
 import { AppEffects } from './effects/app.effects';
@@ -62,7 +62,7 @@ export function createTranslateLoader(http: HttpClient) {
             provide: APP_INITIALIZER, deps:
                 [
                     AppEffects,
-                    BackendWiredEffects,
+                    WorkspaceEffects,
                     BlocklyEditorEffects,
                     DialogEffects,
                     CodeEditorEffects,

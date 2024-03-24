@@ -13,6 +13,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import JSZip from 'jszip';
 import {BackEndMessage} from "../../../domain/backend.message";
 import {microPythonRobotType} from "../../../domain/robot.type";
+import {DebugInformationDialog} from "../../core/dialogs/debug-information/debug-information.dialog";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
     selector: 'app-header',
@@ -29,6 +31,7 @@ export class HeaderComponent {
         public robotWiredState: RobotWiredState,
         private router: Router,
         private snackBar: MatSnackBar,
+        private dialog: MatDialog
     ) {
 
     }
@@ -149,7 +152,9 @@ export class HeaderComponent {
     }
 
     public onViewLogClicked() {
-        this.backEndState.setIsViewLogClicked();
+        this.dialog.open(DebugInformationDialog, {
+            disableClose: false,
+        });
     }
 
     public onToggleSoundClicked() {
