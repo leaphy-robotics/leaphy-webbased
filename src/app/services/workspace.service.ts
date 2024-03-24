@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {CodeEditorType} from "../domain/code-editor.type";
 import {LocationSelectDialog} from "../modules/core/dialogs/location-select/location-select.dialog";
 import {NameFileDialog} from "../modules/core/dialogs/name-file/name-file.dialog";
@@ -14,6 +14,8 @@ import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-exp
 import {StatusMessageDialog} from "../modules/core/dialogs/status-message/status-message.dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import * as Blockly from "blockly/core";
+import {firstValueFrom} from "rxjs";
+import {ConfirmEditorDialog} from "../modules/core/dialogs/confirm-editor/confirm-editor.dialog";
 
 const fileExtensions = [
     ".l_flitz_uno",
@@ -46,9 +48,6 @@ function isJSON(data: string) {
     providedIn: 'root'
 })
 export class WorkspaceService {
-
-
-
     constructor(private dialog: MatDialog,
                 private appState: AppState,
                 private codeEditorState: CodeEditorState,
@@ -69,7 +68,6 @@ export class WorkspaceService {
             data: {message: 'WORKSPACE_RESTORING'}
         })
         if (message.payload.type == 'advanced' || message.payload.type == 'python') {
-            this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
             this.codeEditorState.setOriginalCode(message.payload.data as string);
             this.codeEditorState.setCode(message.payload.data as string);
             if (message.payload.type == 'advanced') {
@@ -86,6 +84,26 @@ export class WorkspaceService {
         this.blocklyState.setWorkspaceJSON(message.payload.data as string);
         this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
         await this.loadWorkspace();
+    }
+
+    public async switchCodeEditor() {
+        const editor = this.appState.getCurrentEditor()
+        if (!this.codeEditorState.getSaveState() && editor === CodeEditorType.CPP) {
+            const confirmed = await firstValueFrom(
+                this.dialog.open(ConfirmEditorDialog, {
+                    width: '300px'
+                }).afterClosed()
+            )
+            if (!confirmed) return
+        }
+
+        if (editor === CodeEditorType.Beginner) {
+            this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+            this.codeEditorState.setSaveState(false)
+        } else {
+            this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
+            this.codeEditorState.setSaveState(true)
+        }
     }
 
     /*
@@ -165,6 +183,8 @@ export class WorkspaceService {
                     a.remove();
                 }
             }
+
+            this.codeEditorState.afterSave()
         })
     }
 
@@ -190,6 +210,8 @@ export class WorkspaceService {
         } else {
             await this.saveWorkspaceAs(this.appState.getSelectedRobotType().id);
         }
+
+        this.codeEditorState.afterSave()
     }
 
     public async saveWorkspaceTemp(data) {
@@ -225,7 +247,6 @@ export class WorkspaceService {
                     }).afterClosed().subscribe(async (fileName) =>  {
                         if (fileName) {
                             const content = await this.uploaderService.runFileSystemCommand('get', fileName);
-                            this.codeEditorState.getAceEditor().session.setValue(content);
                             this.codeEditorState.setOriginalCode(content);
                             this.codeEditorState.setCode(content);
                             this.blocklyState.setProjectFileHandle(new PythonFile(fileName));
@@ -280,7 +301,6 @@ export class WorkspaceService {
             })
         } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.CPP) {
             try {
-                this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
                 this.codeEditorState.setOriginalCode(workspaceTemp);
                 this.codeEditorState.setCode(workspaceTemp);
             } catch (error) {
@@ -288,7 +308,6 @@ export class WorkspaceService {
             }
         } else if (type == 'python' && this.appState.getCurrentEditor() == CodeEditorType.Python) {
             try {
-                this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
                 this.codeEditorState.setOriginalCode(workspaceTemp);
                 this.codeEditorState.setCode(workspaceTemp);
             } catch (error) {
@@ -321,7 +340,6 @@ export class WorkspaceService {
         } else if (type == 'advanced') {
             this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
             try {
-                this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
                 this.codeEditorState.setOriginalCode(workspaceTemp);
                 this.codeEditorState.setCode(workspaceTemp);
             } catch (error) {
@@ -330,7 +348,6 @@ export class WorkspaceService {
         } else if (type == 'python') {
             this.appState.setSelectedCodeEditor(CodeEditorType.Python);
             try {
-                this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
                 this.codeEditorState.setOriginalCode(workspaceTemp);
                 this.codeEditorState.setCode(workspaceTemp);
             } catch (error) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import {BehaviorSubject, firstValueFrom, Observable} from 'rxjs';
 import {
     arduinoMegaRobotType, arduinoNanoESP32RobotType,
     arduinoNanoRobotType, arduinoNanoRP2040RobotType,
@@ -20,6 +20,8 @@ import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
 import { version } from '../../../package.json';
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmEditorDialog} from "../modules/core/dialogs/confirm-editor/confirm-editor.dialog";
 
 @Injectable({
     providedIn: 'root'
@@ -127,7 +129,7 @@ export class AppState {
     private defaultLanguage = new Language('nl', 'Nederlands')
     private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
 
-    constructor(private localStorage: LocalStorageService) {
+    constructor(private localStorage: LocalStorageService, private dialog: MatDialog) {
 
         this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
         this.isDesktop$ = this.isDesktopSubject$.asObservable();
@@ -174,6 +176,9 @@ export class AppState {
     private codeEditorSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.None);
     public codeEditor$ = this.codeEditorSubject$.asObservable();
 
+    private saveStateSubject$ = new BehaviorSubject<boolean>(true)
+    public saveState$ = this.saveStateSubject$.asObservable()
+
     public canChangeCodeEditor$: Observable<boolean>;
 
     public setSelectedRobotType(robotType: RobotType, skipPopup: boolean = false) {
@@ -194,15 +199,6 @@ export class AppState {
     public setCurrentLanguage(language: Language) {
         this.localStorage.store('currentLanguage', language);
         this.currentLanguageSubject$.next(language);
-    }
-
-    public switchCodeEditor() {
-        if (this.codeEditorSubject$.getValue() == CodeEditorType.Beginner) {
-            this.codeEditorSubject$.next(CodeEditorType.CPP);
-        }
-        else if (this.codeEditorSubject$.getValue() == CodeEditorType.CPP) {
-            this.codeEditorSubject$.next(CodeEditorType.Beginner);
-        }
     }
 
     public setIsCodeEditorToggleConfirmed(confirmed: boolean) {

@@ -27,9 +27,10 @@ import { NgChartsModule  } from 'ng2-charts';
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {TerminalComponent} from "./components/terminal/terminal.component";
 import {NgTerminalModule} from "ng-terminal";
+import {MonacoComponent} from "./components/monaco/monaco.component";
 
 @NgModule({
-    declarations: [TerminalComponent, ButtonBarComponent, SerialOutputComponent, LibraryManagerComponent],
+    declarations: [TerminalComponent, ButtonBarComponent, SerialOutputComponent, LibraryManagerComponent, MonacoComponent],
     imports: [
         NgTerminalModule,
         CommonModule,
@@ -58,6 +59,7 @@ import {NgTerminalModule} from "ng-terminal";
         ButtonBarComponent,
         SerialOutputComponent,
         LibraryManagerComponent,
+        MonacoComponent,
         TranslateModule,
         MatIconModule,
         MatSidenavModule,

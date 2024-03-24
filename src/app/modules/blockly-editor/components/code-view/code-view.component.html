@@ -1,3 +1,5 @@
-<pre id="code-view" >
-    <code [innerHTML]="codeEditor.tokenizedCode$ | async" class="language-arduino"></code>
-</pre>
+<monaco-editor
+    class="code-view"
+    [code]="codeEditor.code$ | async"
+    readonly="true"
+/>

@@ -18,19 +18,14 @@ import {WorkspaceService} from "../../services/workspace.service";
     ]
 })
 export class CodeEditorCppPage implements AfterViewInit {
-
-    @ViewChild("editor") private editor: ElementRef<HTMLElement>;
-
     constructor(
-        private codeEditorState: CodeEditorState,
+        public codeEditorState: CodeEditorState,
         private workspaceService: WorkspaceService
     ) {}
 
     ngAfterViewInit(): void {
-        this.codeEditorState.setAceElement(this.editor);
-
         window.addEventListener("beforeunload", async () => {
-            this.workspaceService.saveWorkspaceTemp(this.codeEditorState.getCode());
+            await this.workspaceService.saveWorkspaceTemp(this.codeEditorState.getCode());
         });
     }
 }

@@ -1,5 +1,10 @@
 <div id="container">
-    <div class="app-ace-editor" #editor></div>
+    <monaco-editor
+        class="monaco-editor"
+        [code]="codeEditorState.code$ | async"
+        (codeChange)="codeEditorState.setCode($event)"
+        language="python"
+    />
     <app-button-bar></app-button-bar>
     <app-terminal class="terminal" #terminal></app-terminal>
 </div>

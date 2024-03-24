@@ -111,8 +111,8 @@ export class HeaderComponent {
         }
     }
 
-    public onCodeEditorClicked() {
-        this.appState.switchCodeEditor();
+    public async onCodeEditorClicked() {
+        await this.workspaceService.switchCodeEditor();
     }
 
     public onSaveWorkspaceAsClicked() {
