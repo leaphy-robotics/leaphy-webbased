@@ -18,13 +18,9 @@ import {PythonUploaderService} from "../services/python-uploader/PythonUploader.
 import {WorkspaceService} from "../services/workspace.service";
 
 
-
-
 @Injectable({
     providedIn: 'root',
 })
-
-// Defines the effects on the Electron environment that different state changes have
 export class WorkspaceEffects {
 
     constructor(
@@ -54,57 +50,6 @@ export class WorkspaceEffects {
                     console.log(e);
                     throw e;
                 }
-
-                // When the sketch status is set to sending
-                this.blocklyEditorState.sketchStatus$
-                    .pipe(withLatestFrom(this.codeEditorState.code$, this.appState.selectedRobotType$))
-                    .pipe(filter(([, , robotType,]) => !!robotType))
-                    .subscribe(async ([status, code, robotType]) => {
-                        switch (status) {
-                            case SketchStatus.Sending:
-                                const libraries = [...robotType.libs];
-                                libraries.push(...codeEditorState.getInstalledLibraries().map(lib => `${lib.name}@${lib.version}`));
-                                const board = robotType.fqbn;
-
-                                try {
-                                    if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
-                                        await this.uploaderService.runCode(code)
-                                    } else {
-                                        this.dialog.open(UploadDialog, {
-                                            width: '450px', disableClose: true,
-                                            data: {source_code: code, libraries: libraries, board: board}
-                                        }).afterClosed().subscribe((result) => {
-                                            if (result) {
-                                                if (result == "HELP_ENVIRONMENT") {
-                                                    const langcode = this.appState.getCurrentLanguageCode();
-                                                    this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
-                                                }
-                                            }
-                                        });
-                                    }
-
-
-                                } catch (error) {
-                                    console.log('Error:', error.message);
-                                }
-
-                                break;
-                            case SketchStatus.ReadyToSend:
-                                this.dialog.open(ConnectPythonDialog, {
-                                    width: '600px', disableClose: true,
-                                }).afterClosed().subscribe((result) => {
-                                    if (result) {
-                                        if (result == "HELP_ENVIRONMENT") {
-                                            const langcode = this.appState.getCurrentLanguageCode();
-                                            this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
-                                        }
-                                    }
-                                });
-                                break;
-                            default:
-                                break;
-                        }
-                    });
 
                 // When a workspace project is being loaded
                 this.blocklyEditorState.workspaceStatus$

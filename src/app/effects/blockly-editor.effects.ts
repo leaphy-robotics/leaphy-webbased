@@ -36,6 +36,7 @@ import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
 import {genericRobotType, microPythonRobotType, RobotType} from "../domain/robot.type";
 import {WorkspaceService} from "../services/workspace.service";
+import {ConnectPythonDialog} from "../modules/core/dialogs/connect-python/connect-python.dialog";
 
 function isJSON(data: string) {
     try {
@@ -278,27 +279,11 @@ export class BlocklyEditorEffects {
         this.appState.codeEditor$
             .subscribe(() => this.blocklyState.setProjectFileHandle(null));
 
-        // React to messages received from the Backend
-        this.backEndState.backEndMessages$
+        // React to messages from all over the application
+        this.backEndState.applicationMessage$
             .pipe(filter(message => !!message))
             .subscribe(message => {
                 switch (message.event) {
-                    case 'PREPARING_COMPILATION_ENVIRONMENT':
-                    case 'COMPILATION_STARTED':
-                    case 'COMPILATION_COMPLETE':
-                    case 'UPDATE_STARTED':
-                        this.blocklyState.setSketchStatusMessage(message.message);
-                        break;
-                    case 'ROBOT_REGISTERED':
-                    case 'UPDATE_COMPLETE':
-                        this.blocklyState.setSketchStatus(SketchStatus.ReadyToSend);
-                        this.blocklyState.setSketchStatusMessage(null);
-                        break;
-                    case 'COMPILATION_FAILED':
-                    case 'UPDATE_FAILED':
-                        this.blocklyState.setSketchStatus(SketchStatus.UnableToSend);
-                        this.blocklyState.setSketchStatusMessage(null);
-                        break;
                     case 'WORKSPACE_SAVE_CANCELLED':
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
                         break;
@@ -309,29 +294,8 @@ export class BlocklyEditorEffects {
                     case 'WORKSPACE_SAVED_TEMP':
                         this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
                         break;
-                    case 'WORKSPACE_RESTORING':
-                        console.log("WORKSPACE_RESTORING");
-                        if (message.payload.type == 'advanced' || message.payload.type == 'python') {
-                            this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
-                            this.codeEditorState.setOriginalCode(message.payload.data as string);
-                            this.codeEditorState.setCode(message.payload.data as string);
-                            if (message.payload.type == 'advanced') {
-                                this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
-                            } else if (message.payload.type == 'python') {
-                                this.appState.setSelectedCodeEditor(CodeEditorType.Python);
-                            }
-                            this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
-                            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(genericRobotType, true);
-                            return;
-                        }
-                        this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);
-                        this.blocklyState.setWorkspaceJSON(message.payload.data as string);
-                        this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                        break;
                     default:
-                        console.log('Unknown message received from backend: ' + message.event);
+                        console.log('Unknown message received from application: ' + message.event);
                         break;
                 }
             });

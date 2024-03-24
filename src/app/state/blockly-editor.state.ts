@@ -22,14 +22,6 @@ export class BlocklyEditorState {
         this.isSoundOn$ = this.isSoundOnSubject$.asObservable();
     }
 
-    private sketchStatusSubject$: BehaviorSubject<SketchStatus> = new BehaviorSubject(
-        SketchStatus.UnableToSend
-    );
-    public sketchStatus$ = this.sketchStatusSubject$.asObservable();
-
-    private sketchStatusMessageSubject$ = new BehaviorSubject("");
-    public sketchStatusMessage$ = this.sketchStatusMessageSubject$.asObservable();
-
     private isSideNavOpenToggledSubject$ = new BehaviorSubject<boolean>(false);
     public isSideNavOpenToggled$ = this.isSideNavOpenToggledSubject$.asObservable();
 
@@ -89,14 +81,6 @@ export class BlocklyEditorState {
     private playSoundFunctionSubject$ = new BehaviorSubject<(name, opt_volume) => void>(null);
     public playSoundFunction$ = this.playSoundFunctionSubject$.asObservable();
 
-    public setSketchStatus(status: SketchStatus) {
-        this.sketchStatusSubject$.next(status);
-    }
-
-    public setSketchStatusMessage(message: string) {
-        this.sketchStatusMessageSubject$.next(message);
-    }
-
     public setIsSideNavOpen(status: boolean) {
         this.isSideNavOpenSubject$.next(status);
     }
@@ -106,7 +90,6 @@ export class BlocklyEditorState {
     }
 
     public setWorkspaceStatus(status: WorkspaceStatus) {
-        console.log("Workspace status changed to: " + status);
         this.workspaceStatusSubject$.next(status);
     }
 

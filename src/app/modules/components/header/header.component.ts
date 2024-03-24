@@ -11,10 +11,14 @@ import {CodeEditorType} from "../../../domain/code-editor.type";
 import {RobotWiredState} from "../../../state/robot.wired.state";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import JSZip from 'jszip';
-import {BackEndMessage} from "../../../domain/backend.message";
 import {microPythonRobotType} from "../../../domain/robot.type";
 import {DebugInformationDialog} from "../../core/dialogs/debug-information/debug-information.dialog";
 import {MatDialog} from "@angular/material/dialog";
+import {UploadDialog} from "../../core/dialogs/upload/upload.dialog";
+import {CodeEditorState} from "../../../state/code-editor.state";
+import {PythonUploaderService} from "../../../services/python-uploader/PythonUploader.service";
+import ArduinoUploader from "../../../services/arduino-uploader/ArduinoUploader";
+import {ConnectPythonDialog} from "../../core/dialogs/connect-python/connect-python.dialog";
 
 @Component({
     selector: 'app-header',
@@ -31,7 +35,9 @@ export class HeaderComponent {
         public robotWiredState: RobotWiredState,
         private router: Router,
         private snackBar: MatSnackBar,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private codeEditorState: CodeEditorState,
+        private uploaderService: PythonUploaderService
     ) {
 
     }
@@ -116,11 +122,46 @@ export class HeaderComponent {
     }
 
     public onConnectClicked() {
-        this.blocklyState.setSketchStatus(SketchStatus.ReadyToSend);
+        this.dialog.open(ConnectPythonDialog, {
+            width: '600px', disableClose: true,
+        }).afterClosed().subscribe((result) => {
+            if (result) {
+                if (result == "HELP_ENVIRONMENT") {
+                    const langcode = this.appState.getCurrentLanguageCode();
+                    this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
+                }
+            }
+        });
     }
 
-    public onRunClicked() {
-        this.blocklyState.setSketchStatus(SketchStatus.Sending);
+    public async onRunClicked() {
+        const robotType = this.appState.getSelectedRobotType();
+        const code = this.codeEditorState.getCode();
+        const libraries = [...robotType.libs];
+        libraries.push(...this.codeEditorState.getInstalledLibraries().map(lib => `${lib.name}@${lib.version}`));
+        const board = robotType.fqbn;
+
+        try {
+            if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+                await this.uploaderService.runCode(code)
+            } else {
+                this.dialog.open(UploadDialog, {
+                    width: '450px', disableClose: true,
+                    data: {source_code: code, libraries: libraries, board: board}
+                }).afterClosed().subscribe((result) => {
+                    if (result) {
+                        if (result == "HELP_ENVIRONMENT") {
+                            const langcode = this.appState.getCurrentLanguageCode();
+                            this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
+                        }
+                    }
+                });
+            }
+
+
+        } catch (error) {
+            console.log('Error:', error.message);
+        }
     }
 
     public onUndoClicked() {

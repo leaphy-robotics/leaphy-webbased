@@ -23,7 +23,7 @@ export class RobotWiredEffects {
         private dialogState: DialogState,
     ) {
         this.webserial = new ArduinoUploader(this.robotWiredState, this.appState, this.uploadState);
-        this.backEndState.backEndMessages$
+        this.backEndState.applicationMessage$
             .pipe(filter(message => !!message))
             .subscribe(message => {
                 if (message.event == 'SERIAL_DATA')

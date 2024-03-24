@@ -66,7 +66,7 @@ export class CodeEditorEffects {
             });
         // React to the backend message and set the ACE Editor code
         // React to messages received from the Backend
-        this.backEndState.backEndMessages$
+        this.backEndState.applicationMessage$
             .pipe(withLatestFrom(this.codeEditorState.aceEditor$))
             .pipe(filter(([message,]) => !!message))
             .subscribe(([message, aceEditor]) => {

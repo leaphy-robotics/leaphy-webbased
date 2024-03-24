@@ -3,6 +3,7 @@ import {Component} from "@angular/core";
 import examples, {Board, Example} from "src/examples";
 import {AppState} from "../../../../state/app.state";
 import {BackEndState} from "../../../../state/backend.state";
+import {WorkspaceService} from "../../../../services/workspace.service";
 
 @Component({
     selector: "app-examples",
@@ -16,7 +17,8 @@ export class ExamplesDialog {
     constructor(
         public appState: AppState,
         public backEndState: BackEndState,
-        private dialog: MatDialogRef<ExamplesDialog>
+        private dialog: MatDialogRef<ExamplesDialog>,
+        private workspaceService: WorkspaceService
     ) {
         this.examples = this.getExamplesForRobot(this.appState.getSelectedRobotType().id)
         this.filtered = this.examples
@@ -43,12 +45,10 @@ export class ExamplesDialog {
         const sketch = await fetch(`examples/${example.sketch}`)
             .then(res => res.text())
 
-        this.backEndState.setBackendMessage({
-            event: 'WORKSPACE_RESTORING',
-            message: 'WORKSPACE_RESTORING',
+        this.workspaceService.restoreWorkspaceFromMessage({
             payload: { data: sketch, type: 'beginner', extension: this.appState.getSelectedRobotType().id },
             displayTimeout: 2000
-        });
+        })
         this.close()
     }
 

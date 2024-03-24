@@ -8,7 +8,7 @@ import { BackEndMessage } from '../domain/backend.message';
 export class BackEndState {
 
     private backEndMessagesSubject$ = new BehaviorSubject<BackEndMessage>(null);
-    public backEndMessages$ = this.backEndMessagesSubject$.asObservable();
+    public applicationMessage$ = this.backEndMessagesSubject$.asObservable();
 
 
     public setBackendMessage(message: BackEndMessage) {

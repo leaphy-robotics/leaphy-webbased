@@ -66,7 +66,7 @@ export class AppEffects {
             });
 
         // Show snackbar based on messages received from the Backend
-        this.backEndState.backEndMessages$
+        this.backEndState.applicationMessage$
             .pipe(filter(message => !!message && message.displayTimeout >= 0))
             .subscribe(message => {
                 this.snackBar.openFromComponent(StatusMessageDialog, {

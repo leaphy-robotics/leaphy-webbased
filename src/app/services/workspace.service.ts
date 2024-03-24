@@ -3,7 +3,7 @@ import {CodeEditorType} from "../domain/code-editor.type";
 import {LocationSelectDialog} from "../modules/core/dialogs/location-select/location-select.dialog";
 import {NameFileDialog} from "../modules/core/dialogs/name-file/name-file.dialog";
 import {MatDialog} from "@angular/material/dialog";
-import {RobotType} from "../domain/robot.type";
+import {genericRobotType, RobotType} from "../domain/robot.type";
 import {BlocklyEditorState} from "../state/blockly-editor.state";
 import {CodeEditorState} from "../state/code-editor.state";
 import {RobotWiredState} from "../state/robot.wired.state";
@@ -12,6 +12,9 @@ import {PythonUploaderService} from "./python-uploader/PythonUploader.service";
 import {PythonFile} from "../domain/python-file.type";
 import {BackEndState} from "../state/backend.state";
 import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-explorer.dialog";
+import {WorkspaceStatus} from "../domain/workspace.status";
+import {StatusMessageDialog} from "../modules/core/dialogs/status-message/status-message.dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 const fileExtensions = [
     ".l_flitz_uno",
@@ -36,6 +39,8 @@ const fileExtensions = [
 })
 export class WorkspaceService {
 
+
+
     constructor(private dialog: MatDialog,
                 private appState: AppState,
                 private blocklyEditorState: BlocklyEditorState,
@@ -43,8 +48,38 @@ export class WorkspaceService {
                 private robotWiredState: RobotWiredState,
                 private uploaderService: PythonUploaderService,
                 private blocklyState: BlocklyEditorState,
-                private backEndState: BackEndState
+                private snackBar: MatSnackBar
     ) {}
+
+    /*
+    * Centralized to restore workspace from data
+     */
+    public async restoreWorkspaceFromMessage(message: any) {
+        this.snackBar.openFromComponent(StatusMessageDialog, {
+            duration: message.displayTimeout,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            data: {message: 'WORKSPACE_RESTORING'}
+        })
+        if (message.payload.type == 'advanced' || message.payload.type == 'python') {
+            this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
+            this.codeEditorState.setOriginalCode(message.payload.data as string);
+            this.codeEditorState.setCode(message.payload.data as string);
+            if (message.payload.type == 'advanced') {
+                this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+            } else if (message.payload.type == 'python') {
+                this.appState.setSelectedCodeEditor(CodeEditorType.Python);
+            }
+            this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
+            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+            this.appState.setSelectedRobotType(genericRobotType, true);
+            return;
+        }
+        this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);
+        this.blocklyState.setWorkspaceJSON(message.payload.data as string);
+        this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
+        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+    }
 
     /*
     * Save workspace section
@@ -203,26 +238,20 @@ export class WorkspaceService {
             return;
 
         if (file.name.endsWith('.ino')) {
-            this.backEndState.setBackendMessage({
-                event: 'WORKSPACE_RESTORING',
-                message: 'WORKSPACE_RESTORING',
+            this.restoreWorkspaceFromMessage({
                 payload: {projectFilePath: file, data: content, type: 'advanced'},
                 displayTimeout: 2000
             });
         } else if (file.name.endsWith('.py')) {
-            this.backEndState.setBackendMessage({
-                event: 'WORKSPACE_RESTORING',
-                message: 'WORKSPACE_RESTORING',
+            this.restoreWorkspaceFromMessage({
                 payload: { projectFilePath: file, data: content, type: 'python' },
                 displayTimeout: 2000
-            });
+            })
         } else {
-            this.backEndState.setBackendMessage({
-                event: 'WORKSPACE_RESTORING',
-                message: 'WORKSPACE_RESTORING',
-                payload: { projectFilePath: file, data: content, type: 'beginner', extension: file.name.substring(file.name.lastIndexOf('.')) },
+            this.restoreWorkspaceFromMessage({
+                payload: {projectFilePath: file, data: content, type: 'beginner', extension: file.name.substring(file.name.lastIndexOf('.'))},
                 displayTimeout: 2000
-            });
+            })
         }
     }
 
@@ -238,12 +267,10 @@ export class WorkspaceService {
             if (robotType != this.appState.getSelectedRobotType().id) {
                 return;
             }
-            this.backEndState.setBackendMessage({
-                event: 'WORKSPACE_RESTORING',
-                message: 'WORKSPACE_RESTORING',
-                payload: { projectFilePath: null, data: workspaceTemp, type: 'beginner', extension: robotType },
+            this.restoreWorkspaceFromMessage({
+                payload: {projectFilePath: null, data: workspaceTemp, type: 'beginner', extension: robotType},
                 displayTimeout: 1000
-            });
+            })
         } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.CPP) {
             try {
                 this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
