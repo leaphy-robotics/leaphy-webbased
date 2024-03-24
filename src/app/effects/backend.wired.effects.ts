@@ -64,20 +64,35 @@ export class BackendWiredEffects {
                 this.blocklyEditorState.sketchStatus$
                     .pipe(withLatestFrom(this.codeEditorState.code$, this.appState.selectedRobotType$))
                     .pipe(filter(([, , robotType,]) => !!robotType))
-                    .subscribe(([status, code, robotType]) => {
+                    .subscribe(async ([status, code, robotType]) => {
                         switch (status) {
                             case SketchStatus.Sending:
                                 const libraries = [...robotType.libs];
                                 libraries.push(...codeEditorState.getInstalledLibraries().map(lib => `${lib.name}@${lib.version}`));
+                                const board = robotType.fqbn;
 
-                                const payload = {
-                                    code,
-                                    fqbn: robotType.fqbn,
-                                    core: robotType.core,
-                                    name: robotType.name,
-                                    libs: libraries
-                                };
-                                this.send('upload', payload);
+                                try {
+                                    if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+                                        await this.uploaderService.runCode(code)
+                                    } else {
+                                        this.dialog.open(UploadDialog, {
+                                            width: '450px', disableClose: true,
+                                            data: {source_code: code, libraries: libraries, board: board}
+                                        }).afterClosed().subscribe((result) => {
+                                            if (result) {
+                                                if (result == "HELP_ENVIRONMENT") {
+                                                    const langcode = this.appState.getCurrentLanguageCode();
+                                                    this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
+                                                }
+                                            }
+                                        });
+                                    }
+
+
+                                } catch (error) {
+                                    console.log('Error:', error.message);
+                                }
+
                                 break;
                             case SketchStatus.ReadyToSend:
                                 this.dialog.open(ConnectPythonDialog, {
@@ -86,7 +101,7 @@ export class BackendWiredEffects {
                                     if (result) {
                                         if (result == "HELP_ENVIRONMENT") {
                                             const langcode = this.appState.getCurrentLanguageCode();
-                                            this.router.navigateByUrl('/' + langcode + '/driverissues', { skipLocationChange: true });
+                                            this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
                                         }
                                     }
                                 });
@@ -142,42 +157,5 @@ export class BackendWiredEffects {
                         });
                     });
             });
-    }
-
-
-    public async send(channel: string, ...args): Promise<void> {
-        switch (channel) {
-            case 'upload':
-                const source_code = this.codeEditorState.getCode();
-                const libraries = args[0].libs;
-                const board = args[0].fqbn;
-
-                try {
-                    if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
-                        await this.uploaderService.runCode(source_code)
-                    } else {
-                        this.dialog.open(UploadDialog, {
-                            width: '450px', disableClose: true,
-                            data: {source_code: source_code, libraries: libraries, board: board}
-                        }).afterClosed().subscribe((result) => {
-                            if (result) {
-                                if (result == "HELP_ENVIRONMENT") {
-                                    const langcode = this.appState.getCurrentLanguageCode();
-                                    this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
-                                }
-                            }
-                        });
-                    }
-
-
-                } catch (error) {
-                    console.log('Error:', error.message);
-                }
-
-                break;
-            default:
-                console.log(channel);
-                break;
-        }
     }
 }
