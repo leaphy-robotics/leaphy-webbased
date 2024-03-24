@@ -1,308 +1,112 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import {RobotSelector, RobotType} from '../domain/robot.type';
+import {
+    arduinoMegaRobotType, arduinoNanoESP32RobotType,
+    arduinoNanoRobotType, arduinoNanoRP2040RobotType,
+    arduinoUnoRobotType,
+    genericRobotType,
+    leaphyClickRobotType,
+    leaphyFlitzNanoRobotType,
+    leaphyFlitzRobotType,
+    leaphyOriginalNanoESP32RobotType,
+    leaphyOriginalNanoRobotType,
+    leaphyOriginalNanoRP2040RobotType,
+    leaphyOriginalRobotType,
+    microPythonRobotType,
+} from '../domain/robots';
+import { RobotType, RobotSelector } from '../domain/robot.type';
 import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
-import { MatDialog } from '@angular/material/dialog';
 import { version } from '../../../package.json';
-import Avrdude from "../services/arduino-uploader/protocols/avrdude";
-import DFU from "../services/arduino-uploader/protocols/dfu";
-import Pico from "../services/arduino-uploader/protocols/pico";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AppState {
     /* eslint-disable max-len */
-    private static defaultLibraries = [
-        'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library',
-        'Adafruit Unified Sensor', 'List', 'Adafruit SGP30 Sensor', 'Adafruit_VL53L0X', 'Adafruit BMP280 Library', 'TM1637', 'LedControl'
-    ]
-    private static leaphyOriginalRobotType = new RobotType(
-        'l_original_uno',
-        Avrdude,
-        'Leaphy Original',
-        'orig.svg',
-        'orig_uno.svg',
-        'arduino:avr:uno',
-        'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyActuators: true,
-            showLeaphyOperators: false,
-            showLeaphySensors: true,
-        },
-        'atmega328p'
-    );
-    private static leaphyOriginalNanoRobotType = new RobotType(
-        'l_original_nano',
-        Avrdude,
-        'Original Nano',
-        'orig.svg',
-        'orig_nano.svg',
-        'arduino:avr:nano',
-        'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyActuators: true,
-            showLeaphyOperators: true,
-            showLeaphySensors: true,
-        },
-        'atmega328p',
-    );
-    private static leaphyOriginalNanoESP32RobotType = new RobotType(
-        'l_original_nano_esp32',
-        DFU,
-        'Original Nano ESP32',
-        'orig.svg',
-        'orig_nano_esp32.svg',
-        'arduino:esp32:nano_nora',
-        'arduino:esp32',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyActuators: true,
-            showLeaphyOperators: true,
-            showLeaphySensors: true,
-        },
-    );
-    private static leaphyOriginalNanoRP2040RobotType = new RobotType(
-        'l_original_nano_esp32',
-        Pico,
-        'Original Nano RP2040',
-        'orig.svg',
-        'orig_nano_rp2040.svg',
-        'arduino:mbed_nano:nanorp2040connect',
-        'arduino:mbed_nano',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyActuators: true,
-            showLeaphyOperators: true,
-            showLeaphySensors: true,
-        },
-    );
-    private static leaphyFlitzRobotType = new RobotType(
-        'l_flitz_uno',
-        Avrdude,
-        'Leaphy Flitz',
-        'flitz.svg',
-        'flitz_uno.svg',
-        'arduino:avr:uno',
-        'arduino:avr',
-        AppState.defaultLibraries,
-        {
-            showLeaphyActuators: false,
-            showLeaphyOperators: false,
-        },
-        'atmega328p',
-    );
-    private static leaphyFlitzNanoRobotType = new RobotType(
-        'l_flitz_nano',
-        Avrdude,
-        'Flitz Nano',
-        'flitz_nano.svg',
-        'flitz_nano.svg',
-        'arduino:avr:nano',
-        'arduino:avr',
-        AppState.defaultLibraries,
-        {
-            showLeaphyActuators: false,
-            showLeaphyOperators: false,
-        },
-        'atmega328p',
-    );
-    private static leaphyClickRobotType = new RobotType(
-        'l_click',
-        Avrdude,
-        'Leaphy Click',
-        'click.svg',
-        null,
-        'arduino:avr:uno',
-        'arduino:avr',
-        AppState.defaultLibraries,
-        {
-            showLeaphySensors: true,
-        },
-        'atmega328p',
-    );
-    private static arduinoUnoRobotType = new RobotType(
-        'l_uno',
-        Avrdude,
-        'Arduino Uno',
-        'uno.svg',
-        null,
-        'arduino:avr:uno',
-        'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyLists: true,
-            showLeaphySensors: true,
-        },
-        'atmega328p',
-    );
 
-    public static genericRobotType = new RobotType(
-        'l_code',
-        Avrdude,
-        'Leaphy C++',
-        "c++.svg",
-        null,
-        'arduino:avr:uno',
-        'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {},
-        'atmega328p'
-    );
-    private static arduinoNanoRobotType = new RobotType(
-        'l_nano',
-        Avrdude,
-        'Arduino Nano',
-        'nano.svg',
-        null,
-        'arduino:avr:nano',
-        'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyLists: true,
-            showLeaphySensors: true,
-        },
-        'atmega328p',
-    );
-    private static arduinoNanoESP32RobotType = new RobotType(
-        'l_nano_esp32', DFU,
-        'Arduino Nano ESP32',
-        'nano.svg',
-        null,
-        'arduino:esp32:nano_nora',
-        'arduino:esp32',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyLists: true,
-            showLeaphySensors: true,
-        }
-    );
-    private static arduinoNanoRP2040RobotType = new RobotType(
-        'l_nano_rp2040', Pico,
-        'Arduino Nano RP2040',
-        'nano.svg',
-        null,
-        'arduino:mbed_nano:nanorp2040connect',
-        'arduino:mbed_nano',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyLists: true,
-            showLeaphySensors: true,
-        }
-    );
-    public static microPythonRobotType = new RobotType(
-        'l_micropython',
-        Avrdude,
-        'MicroPython',
-        'micropython.svg',
-        null,
-        '',
-        '',
-        [],
-        {
-            showLeaphyActuators: false,
-            showLeaphyOperators: false,
-        });
-    private static arduinoMegaRobotType = new RobotType(
-        'l_mega',
-        Avrdude,
-        'Arduino Mega',
-        'mega.svg',
-        null,
-        'arduino:avr:mega',
-        'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
-        {
-            showLeaphyLists: true,
-            showLeaphySensors: true,
-        },
-        'atmega2560',
-    )
 
     public static idToRobotType = {
-        'l_original_uno': AppState.leaphyOriginalRobotType,
-        'l_original_nano': AppState.leaphyOriginalNanoRobotType,
-        'l_original_nano_esp32': AppState.leaphyOriginalNanoESP32RobotType,
-        'l_original_nano_rp2040': AppState.leaphyOriginalNanoRP2040RobotType,
-        'l_flitz_uno': AppState.leaphyFlitzRobotType,
-        'l_click': AppState.leaphyClickRobotType,
-        'l_uno': AppState.arduinoUnoRobotType,
-        'l_code': AppState.genericRobotType,
-        'l_flitz_nano': AppState.leaphyFlitzNanoRobotType,
-        'l_nano': AppState.arduinoNanoRobotType,
-        'l_nano_esp32': AppState.arduinoNanoESP32RobotType,
-        'l_nano_rp2040': AppState.arduinoNanoRP2040RobotType,
-        'l_micropython': AppState.microPythonRobotType,
-        'l_mega': AppState.arduinoMegaRobotType,
+        'l_original_uno': leaphyOriginalRobotType,
+        'l_original_nano': leaphyOriginalNanoRobotType,
+        'l_original_nano_esp32': leaphyOriginalNanoESP32RobotType,
+        'l_original_nano_rp2040': leaphyOriginalNanoRP2040RobotType,
+        'l_flitz_uno': leaphyFlitzRobotType,
+        'l_click': leaphyClickRobotType,
+        'l_uno': arduinoUnoRobotType,
+        'l_code': genericRobotType,
+        'l_flitz_nano': leaphyFlitzNanoRobotType,
+        'l_nano': arduinoNanoRobotType,
+        'l_nano_esp32': arduinoNanoESP32RobotType,
+        'l_nano_rp2040': arduinoNanoRP2040RobotType,
+        'l_micropython': microPythonRobotType,
+        'l_mega': arduinoMegaRobotType,
     }
 
     private static robotSelectors: RobotSelector[] = [
         {
-            intercept: AppState.leaphyFlitzRobotType,
+            intercept: leaphyFlitzRobotType,
             choices: [[
                 {
                     name: 'Flitz Uno',
                     icon: 'flitz.svg',
-                    robot: AppState.leaphyFlitzRobotType,
+                    robot: leaphyFlitzRobotType,
                 },
                 {
                     name: 'Flitz Nano',
                     icon: 'flitz.svg',
-                    robot: AppState.leaphyFlitzNanoRobotType,
+                    robot: leaphyFlitzNanoRobotType,
                 }
             ]]
         },
         {
-            intercept: AppState.leaphyOriginalRobotType,
+            intercept: leaphyOriginalRobotType,
             choices: [
                 [
                     {
                         name: 'Original Uno',
                         icon: 'orig.svg',
-                        robot: AppState.leaphyOriginalRobotType,
+                        robot: leaphyOriginalRobotType,
                     },
                     {
                         name: 'Original Nano',
                         icon: 'orig.svg',
-                        robot: AppState.leaphyOriginalNanoRobotType,
+                        robot: leaphyOriginalNanoRobotType,
                     },
                 ],
                 [
                     {
                         name: 'Original Nano ESP32',
                         icon: 'orig.svg',
-                        robot: AppState.leaphyOriginalNanoESP32RobotType,
+                        robot: leaphyOriginalNanoESP32RobotType,
                     },
                     {
                         name: 'Original Nano RP2040',
                         icon: 'orig.svg',
-                        robot: AppState.leaphyOriginalNanoRP2040RobotType,
+                        robot: leaphyOriginalNanoRP2040RobotType,
                     },
                 ]
             ]
         },
         {
-            intercept: AppState.arduinoNanoRobotType,
+            intercept: arduinoNanoRobotType,
             choices: [[
                 {
                     name: 'Arduino Nano',
                     icon: 'nano.svg',
-                    robot: AppState.arduinoNanoRobotType,
+                    robot: arduinoNanoRobotType,
                 },
                 {
                     name: 'Arduino Nano ESP32',
                     icon: 'nano.svg',
-                    robot: AppState.arduinoNanoESP32RobotType,
+                    robot: arduinoNanoESP32RobotType,
                 },
                 {
                     name: 'Arduino Nano RP2040',
                     icon: 'nano.svg',
-                    robot: AppState.arduinoNanoRP2040RobotType,
+                    robot: arduinoNanoRP2040RobotType,
                 },
             ]]
         }
@@ -323,7 +127,7 @@ export class AppState {
     private defaultLanguage = new Language('nl', 'Nederlands')
     private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
 
-    constructor(private localStorage: LocalStorageService, private dialog: MatDialog) {
+    constructor(private localStorage: LocalStorageService) {
 
         this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
         this.isDesktop$ = this.isDesktopSubject$.asObservable();
@@ -331,9 +135,9 @@ export class AppState {
             .pipe(map(isDesktop => {
                 if (isDesktop) {
                     return [
-                        [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType],
-                        [AppState.arduinoNanoRobotType, AppState.arduinoUnoRobotType, AppState.arduinoMegaRobotType],
-                        [AppState.genericRobotType, AppState.microPythonRobotType],
+                        [leaphyFlitzRobotType, leaphyOriginalRobotType, leaphyClickRobotType],
+                        [arduinoNanoRobotType, arduinoUnoRobotType, arduinoMegaRobotType],
+                        [genericRobotType, microPythonRobotType],
                     ]
                 } else {}
             }));
@@ -344,9 +148,7 @@ export class AppState {
 
         this.canChangeCodeEditor$ = this.selectedRobotType$
             .pipe(filter(robotType => !!robotType))
-            .pipe(map(robotType => robotType !== AppState.genericRobotType));
-
-
+            .pipe(map(robotType => robotType !== genericRobotType));
     }
 
     private isDesktopSubject$: BehaviorSubject<boolean>;
@@ -365,9 +167,6 @@ export class AppState {
 
     private changedLanguageSubject$ = new BehaviorSubject(null);
     public changedLanguage$ = this.changedLanguageSubject$.asObservable();
-
-    private showHelpPageSubject$ = new BehaviorSubject<boolean>(false);
-    public showHelpPage$ = this.showHelpPageSubject$.asObservable();
 
     private isCodeEditorToggleConfirmedSubject$ = new BehaviorSubject<boolean>(false);
     public isCodeEditorToggleConfirmed$ = this.isCodeEditorToggleConfirmedSubject$.asObservable();
@@ -395,10 +194,6 @@ export class AppState {
     public setCurrentLanguage(language: Language) {
         this.localStorage.store('currentLanguage', language);
         this.currentLanguageSubject$.next(language);
-    }
-
-    public setShowHelpPage(show: boolean) {
-        this.showHelpPageSubject$.next(show);
     }
 
     public switchCodeEditor() {

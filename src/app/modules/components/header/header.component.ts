@@ -1,9 +1,6 @@
 import {Component, HostListener} from '@angular/core';
 import {AppState} from 'src/app/state/app.state';
-import {BackEndState} from 'src/app/state/backend.state';
 import {BlocklyEditorState} from 'src/app/state/blockly-editor.state';
-import {WorkspaceStatus} from 'src/app/domain/workspace.status';
-import {SketchStatus} from 'src/app/domain/sketch.status';
 import {DialogState} from 'src/app/state/dialog.state';
 import {Language} from 'src/app/domain/language';
 import {Router} from "@angular/router";
@@ -11,7 +8,15 @@ import {CodeEditorType} from "../../../domain/code-editor.type";
 import {RobotWiredState} from "../../../state/robot.wired.state";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import JSZip from 'jszip';
-import {BackEndMessage} from "../../../domain/backend.message";
+import {microPythonRobotType} from "../../../domain/robots";
+import {DebugInformationDialog} from "../../core/dialogs/debug-information/debug-information.dialog";
+import {MatDialog} from "@angular/material/dialog";
+import {UploadDialog} from "../../core/dialogs/upload/upload.dialog";
+import {CodeEditorState} from "../../../state/code-editor.state";
+import {PythonUploaderService} from "../../../services/python-uploader/PythonUploader.service";
+import {ConnectPythonDialog} from "../../core/dialogs/connect-python/connect-python.dialog";
+import {StatusMessageDialog} from "../../core/dialogs/status-message/status-message.dialog";
+import {WorkspaceService} from "../../../services/workspace.service";
 
 @Component({
     selector: 'app-header',
@@ -22,12 +27,15 @@ export class HeaderComponent {
 
     constructor(
         public appState: AppState,
-        public backEndState: BackEndState,
         public blocklyState: BlocklyEditorState,
         public dialogState: DialogState,
         public robotWiredState: RobotWiredState,
         private router: Router,
         private snackBar: MatSnackBar,
+        private dialog: MatDialog,
+        private codeEditorState: CodeEditorState,
+        private uploaderService: PythonUploaderService,
+        private workspaceService: WorkspaceService
     ) {
 
     }
@@ -37,7 +45,7 @@ export class HeaderComponent {
     }
 
     public onLoadWorkspaceClicked() {
-        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Finding);
+        this.workspaceService.restoreWorkspace().then(() => {});
     }
 
     public async onDownloadDriversClicked() {
@@ -81,17 +89,17 @@ export class HeaderComponent {
                 this.dialogState.setIsSerialOutputListening(true);
             }
 
-            this.backEndState.setBackendMessage({
-                event: 'CONNECTED',
-                message: 'CONNECTED',
-                payload: {},
-                displayTimeout: 2000
+            this.snackBar.openFromComponent(StatusMessageDialog, {
+                duration: 2000,
+                horizontalPosition: 'center',
+                verticalPosition: 'bottom',
+                data: { message: "CONNECTED" }
             })
         }
     }
 
     public onSaveWorkspaceClicked() {
-        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Saving);
+        this.workspaceService.saveWorkspace().then(() => {});
     }
 
     // To capture the keyboard shortcut for Saving a project
@@ -108,15 +116,48 @@ export class HeaderComponent {
     }
 
     public onSaveWorkspaceAsClicked() {
-        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingAs);
+        this.workspaceService.saveWorkspaceAs(this.appState.getSelectedRobotType().id).then(() => {});
     }
 
     public onConnectClicked() {
-        this.blocklyState.setSketchStatus(SketchStatus.ReadyToSend);
+        this.dialog.open(ConnectPythonDialog, {
+            width: '600px', disableClose: true,
+        }).afterClosed().subscribe((result) => {
+            if (result) {
+                if (result == "HELP_ENVIRONMENT") {
+                    const langcode = this.appState.getCurrentLanguageCode();
+                    this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true}).then(() => {});
+                }
+            }
+        });
     }
 
-    public onRunClicked() {
-        this.blocklyState.setSketchStatus(SketchStatus.Sending);
+    public async onRunClicked() {
+        const robotType = this.appState.getSelectedRobotType();
+        const code = this.codeEditorState.getCode();
+        const libraries = [...robotType.libs];
+        libraries.push(...this.codeEditorState.getInstalledLibraries().map(lib => `${lib.name}@${lib.version}`));
+        try {
+            if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+                await this.uploaderService.runCode(code)
+            } else {
+                this.dialog.open(UploadDialog, {
+                    width: '450px', disableClose: true,
+                    data: {source_code: code, libraries: libraries, board: robotType.fqbn}
+                }).afterClosed().subscribe((result) => {
+                    if (result) {
+                        if (result == "HELP_ENVIRONMENT") {
+                            const langcode = this.appState.getCurrentLanguageCode();
+                            this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
+                        }
+                    }
+                });
+            }
+
+
+        } catch (error) {
+            console.log('Error:', error.message);
+        }
     }
 
     public onUndoClicked() {
@@ -128,7 +169,7 @@ export class HeaderComponent {
     }
 
     public onHelpClicked() {
-        this.appState.setShowHelpPage(true);
+        window.open("https://discord.com/invite/Yeg7Kkrq5W", '_blank').focus()
     }
 
     public onEmailClicked() {
@@ -148,7 +189,9 @@ export class HeaderComponent {
     }
 
     public onViewLogClicked() {
-        this.backEndState.setIsViewLogClicked();
+        this.dialog.open(DebugInformationDialog, {
+            disableClose: false,
+        });
     }
 
     public onToggleSoundClicked() {
@@ -162,11 +205,11 @@ export class HeaderComponent {
 
     public onBackToBlocks() {
         if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
-            this.router.navigate(['/blocks'], { skipLocationChange: true });
+            this.router.navigate(['/blocks'], {skipLocationChange: true}).then(() => {});
         else if (this.appState.getCurrentEditor() == CodeEditorType.CPP)
-            this.router.navigate(['/cppEditor'], { skipLocationChange: true });
+            this.router.navigate(['/cppEditor'], { skipLocationChange: true }).then(() => {});
         else if (this.appState.getCurrentEditor() == CodeEditorType.Python)
-            this.router.navigate(['/pythonEditor'], { skipLocationChange: true });
+            this.router.navigate(['/pythonEditor'], { skipLocationChange: true }).then(() => {});
     }
 
     public onExamplesClicked() {
@@ -174,6 +217,7 @@ export class HeaderComponent {
     }
 
     protected readonly AppState = AppState;
+    protected readonly microPythonRobotType = microPythonRobotType;
 }
 
 

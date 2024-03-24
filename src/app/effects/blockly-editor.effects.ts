@@ -1,14 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BlocklyEditorState} from '../state/blockly-editor.state';
-import {SketchStatus} from '../domain/sketch.status';
-import {BackEndState} from '../state/backend.state';
 import {filter, pairwise, withLatestFrom} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {combineLatest, Observable} from 'rxjs';
-import {WorkspaceStatus} from '../domain/workspace.status';
 import {AppState} from '../state/app.state';
 import {CodeEditorType} from '../domain/code-editor.type';
-import {BackendWiredEffects} from "./backend.wired.effects";
 import * as Blockly from 'blockly/core';
 import '@blockly/field-bitmap'
 import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
@@ -35,16 +31,10 @@ import {LeaphyToolbox} from "../services/toolbox/toolbox";
 import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
 import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
+import {genericRobotType, microPythonRobotType} from "../domain/robots";
 import {RobotType} from "../domain/robot.type";
-
-function isJSON(data: string) {
-    try {
-        JSON.parse(data)
-        return true
-    } catch (e) {
-        return false
-    }
-}
+import {WorkspaceService} from "../services/workspace.service";
+import {LocalStorageService} from "../services/localstorage.service";
 
 const translationsMap = {
     en: translationsEn.default,
@@ -62,11 +52,11 @@ export class BlocklyEditorEffects {
 
     constructor(
         private blocklyState: BlocklyEditorState,
-        private backEndState: BackEndState,
-        private backEndWiredEffects: BackendWiredEffects,
         private appState: AppState,
         private codeEditorState: CodeEditorState,
         private http: HttpClient,
+        private workspaceService: WorkspaceService,
+        private localStorage: LocalStorageService
     ) {
         // Variables:
         Extensions.registerMixin(
@@ -123,14 +113,16 @@ export class BlocklyEditorEffects {
         // When the language is changed, save the workspace temporarily
         this.appState.changedLanguage$
             .pipe(filter(language => !!language))
-            .subscribe(() => {
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingTemp);
+            .pipe(withLatestFrom(this.blocklyState.workspaceJSON$, this.appState.selectedRobotType$))
+            .subscribe(([, workspaceXml]) => {
+                this.workspaceService.saveWorkspaceTemp(workspaceXml).then(() => {});
+                this.localStorage.store("changedLanguage", this.appState.getSelectedRobotType().id);
             });
 
         // When all prerequisites are there, Create a new workspace and open the codeview if needed
         combineLatest([this.blocklyState.blocklyElement$, this.blocklyState.blocklyConfig$])
             .pipe(withLatestFrom(this.appState.selectedRobotType$))
-            .pipe(filter(([[element, config], robotType]) => !!element && !!config && !!robotType && (robotType !== AppState.genericRobotType && robotType !== AppState.microPythonRobotType)))
+            .pipe(filter(([[element, config], robotType]) => !!element && !!config && !!robotType && (robotType !== genericRobotType && robotType !== microPythonRobotType)))
             .pipe(withLatestFrom(
                 this.getXmlContent('./assets/blockly/base-toolbox.xml'),
                 this.getXmlContent('./assets/blockly/leaphy-toolbox.xml'),
@@ -160,7 +152,7 @@ export class BlocklyEditorEffects {
                 this.blocklyState.setWorkspace(workspace);
                 this.blocklyState.setToolboxXml(toolboxXmlString);
                 if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
-                    this.backEndWiredEffects.send('restore-workspace-temp', this.appState.getSelectedRobotType().id);
+                    this.workspaceService.restoreWorkspaceTemp().then(() => {});
                 }
                 toolbox.selectItemByPosition(0);
                 toolbox.refreshTheme();
@@ -171,7 +163,7 @@ export class BlocklyEditorEffects {
         // When a new project is started, reset the blockly code
         this.appState.selectedRobotType$
             .pipe(filter(robotType => !robotType))
-            .subscribe(() => this.blocklyState.setCode(''))
+            .subscribe(() => this.codeEditorState.setCode(''))
 
         // When the robot selection changes, set the toolbox and initialWorkspace
         this.appState.selectedRobotType$
@@ -204,27 +196,9 @@ export class BlocklyEditorEffects {
                 workspace.clearUndo();
                 workspace.addChangeListener(Blockly.Events.disableOrphans);
                 workspace.addChangeListener(async () => {
-                    this.blocklyState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
+                    this.codeEditorState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
                     this.blocklyState.setWorkspaceJSON(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
                 });
-            });
-
-        // When the WorkspaceStatus is set to loading, load in the latest workspace XML
-        this.blocklyState.workspaceStatus$
-            .pipe(filter(status => status === WorkspaceStatus.Restoring))
-            .pipe(withLatestFrom(this.blocklyState.workspaceJSON$, this.blocklyState.workspace$))
-            .subscribe(async ([, workspaceXml, workspace]) => {
-                if (!workspace) return;
-                if (!workspaceXml) return;
-                workspace.clear();
-
-                if (isJSON(workspaceXml)) Blockly.serialization.workspaces.load(JSON.parse(workspaceXml), workspace)
-                else {
-                    const xml = Blockly.utils.xml.textToDom(workspaceXml);
-                    Blockly.Xml.domToWorkspace(xml, workspace);
-                }
-
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
             });
 
         // When the user presses undo or redo, trigger undo or redo on the workspace
@@ -234,7 +208,7 @@ export class BlocklyEditorEffects {
             .subscribe(([redo, workspace]) => workspace.undo(redo));
 
 
-        // When Advanced CodeEditor is Selected, set the workspace status to SavingTemp and hide the sideNav
+        // When Advanced CodeEditor is Selected, hide the sideNav
         this.appState.codeEditor$
             .pipe(
                 pairwise(),
@@ -242,7 +216,6 @@ export class BlocklyEditorEffects {
             )
             .subscribe(() => {
                 this.blocklyState.setIsSideNavOpen(false);
-                //this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingTemp) ? no reason to do this?
             });
 
         // Toggle the isSideNavOpen state
@@ -277,69 +250,6 @@ export class BlocklyEditorEffects {
         // When the code editor is changed, clear the projectFilePath
         this.appState.codeEditor$
             .subscribe(() => this.blocklyState.setProjectFileHandle(null));
-
-        // React to messages received from the Backend
-        this.backEndState.backEndMessages$
-            .pipe(filter(message => !!message))
-            .subscribe(message => {
-                switch (message.event) {
-                    case 'PREPARING_COMPILATION_ENVIRONMENT':
-                    case 'COMPILATION_STARTED':
-                    case 'COMPILATION_COMPLETE':
-                    case 'UPDATE_STARTED':
-                        this.blocklyState.setSketchStatusMessage(message.message);
-                        break;
-                    case 'ROBOT_REGISTERED':
-                    case 'UPDATE_COMPLETE':
-                        this.blocklyState.setSketchStatus(SketchStatus.ReadyToSend);
-                        this.blocklyState.setSketchStatusMessage(null);
-                        break;
-                    case 'COMPILATION_FAILED':
-                    case 'UPDATE_FAILED':
-                        this.blocklyState.setSketchStatus(SketchStatus.UnableToSend);
-                        this.blocklyState.setSketchStatusMessage(null);
-                        break;
-                    case 'WORKSPACE_SAVE_CANCELLED':
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    case 'WORKSPACE_SAVED':
-                        this.blocklyState.setProjectFileHandle(message.payload);
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    case 'WORKSPACE_SAVED_TEMP':
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    case 'WORKSPACE_RESTORING':
-                        console.log("WORKSPACE_RESTORING");
-                        if (message.payload.type == 'advanced') {
-                            this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
-                            this.codeEditorState.setOriginalCode(message.payload.data as string);
-                            this.codeEditorState.setCode(message.payload.data as string);
-                            this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
-                            this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
-                            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(AppState.genericRobotType, true);
-                            return;
-                        } else if (message.payload.type == 'python') {
-                            this.codeEditorState.getAceEditor().session.setValue(message.payload.data as string);
-                            this.codeEditorState.setOriginalCode(message.payload.data as string);
-                            this.codeEditorState.setCode(message.payload.data as string);
-                            this.appState.setSelectedCodeEditor(CodeEditorType.Python);
-                            this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
-                            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(AppState.microPythonRobotType, true);
-                            return;
-                        }
-                        this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);
-                        this.blocklyState.setWorkspaceJSON(message.payload.data as string);
-                        this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                        break;
-                    default:
-                        console.log('Unknown message received from backend: ' + message.event);
-                        break;
-                }
-            });
     }
 
     private parseCategory(root: Document, category: HTMLElement, robotType: RobotType,) : HTMLElement {

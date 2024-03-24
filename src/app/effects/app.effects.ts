@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AppState } from '../state/app.state';
 import { TranslateService } from '@ngx-translate/core';
-import { BackEndState } from '../state/backend.state';
 import { filter, withLatestFrom } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { StatusMessageDialog } from '../modules/core/dialogs/status-message/status-message.dialog';
 import { Router } from '@angular/router';
 import { CodeEditorType } from '../domain/code-editor.type';
 import {LocalStorageService} from "../services/localstorage.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ChangeLogDialog} from "../modules/core/dialogs/change-log/change-log.dialog";
 import showdown from "showdown";
+import {WorkspaceService} from "../services/workspace.service";
+import * as Blockly from "blockly/core";
+import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
 
 @Injectable({
     providedIn: 'root',
@@ -21,11 +21,10 @@ export class AppEffects {
     constructor(
         private appState: AppState,
         private translate: TranslateService,
-        private backEndState: BackEndState,
-        private snackBar: MatSnackBar,
         private router: Router,
         private localStorage: LocalStorageService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private workspaceService: WorkspaceService
     ) {
 
         // Use the current language to translate the angular strings
@@ -65,17 +64,6 @@ export class AppEffects {
                 this.appState.setIsCodeEditorToggleConfirmed(false);
             });
 
-        // Show snackbar based on messages received from the Backend
-        this.backEndState.backEndMessages$
-            .pipe(filter(message => !!message && message.displayTimeout >= 0))
-            .subscribe(message => {
-                this.snackBar.openFromComponent(StatusMessageDialog, {
-                    duration: message.displayTimeout,
-                    horizontalPosition: 'center',
-                    verticalPosition: 'bottom',
-                    data: message
-                })
-            });
 
 
         this.appState.releaseInfo$
@@ -95,7 +83,7 @@ export class AppEffects {
                     let releaseNotes = releaseInfo["body"]
                     // convert all the urls to links
                     // first find the urls
-                    let urls = releaseNotes.match(/(https?:\/\/[^\s]+)/g);
+                    let urls = releaseNotes.match(/(https?:\/\/[\S]+)/g);
                     // then replace them with links
                     if (urls) {
                         // to prevent infinite loops we want to know the index of the last url we replaced
@@ -117,13 +105,9 @@ export class AppEffects {
                         });
                     }
 
-
                     // convert markdown to html
                     const converter = new showdown.Converter();
                     releaseNotes = converter.makeHtml(releaseNotes);
-
-
-
 
                     this.dialog.open(ChangeLogDialog, {
                         data: {
@@ -135,6 +119,33 @@ export class AppEffects {
 
                 }
                 this.localStorage.store('releaseVersion', releaseVersion);
+
+                const robotId = this.localStorage.fetch('changedLanguage');
+                console.log(robotId);
+                if (robotId) {
+                    this.localStorage.store('changedLanguage', '');
+                    this.workspaceService.forceRestoreWorkspaceTemp().then(() => {});
+                }
             })
+
+        this.appState.isDesktop$
+            .pipe(filter(isDesktop => !!isDesktop))
+            .subscribe(() => {
+                try {
+                    Blockly.dialog.setPrompt((msg, defaultValue, callback) => {
+                        this.dialog.open(VariableDialog, {
+                            width: '400px',
+                            data: { name: defaultValue }
+                        }).afterClosed().subscribe(result => {
+                            callback(result);
+                        });
+                    });
+                } catch (e) {
+                    console.log(e);
+                    throw e;
+                }
+            });
     }
+
+
 }

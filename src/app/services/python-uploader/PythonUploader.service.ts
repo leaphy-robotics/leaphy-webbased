@@ -172,7 +172,7 @@ export class PythonUploaderService {
     }
 
     /**
-     * Check if filesystem is a eligible
+     * Check if filesystem is an eligible
      * @param filesystem The filesystem directory handle to use
      */
     static async checkFilesystem(filesystem: FileSystemDirectoryHandle) {

@@ -1,6 +1,6 @@
 import {RobotWiredState} from "../../state/robot.wired.state";
 
-export const clearReadBuffer = async (robotWiredState: RobotWiredState, readStream: ReadableStreamDefaultReader<Uint8Array>) => {
+export const clearReadBuffer = async (readStream: ReadableStreamDefaultReader<Uint8Array>) => {
     const timeoutPromise = new Promise((resolve, _) => {
         setTimeout(() => {
             resolve("Timeout");
@@ -30,18 +30,6 @@ export const clearReadBuffer = async (robotWiredState: RobotWiredState, readStre
             throw new Error('Timeout');
         i++;
     }
-}
-
-export const includesAll = (values, array) => {
-  return values.every((value) => {
-    return array.includes(value)
-  })
-}
-
-export function convertArrayToHex(array) {
-  return array.map((value) => {
-    return value.toString(16)
-  })
 }
 
 export const delay = (timeOut) => {

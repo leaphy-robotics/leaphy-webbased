@@ -12,10 +12,8 @@ export class RobotWiredState {
     public SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 0x2e8a]
 
     private serialPortSubject$: BehaviorSubject<SerialPort> = new BehaviorSubject(null);
-    public serialPort$: Observable<SerialPort> = this.serialPortSubject$.asObservable();
 
     private abortControllerSubject$: BehaviorSubject<AbortController> = new BehaviorSubject(null);
-    public abortController$: Observable<AbortController> = this.abortControllerSubject$.asObservable();
 
     // Upload log, a Log of list of strings
     private uploadLogSubject$ = new BehaviorSubject<string[]>([]);
@@ -45,18 +43,16 @@ export class RobotWiredState {
 
 
     private serialWriteSubject$ = new BehaviorSubject<WritableStreamDefaultWriter<Uint8Array>>(null);
-    public serialWrite$: Observable<WritableStreamDefaultWriter<Uint8Array>> = this.serialWriteSubject$.asObservable();
-
 
     public serialChartDataSets$: Observable<ChartDataset[]> = this.serialData$
         .pipe(map(data => {
             const dataSets: ChartDataset[] = data.reduce((sets, item) => {
-                var [label, valueStr] = item.data.split(' = ');
+                const [label, valueStr] = item.data.split(' = ');
 
                 // If it can't be parsed, move to next item
                 if (!label || !valueStr) return sets;
 
-                var value = Number(valueStr);
+                const value = Number(valueStr);
 
                 const dataPoint = { x: item.time, y: value }
                 // Find the set with the label

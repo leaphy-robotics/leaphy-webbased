@@ -30,7 +30,7 @@ export default class Avrdude extends BaseProtocol {
         avrdude.FS.writeFile('/tmp/avrdude.conf', avrdudeConfig)
         avrdude.FS.writeFile('/tmp/program.hex', response['hex'])
         // get board
-        const mcu = this.uploader.appState.getSelectedRobotType().microcontroller
+        const mcu = this.uploader.appState.getSelectedRobotType().protocol?.microcontroller
         if (!supportedMicrocontrollers.includes(mcu)) {
             throw new Error('Unsupported microcontroller')
         }

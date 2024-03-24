@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { AppState } from 'src/app/state/app.state';
 import {PythonUploaderService} from "../../../../services/python-uploader/PythonUploader.service";
-import {BackEndState} from "../../../../state/backend.state";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
 
 @Component({
