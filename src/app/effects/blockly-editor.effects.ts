@@ -34,6 +34,7 @@ import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
 import {genericRobotType, microPythonRobotType, RobotType} from "../domain/robot.type";
 import {WorkspaceService} from "../services/workspace.service";
+import {LocalStorageService} from "../services/localstorage.service";
 
 function isJSON(data: string) {
     try {
@@ -63,7 +64,8 @@ export class BlocklyEditorEffects {
         private appState: AppState,
         private codeEditorState: CodeEditorState,
         private http: HttpClient,
-        private workspaceService: WorkspaceService
+        private workspaceService: WorkspaceService,
+        private localStorage: LocalStorageService
     ) {
         // Variables:
         Extensions.registerMixin(
@@ -120,8 +122,10 @@ export class BlocklyEditorEffects {
         // When the language is changed, save the workspace temporarily
         this.appState.changedLanguage$
             .pipe(filter(language => !!language))
-            .subscribe(() => {
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingTemp);
+            .pipe(withLatestFrom(this.blocklyState.workspaceJSON$, this.appState.selectedRobotType$))
+            .subscribe(([, workspaceXml]) => {
+                this.workspaceService.saveWorkspaceTemp(workspaceXml).then(() => {});
+                this.localStorage.store("changedLanguage", this.appState.getSelectedRobotType().id);
             });
 
         // When all prerequisites are there, Create a new workspace and open the codeview if needed

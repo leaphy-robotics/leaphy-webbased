@@ -293,4 +293,38 @@ export class WorkspaceService {
         sessionStorage.removeItem('robotType');
         sessionStorage.removeItem('type');
     }
+
+    public async restoreWorkspaceTempViolenly() {
+        // restory workspace from session storage but don't care about if we selected the same robot type or the current editor
+        const workspaceTemp = sessionStorage.getItem('workspace');
+        const robotType = sessionStorage.getItem('robotType');
+        const type = sessionStorage.getItem('type');
+        this.blocklyState.setProjectFileHandle(null);
+        this.appState.setSelectedRobotType(AppState.idToRobotType[robotType], true);
+        if (type == 'beginner') {
+            this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
+            this.restoreWorkspaceFromMessage({
+                payload: {projectFilePath: null, data: workspaceTemp, type: 'beginner', extension: robotType},
+                displayTimeout: 1000
+            })
+        } else if (type == 'advanced') {
+            this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+            try {
+                this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
+                this.codeEditorState.setOriginalCode(workspaceTemp);
+                this.codeEditorState.setCode(workspaceTemp);
+            } catch (error) {
+                console.log('Error:', error.message);
+            }
+        } else if (type == 'python') {
+            this.appState.setSelectedCodeEditor(CodeEditorType.Python);
+            try {
+                this.codeEditorState.getAceEditor().session.setValue(workspaceTemp);
+                this.codeEditorState.setOriginalCode(workspaceTemp);
+                this.codeEditorState.setCode(workspaceTemp);
+            } catch (error) {
+                console.log('Error:', error.message);
+            }
+        }
+    }
 }

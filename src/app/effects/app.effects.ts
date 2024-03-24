@@ -8,6 +8,7 @@ import {LocalStorageService} from "../services/localstorage.service";
 import {MatDialog} from "@angular/material/dialog";
 import {ChangeLogDialog} from "../modules/core/dialogs/change-log/change-log.dialog";
 import showdown from "showdown";
+import {WorkspaceService} from "../services/workspace.service";
 
 @Injectable({
     providedIn: 'root',
@@ -20,7 +21,8 @@ export class AppEffects {
         private translate: TranslateService,
         private router: Router,
         private localStorage: LocalStorageService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private workspaceService: WorkspaceService
     ) {
 
         // Use the current language to translate the angular strings
@@ -115,6 +117,14 @@ export class AppEffects {
 
                 }
                 this.localStorage.store('releaseVersion', releaseVersion);
+
+                const robotId = this.localStorage.fetch('changedLanguage');
+                console.log(robotId);
+                if (robotId) {
+                    this.localStorage.store('changedLanguage', '');
+                    this.workspaceService.restoreWorkspaceTempViolenly();
+                }
             })
+
     }
 }
