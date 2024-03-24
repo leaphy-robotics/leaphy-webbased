@@ -157,7 +157,7 @@ export class BlocklyEditorEffects {
                 this.blocklyState.setWorkspace(workspace);
                 this.blocklyState.setToolboxXml(toolboxXmlString);
                 if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
-                    this.workspaceService.restoreWorkspaceTemp();
+                    this.workspaceService.restoreWorkspaceTemp().then(() => {});
                 }
                 toolbox.selectItemByPosition(0);
                 toolbox.refreshTheme();

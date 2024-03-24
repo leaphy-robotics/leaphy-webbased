@@ -51,7 +51,7 @@ export class CodeEditorEffects {
                 aceEditor.session.setValue(startingCode);
                 this.codeEditorState.setOriginalCode(startingCode);
                 this.codeEditorState.setCode(startingCode);
-                this.workspaceService.restoreWorkspaceTemp();
+                this.workspaceService.restoreWorkspaceTemp().then(() => {});
 
                 aceEditor.on("change", () => {
                     const changedCode = aceEditor.getValue();

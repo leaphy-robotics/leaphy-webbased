@@ -20,11 +20,7 @@ import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
-import { MatDialog } from '@angular/material/dialog';
 import { version } from '../../../package.json';
-import Avrdude from "../services/arduino-uploader/protocols/avrdude";
-import DFU from "../services/arduino-uploader/protocols/dfu";
-import Pico from "../services/arduino-uploader/protocols/pico";
 
 @Injectable({
     providedIn: 'root'
@@ -132,7 +128,7 @@ export class AppState {
     private defaultLanguage = new Language('nl', 'Nederlands')
     private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
 
-    constructor(private localStorage: LocalStorageService, private dialog: MatDialog) {
+    constructor(private localStorage: LocalStorageService) {
 
         this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
         this.isDesktop$ = this.isDesktopSubject$.asObservable();

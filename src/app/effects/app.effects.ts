@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AppState } from '../state/app.state';
 import { TranslateService } from '@ngx-translate/core';
 import { filter, withLatestFrom } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CodeEditorType } from '../domain/code-editor.type';
 import {LocalStorageService} from "../services/localstorage.service";

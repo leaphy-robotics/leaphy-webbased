@@ -44,7 +44,7 @@ export class WorkspaceEffects {
                     .pipe(withLatestFrom(this.appState.codeEditor$))
                     .pipe(filter(([status]) => status === WorkspaceStatus.Finding))
                     .subscribe(([,]) => {
-                        workspaceService.restoreWorkspace();
+                        workspaceService.restoreWorkspace().then(() => {});
                     });
 
                 // When the workspace is being saved as a new project
@@ -53,25 +53,25 @@ export class WorkspaceEffects {
                     .pipe(filter(([status]) => status === WorkspaceStatus.SavingAs))
                     .pipe(withLatestFrom(this.appState.selectedRobotType$))
                     .subscribe(([, robotType]) => {
-                        workspaceService.saveWorkspaceAs(robotType.id);
+                        workspaceService.saveWorkspaceAs(robotType.id).then(() => {});
                     });
 
                 this.blocklyEditorState.workspaceStatus$
                     .pipe(withLatestFrom(this.appState.codeEditor$))
                     .pipe(filter(([status]) => status === WorkspaceStatus.Saving))
                     .subscribe(() => {
-                        workspaceService.saveWorkspace();
+                        workspaceService.saveWorkspace().then(() => {});
                     });
 
                 // When the workspace is being temporarily saved
                 this.blocklyEditorState.workspaceStatus$
                     .pipe(filter(status => status === WorkspaceStatus.SavingTemp))
                     .pipe(withLatestFrom(this.blocklyEditorState.workspaceJSON$, this.appState.selectedRobotType$))
-                    .subscribe(([, workspaceXml, robotType]) => {
+                    .subscribe(([, workspaceXml]) => {
                         if (CodeEditorType.CPP == this.appState.getCurrentEditor() || CodeEditorType.Python == this.appState.getCurrentEditor()) {
-                            this.workspaceService.saveWorkspaceTemp(workspaceXml);
+                            this.workspaceService.saveWorkspaceTemp(workspaceXml).then(() => {});
                         } else {
-                            this.workspaceService.saveWorkspaceTemp(workspaceXml);
+                            this.workspaceService.saveWorkspaceTemp(workspaceXml).then(() => {});
                         }
                     });
             });

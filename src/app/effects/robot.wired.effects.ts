@@ -63,7 +63,7 @@ export class RobotWiredEffects {
                     },
                 });
 
-                this.webserial.serialMonitor(outputStream);
+                this.webserial.serialMonitor(outputStream).then(() => {});
             });
     }
 

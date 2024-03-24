@@ -1,7 +1,5 @@
 import { Injectable, ElementRef } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { SketchStatus } from "../domain/sketch.status";
-import { map, filter } from "rxjs/operators";
 import { WorkspaceStatus } from "../domain/workspace.status";
 import { LocalStorageService } from "../services/localstorage.service";
 import {PythonFile} from "../domain/python-file.type";
@@ -28,7 +26,7 @@ export class BlocklyEditorState {
     private isSideNavOpenSubject$ = new BehaviorSubject(false);
     public isSideNavOpen$ = this.isSideNavOpenSubject$.asObservable();
 
-    private blocklyElementSubject$ = new BehaviorSubject<ElementRef<any>>(null);
+    private blocklyElementSubject$ = new BehaviorSubject<ElementRef>(null);
     public blocklyElement$ = this.blocklyElementSubject$.asObservable();
 
     private workspaceStatusSubject$: BehaviorSubject<WorkspaceStatus> = new BehaviorSubject(
@@ -78,14 +76,14 @@ export class BlocklyEditorState {
     private isSoundOnSubject$: BehaviorSubject<boolean>;
     public isSoundOn$: Observable<boolean>;
 
-    private playSoundFunctionSubject$ = new BehaviorSubject<(name, opt_volume) => void>(null);
+    private playSoundFunctionSubject$ = new BehaviorSubject<(name: string, opt_volume: number) => void>(null);
     public playSoundFunction$ = this.playSoundFunctionSubject$.asObservable();
 
     public setIsSideNavOpen(status: boolean) {
         this.isSideNavOpenSubject$.next(status);
     }
 
-    public setBlocklyElement(element: ElementRef<any>) {
+    public setBlocklyElement(element: ElementRef) {
         this.blocklyElementSubject$.next(element);
     }
 
@@ -127,7 +125,7 @@ export class BlocklyEditorState {
         this.isSoundOnSubject$.next(isSoundOn);
     }
 
-    public setPlaySoundFunction(fn: (name, opt_volume) => void) {
+    public setPlaySoundFunction(fn: (name: string, opt_volume: number) => void) {
         this.playSoundFunctionSubject$.next(fn);
     }
 

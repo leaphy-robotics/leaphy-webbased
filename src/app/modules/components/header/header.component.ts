@@ -125,7 +125,7 @@ export class HeaderComponent {
             if (result) {
                 if (result == "HELP_ENVIRONMENT") {
                     const langcode = this.appState.getCurrentLanguageCode();
-                    this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
+                    this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true}).then(() => {});
                 }
             }
         });
@@ -136,15 +136,13 @@ export class HeaderComponent {
         const code = this.codeEditorState.getCode();
         const libraries = [...robotType.libs];
         libraries.push(...this.codeEditorState.getInstalledLibraries().map(lib => `${lib.name}@${lib.version}`));
-        const board = robotType.fqbn;
-
         try {
             if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
                 await this.uploaderService.runCode(code)
             } else {
                 this.dialog.open(UploadDialog, {
                     width: '450px', disableClose: true,
-                    data: {source_code: code, libraries: libraries, board: board}
+                    data: {source_code: code, libraries: libraries, board: robotType.fqbn}
                 }).afterClosed().subscribe((result) => {
                     if (result) {
                         if (result == "HELP_ENVIRONMENT") {
@@ -206,11 +204,11 @@ export class HeaderComponent {
 
     public onBackToBlocks() {
         if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
-            this.router.navigate(['/blocks'], { skipLocationChange: true });
+            this.router.navigate(['/blocks'], {skipLocationChange: true}).then(() => {});
         else if (this.appState.getCurrentEditor() == CodeEditorType.CPP)
-            this.router.navigate(['/cppEditor'], { skipLocationChange: true });
+            this.router.navigate(['/cppEditor'], { skipLocationChange: true }).then(() => {});
         else if (this.appState.getCurrentEditor() == CodeEditorType.Python)
-            this.router.navigate(['/pythonEditor'], { skipLocationChange: true });
+            this.router.navigate(['/pythonEditor'], { skipLocationChange: true }).then(() => {});
     }
 
     public onExamplesClicked() {
