@@ -14,6 +14,7 @@ import {FileExplorerDialog} from "../modules/core/dialogs/file-explorer/file-exp
 import {WorkspaceStatus} from "../domain/workspace.status";
 import {StatusMessageDialog} from "../modules/core/dialogs/status-message/status-message.dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import * as Blockly from "blockly/core";
 
 const fileExtensions = [
     ".l_flitz_uno",
@@ -33,6 +34,15 @@ const fileExtensions = [
     ".py",
 ]
 
+function isJSON(data: string) {
+    try {
+        JSON.parse(data)
+        return true
+    } catch (e) {
+        return false
+    }
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -42,7 +52,6 @@ export class WorkspaceService {
 
     constructor(private dialog: MatDialog,
                 private appState: AppState,
-                private blocklyEditorState: BlocklyEditorState,
                 private codeEditorState: CodeEditorState,
                 private robotWiredState: RobotWiredState,
                 private uploaderService: PythonUploaderService,
@@ -70,14 +79,14 @@ export class WorkspaceService {
                 this.appState.setSelectedCodeEditor(CodeEditorType.Python);
             }
             this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
-            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+            await this.loadWorkspace();
             this.appState.setSelectedRobotType(genericRobotType, true);
             return;
         }
         this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);
         this.blocklyState.setWorkspaceJSON(message.payload.data as string);
         this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
-        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
+        await this.loadWorkspace();
     }
 
     /*
@@ -112,7 +121,7 @@ export class WorkspaceService {
             if (name == null)
                 return
             if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
-                const data = this.blocklyEditorState.workspaceJSON;
+                const data = this.blocklyState.workspaceJSON;
                 const blob = new Blob([data], { type: 'text/plain' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -294,7 +303,10 @@ export class WorkspaceService {
         sessionStorage.removeItem('type');
     }
 
-    public async restoreWorkspaceTempViolenly() {
+    /*
+    * Restore the workspace from the session storage without checking the current editor or the selected robot type
+     */
+    public async forceRestoreWorkspaceTemp() {
         // restory workspace from session storage but don't care about if we selected the same robot type or the current editor
         const workspaceTemp = sessionStorage.getItem('workspace');
         const robotType = sessionStorage.getItem('robotType');
@@ -325,6 +337,24 @@ export class WorkspaceService {
             } catch (error) {
                 console.log('Error:', error.message);
             }
+        }
+    }
+
+
+    /*
+    * Load workspace
+     */
+    public async loadWorkspace() {
+        const workspace = this.blocklyState.getWorkspace();
+        const workspaceXml = this.blocklyState.workspaceJSON;
+        if (!workspace) return;
+        if (!workspaceXml) return;
+        workspace.clear();
+
+        if (isJSON(workspaceXml)) Blockly.serialization.workspaces.load(JSON.parse(workspaceXml), workspace)
+        else {
+            const xml = Blockly.utils.xml.textToDom(workspaceXml);
+            Blockly.Xml.domToWorkspace(xml, workspace);
         }
     }
 }

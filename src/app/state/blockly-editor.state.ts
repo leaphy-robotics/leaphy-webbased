@@ -29,11 +29,6 @@ export class BlocklyEditorState {
     private blocklyElementSubject$ = new BehaviorSubject<ElementRef>(null);
     public blocklyElement$ = this.blocklyElementSubject$.asObservable();
 
-    private workspaceStatusSubject$: BehaviorSubject<WorkspaceStatus> = new BehaviorSubject(
-        WorkspaceStatus.Clean
-    );
-    public workspaceStatus$ = this.workspaceStatusSubject$.asObservable();
-
     private blocklyConfigSubject$ = new BehaviorSubject<any>({
         scrollbars: true,
         zoom: {
@@ -87,10 +82,6 @@ export class BlocklyEditorState {
         this.blocklyElementSubject$.next(element);
     }
 
-    public setWorkspaceStatus(status: WorkspaceStatus) {
-        this.workspaceStatusSubject$.next(status);
-    }
-
     public setToolboxXml(toolboxXml: any) {
         this.toolboxXmlSubject$.next(toolboxXml);
     }
@@ -98,6 +89,10 @@ export class BlocklyEditorState {
     public setWorkspace(workspace: any) {
         workspace.resize();
         this.workspaceSubject$.next(workspace);
+    }
+
+    public getWorkspace(): any {
+        return this.workspaceSubject$.getValue();
     }
 
     public setWorkspaceJSON(workspaceXml: any) {

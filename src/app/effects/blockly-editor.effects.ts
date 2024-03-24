@@ -36,15 +36,6 @@ import {genericRobotType, microPythonRobotType, RobotType} from "../domain/robot
 import {WorkspaceService} from "../services/workspace.service";
 import {LocalStorageService} from "../services/localstorage.service";
 
-function isJSON(data: string) {
-    try {
-        JSON.parse(data)
-        return true
-    } catch (e) {
-        return false
-    }
-}
-
 const translationsMap = {
     en: translationsEn.default,
     nl: translationsNl.default,
@@ -208,24 +199,6 @@ export class BlocklyEditorEffects {
                     this.codeEditorState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
                     this.blocklyState.setWorkspaceJSON(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
                 });
-            });
-
-        // When the WorkspaceStatus is set to loading, load in the latest workspace XML
-        this.blocklyState.workspaceStatus$
-            .pipe(filter(status => status === WorkspaceStatus.Restoring))
-            .pipe(withLatestFrom(this.blocklyState.workspaceJSON$, this.blocklyState.workspace$))
-            .subscribe(async ([, workspaceXml, workspace]) => {
-                if (!workspace) return;
-                if (!workspaceXml) return;
-                workspace.clear();
-
-                if (isJSON(workspaceXml)) Blockly.serialization.workspaces.load(JSON.parse(workspaceXml), workspace)
-                else {
-                    const xml = Blockly.utils.xml.textToDom(workspaceXml);
-                    Blockly.Xml.domToWorkspace(xml, workspace);
-                }
-
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
             });
 
         // When the user presses undo or redo, trigger undo or redo on the workspace

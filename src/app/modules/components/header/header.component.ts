@@ -17,6 +17,7 @@ import {CodeEditorState} from "../../../state/code-editor.state";
 import {PythonUploaderService} from "../../../services/python-uploader/PythonUploader.service";
 import {ConnectPythonDialog} from "../../core/dialogs/connect-python/connect-python.dialog";
 import {StatusMessageDialog} from "../../core/dialogs/status-message/status-message.dialog";
+import {WorkspaceService} from "../../../services/workspace.service";
 
 @Component({
     selector: 'app-header',
@@ -34,7 +35,8 @@ export class HeaderComponent {
         private snackBar: MatSnackBar,
         private dialog: MatDialog,
         private codeEditorState: CodeEditorState,
-        private uploaderService: PythonUploaderService
+        private uploaderService: PythonUploaderService,
+        private workspaceService: WorkspaceService
     ) {
 
     }
@@ -44,7 +46,7 @@ export class HeaderComponent {
     }
 
     public onLoadWorkspaceClicked() {
-        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Finding);
+        this.workspaceService.restoreWorkspace().then(() => {});
     }
 
     public async onDownloadDriversClicked() {
@@ -98,7 +100,7 @@ export class HeaderComponent {
     }
 
     public onSaveWorkspaceClicked() {
-        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Saving);
+        this.workspaceService.saveWorkspace().then(() => {});
     }
 
     // To capture the keyboard shortcut for Saving a project
@@ -115,7 +117,7 @@ export class HeaderComponent {
     }
 
     public onSaveWorkspaceAsClicked() {
-        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingAs);
+        this.workspaceService.saveWorkspaceAs(this.appState.getSelectedRobotType().id).then(() => {});
     }
 
     public onConnectClicked() {

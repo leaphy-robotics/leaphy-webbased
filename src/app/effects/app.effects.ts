@@ -122,7 +122,7 @@ export class AppEffects {
                 console.log(robotId);
                 if (robotId) {
                     this.localStorage.store('changedLanguage', '');
-                    this.workspaceService.restoreWorkspaceTempViolenly();
+                    this.workspaceService.forceRestoreWorkspaceTemp().then(() => {});
                 }
             })
 
