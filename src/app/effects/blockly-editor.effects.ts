@@ -231,7 +231,7 @@ export class BlocklyEditorEffects {
             .subscribe(([redo, workspace]) => workspace.undo(redo));
 
 
-        // When Advanced CodeEditor is Selected, set the workspace status to SavingTemp and hide the sideNav
+        // When Advanced CodeEditor is Selected, hide the sideNav
         this.appState.codeEditor$
             .pipe(
                 pairwise(),
@@ -239,7 +239,6 @@ export class BlocklyEditorEffects {
             )
             .subscribe(() => {
                 this.blocklyState.setIsSideNavOpen(false);
-                //this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingTemp) ? no reason to do this?
             });
 
         // Toggle the isSideNavOpen state

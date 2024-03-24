@@ -5,6 +5,7 @@ import {CodeEditorState} from "../state/code-editor.state";
 import {AppState} from "../state/app.state";
 import {CodeEditorType} from "../domain/code-editor.type";
 import {WorkspaceService} from "../services/workspace.service";
+import {genericRobotType} from "../domain/robot.type";
 
 
 @Injectable({
@@ -63,7 +64,7 @@ export class CodeEditorEffects {
             .subscribe(codeEditor => {
                 if (codeEditor == CodeEditorType.Python) {
                     this.codeEditorState.setCode(this.codeEditorState.pythonProgram);
-                } else if (codeEditor == CodeEditorType.CPP) {
+                } else if (codeEditor == CodeEditorType.CPP && this.appState.getSelectedRobotType() == genericRobotType) {
                     this.codeEditorState.setCode(this.codeEditorState.originalProgram);
                 }
             });
