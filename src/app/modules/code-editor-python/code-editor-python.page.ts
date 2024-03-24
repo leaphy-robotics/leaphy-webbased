@@ -1,32 +1,36 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from "@angular/core";
-import { CodeEditorState } from "src/app/state/code-editor.state";
-import { CommonModule } from "@angular/common";
-import { SharedModule } from "../shared/shared.module";
-import { CoreModule } from "../core/core.module";
-import { WorkspaceService } from "../../services/workspace.service";
+import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {CodeEditorState} from 'src/app/state/code-editor.state';
+import {CommonModule} from "@angular/common";
+import {SharedModule} from "../shared/shared.module";
+import {CoreModule} from "../core/core.module";
+import {WorkspaceService} from "../../services/workspace.service";
+
 
 @Component({
-    selector: "app-code-editor-python",
+    selector: 'app-code-editor-python',
     standalone: true,
-    templateUrl: "./code-editor-python.page.html",
-    styleUrls: ["./code-editor-python.page.scss"],
-    imports: [CommonModule, SharedModule, CoreModule],
+    templateUrl: './code-editor-python.page.html',
+    styleUrls: ['./code-editor-python.page.scss'],
+    imports: [
+        CommonModule,
+        SharedModule,
+        CoreModule
+    ]
 })
 export class CodeEditorPythonPage implements AfterViewInit {
+
     @ViewChild("editor") private editor: ElementRef<HTMLElement>;
 
     constructor(
         private codeEditorState: CodeEditorState,
-        private workspaceService: WorkspaceService,
+        private workspaceService: WorkspaceService
     ) {}
 
     ngAfterViewInit(): void {
         this.codeEditorState.setAceElement(this.editor);
 
         window.addEventListener("beforeunload", async (event) => {
-            this.workspaceService.saveWorkspaceTemp(
-                this.codeEditorState.getCode(),
-            );
+            this.workspaceService.saveWorkspaceTemp(this.codeEditorState.getCode());
         });
     }
 }

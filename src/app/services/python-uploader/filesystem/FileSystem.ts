@@ -1,50 +1,37 @@
-import { readResponse, sendCommand } from "../comms/BoardCommunication";
+import {readResponse, sendCommand} from "../comms/BoardCommunication";
 
-async function dirExists(
-    writer: WritableStreamDefaultWriter,
-    reader: ReadableStreamDefaultReader,
-    path: string,
-) {
+async function dirExists(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string) {
     const dirExistsCommand = `import os; print(os.stat("${path}")[0] & 0x4000 != 0)`;
     await sendCommand(writer, dirExistsCommand);
     const { stdOut, stdErr, failed } = await readResponse(reader);
     if (failed) {
-        if (stdErr.includes("OSError: [Errno 2] ENOENT")) {
+        if (stdErr.includes('OSError: [Errno 2] ENOENT')) {
             return false;
         }
         throw new Error(stdErr);
     }
-    return stdOut.includes("True");
+    return stdOut.includes('True')
 }
 
-async function exists(
-    writer: WritableStreamDefaultWriter,
-    reader: ReadableStreamDefaultReader,
-    path: string,
-) {
+async function exists(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string) {
     const existsCommand = `import os; print(os.stat("${path}")[0] & 0x8000 != 0)`;
     await sendCommand(writer, existsCommand);
     const { stdOut, stdErr, failed } = await readResponse(reader);
     if (failed) {
-        if (stdErr.includes("OSError: [Errno 2] ENOENT")) {
+        if (stdErr.includes('OSError: [Errno 2] ENOENT')) {
             return false;
         }
         throw new Error(stdErr);
     }
-    return stdOut.includes("True");
+    return stdOut.includes('True')
 }
 
-async function put(
-    writer: WritableStreamDefaultWriter,
-    reader: ReadableStreamDefaultReader,
-    filename: string,
-    content: string,
-) {
+async function put(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, filename: string, content: string) {
     // make sure the dir above exists and above that
-    let dirs = filename.split("/");
+    let dirs = filename.split('/');
     for (let i = 0; i < dirs.length - 1; i++) {
-        const dir = dirs.slice(0, i + 1).join("/");
-        if (!(await dirExists(writer, reader, dir))) {
+        const dir = dirs.slice(0, i + 1).join('/');
+        if (!await dirExists(writer, reader, dir)) {
             await mkdir(writer, reader, dir);
         }
     }
@@ -57,11 +44,7 @@ async function put(
     }
 }
 
-async function get(
-    writer: WritableStreamDefaultWriter,
-    reader: ReadableStreamDefaultReader,
-    filename: string,
-) {
+async function get(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, filename: string) {
     const readCommand = `
 import sys
 with open('${filename}', 'rb') as infile:
@@ -79,11 +62,7 @@ with open('${filename}', 'rb') as infile:
     return stdOut;
 }
 
-async function mkdir(
-    writer: WritableStreamDefaultWriter,
-    reader: ReadableStreamDefaultReader,
-    path: string,
-) {
+async function mkdir(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string) {
     const mkdirCommand = `import os; os.mkdir("${path}")`;
     await sendCommand(writer, mkdirCommand);
     const { stdOut, stdErr, failed } = await readResponse(reader);
@@ -93,11 +72,7 @@ async function mkdir(
     return stdOut;
 }
 
-async function ls(
-    writer: WritableStreamDefaultWriter,
-    reader: ReadableStreamDefaultReader,
-    path: string,
-): Promise<{ name: string; isDir: boolean }[]> {
+async function ls(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string): Promise<{name: string, isDir: boolean}[]> {
     const lsCommand = `import os
 import json
 def ls(path):
@@ -120,12 +95,8 @@ print(ls("${path}"))`;
     return JSON.parse(stdOut);
 }
 
-async function rm(
-    writer: WritableStreamDefaultWriter,
-    reader: ReadableStreamDefaultReader,
-    path: string,
-) {
-    if (!(await exists(writer, reader, path))) {
+async function rm(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string) {
+    if (!await exists(writer, reader, path)) {
         return;
     }
     const rmCommand = `import os; os.remove("${path}")`;
@@ -136,24 +107,19 @@ async function rm(
     }
 }
 
-async function rmdir(
-    writer: WritableStreamDefaultWriter,
-    reader: ReadableStreamDefaultReader,
-    path: string,
-    recursive: boolean = false,
-) {
+async function rmdir(writer: WritableStreamDefaultWriter, reader: ReadableStreamDefaultReader, path: string, recursive: boolean = false) {
     // if it is recursive then delete all the files in the folder first
     if (recursive) {
         const dirContent = await ls(writer, reader, path);
         for (const file of dirContent) {
-            if (file["isDir"]) {
-                await rmdir(writer, reader, path + "/" + file["name"], true);
+            if (file['isDir']) {
+                await rmdir(writer, reader, path + '/' + file['name'], true);
             } else {
-                await rm(writer, reader, path + "/" + file["name"]);
+                await rm(writer, reader, path + '/' + file['name']);
             }
         }
     }
-    if (!(await dirExists(writer, reader, path))) {
+    if (!await dirExists(writer, reader, path)) {
         return;
     }
     const rmdirCommand = `import os; os.rmdir("${path}")`;
@@ -164,4 +130,4 @@ async function rmdir(
     }
 }
 
-export { dirExists, exists, put, rm, rmdir, get, ls, mkdir };
+export { dirExists, exists, put, rm, rmdir, get, ls, mkdir }

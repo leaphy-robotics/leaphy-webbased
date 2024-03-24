@@ -2,13 +2,15 @@ import { Injectable, ElementRef } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { WorkspaceStatus } from "../domain/workspace.status";
 import { LocalStorageService } from "../services/localstorage.service";
-import { PythonFile } from "../domain/python-file.type";
+import {PythonFile} from "../domain/python-file.type";
+
 
 @Injectable({
     providedIn: "root",
 })
 export class BlocklyEditorState {
-    constructor(private localStorage: LocalStorageService) {
+
+    constructor(private localStorage: LocalStorageService){
         let isSoundOn = this.localStorage.fetch<boolean>("isSoundOn");
         if (isSoundOn === null) {
             this.localStorage.store("isSoundOn", true);
@@ -19,8 +21,7 @@ export class BlocklyEditorState {
     }
 
     private isSideNavOpenToggledSubject$ = new BehaviorSubject<boolean>(false);
-    public isSideNavOpenToggled$ =
-        this.isSideNavOpenToggledSubject$.asObservable();
+    public isSideNavOpenToggled$ = this.isSideNavOpenToggledSubject$.asObservable();
 
     private isSideNavOpenSubject$ = new BehaviorSubject(false);
     public isSideNavOpen$ = this.isSideNavOpenSubject$.asObservable();
@@ -28,8 +29,9 @@ export class BlocklyEditorState {
     private blocklyElementSubject$ = new BehaviorSubject<ElementRef>(null);
     public blocklyElement$ = this.blocklyElementSubject$.asObservable();
 
-    private workspaceStatusSubject$: BehaviorSubject<WorkspaceStatus> =
-        new BehaviorSubject(WorkspaceStatus.Clean);
+    private workspaceStatusSubject$: BehaviorSubject<WorkspaceStatus> = new BehaviorSubject(
+        WorkspaceStatus.Clean
+    );
     public workspaceStatus$ = this.workspaceStatusSubject$.asObservable();
 
     private blocklyConfigSubject$ = new BehaviorSubject<any>({
@@ -62,9 +64,7 @@ export class BlocklyEditorState {
     private workspaceJSONSubject$ = new BehaviorSubject(null);
     public workspaceJSON$ = this.workspaceJSONSubject$.asObservable();
 
-    private projectFileHandleSubject$ = new BehaviorSubject<
-        FileSystemFileHandle | PythonFile
-    >(null);
+    private projectFileHandleSubject$ = new BehaviorSubject<FileSystemFileHandle | PythonFile>(null);
     public projectFileHandle$ = this.projectFileHandleSubject$.asObservable();
 
     private undoSubject$ = new BehaviorSubject<boolean>(false);
@@ -76,9 +76,7 @@ export class BlocklyEditorState {
     private isSoundOnSubject$: BehaviorSubject<boolean>;
     public isSoundOn$: Observable<boolean>;
 
-    private playSoundFunctionSubject$ = new BehaviorSubject<
-        (name: string, opt_volume: number) => void
-    >(null);
+    private playSoundFunctionSubject$ = new BehaviorSubject<(name: string, opt_volume: number) => void>(null);
     public playSoundFunction$ = this.playSoundFunctionSubject$.asObservable();
 
     public setIsSideNavOpen(status: boolean) {
@@ -127,9 +125,7 @@ export class BlocklyEditorState {
         this.isSoundOnSubject$.next(isSoundOn);
     }
 
-    public setPlaySoundFunction(
-        fn: (name: string, opt_volume: number) => void,
-    ) {
+    public setPlaySoundFunction(fn: (name: string, opt_volume: number) => void) {
         this.playSoundFunctionSubject$.next(fn);
     }
 

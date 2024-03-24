@@ -1,4 +1,4 @@
 export const environment = {
-    production: false,
-    backend: "https://webservice.leaphyeasybloqs.com",
+  production: false,
+  backend: 'https://webservice.leaphyeasybloqs.com',
 };

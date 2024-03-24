@@ -1,7 +1,8 @@
 export class PythonFile {
-    path: string;
+	path: string;
 
-    constructor(path: string) {
-        this.path = path;
-    }
+	constructor(path: string) {
+		this.path = path;
+	}
 }
+
