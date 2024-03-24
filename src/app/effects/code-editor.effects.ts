@@ -7,6 +7,7 @@ import {CodeEditorState} from "../state/code-editor.state";
 import {AppState} from "../state/app.state";
 import {CodeEditorType} from "../domain/code-editor.type";
 import {BackendWiredEffects} from "./backend.wired.effects";
+import {WorkspaceService} from "../services/workspace.service";
 
 
 @Injectable({
@@ -21,7 +22,8 @@ export class CodeEditorEffects {
         private backEndState: BackEndState,
         private codeEditorState: CodeEditorState,
         private appState: AppState,
-        private backEndWiredEffects: BackendWiredEffects
+        private backEndWiredEffects: BackendWiredEffects,
+        private workspaceService: WorkspaceService
     ) {
 
         this.codeEditorState.aceElement$
@@ -55,7 +57,7 @@ export class CodeEditorEffects {
                 aceEditor.session.setValue(startingCode);
                 this.codeEditorState.setOriginalCode(startingCode);
                 this.codeEditorState.setCode(startingCode);
-                this.backEndWiredEffects.send('restore-workspace-temp', this.appState.getSelectedRobotType().id);
+                this.workspaceService.restoreWorkspaceTemp();
 
                 aceEditor.on("change", () => {
                     const changedCode = aceEditor.getValue();

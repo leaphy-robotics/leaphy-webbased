@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {BlocklyEditorState} from 'src/app/state/blockly-editor.state';
-import {BackendWiredEffects} from "../../effects/backend.wired.effects";
 import {CommonModule} from "@angular/common";
 import {SharedModule} from "../shared/shared.module";
 import {BlocklyEditorModule} from "./blockly-editor.module";
+import {WorkspaceService} from "../../services/workspace.service";
 
 @Component({
     standalone: true,
@@ -20,11 +20,11 @@ import {BlocklyEditorModule} from "./blockly-editor.module";
 export class BlocklyEditorPage {
     constructor(
         public blocklyState: BlocklyEditorState,
-        private backendWiredEffects: BackendWiredEffects,
-        private blocklyEditorState: BlocklyEditorState
+        private blocklyEditorState: BlocklyEditorState,
+        private workspaceService: WorkspaceService
     ) {
         window.addEventListener("beforeunload", async (event) => {
-            await this.backendWiredEffects.send('save-workspace-temp', {data: this.blocklyEditorState.workspaceJSON})
+            this.workspaceService.saveWorkspaceTemp(this.blocklyEditorState.workspaceJSON);
         });
     }
 }

@@ -173,9 +173,6 @@ export class AppState {
     private changedLanguageSubject$ = new BehaviorSubject(null);
     public changedLanguage$ = this.changedLanguageSubject$.asObservable();
 
-    private showHelpPageSubject$ = new BehaviorSubject<boolean>(false);
-    public showHelpPage$ = this.showHelpPageSubject$.asObservable();
-
     private isCodeEditorToggleConfirmedSubject$ = new BehaviorSubject<boolean>(false);
     public isCodeEditorToggleConfirmed$ = this.isCodeEditorToggleConfirmedSubject$.asObservable();
 
@@ -202,10 +199,6 @@ export class AppState {
     public setCurrentLanguage(language: Language) {
         this.localStorage.store('currentLanguage', language);
         this.currentLanguageSubject$.next(language);
-    }
-
-    public setShowHelpPage(show: boolean) {
-        this.showHelpPageSubject$.next(show);
     }
 
     public switchCodeEditor() {

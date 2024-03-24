@@ -8,7 +8,6 @@ import {combineLatest, Observable} from 'rxjs';
 import {WorkspaceStatus} from '../domain/workspace.status';
 import {AppState} from '../state/app.state';
 import {CodeEditorType} from '../domain/code-editor.type';
-import {BackendWiredEffects} from "./backend.wired.effects";
 import * as Blockly from 'blockly/core';
 import '@blockly/field-bitmap'
 import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
@@ -36,6 +35,7 @@ import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
 import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
 import {genericRobotType, microPythonRobotType, RobotType} from "../domain/robot.type";
+import {WorkspaceService} from "../services/workspace.service";
 
 function isJSON(data: string) {
     try {
@@ -63,10 +63,10 @@ export class BlocklyEditorEffects {
     constructor(
         private blocklyState: BlocklyEditorState,
         private backEndState: BackEndState,
-        private backEndWiredEffects: BackendWiredEffects,
         private appState: AppState,
         private codeEditorState: CodeEditorState,
         private http: HttpClient,
+        private workspaceService: WorkspaceService
     ) {
         // Variables:
         Extensions.registerMixin(
@@ -160,7 +160,7 @@ export class BlocklyEditorEffects {
                 this.blocklyState.setWorkspace(workspace);
                 this.blocklyState.setToolboxXml(toolboxXmlString);
                 if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
-                    this.backEndWiredEffects.send('restore-workspace-temp', this.appState.getSelectedRobotType().id);
+                    this.workspaceService.restoreWorkspaceTemp();
                 }
                 toolbox.selectItemByPosition(0);
                 toolbox.refreshTheme();

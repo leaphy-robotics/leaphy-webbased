@@ -129,7 +129,7 @@ export class HeaderComponent {
     }
 
     public onHelpClicked() {
-        this.appState.setShowHelpPage(true);
+        window.open("https://discord.com/invite/Yeg7Kkrq5W", '_blank').focus()
     }
 
     public onEmailClicked() {
