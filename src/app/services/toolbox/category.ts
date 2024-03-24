@@ -207,7 +207,7 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
     }
 
     /**
-     * Creates the parent of the contents container. All clicks will happen on
+     * Creates the parent of the contents' container. All clicks will happen on
      * this div.
      *
      * @returns The div that holds the contents container.
@@ -227,7 +227,7 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
 
     /**
      * Creates the container for the label and icon.
-     * This is necessary so we can set all subcategory pointer events to none.
+     * This is necessary, so we can set all subcategory pointer events to none.
      *
      * @returns The div that holds the icon and the label.
      */
@@ -342,7 +342,7 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
     /**
      * Gets the HTML element that is clickable.
      * The parent toolbox element receives clicks. The parent toolbox will add an
-     * ID to this element so it can pass the onClick event to the correct
+     * ID to this element, so it can pass the onClick event to the correct
      * toolboxItem.
      *
      * @returns The HTML element that receives clicks.

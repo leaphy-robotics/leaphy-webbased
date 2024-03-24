@@ -1,9 +1,7 @@
 import {clearReadBuffer, delay} from './utils'
 import {RobotWiredState} from "../../state/robot.wired.state";
 import {AppState} from "../../state/app.state";
-import BaseProtocol from "./protocols/base";
 import {UploadState} from "../../state/upload.state";
-import Avrdude from "./protocols/avrdude";
 
 class Arduino {
     port: SerialPort = null
@@ -85,7 +83,7 @@ class Arduino {
 
             this.readStream = this.port.readable.getReader();
             this.writeStream = this.port.writable.getWriter();
-            await clearReadBuffer(this.robotWiredState, this.readStream);
+            await clearReadBuffer(this.readStream);
             this.readStream.releaseLock();
 
             this.robotWiredState.setSerialWrite(this.writeStream);
@@ -171,8 +169,8 @@ class Arduino {
     }
 
     /**
-     * Check if webserial is available.
-     * @returns {boolean} True if webserial is available.
+     * Check if web-serial is available.
+     * @returns {boolean} True if web-serial is available.
      */
     static isAvailable(): boolean {
         return 'serial' in navigator

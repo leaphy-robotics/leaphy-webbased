@@ -21,7 +21,7 @@ async function sendCommand(writer: WritableStreamDefaultWriter, command: string)
     }
 }
 
-async function readResponse(reader: ReadableStreamDefaultReader<Uint8Array>, timeoutMs: number = 1000) {
+async function readResponse(reader: ReadableStreamDefaultReader<Uint8Array>) {
     let fullReadResponse = new Uint8Array();
     let stdOut = "";
     let stdErr = "";
@@ -38,7 +38,7 @@ async function readResponse(reader: ReadableStreamDefaultReader<Uint8Array>, tim
     let failed = stdErr.length > 0;
     if (!stdOut.includes("OK")) {
         failed = true;
-        stdErr = "Compile error occured: " + stdErr
+        stdErr = "Compile error occurred: " + stdErr
     } else {
         stdOut = stdOut.slice(2)
     }

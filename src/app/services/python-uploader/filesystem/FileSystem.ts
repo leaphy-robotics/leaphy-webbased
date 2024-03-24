@@ -38,7 +38,7 @@ async function put(writer: WritableStreamDefaultWriter, reader: ReadableStreamDe
     content = btoa(content);
     const writeCommand = `import binascii; f = open("${filename}", "w"); f.write(binascii.a2b_base64("${content}")); f.close()`;
     await sendCommand(writer, writeCommand);
-    const { stdOut, stdErr, failed } = await readResponse(reader);
+    const {stdErr, failed } = await readResponse(reader);
     if (failed) {
         throw new Error(stdErr);
     }
@@ -101,7 +101,7 @@ async function rm(writer: WritableStreamDefaultWriter, reader: ReadableStreamDef
     }
     const rmCommand = `import os; os.remove("${path}")`;
     await sendCommand(writer, rmCommand);
-    const { stdOut, stdErr, failed } = await readResponse(reader);
+    const {stdErr, failed } = await readResponse(reader);
     if (failed) {
         throw new Error(stdErr + "while getting: " + path);
     }
@@ -124,7 +124,7 @@ async function rmdir(writer: WritableStreamDefaultWriter, reader: ReadableStream
     }
     const rmdirCommand = `import os; os.rmdir("${path}")`;
     await sendCommand(writer, rmdirCommand);
-    const { stdOut, stdErr, failed } = await readResponse(reader);
+    const {stdErr, failed } = await readResponse(reader);
     if (failed) {
         throw new Error(stdErr);
     }
