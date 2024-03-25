@@ -1,7 +1,7 @@
 <div class="info">
   <img class="contributeLogo" src="./assets/contribute-foundation.png" />
   <p>
-    {{"INFO_INTRO"|translate}} 
+    {{"INFO_INTRO"|translate}}
     <a href="https://github.com/leaphy-robotics" target="_blank">{{"INFO_GITHUB"|translate}}</a><br />
   </p>
   <p>
@@ -22,7 +22,7 @@
 
   <div class="version">
     <p>
-      {{appState.packageJsonVersion$ | async}}
+      {{(appState.releaseVersion$ | async)}}
     </p>
   </div>
 </div>

@@ -1,193 +1,133 @@
 import { Injectable, ElementRef } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
-import { SketchStatus } from "../domain/sketch.status";
-import { map, filter } from "rxjs/operators";
-import { WorkspaceStatus } from "../domain/workspace.status";
 import { LocalStorageService } from "../services/localstorage.service";
-import "prismjs";
-import "prismjs/components/prism-clike";
-import "prismjs/components/prism-c";
-import "prismjs/components/prism-cpp";
-import "prismjs/components/prism-arduino";
+import {PythonFile} from "../domain/python-file.type";
 
-declare var Prism: any;
 
 @Injectable({
-  providedIn: "root",
+    providedIn: "root",
 })
 export class BlocklyEditorState {
 
-  constructor(private localStorage: LocalStorageService){
-    var isSoundOn = this.localStorage.fetch<boolean>("isSoundOn");
-    if (isSoundOn === null) {
-      this.localStorage.store("isSoundOn", true);
-      isSoundOn = true;
+    constructor(private localStorage: LocalStorageService){
+        let isSoundOn = this.localStorage.fetch<boolean>("isSoundOn");
+        if (isSoundOn === null) {
+            this.localStorage.store("isSoundOn", true);
+            isSoundOn = true;
+        }
+        this.isSoundOnSubject$ = new BehaviorSubject<boolean>(isSoundOn);
+        this.isSoundOn$ = this.isSoundOnSubject$.asObservable();
     }
-    this.isSoundOnSubject$ = new BehaviorSubject<boolean>(isSoundOn);
-    this.isSoundOn$ = this.isSoundOnSubject$.asObservable();
-  }
 
-  private codeSubject$ = new BehaviorSubject("");
-  public code$ = this.codeSubject$.asObservable();
+    private isSideNavOpenToggledSubject$ = new BehaviorSubject<boolean>(false);
+    public isSideNavOpenToggled$ = this.isSideNavOpenToggledSubject$.asObservable();
 
-  public tokenizedCode$ = this.code$.pipe(filter((code) => !!code)).pipe(
-    map((code) => {
-      return Prism.highlight(code, Prism.languages.arduino);
-    })
-  );
+    private isSideNavOpenSubject$ = new BehaviorSubject(false);
+    public isSideNavOpen$ = this.isSideNavOpenSubject$.asObservable();
 
-  private sketchStatusSubject$: BehaviorSubject<SketchStatus> = new BehaviorSubject(
-    SketchStatus.UnableToSend
-  );
-  public sketchStatus$ = this.sketchStatusSubject$.asObservable();
+    private blocklyElementSubject$ = new BehaviorSubject<ElementRef>(null);
+    public blocklyElement$ = this.blocklyElementSubject$.asObservable();
 
-  private sketchStatusMessageSubject$ = new BehaviorSubject("");
-  public sketchStatusMessage$ = this.sketchStatusMessageSubject$.asObservable();
+    private blocklyConfigSubject$ = new BehaviorSubject<any>({
+        scrollbars: true,
+        zoom: {
+            controls: true,
+            wheel: false,
+            startScale: 0.8,
+            maxScale: 3,
+            minScale: 0.3,
+            scaleSpeed: 1.2,
+        },
+        trashcan: true,
+        move: {
+            scrollbars: true,
+            drag: true,
+            wheel: true,
+        },
+        renderer: "zelos",
+        media: "media",
+    });
+    public blocklyConfig$ = this.blocklyConfigSubject$.asObservable();
 
-  private isSideNavOpenToggledSubject$ = new BehaviorSubject<boolean>(false);
-  public isSideNavOpenToggled$ = this.isSideNavOpenToggledSubject$.asObservable();
+    private toolboxXmlSubject$ = new BehaviorSubject(null);
+    public toolboxXml$ = this.toolboxXmlSubject$.asObservable();
 
-  private isSideNavOpenSubject$ = new BehaviorSubject(false);
-  public isSideNavOpen$ = this.isSideNavOpenSubject$.asObservable();
+    private workspaceSubject$ = new BehaviorSubject<any>(null);
+    public workspace$ = this.workspaceSubject$.asObservable();
 
-  private blocklyElementSubject$ = new BehaviorSubject<ElementRef<any>>(null);
-  public blocklyElement$ = this.blocklyElementSubject$.asObservable();
+    private workspaceJSONSubject$ = new BehaviorSubject(null);
+    public workspaceJSON$ = this.workspaceJSONSubject$.asObservable();
 
-  private workspaceStatusSubject$: BehaviorSubject<WorkspaceStatus> = new BehaviorSubject(
-    WorkspaceStatus.Clean
-  );
-  public workspaceStatus$ = this.workspaceStatusSubject$.asObservable();
+    private projectFileHandleSubject$ = new BehaviorSubject<FileSystemFileHandle | PythonFile>(null);
+    public projectFileHandle$ = this.projectFileHandleSubject$.asObservable();
 
-  private blocklyConfigSubject$ = new BehaviorSubject<any>({
-    scrollbars: true,
-    zoom: {
-      controls: true,
-      wheel: false,
-      startScale: 0.8,
-      maxScale: 3,
-      minScale: 0.3,
-      scaleSpeed: 1.2,
-    },
-    trashcan: true,
-    move: {
-      scrollbars: true,
-      drag: true,
-      wheel: true,
-    },
-    renderer: "zelos",
-  });
-  public blocklyConfig$ = this.blocklyConfigSubject$.asObservable();
+    private undoSubject$ = new BehaviorSubject<boolean>(false);
+    public undo$ = this.undoSubject$.asObservable();
 
-  private toolboxXmlSubject$ = new BehaviorSubject(null);
-  public toolboxXml$ = this.toolboxXmlSubject$.asObservable();
+    private isSoundToggledSubject$ = new BehaviorSubject<boolean>(false);
+    public isSoundToggled$ = this.isSoundToggledSubject$.asObservable();
 
-  private workspaceSubject$ = new BehaviorSubject<any>(null);
-  public workspace$ = this.workspaceSubject$.asObservable();
+    private isSoundOnSubject$: BehaviorSubject<boolean>;
+    public isSoundOn$: Observable<boolean>;
 
-  private workspaceXmlSubject$ = new BehaviorSubject(null);
-  public workspaceXml$ = this.workspaceXmlSubject$.asObservable();
+    private playSoundFunctionSubject$ = new BehaviorSubject<(name: string, opt_volume: number) => void>(null);
+    public playSoundFunction$ = this.playSoundFunctionSubject$.asObservable();
 
-  private projectFilePathSubject$ = new BehaviorSubject<string>(null);
-  public projectFilePath$ = this.projectFilePathSubject$.asObservable();
-
-  public projectName$ = this.projectFilePath$
-    .pipe(
-      map((filePath) => {
-        if(!filePath) return '';
-        const fileName = filePath.replace(/^.*[\\\/]/, "");
-        return fileName.substring(0, fileName.lastIndexOf(".")) || fileName;
-      })
-    );
-
-  private undoSubject$ = new BehaviorSubject<boolean>(false);
-  public undo$ = this.undoSubject$.asObservable();
-
-  private isSoundToggledSubject$ = new BehaviorSubject<boolean>(false);
-  public isSoundToggled$ = this.isSoundToggledSubject$.asObservable();
-
-  private isSoundOnSubject$: BehaviorSubject<boolean>;
-  public isSoundOn$: Observable<boolean>;
-
-  private playSoundFunctionSubject$ = new BehaviorSubject<(name, opt_volume) => void>(null);
-  public playSoundFunction$ = this.playSoundFunctionSubject$.asObservable();
-
-  public setCode(code: string): void {
-    this.codeSubject$.next(code);
-  }
-
-  public setSketchStatus(status: SketchStatus) {
-    this.sketchStatusSubject$.next(status);
-  }
-
-  public setSketchStatusMessage(message: string) {
-    this.sketchStatusMessageSubject$.next(message);
-  }
-
-  public setIsSideNavOpen(status: boolean) {
-    this.isSideNavOpenSubject$.next(status);
-  }
-
-  public setBlocklyElement(element: ElementRef<any>) {
-    this.blocklyElementSubject$.next(element);
-  }
-
-  public setWorkspaceStatus(status: WorkspaceStatus) {
-    if (this.workspaceSubject$.getValue() === null) {
-      throw new Error("Workspace must be set before setting workspace status; Tried to set workspace status to " + status + "");
+    public setIsSideNavOpen(status: boolean) {
+        this.isSideNavOpenSubject$.next(status);
     }
-    this.workspaceStatusSubject$.next(status);
-  }
 
-  public setToolboxXml(toolboxXml: any) {
-    this.toolboxXmlSubject$.next(toolboxXml);
-  }
+    public setBlocklyElement(element: ElementRef) {
+        this.blocklyElementSubject$.next(element);
+    }
 
-  public setWorkspace(workspace: any) {
-    this.workspaceSubject$.next(workspace);
-  }
+    public setToolboxXml(toolboxXml: any) {
+        this.toolboxXmlSubject$.next(toolboxXml);
+    }
 
-  public setWorkspaceXml(workspaceXml: any) {
-    this.workspaceXmlSubject$.next(workspaceXml);
-  }
+    public setWorkspace(workspace: any) {
+        workspace.resize();
+        this.workspaceSubject$.next(workspace);
+    }
 
-  public setProjectFilePath(path: string) {
-    this.projectFilePathSubject$.next(path);
-  }
+    public getWorkspace(): any {
+        return this.workspaceSubject$.getValue();
+    }
 
-  public setUndo(redo: boolean) {
-    this.undoSubject$.next(redo);
-  }
+    public setWorkspaceJSON(workspaceXml: any) {
+        this.workspaceJSONSubject$.next(workspaceXml);
+    }
 
-  public setIsSoundToggled() {
-    this.isSoundToggledSubject$.next(true);
-  }
+    public setProjectFileHandle(path: FileSystemFileHandle | PythonFile) {
+        this.projectFileHandleSubject$.next(path);
+    }
 
-  public setIsSoundOn(isSoundOn: boolean) {
-    this.localStorage.store("isSoundOn", isSoundOn);
-    this.isSoundOnSubject$.next(isSoundOn);
-  }
+    public getProjectFileHandle(): FileSystemFileHandle | PythonFile {
+        return this.projectFileHandleSubject$.getValue();
+    }
 
-  public setPlaySoundFunction(fn: (name, opt_volume) => void) {
-    this.playSoundFunctionSubject$.next(fn);
-  }
+    public setUndo(redo: boolean) {
+        this.undoSubject$.next(redo);
+    }
 
-  public setIsSideNavOpenToggled() {
-    this.isSideNavOpenToggledSubject$.next(true);
-  }
+    public setIsSoundToggled() {
+        this.isSoundToggledSubject$.next(true);
+    }
 
-  get code(): string {
-    return this.codeSubject$.getValue();
-  }
+    public setIsSoundOn(isSoundOn: boolean) {
+        this.localStorage.store("isSoundOn", isSoundOn);
+        this.isSoundOnSubject$.next(isSoundOn);
+    }
 
-  get workspaceXml(): string {
-    return this.workspaceXmlSubject$.getValue();
-  }
+    public setPlaySoundFunction(fn: (name: string, opt_volume: number) => void) {
+        this.playSoundFunctionSubject$.next(fn);
+    }
 
-  get workspace(): any {
-    return this.workspaceSubject$.getValue();
-  }
+    public setIsSideNavOpenToggled() {
+        this.isSideNavOpenToggledSubject$.next(true);
+    }
 
-  get workspaceStatus(): WorkspaceStatus {
-    return this.workspaceStatusSubject$.getValue();
-  }
+    get workspaceJSON(): string {
+        return this.workspaceJSONSubject$.getValue();
+    }
 }

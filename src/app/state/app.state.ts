@@ -1,110 +1,162 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { RobotType } from '../domain/robot.type';
+import {BehaviorSubject, firstValueFrom, Observable} from 'rxjs';
+import {
+    arduinoMegaRobotType, arduinoNanoESP32RobotType,
+    arduinoNanoRobotType, arduinoNanoRP2040RobotType,
+    arduinoUnoRobotType,
+    genericRobotType,
+    leaphyClickRobotType,
+    leaphyFlitzNanoRobotType,
+    leaphyFlitzRobotType,
+    leaphyOriginalNanoESP32RobotType,
+    leaphyOriginalNanoRobotType,
+    leaphyOriginalNanoRP2040RobotType,
+    leaphyOriginalRobotType,
+    microPythonRobotType,
+} from '../domain/robots';
+import { RobotType, RobotSelector } from '../domain/robot.type';
 import { map, filter } from 'rxjs/operators';
 import { Language } from '../domain/language';
 import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
-import { ReloadConfig } from '../domain/reload.config';
-import packageJson from '../../../package.json';
-import { MatDialog } from '@angular/material/dialog';
-import { SelectRobotTypeDialog } from '../modules/core/dialogs/robot-select/robot-select.dialog';
+import { version } from '../../../package.json';
+import {MatDialog} from "@angular/material/dialog";
+import {ConfirmEditorDialog} from "../modules/core/dialogs/confirm-editor/confirm-editor.dialog";
 
 @Injectable({
     providedIn: 'root'
 })
 export class AppState {
     /* eslint-disable max-len */
-    private static defaultLibraries = [
-        'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library', 'Adafruit Unified Sensor'
-    ]
-    private static leaphyOriginalRobotType = new RobotType('l_original_uno', 'Leaphy Original', 'orig.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
-    );
-    private static leaphyFlitzRobotType = new RobotType('l_flitz_uno', 'Leaphy Flitz', 'flitz.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries, true, false
-    );
-    private static leaphyFlitzNanoRobotType = new RobotType('l_flitz_nano', 'Flitz Nano', 'flitz_nano.svg', 'Arduino Nano', 'arduino:avr:nano', 'hex', 'arduino:avr',
-        AppState.defaultLibraries, true, false
-    );
-    private static leaphyClickRobotType = new RobotType('l_click', 'Leaphy Click', 'click.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries
-    );
-    private static arduinoUnoRobotType = new RobotType('l_uno', 'Arduino Uno', 'uno.svg', 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
-    );
-    private static leaphyWiFiRobotType = new RobotType('l_wifi', 'Leaphy WiFi', 'wifi.svg', 'NodeMCU', 'esp8266:esp8266:nodemcuv2', 'bin', 'esp8266:esp8266',
-        AppState.defaultLibraries.concat(['Leaphy WiFi Extension'])
-    );
-    public static genericRobotType = new RobotType('l_code', 'Generic Robot', null, 'Arduino UNO', 'arduino:avr:uno', 'hex', 'arduino:avr',
-    AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
-    );
-    private static arduinoNanoRobotType = new RobotType('l_nano', 'Arduino Nano', 'nano.svg', 'Arduino NANO', 'arduino:avr:nano', 'hex', 'arduino:avr',
-        AppState.defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960'])
-    );
+
 
     public static idToRobotType = {
-        'l_original_uno': AppState.leaphyOriginalRobotType,
-        'l_flitz_uno': AppState.leaphyFlitzRobotType,
-        'l_click': AppState.leaphyClickRobotType,
-        'l_uno': AppState.arduinoUnoRobotType,
-        'l_wifi': AppState.leaphyWiFiRobotType,
-        'l_code': AppState.genericRobotType,
-        'l_flitz_nano': AppState.leaphyFlitzNanoRobotType,
-        'l_nano': AppState.arduinoNanoRobotType,
+        'l_original_uno': leaphyOriginalRobotType,
+        'l_original_nano': leaphyOriginalNanoRobotType,
+        'l_original_nano_esp32': leaphyOriginalNanoESP32RobotType,
+        'l_original_nano_rp2040': leaphyOriginalNanoRP2040RobotType,
+        'l_flitz_uno': leaphyFlitzRobotType,
+        'l_click': leaphyClickRobotType,
+        'l_uno': arduinoUnoRobotType,
+        'l_code': genericRobotType,
+        'l_flitz_nano': leaphyFlitzNanoRobotType,
+        'l_nano': arduinoNanoRobotType,
+        'l_nano_esp32': arduinoNanoESP32RobotType,
+        'l_nano_rp2040': arduinoNanoRP2040RobotType,
+        'l_micropython': microPythonRobotType,
+        'l_mega': arduinoMegaRobotType,
     }
+
+    private static robotSelectors: RobotSelector[] = [
+        {
+            intercept: leaphyFlitzRobotType,
+            choices: [[
+                {
+                    name: 'Flitz Uno',
+                    icon: 'flitz.svg',
+                    robot: leaphyFlitzRobotType,
+                },
+                {
+                    name: 'Flitz Nano',
+                    icon: 'flitz.svg',
+                    robot: leaphyFlitzNanoRobotType,
+                }
+            ]]
+        },
+        {
+            intercept: leaphyOriginalRobotType,
+            choices: [
+                [
+                    {
+                        name: 'Original Uno',
+                        icon: 'orig.svg',
+                        robot: leaphyOriginalRobotType,
+                    },
+                    {
+                        name: 'Original Nano',
+                        icon: 'orig.svg',
+                        robot: leaphyOriginalNanoRobotType,
+                    },
+                ],
+                [
+                    {
+                        name: 'Original Nano ESP32',
+                        icon: 'orig.svg',
+                        robot: leaphyOriginalNanoESP32RobotType,
+                    },
+                    {
+                        name: 'Original Nano RP2040',
+                        icon: 'orig.svg',
+                        robot: leaphyOriginalNanoRP2040RobotType,
+                    },
+                ]
+            ]
+        },
+        {
+            intercept: arduinoNanoRobotType,
+            choices: [[
+                {
+                    name: 'Arduino Nano',
+                    icon: 'nano.svg',
+                    robot: arduinoNanoRobotType,
+                },
+                {
+                    name: 'Arduino Nano ESP32',
+                    icon: 'nano.svg',
+                    robot: arduinoNanoESP32RobotType,
+                },
+                {
+                    name: 'Arduino Nano RP2040',
+                    icon: 'nano.svg',
+                    robot: arduinoNanoRP2040RobotType,
+                },
+            ]]
+        }
+    ]
+
+    public releaseInfoSubject$ = new BehaviorSubject<any>(null);
+    public releaseInfo$: Observable<any> = this.releaseInfoSubject$.asObservable();
+
+    public releaseVersionSubject$ = new BehaviorSubject<string>(version);
+    public releaseVersion$: Observable<string> = this.releaseVersionSubject$.asObservable();
+
+    private robotChoiceSubject$ = new BehaviorSubject<RobotSelector>(null)
+    public robotChoice$ = this.robotChoiceSubject$.asObservable()
+
+
     /* eslint-enable max-len */
 
     private defaultLanguage = new Language('nl', 'Nederlands')
     private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
 
     constructor(private localStorage: LocalStorageService, private dialog: MatDialog) {
+
         this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
         this.isDesktop$ = this.isDesktopSubject$.asObservable();
         this.availableRobotTypes$ = this.isDesktop$
             .pipe(map(isDesktop => {
                 if (isDesktop) {
-                    return [AppState.leaphyFlitzRobotType, AppState.leaphyOriginalRobotType, AppState.leaphyClickRobotType, AppState.arduinoUnoRobotType, AppState.arduinoNanoRobotType]
-                } else {
-                    return [AppState.leaphyWiFiRobotType]
-                }
+                    return [
+                        [leaphyFlitzRobotType, leaphyOriginalRobotType, leaphyClickRobotType],
+                        [arduinoNanoRobotType, arduinoUnoRobotType, arduinoMegaRobotType],
+                        [genericRobotType, microPythonRobotType],
+                    ]
+                } else {}
             }));
 
         const currentLanguage = this.localStorage.fetch<Language>('currentLanguage') || this.defaultLanguage;
         this.currentLanguageSubject$ = new BehaviorSubject(currentLanguage);
         this.currentLanguage$ = this.currentLanguageSubject$.asObservable();
 
-        const reloadConfig = this.localStorage.fetch<ReloadConfig>('reloadConfig');
-        this.reloadConfigSubject$ = new BehaviorSubject(reloadConfig);
-        this.reloadConfig$ = this.reloadConfigSubject$.asObservable();
-
-        this.codeEditorType$ = combineLatest([this.selectedRobotType$, this.selectedCodeEditorType$])
-            .pipe(filter(([robotType,]) => !!robotType))
-            .pipe(map(([robotType, selectedCodeEditorType]) => {
-                if (robotType === AppState.genericRobotType) {
-                    return CodeEditorType.Advanced
-                }
-                return selectedCodeEditorType;
-            }))
-
         this.canChangeCodeEditor$ = this.selectedRobotType$
             .pipe(filter(robotType => !!robotType))
-            .pipe(map(robotType => robotType !== AppState.genericRobotType))
-
-        this.packageJsonVersionSubject$ = new BehaviorSubject(packageJson.version);
-        this.packageJsonVersion$ = this.packageJsonVersionSubject$.asObservable();
+            .pipe(map(robotType => robotType !== genericRobotType));
     }
 
     private isDesktopSubject$: BehaviorSubject<boolean>;
     public isDesktop$: Observable<boolean>;
 
-    private reloadConfigSubject$: BehaviorSubject<ReloadConfig>;
-    public reloadConfig$: Observable<ReloadConfig>;
-
-    private isReloadRequestedSubject$ = new BehaviorSubject<boolean>(false);
-    public isReloadRequested$ = this.isReloadRequestedSubject$.asObservable();
-
-    public availableRobotTypes$: Observable<RobotType[]>;
+    public availableRobotTypes$: Observable<RobotType[][]>;
 
     private selectedRobotTypeSubject$ = new BehaviorSubject<RobotType>(null);
     public selectedRobotType$ = this.selectedRobotTypeSubject$.asObservable();
@@ -118,59 +170,25 @@ export class AppState {
     private changedLanguageSubject$ = new BehaviorSubject(null);
     public changedLanguage$ = this.changedLanguageSubject$.asObservable();
 
-    public isRobotWired$: Observable<boolean> = this.selectedRobotType$
-        .pipe(filter(selectedRobotType => !!selectedRobotType))
-        .pipe(map(selectedRobotType => selectedRobotType.isWired));
-
-    private showHelpPageSubject$ = new BehaviorSubject<boolean>(false);
-    public showHelpPage$ = this.showHelpPageSubject$.asObservable();
-
-    private isCodeEditorToggleRequestedSubject$ = new BehaviorSubject<boolean>(false);
-    public isCodeEditorToggleRequested$ = this.isCodeEditorToggleRequestedSubject$.asObservable();
-
     private isCodeEditorToggleConfirmedSubject$ = new BehaviorSubject<boolean>(false);
     public isCodeEditorToggleConfirmed$ = this.isCodeEditorToggleConfirmedSubject$.asObservable();
 
-    private selectedCodeEditorTypeSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.Beginner);
-    public selectedCodeEditorType$ = this.selectedCodeEditorTypeSubject$.asObservable();
+    private codeEditorSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.None);
+    public codeEditor$ = this.codeEditorSubject$.asObservable();
 
-    public codeEditorType$: Observable<CodeEditorType>;
+    private saveStateSubject$ = new BehaviorSubject<boolean>(true)
+    public saveState$ = this.saveStateSubject$.asObservable()
 
     public canChangeCodeEditor$: Observable<boolean>;
 
-    private packageJsonVersionSubject$: BehaviorSubject<string>;
-    public packageJsonVersion$: Observable<string>;
+    public setSelectedRobotType(robotType: RobotType, skipPopup: boolean = false) {
+        if (robotType === null) this.robotChoiceSubject$.next(null)
 
+        // Intercept robots and ask what type of robot: nano, or uno
+        const selector = AppState.robotSelectors.find(({ intercept }) => intercept === robotType);
+        if (!selector || skipPopup) return this.selectedRobotTypeSubject$.next(robotType);
 
-    public setReloadConfig(reloadConfig: ReloadConfig) {
-        if (!reloadConfig) this.localStorage.remove('reloadConfig');
-        else this.localStorage.store('reloadConfig', reloadConfig);
-    }
-
-    public setIsReloadRequested(isRequested: boolean) {
-        this.isReloadRequestedSubject$.next(isRequested);
-    }
-
-    public setSelectedRobotType(robotType: RobotType) {
-        // Intercept flitz robots and ask what type of flitz robot: nano, or uno
-        if (robotType === AppState.leaphyFlitzRobotType) {
-            this.dialog.open(SelectRobotTypeDialog, {
-                width: '250px',
-                data: { boardTypes: ["Flitz Uno", "Flitz Nano"], icons: ["flitz.svg", "flitz.svg"] }
-            }).afterClosed().subscribe((result: string) => {
-                if (result === "Flitz Uno") {
-                    robotType = AppState.leaphyFlitzRobotType;
-                } else if (result === "Flitz Nano") {
-                    robotType = AppState.leaphyFlitzNanoRobotType;
-                } else {
-                    return;
-                }
-                this.selectedRobotTypeSubject$.next(robotType);
-            });
-
-        } else {
-          this.selectedRobotTypeSubject$.next(robotType);
-        }
+        this.robotChoiceSubject$.next(selector)
     }
 
     public setChangedLanguage(language: Language) {
@@ -183,20 +201,12 @@ export class AppState {
         this.currentLanguageSubject$.next(language);
     }
 
-    public setShowHelpPage(show: boolean) {
-        this.showHelpPageSubject$.next(show);
-    }
-
-    public setIsCodeEditorToggleRequested() {
-        this.isCodeEditorToggleRequestedSubject$.next(true);
-    }
-
     public setIsCodeEditorToggleConfirmed(confirmed: boolean) {
         this.isCodeEditorToggleConfirmedSubject$.next(confirmed);
     }
 
     public setSelectedCodeEditor(codeEditor: CodeEditorType) {
-      this.selectedCodeEditorTypeSubject$.next(codeEditor);
+        this.codeEditorSubject$.next(codeEditor);
     }
 
     public getCurrentLanguageCode(): string {
@@ -204,10 +214,14 @@ export class AppState {
     }
 
     public getCurrentEditor(): CodeEditorType {
-        return this.selectedCodeEditorTypeSubject$.getValue();
+        return this.codeEditorSubject$.getValue();
     }
 
     public getSelectedRobotType(): RobotType {
         return this.selectedRobotTypeSubject$.getValue();
+    }
+
+    public getReleaseVersion(): string {
+        return this.releaseVersionSubject$.getValue();
     }
 }

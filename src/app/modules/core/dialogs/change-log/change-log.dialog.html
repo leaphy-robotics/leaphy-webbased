@@ -1,0 +1,13 @@
+<div class="container">
+    <h1 id="version-title" class="version-title"></h1>
+    <span size="20px" style="width: 100%;"></span>
+    <div id="release-notes">
+    </div>
+    <form #closeForm="ngForm" (ngSubmit)="onConfirm(closeForm.value.repeat)">
+        <div class="group">
+            <input type="checkbox" name="repeat" id="repeat" [ngModel]="false">
+            <label for="repeat">{{ "DONT_SHOW" | translate }}</label>
+        </div>
+        <button class="btn" type="submit">{{ "CLOSE" | translate }}</button>
+    </form>
+</div>

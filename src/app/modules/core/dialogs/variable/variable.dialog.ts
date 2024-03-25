@@ -14,7 +14,6 @@ export class VariableDialog {
   ) { }
 
   public onSubmit(name: string) {
-    console.log(name);
     this.dialogRef.close(name);
   }
 

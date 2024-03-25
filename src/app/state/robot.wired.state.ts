@@ -9,18 +9,24 @@ import { filter, map, scan } from 'rxjs/operators';
 })
 export class RobotWiredState {
 
+    public SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 0x2e8a]
+
     private serialPortSubject$: BehaviorSubject<SerialPort> = new BehaviorSubject(null);
-    public serialPort$: Observable<SerialPort> = this.serialPortSubject$.asObservable();
 
     private abortControllerSubject$: BehaviorSubject<AbortController> = new BehaviorSubject(null);
-    public abortController$: Observable<AbortController> = this.abortControllerSubject$.asObservable();
-
-    private isSerialOutputStillListening$ = new BehaviorSubject(false);
-    public isSerialOutputStillListening = this.isSerialOutputStillListening$.asObservable();
 
     // Upload log, a Log of list of strings
     private uploadLogSubject$ = new BehaviorSubject<string[]>([]);
     public uploadLog$: Observable<string[]> = this.uploadLogSubject$.asObservable();
+
+    private isPythonCodeRunningSubject$ = new BehaviorSubject<boolean>(false);
+    public isPythonCodeRunning$: Observable<boolean> = this.isPythonCodeRunningSubject$.asObservable();
+
+    private isPythonDeviceConnectedSubject$ = new BehaviorSubject<boolean>(false);
+    public isPythonDeviceConnected$: Observable<boolean> = this.isPythonDeviceConnectedSubject$.asObservable();
+
+    public isPythonSerialMonitorListeningSubject$ = new BehaviorSubject<boolean>(false);
+    public isPythonSerialMonitorListening$: Observable<boolean> = this.isPythonSerialMonitorListeningSubject$.asObservable();
 
     private serialDataSubject$ = new ReplaySubject<{ time: Date, data: string }>();
     public serialData$: Observable<{ time: Date, data: string }[]> = this.serialDataSubject$
@@ -36,15 +42,17 @@ export class RobotWiredState {
         }, []));
 
 
+    private serialWriteSubject$ = new BehaviorSubject<WritableStreamDefaultWriter<Uint8Array>>(null);
+
     public serialChartDataSets$: Observable<ChartDataset[]> = this.serialData$
         .pipe(map(data => {
             const dataSets: ChartDataset[] = data.reduce((sets, item) => {
-                var [label, valueStr] = item.data.split(' = ');
+                const [label, valueStr] = item.data.split(' = ');
 
                 // If it can't be parsed, move to next item
                 if (!label || !valueStr) return sets;
 
-                var value = Number(valueStr);
+                const value = Number(valueStr);
 
                 const dataPoint = { x: item.time, y: value }
                 // Find the set with the label
@@ -63,6 +71,14 @@ export class RobotWiredState {
 
     public setIncomingSerialData(data: { time: Date, data: string }): void {
         this.serialDataSubject$.next(data);
+    }
+
+    public setSerialWrite(data: WritableStreamDefaultWriter<Uint8Array>): void {
+        this.serialWriteSubject$.next(data);
+    }
+
+    public getSerialWrite(): WritableStreamDefaultWriter<Uint8Array> {
+        return this.serialWriteSubject$.getValue();
     }
 
     public clearSerialData(): void {
@@ -85,14 +101,6 @@ export class RobotWiredState {
         return this.abortControllerSubject$.getValue();
     }
 
-    public setIsSerialOutputStillListening(isListening: boolean): void {
-        this.isSerialOutputStillListening$.next(isListening);
-    }
-
-    public getIsSerialOutputStillListening(): boolean {
-        return this.isSerialOutputStillListening$.getValue();
-    }
-
     public addToUploadLog(log: string): void {
         this.uploadLogSubject$.next([...this.uploadLogSubject$.getValue(), log]);
     }
@@ -101,8 +109,28 @@ export class RobotWiredState {
         this.uploadLogSubject$.next([]);
     }
 
-    public getUploadLog(): string[] {
-        return this.uploadLogSubject$.getValue();
+    public setPythonCodeRunning(isRunning: boolean): void {
+        this.isPythonCodeRunningSubject$.next(isRunning);
+    }
+
+    public getPythonCodeRunning(): boolean {
+        return this.isPythonCodeRunningSubject$.getValue();
+    }
+
+    public setPythonDeviceConnected(isConnected: boolean): void {
+        this.isPythonDeviceConnectedSubject$.next(isConnected);
+    }
+
+    public getPythonDeviceConnected(): boolean {
+        return this.isPythonDeviceConnectedSubject$.getValue();
+    }
+
+    public setPythonSerialMonitorListening(isListening: boolean): void {
+        this.isPythonSerialMonitorListeningSubject$.next(isListening);
+    }
+
+    public getPythonSerialMonitorListening(): boolean {
+        return this.isPythonSerialMonitorListeningSubject$.getValue();
     }
 
     private readonly poisonPill: string = "caaa61a6-a666-4c0b-83b4-ebc75b08fecb"

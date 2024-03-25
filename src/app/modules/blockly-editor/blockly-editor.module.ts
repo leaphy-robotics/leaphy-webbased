@@ -1,19 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { BlocklyEditorRoutingModule } from './blockly-editor-routing.module';
-import { BlocklyEditorPage } from './blockly-editor.page';
 import { LeaphyBlocklyComponent } from './components/leaphy-blockly/leaphy-blockly.component';
 import { CodeViewComponent } from './components/code-view/code-view.component';
 import { SharedModule } from '../shared/shared.module';
+import {MonacoEditorModule} from "ngx-monaco-editor-v2";
 
 @NgModule({
-  declarations: [BlocklyEditorPage, LeaphyBlocklyComponent, CodeViewComponent],
-  imports: [
-    CommonModule,
-    BlocklyEditorRoutingModule,
-    SharedModule
-  ],
-  entryComponents: []
+    declarations: [LeaphyBlocklyComponent, CodeViewComponent],
+    imports: [
+        CommonModule,
+        SharedModule,
+        MonacoEditorModule
+    ],
+    exports: [LeaphyBlocklyComponent, CodeViewComponent],
 })
 export class BlocklyEditorModule { }

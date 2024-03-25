@@ -1,1 +1,4 @@
-<div #blockContent id="blockly-container"></div>
+<div class="workspace-container">
+    <div #blockContent id="blockly-container"></div>
+    <img class="background" *ngIf="background" src="assets/backgrounds/{{background.src}}" [ngStyle]="{ left: background.x }" alt="" />
+</div>

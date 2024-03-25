@@ -1,39 +1,49 @@
-import { Injectable } from '@angular/core';
-import { BlocklyEditorState } from '../state/blockly-editor.state';
-import { SketchStatus } from '../domain/sketch.status';
-import { BackEndState } from '../state/backend.state';
-import { ConnectionStatus } from '../domain/connection.status';
-import { filter, pairwise, withLatestFrom } from 'rxjs/operators';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { combineLatest, Observable } from 'rxjs';
-import { WorkspaceStatus } from '../domain/workspace.status';
-import { AppState } from '../state/app.state';
-import { CodeEditorType } from '../domain/code-editor.type';
-import {BackendWiredEffects} from "./backend.wired.effects";
+import {Injectable} from '@angular/core';
+import {BlocklyEditorState} from '../state/blockly-editor.state';
+import {filter, pairwise, withLatestFrom} from 'rxjs/operators';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {combineLatest, Observable} from 'rxjs';
+import {AppState} from '../state/app.state';
+import {CodeEditorType} from '../domain/code-editor.type';
 import * as Blockly from 'blockly/core';
 import 'blockly/blockly';
 import 'blockly/blocks';
+import '@blockly/field-bitmap'
 import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
 import getBlocks from "@leaphy-robotics/leaphy-blocks/blocks/blocks";
-import {CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
-  LIST_MODES_MUTATOR_MIXIN,
-  LIST_MODES_MUTATOR_EXTENSION,
-  IS_DIVISIBLEBY_MUTATOR_MIXIN,
-  IS_DIVISIBLE_MUTATOR_EXTENSION,
-  MATH_TOOLTIPS_BY_OP,
-  LOGIC_TOOLTIPS_BY_OP,
-  LOGIC_COMPARE_EXTENSION,
-  TEXT_QUOTES_EXTENSION,
-  APPEND_STATEMENT_INPUT_STACK,
-  CONTROLS_IF_MUTATOR_MIXIN,
-  CONTROLS_IF_TOOLTIP_EXTENSION,
-  WHILE_UNTIL_TOOLTIPS
+import {
+    APPEND_STATEMENT_INPUT_STACK,
+    CONTROLS_IF_MUTATOR_MIXIN,
+    CONTROLS_IF_TOOLTIP_EXTENSION,
+    CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
+    IS_DIVISIBLE_MUTATOR_EXTENSION,
+    IS_DIVISIBLEBY_MUTATOR_MIXIN,
+    LIST_MODES_MUTATOR_EXTENSION,
+    LIST_MODES_MUTATOR_MIXIN,
+    LIST_SELECT_EXTENSION,
+    LOGIC_TOOLTIPS_BY_OP,
+    MATH_TOOLTIPS_BY_OP,
+    TEXT_QUOTES_EXTENSION,
+    WHILE_UNTIL_TOOLTIPS,
 } from "@leaphy-robotics/leaphy-blocks/blocks/extensions";
-import {defaultBlockStyles, categoryStyles, componentStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
-import {LeaphyCategory} from "../services/Toolbox/Category";
-import {LeaphyToolbox} from "../services/Toolbox/Toolbox";
+import {LISTS, ListSerializer} from "@leaphy-robotics/leaphy-blocks/categories/all";
+import {categoryStyles, componentStyles, defaultBlockStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
+import {LeaphyCategory} from "../services/toolbox/category";
+import {LeaphyToolbox} from "../services/toolbox/toolbox";
+import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
+import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
+import {CodeEditorState} from "../state/code-editor.state";
+import {genericRobotType, microPythonRobotType} from "../domain/robots";
+import {RobotType} from "../domain/robot.type";
+import {WorkspaceService} from "../services/workspace.service";
+import {LocalStorageService} from "../services/localstorage.service";
 
-var Extensions = Blockly.Extensions;
+const translationsMap = {
+    en: translationsEn.default,
+    nl: translationsNl.default,
+}
+
+const Extensions = Blockly.Extensions;
 
 @Injectable({
     providedIn: 'root',
@@ -44,40 +54,44 @@ export class BlocklyEditorEffects {
 
     constructor(
         private blocklyState: BlocklyEditorState,
-        private backEndState: BackEndState,
-        private backEndWiredEffects: BackendWiredEffects,
         private appState: AppState,
+        private codeEditorState: CodeEditorState,
         private http: HttpClient,
+        private workspaceService: WorkspaceService,
+        private localStorage: LocalStorageService
     ) {
 
-
         Blockly.registry.register(
-          Blockly.registry.Type.TOOLBOX_ITEM,
-          Blockly.ToolboxCategory.registrationName,
-          LeaphyCategory, true);
+            Blockly.registry.Type.TOOLBOX_ITEM,
+            Blockly.ToolboxCategory.registrationName,
+            LeaphyCategory, true);
         Blockly.registry.register(Blockly.registry.Type.TOOLBOX, Blockly.CollapsibleToolboxCategory.registrationName, LeaphyToolbox);
+        Blockly.registry.register(Blockly.registry.Type.SERIALIZER, "lists", new ListSerializer())
 
         Extensions.register('appendStatementInputStack', APPEND_STATEMENT_INPUT_STACK)
-
+    
         // When the current language is set: Find and set the blockly translations
         this.appState.currentLanguage$
             .pipe(filter(language => !!language))
             .subscribe(async language => {
-                const translations = await import(`node_modules/@leaphy-robotics/leaphy-blocks/msg/js/${language.code}.js`);
-                Blockly.setLocale(translations.default);
+                // import translations from the language file @leaphy-robotics/leaphy-blocks/msg/js/${language.code}.js
+                const translations = translationsMap[language.code];
+                Blockly.setLocale(translations);
             });
 
         // When the language is changed, save the workspace temporarily
         this.appState.changedLanguage$
             .pipe(filter(language => !!language))
-            .subscribe(() => {
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingTemp);
+            .pipe(withLatestFrom(this.blocklyState.workspaceJSON$, this.appState.selectedRobotType$))
+            .subscribe(([, workspaceXml]) => {
+                this.workspaceService.saveWorkspaceTemp(workspaceXml).then(() => {});
+                this.localStorage.store("changedLanguage", this.appState.getSelectedRobotType().id);
             });
 
         // When all prerequisites are there, Create a new workspace and open the codeview if needed
         combineLatest([this.blocklyState.blocklyElement$, this.blocklyState.blocklyConfig$])
             .pipe(withLatestFrom(this.appState.selectedRobotType$))
-            .pipe(filter(([[element, config], robotType]) => !!element && !!config && !!robotType && robotType !== AppState.genericRobotType))
+            .pipe(filter(([[element, config], robotType]) => !!element && !!config && !!robotType && (robotType !== genericRobotType && robotType !== microPythonRobotType)))
             .pipe(withLatestFrom(
                 this.getXmlContent('./assets/blockly/base-toolbox.xml'),
                 this.getXmlContent('./assets/blockly/leaphy-toolbox.xml'),
@@ -89,47 +103,36 @@ export class BlocklyEditorEffects {
                 for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {
                     Blockly.Blocks[name] = block;
                 }
-                const LeaphyTheme = Blockly.Theme.defineTheme('leaphy', {
+                config.theme = Blockly.Theme.defineTheme('leaphy', {
                     'blockStyles': defaultBlockStyles,
                     'categoryStyles': categoryStyles,
                     'componentStyles': componentStyles,
                     name: 'leaphy',
-                  })
-                  config.theme = LeaphyTheme;
-                  const parser = new DOMParser();
-                  const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
-                  const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
-                  const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
-                  const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
-                  if (robotType.showLeaphyActuators) {
-                      const leaphyExtraCategory = leaphyCategories.getElementById(`${robotType.id}_actuators`);
-                      toolboxElement.prepend(leaphyExtraCategory);
-                  }
-                  toolboxElement.prepend(leaphyRobotCategory);
-                  const serializer = new XMLSerializer();
-                  const toolboxXmlString = serializer.serializeToString(toolboxXmlDoc);
-                  config.toolbox = toolboxXmlString;
-                  // @ts-ignore
-                  const workspace = Blockly.inject(element, config);
-                  const toolbox = workspace.getToolbox();
-                  toolbox.getFlyout().autoClose = false;
-                  const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
-                  Blockly.Xml.domToWorkspace(xml, workspace);
-                  this.blocklyState.setWorkspace(workspace);
-                  this.blocklyState.setToolboxXml(toolboxXmlString);
-                  if (this.blocklyState.workspaceStatus == WorkspaceStatus.Clean) {
-                    this.backEndWiredEffects.send('restore-workspace-temp', robotType.id);
-                  }
-                  toolbox.selectItemByPosition(0);
-                  toolbox.refreshTheme();
+                });
+                const toolboxXmlString = this.loadToolBox(baseToolboxXml, leaphyToolboxXml, robotType);
+                config.toolbox = toolboxXmlString;
+                // @ts-ignore
+                const workspace = Blockly.inject(element, config);
+                const toolbox = workspace.getToolbox();
+                workspace.registerToolboxCategoryCallback('LISTS', LISTS);
+                toolbox.getFlyout().autoClose = false;
+                const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
+                Blockly.Xml.domToWorkspace(xml, workspace);
+                this.blocklyState.setWorkspace(workspace);
+                this.blocklyState.setToolboxXml(toolboxXmlString);
+                if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+                    this.workspaceService.restoreWorkspaceTemp().then(() => {});
+                }
+                toolbox.selectItemByPosition(0);
+                toolbox.refreshTheme();
 
-                  setTimeout(() => this.blocklyState.setIsSideNavOpen(robotType.showCodeOnStart), 200);
+                setTimeout(() => this.blocklyState.setIsSideNavOpen(robotType.features.showCodeOnStart), 200);
             });
 
         // When a new project is started, reset the blockly code
         this.appState.selectedRobotType$
             .pipe(filter(robotType => !robotType))
-            .subscribe(() => this.blocklyState.setCode(''))
+            .subscribe(() => this.codeEditorState.setCode(''))
 
         // When the robot selection changes, set the toolbox and initialWorkspace
         this.appState.selectedRobotType$
@@ -141,14 +144,7 @@ export class BlocklyEditorEffects {
                 this.getXmlContent('./assets/blockly/leaphy-start.xml'),
             ))
             .subscribe(([[robotType, workspace], baseToolboxXml, leaphyToolboxXml, startWorkspaceXml]) => {
-                const parser = new DOMParser();
-                const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
-                const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
-                const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
-                const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
-                toolboxElement.prepend(leaphyRobotCategory);
-                const serializer = new XMLSerializer();
-                const toolboxXmlString = serializer.serializeToString(toolboxXmlDoc);
+                const toolboxXmlString = this.loadToolBox(baseToolboxXml, leaphyToolboxXml, robotType);
                 this.blocklyState.setToolboxXml(toolboxXmlString);
 
                 workspace.clear();
@@ -169,22 +165,9 @@ export class BlocklyEditorEffects {
                 workspace.clearUndo();
                 workspace.addChangeListener(Blockly.Events.disableOrphans);
                 workspace.addChangeListener(async () => {
-                    this.blocklyState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
-                    const xml = Blockly.Xml.workspaceToDom(workspace);
-                    const prettyXml = Blockly.Xml.domToPrettyText(xml);
-                    this.blocklyState.setWorkspaceXml(prettyXml);
+                    this.codeEditorState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
+                    this.blocklyState.setWorkspaceJSON(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
                 });
-            });
-
-        // When the WorkspaceStatus is set to loading, load in the latest workspace XML
-        this.blocklyState.workspaceStatus$
-            .pipe(filter(status => status === WorkspaceStatus.Restoring))
-            .pipe(withLatestFrom(this.blocklyState.workspaceXml$, this.blocklyState.workspace$))
-            .subscribe(async ([, workspaceXml, workspace]) => {
-              workspace.clear();
-              const xml = Blockly.utils.xml.textToDom(workspaceXml);
-              Blockly.Xml.domToWorkspace(xml, workspace);
-              this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
             });
 
         // When the user presses undo or redo, trigger undo or redo on the workspace
@@ -193,32 +176,15 @@ export class BlocklyEditorEffects {
             .pipe(filter(([, workspace]) => !!workspace))
             .subscribe(([redo, workspace]) => workspace.undo(redo));
 
-        // Changes in ConnectionStatus result in changes in SketchStatus
-        this.backEndState.connectionStatus$
-            .subscribe(connectionStatus => {
-                switch (connectionStatus) {
-                    case ConnectionStatus.Disconnected:
-                    case ConnectionStatus.ConnectedToBackend:
-                    case ConnectionStatus.WaitForRobot:
-                        this.blocklyState.setSketchStatus(SketchStatus.UnableToSend);
-                        break;
-                    case ConnectionStatus.PairedWithRobot:
-                        this.blocklyState.setSketchStatus(SketchStatus.ReadyToSend);
-                        break;
-                    default:
-                        break;
-                }
-            });
 
-        // When Advanced CodeEditor is Selected, set the workspace status to SavingTemp and hide the sideNav
-        this.appState.codeEditorType$
+        // When Advanced CodeEditor is Selected, hide the sideNav
+        this.appState.codeEditor$
             .pipe(
                 pairwise(),
-                filter(([previous, current]) => current === CodeEditorType.Advanced && current !== previous)
+                filter(([previous, current]) => (current === CodeEditorType.CPP || current === CodeEditorType.Python ) && current !== previous)
             )
             .subscribe(() => {
                 this.blocklyState.setIsSideNavOpen(false);
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingTemp)
             });
 
         // Toggle the isSideNavOpen state
@@ -251,70 +217,73 @@ export class BlocklyEditorEffects {
             });
 
         // When the code editor is changed, clear the projectFilePath
-        this.appState.codeEditorType$
-            .subscribe(() => this.blocklyState.setProjectFilePath(''));
+        this.appState.codeEditor$
+            .subscribe(() => this.blocklyState.setProjectFileHandle(null));
+    }
 
-        // When an new project is being saved, reset the WorkspaceStatus to SavingAs
-        this.blocklyState.workspaceStatus$
-            .pipe(filter(status => status === WorkspaceStatus.Saving))
-            .pipe(withLatestFrom(
-                this.blocklyState.projectFilePath$
-            ))
-            .pipe(filter(([, projectFilePath]) => !projectFilePath))
-            .subscribe(() => {
-                this.blocklyState.setWorkspaceStatus(WorkspaceStatus.SavingAs);
-            });
+    private parseCategory(root: Document, category: HTMLElement, robotType: RobotType,) : HTMLElement {
+        // Remove blocks that aren't in robots list
+        Array.from(category.querySelectorAll('block'))
+            .filter(block => {
+                const robots = block.querySelector('robots');
+                if (!robots) return false;
 
-        // React to messages received from the Backend
-        this.backEndState.backEndMessages$
-            .pipe(filter(message => !!message))
-            .subscribe(message => {
-                switch (message.event) {
-                    case 'PREPARING_COMPILATION_ENVIRONMENT':
-                    case 'COMPILATION_STARTED':
-                    case 'COMPILATION_COMPLETE':
-                    case 'UPDATE_STARTED':
-                        this.blocklyState.setSketchStatusMessage(message.message);
-                        break;
-                    case 'ROBOT_REGISTERED':
-                    case 'UPDATE_COMPLETE':
-                        this.blocklyState.setSketchStatus(SketchStatus.ReadyToSend);
-                        this.blocklyState.setSketchStatusMessage(null);
-                        break;
-                    case 'COMPILATION_FAILED':
-                    case 'UPDATE_FAILED':
-                        this.blocklyState.setSketchStatus(SketchStatus.UnableToSend);
-                        this.blocklyState.setSketchStatusMessage(null);
-                        break;
-                    case 'WORKSPACE_SAVE_CANCELLED':
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    case 'WORKSPACE_SAVED':
-                        this.blocklyState.setProjectFilePath(message.payload);
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    case 'WORKSPACE_SAVED_TEMP':
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Clean);
-                        break;
-                    case 'WORKSPACE_RESTORING':
-                        if (message.payload.type == 'advanced') {
-                            this.blocklyState.setCode(message.payload.data as string);
-                            this.appState.setSelectedCodeEditor(CodeEditorType.Advanced);
-                            this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
-                            this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                            this.appState.setSelectedRobotType(AppState.genericRobotType);
-                            return;
-                        }
-                        this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')]);
-                        this.blocklyState.setWorkspaceXml(message.payload.data as string);
-                        this.blocklyState.setProjectFilePath(message.payload.projectFilePath);
-                        this.blocklyState.setWorkspaceStatus(WorkspaceStatus.Restoring);
-                        break;
-                    default:
-                        console.log('Unknown message received from backend: ' + message.event);
-                        break;
-                }
-            });
+                block.removeChild(robots);
+                return !robots.querySelector(robotType.id);
+            })
+            .forEach(block => block.remove());
+
+        // Add separator between groups
+        Array.from(category.querySelectorAll('group'))
+            .forEach(group => {
+                const items = Array.from(group.querySelectorAll('block'))
+                    .map((block, index, array) => {
+                        if (index === array.length - 1) return block
+
+                        const separator = root.createElement('sep')
+                        separator.setAttribute('gap', '8')
+                        return [block, separator]
+                    })
+                    .flat()
+
+                group.before(...items)
+                group.remove()
+            })
+
+        return category
+    }
+
+    private loadToolBox(baseToolboxXml: string, leaphyToolboxXml: string, robotType: RobotType) : string {
+        const parser = new DOMParser();
+        const toolboxXmlDoc = parser.parseFromString(baseToolboxXml, 'text/xml');
+        const toolboxElement = toolboxXmlDoc.getElementById('easyBloqsToolbox');
+        const leaphyCategories = parser.parseFromString(leaphyToolboxXml, 'text/xml');
+        const leaphyRobotCategory = leaphyCategories.getElementById(robotType.id);
+        if (robotType.features.showLeaphyOperators) {
+            toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_numbers"))
+        } else {
+            toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_operators"))
+        }
+        if (robotType.features.showLeaphyActuators) {
+            const leaphyExtraCategory = leaphyCategories.getElementById("l_actuators");
+            leaphyExtraCategory.setAttribute("toolboxitemid", `${robotType.id}_actuators`)
+
+            toolboxElement.prepend(this.parseCategory(leaphyCategories, leaphyExtraCategory, robotType));
+        }
+        if (robotType.features.showLeaphySensors) {
+            const leaphySensorCategory = leaphyCategories.getElementById("l_sensors");
+            leaphySensorCategory.setAttribute("toolboxitemid", `${robotType.id}_sensors`);
+
+            toolboxElement.prepend(this.parseCategory(leaphyCategories, leaphySensorCategory, robotType));
+        }
+        if (!robotType.features.showLeaphyLists) {
+            toolboxElement.removeChild(toolboxXmlDoc.getElementById("l_lists"))
+        }
+        if (leaphyRobotCategory) {
+            toolboxElement.prepend(leaphyRobotCategory);
+        }
+        const serializer = new XMLSerializer();
+        return serializer.serializeToString(toolboxXmlDoc);
     }
 
     private getXmlContent(path: string): Observable<string> {

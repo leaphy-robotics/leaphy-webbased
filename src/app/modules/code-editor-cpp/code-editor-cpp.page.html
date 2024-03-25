@@ -1,0 +1,9 @@
+<div id="container">
+    <ngx-monaco-editor
+        class="monaco-editor"
+        [options]="editorOptions"
+        [ngModel]="codeEditorState.code$ | async"
+        (ngModelChange)="codeEditorState.setCode($event)"
+    />
+    <app-button-bar></app-button-bar>
+</div>

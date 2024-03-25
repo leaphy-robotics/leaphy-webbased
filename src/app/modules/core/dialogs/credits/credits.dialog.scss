@@ -34,8 +34,8 @@
   flex: 0 1 auto;
 }
 
-[mat-flat-button] {
-  color: var(--leaphy-color-light);
+.start {
+  color: var(--leaphy-color-light) !important;
   background-color: var(--leaphy-color-secundary);
   font-size: 12px;
   font-weight: bold;

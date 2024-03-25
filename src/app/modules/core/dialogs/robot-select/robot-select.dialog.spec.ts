@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SelectRobotTypeDialog } from './robot-select.dialog';
 
-describe('LanguageSelectComponent', () => {
+describe('RobotSelectComponent', () => {
   let component: SelectRobotTypeDialog;
   let fixture: ComponentFixture<SelectRobotTypeDialog>;
 

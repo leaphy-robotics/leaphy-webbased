@@ -1,40 +1,35 @@
 import { Injectable } from '@angular/core';
 import { filter } from 'rxjs/operators';
-import { BackEndState } from '../state/backend.state';
 import { RobotWiredState } from '../state/robot.wired.state';
 import {DialogState} from "../state/dialog.state";
-import ArduinoWebserial from "../services/webserial/ArduinoWebserial";
+import ArduinoUploader from "../services/arduino-uploader/ArduinoUploader";
+import {AppState} from "../state/app.state";
+import {UploadState} from "../state/upload.state";
 
 @Injectable({
     providedIn: 'root',
 })
 
 export class RobotWiredEffects {
-    private webserial: ArduinoWebserial;
+    private webserial: ArduinoUploader;
     private logBuffer: string = "";
 
     constructor(
+        private appState: AppState,
         private robotWiredState: RobotWiredState,
-        private backEndState: BackEndState,
+        private uploadState: UploadState,
         private dialogState: DialogState,
     ) {
-        this.webserial = new ArduinoWebserial(this.robotWiredState);
-        this.backEndState.backEndMessages$
-            .pipe(filter(message => !!message))
-            .subscribe(message => {
-                if (message.event == 'SERIAL_DATA')
-                {
-                    const serialData = {time: new Date(), data: String(message.payload)}
-                    this.robotWiredState.setIncomingSerialData(serialData);
-                }
-            });
+        this.webserial = new ArduinoUploader(this.robotWiredState, this.appState, this.uploadState);
 
         this.dialogState.isSerialOutputListening$
             .pipe(filter(isListening => !!isListening))
             .subscribe(async () => {
+                if (this.robotWiredState.getPythonDeviceConnected())
+                    return;
                 const robotWiredState = this.robotWiredState;
 
-                const writableStream = new WritableStream({
+                const outputStream = new WritableStream({
                     start: async () => {
                         this.logBuffer = "";
                     },
@@ -68,7 +63,7 @@ export class RobotWiredEffects {
                     },
                 });
 
-                this.webserial.serialMonitor(writableStream);
+                this.webserial.serialMonitor(outputStream).then(() => {});
             });
     }
 

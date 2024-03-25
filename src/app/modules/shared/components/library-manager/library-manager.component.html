@@ -1,0 +1,33 @@
+<div id="container" >
+    <div class="content">
+        <div id="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+            {{ "LIBRARY_MANAGER" | translate}}
+            <div id="button-container">
+                <form #filterForm="ngForm" (ngSubmit)="filter(filterForm.value.filter)">
+                    <input type="text" placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}" name="filter" ngModel autocomplete="off">
+                </form>
+                <button mat-stroked-button class="icon-button" (click)="close()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </div>
+
+        <div class="library-manager">
+            <div class="library" *ngFor="let library of libraries">
+                <div class="library-header">
+                    <span class="name">{{ library.name }}</span>
+                    <span class="attribution"> {{ "ATTRIBUTION" | translate }} {{ library.author }}</span>
+                </div>
+                <div class="library-description" *ngIf="library.paragraph">{{ library.paragraph }}</div>
+
+                <form #installForm="ngForm" *ngIf="!library.installed" (ngSubmit)="install(library, installForm.value.version)" class="modify-form">
+                    <select name="version" [ngModel]="library.versions[0]" class="version-select">
+                        <option *ngFor="let version of library.versions" [value]="version">{{ version }}</option>
+                    </select>
+                    <button class="modify-button" type="submit">{{ "INSTALL_LIBRARY" | translate }}</button>
+                </form>
+                <button (click)="uninstall(library)" *ngIf="library.installed" class="modify-button" type="submit">{{ "UNINSTALL_LIBRARY" | translate }}</button>
+            </div>
+        </div>
+    </div>
+</div>

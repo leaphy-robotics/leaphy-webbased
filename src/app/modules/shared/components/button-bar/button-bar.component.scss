@@ -12,11 +12,23 @@
         margin-bottom: 40px;
         outline: none;
         position: relative;
+        border-radius: 50%;
+        width: 50px;
+        height: 60px;
+        color: white;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        &:disabled {
+            color: var(--leaphy-color-dark);
+        }
 
         &:enabled::before {
             background: var(--leaphy-color-dark);
             border-radius: 5px;
-            content: attr(data-label);
+            content: attr(tooltip);
             display: inline-block;
             right: 70px;
             opacity: 0;

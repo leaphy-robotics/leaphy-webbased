@@ -1,0 +1,39 @@
+.version-title {
+    margin-top: 1em;
+    font-size: 3em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1.5em;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    gap: 5px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+    align-self: center;
+
+    background-color: var(--leaphy-color-primary);
+    color: white;
+}
+
+.btn:hover {
+    background-color: var(--leaphy-color-primary-dark-tint);
+}
+
+.group {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+}

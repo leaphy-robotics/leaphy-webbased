@@ -5,7 +5,7 @@ import {PortalModule} from '@angular/cdk/portal';
 
 import { ButtonBarComponent } from './components/button-bar/button-bar.component';
 import { SerialOutputComponent } from './components/serial-output/serial-output.component';
-import { SerialWindowComponent } from './components/serial-window/serial-window.component';
+import { LibraryManagerComponent } from './components/library-manager/library-manager.component';
 
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -25,50 +25,53 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { NgChartsModule  } from 'ng2-charts';
 import {DragDropModule} from "@angular/cdk/drag-drop";
+import {TerminalComponent} from "./components/terminal/terminal.component";
+import {NgTerminalModule} from "ng-terminal";
 
 @NgModule({
-  declarations: [ButtonBarComponent, SerialOutputComponent, SerialWindowComponent],
-	imports: [
-		CommonModule,
-		FormsModule,
-		TranslateModule,
-		MatIconModule,
-		MatSidenavModule,
-		MatCheckboxModule,
-		MatButtonModule,
-		MatProgressSpinnerModule,
-		MatDialogModule,
-		MatInputModule,
-		MatButtonToggleModule,
-		MatToolbarModule,
-		MatSelectModule,
-		MatMenuModule,
-		MatTooltipModule,
-		MatSnackBarModule,
-		PortalModule,
-		NgChartsModule,
-		DragDropModule
-	],
-  exports: [
-    FormsModule,
-    ButtonBarComponent,
-    SerialOutputComponent,
-    SerialWindowComponent,
-    TranslateModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatCheckboxModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
-    MatInputModule,
-    MatButtonToggleModule,
-    MatToolbarModule,
-    MatSelectModule,
-    MatMenuModule,
-    MatTooltipModule,
-    MatSnackBarModule
-  ],
-  entryComponents:[SerialOutputComponent, SerialWindowComponent]
+    declarations: [TerminalComponent, ButtonBarComponent, SerialOutputComponent, LibraryManagerComponent],
+    imports: [
+        NgTerminalModule,
+        CommonModule,
+        FormsModule,
+        TranslateModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        MatDialogModule,
+        MatInputModule,
+        MatButtonToggleModule,
+        MatToolbarModule,
+        MatSelectModule,
+        MatMenuModule,
+        MatTooltipModule,
+        MatSnackBarModule,
+        PortalModule,
+        NgChartsModule,
+        DragDropModule
+    ],
+    exports: [
+        TerminalComponent,
+        FormsModule,
+        ButtonBarComponent,
+        SerialOutputComponent,
+        LibraryManagerComponent,
+        TranslateModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatCheckboxModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        MatDialogModule,
+        MatInputModule,
+        MatButtonToggleModule,
+        MatToolbarModule,
+        MatSelectModule,
+        MatMenuModule,
+        MatTooltipModule,
+        MatSnackBarModule
+    ],
 })
 export class SharedModule { }

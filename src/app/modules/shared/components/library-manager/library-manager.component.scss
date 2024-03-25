@@ -1,0 +1,96 @@
+#container {
+    width: 61vw;
+    height: 60vh;
+    margin: auto;
+}
+
+.content {
+    width: 60vw;
+    height: 60vh;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2.5vh;
+}
+
+#header:hover {
+    cursor: grab;
+}
+
+#header {
+    background-color: var(--leaphy-color-primary);
+    color: var(--leaphy-color-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    width: 100%;
+}
+
+[mat-stroked-button],
+[mat-flat-button] {
+    color: var(--leaphy-color-light);
+    font-size: 12px;
+    font-weight: normal;
+}
+
+.icon-button {
+    padding: 0;
+    width: 35px;
+    height: 35px;
+    min-width: auto;
+
+    mat-icon {
+        margin-left: auto;
+    }
+}
+
+.library-description {
+    white-space: pre-wrap;
+}
+
+#button-container {
+    display: flex;
+    gap: 3px;
+}
+
+input {
+    background: none;
+    color: var(--leaphy-color-light);
+    border: 1px solid #0000001f;
+    border-radius: 5px;
+    outline: 0;
+    height: 35px;
+}
+input::placeholder {
+    color: var(--leaphy-color-light);
+}
+
+.library-manager {
+    max-height: 55vh;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    overflow-y: auto;
+}
+
+.name {
+    font-weight: bold;
+}
+
+.modify-form {
+    display: flex;
+    gap: 5px;
+}
+
+.modify-button {
+    background: var(--leaphy-color-secundary);
+    border-radius: var(--bs-border-radius-pill);
+    padding: 0 10px;
+    border: none;
+    color: var(--leaphy-color-light);
+}
+
+.version-select {
+    border-radius: 15px;
+    height: 24px;
+}
