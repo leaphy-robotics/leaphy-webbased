@@ -106,3 +106,15 @@ export class BaseNanoRP2040 extends RobotType {
     }
 }
 
+export class BaseMega extends RobotType {
+    constructor(
+        id: string,
+        name: string,
+        svgname: string,
+        background: string,
+        libs: string[],
+        features?: Partial<Features>,
+    ) {
+        super(id, {protocol: Avrdude, microcontroller: 'atmega2560'}, name, svgname, background, "arduino:avr:mega", "arduino:avr", libs, features);
+    }
+}

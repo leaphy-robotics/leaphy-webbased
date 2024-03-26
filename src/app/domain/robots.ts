@@ -1,5 +1,5 @@
 import Avrdude from "../services/arduino-uploader/protocols/avrdude";
-import {BaseNano, BaseNanoESP32, BaseNanoRP2040, BaseUno, RobotType} from "./robot.type";
+import {BaseMega, BaseNano, BaseNanoESP32, BaseNanoRP2040, BaseUno, RobotType} from "./robot.type";
 
 const defaultLibraries = [
     'Leaphy Original Extension', 'Leaphy Extra Extension', 'Servo', 'Adafruit GFX Library', 'Adafruit SSD1306', 'Adafruit LSM9DS1 Library',
@@ -165,17 +165,16 @@ export const microPythonRobotType = new RobotType(
         showLeaphyOperators: false,
     });
 
-export const arduinoMegaRobotType = new RobotType(
+export const arduinoMegaRobotType = new BaseMega(
     'l_mega',
-    {protocol: Avrdude, microcontroller: 'atmega2560'},
     'Arduino Mega',
     'mega.svg',
     null,
-    'arduino:avr:mega',
-    'arduino:avr',
     defaultLibraries.concat(['QMC5883LCompass', 'Arduino_APDS9960']),
     {
         showLeaphyLists: true,
         showLeaphySensors: true,
     },
-)
+);
+
+

@@ -1,6 +1,5 @@
-import {RobotWiredState} from "../../state/robot.wired.state";
 
-export const clearReadBuffer = async (readStream: ReadableStreamDefaultReader<Uint8Array>) => {
+export const clearReadBuffer = async (readStream: ReadableStreamDefaultReader<Uint8Array>, timeout: number = 1500) => {
     const timeoutPromise = new Promise((resolve, _) => {
         setTimeout(() => {
             resolve("Timeout");
@@ -9,7 +8,7 @@ export const clearReadBuffer = async (readStream: ReadableStreamDefaultReader<Ui
     const timeoutPromiseRead = new Promise((resolve, _) => {
         setTimeout(() => {
             resolve("Timeout");
-        }, 1500);
+        }, timeout);
     });
 
     let i = 1;

@@ -9,7 +9,23 @@ import { filter, map, scan } from 'rxjs/operators';
 })
 export class RobotWiredState {
 
-    public SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 0x2e8a]
+    public SUPPORTED_VENDORS = [6790, 9025, 2341, 1027, 11914] // must be a normal number not a hex number
+
+    public supportedProgrammers = [
+        "stk500v1",
+        "stk500v2",
+    ]
+
+    public usbVendorIdToProgrammer = {
+        6790: ["stk500v1", "stk500v2"],
+        2341: ["stk500v1", "stk500v2"],
+    }
+
+    public fqbnToProgrammer = {
+        "arduino:avr:uno": "stk500v1",
+        "arduino:avr:nano": "stk500v1",
+        "arduino:avr:mega": "stk500v2",
+    }
 
     private serialPortSubject$: BehaviorSubject<SerialPort> = new BehaviorSubject(null);
 

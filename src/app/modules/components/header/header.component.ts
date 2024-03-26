@@ -17,6 +17,7 @@ import {PythonUploaderService} from "../../../services/python-uploader/PythonUpl
 import {ConnectPythonDialog} from "../../core/dialogs/connect-python/connect-python.dialog";
 import {StatusMessageDialog} from "../../core/dialogs/status-message/status-message.dialog";
 import {WorkspaceService} from "../../../services/workspace.service";
+import {SignatureFinderService} from "../../../services/arduino-uploader/signature-finder.service";
 
 @Component({
     selector: 'app-header',
@@ -35,7 +36,8 @@ export class HeaderComponent {
         private dialog: MatDialog,
         private codeEditorState: CodeEditorState,
         private uploaderService: PythonUploaderService,
-        private workspaceService: WorkspaceService
+        private workspaceService: WorkspaceService,
+        private si: SignatureFinderService
     ) {
 
     }
@@ -86,8 +88,14 @@ export class HeaderComponent {
             if (port !== this.robotWiredState.getSerialPort()) {
                 await port.open({baudRate: 115200});
                 this.robotWiredState.setSerialPort(port);
+                this.dialogState.setIsSerialOutputListening(false);
+                // wait for a few seconds to make sure the port is ready
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await this.si.findSignature(port);
                 this.dialogState.setIsSerialOutputListening(true);
             }
+
+
 
             this.snackBar.openFromComponent(StatusMessageDialog, {
                 duration: 2000,
