@@ -1862,13 +1862,12 @@
   resolved "https://registry.yarnpkg.com/@leaphy-robotics/dfu-util-wasm/-/dfu-util-wasm-1.0.2.tgz#29afcc01266655e1c7b5da0eeceb0ead48c86fd7"
   integrity sha512-lvS+tJFO049b4ERYKX0HcoUtnQv76A1z9sZrAvbs7s3bvdMW0BObKmktZeJ7emcp3lU/+OJWsD2h0EY5rnkiNg==
 
-"@leaphy-robotics/leaphy-blocks@1.20.0":
-  version "1.20.0"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-1.20.0.tgz#ced932d0aadbdc02348df2945287d2b1d909c456"
-  integrity sha512-bY0K2NS7wr5f60Nh+0BzZWY6fh3Oiu03QXe1d44gJGxOXNT7+ir4leLqT9gFF1F/oMDEiwLSoE4CdXmuk6XeHw==
+"@leaphy-robotics/leaphy-blocks@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-2.0.0.tgz#132caa20410db5ddb201404115eb1e04ecd7085f"
+  integrity sha512-iQcKm08JTUHD+P/Gq6VMS+nHr9JXkkBYlfpAh53wy9VYC6u0LF3KXtq2+GiCIoPWsNb7b5DlBvQ2VWpinue2TQ==
   dependencies:
     blockly "^10.1.3"
-    typescript "4.3.2"
 
 "@leaphy-robotics/picotool-wasm@1.0.2":
   version "1.0.2"
@@ -9325,11 +9324,6 @@ typed-assert@^1.0.8:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/typed-assert/-/typed-assert-1.0.9.tgz#8af9d4f93432c4970ec717e3006f33f135b06213"
   integrity sha512-KNNZtayBCtmnNmbo5mG47p1XsCyrx6iVqomjcZnec/1Y5GGARaxPs6r49RnSPeUP3YjNYiU9sQHAtY4BBvnZwg==
-
-typescript@4.3.2:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.2.tgz#399ab18aac45802d6f2498de5054fcbbe716a805"
-  integrity sha512-zZ4hShnmnoVnAHpVHWpTcxdv7dWP60S2FsydQLV8V5PbS3FifjWFFRiHSWpDJahly88PRyV5teTSLoq4eG7mKw==
 
 typescript@5.1.6:
   version "5.1.6"
