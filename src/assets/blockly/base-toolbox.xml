@@ -188,25 +188,25 @@
                 </shadow>
             </value>
             <value name="VALUE">
-                <block type="text">
+                <shadow type="text">
                     <field name="TEXT">text</field>
-                </block>
+                </shadow>
             </value>
         </block>
         <sep gap="8"></sep>
         <block type="text_length">
             <value name="VALUE">
-                <block type="text">
+                <shadow type="text">
                     <field name="TEXT">text</field>
-                </block>
+                </shadow>
             </value>
         </block>
         <sep gap="8"></sep>
         <block type="text_includes">
             <value name="VALUE">
-                <block type="text">
+                <shadow type="text">
                     <field name="TEXT">apple</field>
-                </block>
+                </shadow>
             </value>
             <value name="CHECK">
                 <shadow type="text">

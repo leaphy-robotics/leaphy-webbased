@@ -5,43 +5,17 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {combineLatest, Observable} from 'rxjs';
 import {AppState} from '../state/app.state';
 import {CodeEditorType} from '../domain/code-editor.type';
-import * as Blockly from 'blockly/core';
+import * as Blockly from 'blockly';
 import '@blockly/field-bitmap'
-import Arduino from '@leaphy-robotics/leaphy-blocks/generators/arduino';
-import getBlocks from "@leaphy-robotics/leaphy-blocks/blocks/blocks";
-import {
-    APPEND_STATEMENT_INPUT_STACK,
-    CONTROLS_IF_MUTATOR_MIXIN,
-    CONTROLS_IF_TOOLTIP_EXTENSION,
-    CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN,
-    IS_DIVISIBLE_MUTATOR_EXTENSION,
-    IS_DIVISIBLEBY_MUTATOR_MIXIN,
-    LIST_MODES_MUTATOR_EXTENSION,
-    LIST_MODES_MUTATOR_MIXIN,
-    LIST_SELECT_EXTENSION,
-    LOGIC_TOOLTIPS_BY_OP,
-    MATH_TOOLTIPS_BY_OP,
-    TEXT_QUOTES_EXTENSION,
-    WHILE_UNTIL_TOOLTIPS,
-} from "@leaphy-robotics/leaphy-blocks/blocks/extensions";
-import {LISTS, ListSerializer} from "@leaphy-robotics/leaphy-blocks/categories/all";
-import {categoryStyles, componentStyles, defaultBlockStyles} from "@leaphy-robotics/leaphy-blocks/theme/theme";
+
+import {CATEGORIES, THEME, EXTENSIONS, translations, arduino, getBlocks} from "@leaphy-robotics/leaphy-blocks"
 import {LeaphyCategory} from "../services/toolbox/category";
 import {LeaphyToolbox} from "../services/toolbox/toolbox";
-import * as translationsEn from '@leaphy-robotics/leaphy-blocks/msg/js/en.js';
-import * as translationsNl from '@leaphy-robotics/leaphy-blocks/msg/js/nl.js';
 import {CodeEditorState} from "../state/code-editor.state";
 import {genericRobotType, microPythonRobotType} from "../domain/robots";
 import {RobotType} from "../domain/robot.type";
 import {WorkspaceService} from "../services/workspace.service";
 import {LocalStorageService} from "../services/localstorage.service";
-
-const translationsMap = {
-    en: translationsEn.default,
-    nl: translationsNl.default,
-}
-
-const Extensions = Blockly.Extensions;
 
 @Injectable({
     providedIn: 'root',
@@ -58,56 +32,21 @@ export class BlocklyEditorEffects {
         private workspaceService: WorkspaceService,
         private localStorage: LocalStorageService
     ) {
-        // Variables:
-        Extensions.registerMixin(
-            'contextMenu_variableSetterGetter',
-            CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN);
-        // Lists:
-        Extensions.register('list_select_extension', LIST_SELECT_EXTENSION);
-        // // Math:
-        Extensions.registerMutator(
-            'math_is_divisibleby_mutator', IS_DIVISIBLEBY_MUTATOR_MIXIN,
-            IS_DIVISIBLE_MUTATOR_EXTENSION);
-
-        // Update the tooltip of 'math_change' block to reference the variable.
-        Extensions.register(
-            'math_change_tooltip',
-            Extensions.buildTooltipWithFieldText('%{BKY_MATH_CHANGE_TOOLTIP}', 'VAR'));
-
         Blockly.registry.register(
             Blockly.registry.Type.TOOLBOX_ITEM,
             Blockly.ToolboxCategory.registrationName,
             LeaphyCategory, true);
         Blockly.registry.register(Blockly.registry.Type.TOOLBOX, Blockly.CollapsibleToolboxCategory.registrationName, LeaphyToolbox);
-        Blockly.registry.register(Blockly.registry.Type.SERIALIZER, "lists", new ListSerializer())
+        Blockly.registry.register(Blockly.registry.Type.SERIALIZER, "lists", new CATEGORIES.ListSerializer())
 
-        Extensions.registerMutator(
-            'math_modes_of_list_mutator', LIST_MODES_MUTATOR_MIXIN,
-            LIST_MODES_MUTATOR_EXTENSION);
-        //
-        Extensions.register('text_quotes', TEXT_QUOTES_EXTENSION)
-        Extensions.register('appendStatementInputStack', APPEND_STATEMENT_INPUT_STACK)
-        // // Tooltip extensions
-        Extensions.register('controls_whileUntil_tooltip', Extensions.buildTooltipForDropdown('MODE', WHILE_UNTIL_TOOLTIPS));
-        Extensions.register(
-            'logic_op_tooltip',
-            Extensions.buildTooltipForDropdown('OP', LOGIC_TOOLTIPS_BY_OP));
-        Extensions.register(
-            'math_op_tooltip',
-            Extensions.buildTooltipForDropdown('OP', MATH_TOOLTIPS_BY_OP));
-        //
-        Extensions.registerMutator(
-            'controls_if_mutator', CONTROLS_IF_MUTATOR_MIXIN, null,
-            ['controls_if_elseif', 'controls_if_else']);
-        Extensions.register('controls_if_tooltip', CONTROLS_IF_TOOLTIP_EXTENSION);
+        Blockly.Extensions.register('appendStatementInputStack', EXTENSIONS.APPEND_STATEMENT_INPUT_STACK)
+        Blockly.Extensions.register('list_select_extension', EXTENSIONS.LIST_SELECT_EXTENSION);
 
         // When the current language is set: Find and set the blockly translations
         this.appState.currentLanguage$
             .pipe(filter(language => !!language))
             .subscribe(async language => {
-                // import translations from the language file @leaphy-robotics/leaphy-blocks/msg/js/${language.code}.js
-                const translations = translationsMap[language.code];
-                Blockly.setLocale(translations);
+                Blockly.setLocale(translations[language.code]);
             });
 
         // When the language is changed, save the workspace temporarily
@@ -131,13 +70,10 @@ export class BlocklyEditorEffects {
             .subscribe(([[[element, config], robotType], baseToolboxXml, leaphyToolboxXml, startWorkspaceXml]) => {
                 const leaphyBlocks = getBlocks(this.appState.getSelectedRobotType().id);
                 Blockly.defineBlocksWithJsonArray(leaphyBlocks.block)
-                for (const [name, block] of Object.entries(leaphyBlocks.blockJs)) {
-                    Blockly.Blocks[name] = block;
-                }
                 config.theme = Blockly.Theme.defineTheme('leaphy', {
-                    'blockStyles': defaultBlockStyles,
-                    'categoryStyles': categoryStyles,
-                    'componentStyles': componentStyles,
+                    'blockStyles': THEME.defaultBlockStyles,
+                    'categoryStyles': THEME.categoryStyles,
+                    'componentStyles': THEME.componentStyles,
                     name: 'leaphy',
                 });
                 const toolboxXmlString = this.loadToolBox(baseToolboxXml, leaphyToolboxXml, robotType);
@@ -145,7 +81,7 @@ export class BlocklyEditorEffects {
                 // @ts-ignore
                 const workspace = Blockly.inject(element, config);
                 const toolbox = workspace.getToolbox();
-                workspace.registerToolboxCategoryCallback('LISTS', LISTS);
+                workspace.registerToolboxCategoryCallback('LISTS', CATEGORIES.LISTS);
                 toolbox.getFlyout().autoClose = false;
                 const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
                 Blockly.Xml.domToWorkspace(xml, workspace);
@@ -196,7 +132,7 @@ export class BlocklyEditorEffects {
                 workspace.clearUndo();
                 workspace.addChangeListener(Blockly.Events.disableOrphans);
                 workspace.addChangeListener(async () => {
-                    this.codeEditorState.setCode(Arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
+                    this.codeEditorState.setCode(arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
                     this.blocklyState.setWorkspaceJSON(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
                 });
             });
