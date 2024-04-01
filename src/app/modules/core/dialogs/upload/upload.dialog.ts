@@ -1,6 +1,5 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {TranslateService} from "@ngx-translate/core";
 import ArduinoUploader from "../../../../services/arduino-uploader/ArduinoUploader";
 import {DialogState} from "../../../../state/dialog.state";
 import {RobotWiredState} from "../../../../state/robot.wired.state";
@@ -43,6 +42,15 @@ export class UploadDialog {
                 source_code, board, libraries
             })
         })
+        if (!res.ok) {
+            let message: string
+            try {
+                message = (await res.json())["detail"]
+            } catch {
+                message = await res.text()
+            }
+            throw new Error(message)
+        }
 
         return await res.json() as Record<string, string>
     }
@@ -82,15 +90,11 @@ export class UploadDialog {
         this.uploadState.setStatusMessage('COMPILATION_STARTED');
         const response = await this.compile(source_code, board, libraries).catch(error => {
             this.uploadState.setStatusMessage('COMPILATION_FAILED');
-            if (!error.toString().startsWith("Error: Request failed: 500 ")) {
-                console.error(error);
-                return;
-            }
             // make the printed red text
-            console.log('%c' + error.toString().replace("Error: Request failed: 500 ", ""), 'color: red');
+            console.log('%c' + error.toString(), 'color: red');
 
             // remove the last 4 lines of the error message
-            const errorLines = error.toString().replace("Error: Request failed: 500 ", "").split("\n");
+            const errorLines = error.toString().split("\n");
             errorLines.splice(errorLines.length - 5, 5);
             const errorString = errorLines.join("\n");
             this.uploadState.setError(errorString)
