@@ -1862,10 +1862,10 @@
   resolved "https://registry.yarnpkg.com/@leaphy-robotics/dfu-util-wasm/-/dfu-util-wasm-1.0.2.tgz#29afcc01266655e1c7b5da0eeceb0ead48c86fd7"
   integrity sha512-lvS+tJFO049b4ERYKX0HcoUtnQv76A1z9sZrAvbs7s3bvdMW0BObKmktZeJ7emcp3lU/+OJWsD2h0EY5rnkiNg==
 
-"@leaphy-robotics/leaphy-blocks@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-2.0.0.tgz#132caa20410db5ddb201404115eb1e04ecd7085f"
-  integrity sha512-iQcKm08JTUHD+P/Gq6VMS+nHr9JXkkBYlfpAh53wy9VYC6u0LF3KXtq2+GiCIoPWsNb7b5DlBvQ2VWpinue2TQ==
+"@leaphy-robotics/leaphy-blocks@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/leaphy-blocks/-/leaphy-blocks-2.0.2.tgz#691529b77a0d37110f145ad146d11f50bde440cb"
+  integrity sha512-qn0pyHpL5fFOd+frcK+gWlRFa3N44XNOGV3KOUH4/tSujTQGNPkG8DVzLS+F3daL4QaKE+AKz3LvR+IJbqk6Ug==
   dependencies:
     blockly "^10.1.3"
 
@@ -5278,9 +5278,9 @@ exponential-backoff@^3.1.1:
   integrity sha512-dX7e/LHVJ6W3DE1MHWi9S1EYzDESENfLrYohG2G++ovZrYOkm4Knwa0mc1cn84xJOR4KEU0WSchhLbd0UklbHw==
 
 express@^4.17.3:
-  version "4.19.1"
-  resolved "https://registry.yarnpkg.com/express/-/express-4.19.1.tgz#4700635795e911600a45596138cf5b0320e78256"
-  integrity sha512-K4w1/Bp7y8iSiVObmCrtq8Cs79XjJc/RU2YYkZQ7wpUu5ZyZ7MtPHkqoMz4pf+mgXfNvo2qft8D9OnrH2ABk9w==
+  version "4.19.2"
+  resolved "https://registry.yarnpkg.com/express/-/express-4.19.2.tgz#e25437827a3aa7f2a827bc8171bbbb664a356465"
+  integrity sha512-5T6nhjsT+EOMzuck8JjBHARTHfMht0POzlA60WV2pMD3gyXw2LZnZ+ueGdNxG+0calOJcWKbpFcuzLZ91YWq9Q==
   dependencies:
     accepts "~1.3.8"
     array-flatten "1.1.1"

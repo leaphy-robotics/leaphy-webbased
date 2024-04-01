@@ -42,6 +42,13 @@ export class BlocklyEditorEffects {
         Blockly.Extensions.register('appendStatementInputStack', EXTENSIONS.APPEND_STATEMENT_INPUT_STACK)
         Blockly.Extensions.register('list_select_extension', EXTENSIONS.LIST_SELECT_EXTENSION);
 
+        Blockly.Extensions.registerMutator(
+            'l_controls_if_mutator',
+            EXTENSIONS.CONTROLS_IF_MUTATOR_MIXIN,
+            null as unknown as undefined, // TODO(#6920)
+            ['controls_if_elseif', 'controls_if_else'],
+        );
+
         // When the current language is set: Find and set the blockly translations
         this.appState.currentLanguage$
             .pipe(filter(language => !!language))
