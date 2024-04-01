@@ -43,12 +43,10 @@ export class UploadDialog {
             })
         })
         if (!res.ok) {
-            let message: string
+            let message: string = await res.text()
             try {
-                message = (await res.json())["detail"]
-            } catch {
-                message = await res.text()
-            }
+                message = JSON.parse(message).detail
+            } catch {}
             throw new Error(message)
         }
 
