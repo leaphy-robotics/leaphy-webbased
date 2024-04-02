@@ -1,10 +1,10 @@
 import {clearReadBuffer, delay} from './utils'
-import {RobotWiredState} from "../../state/robot.wired.state";
+import {LeaphyPort, RobotWiredState} from "../../state/robot.wired.state";
 import {AppState} from "../../state/app.state";
 import {UploadState} from "../../state/upload.state";
 
 class Arduino {
-    port: SerialPort = null
+    port: LeaphyPort = null
     isUploading = false
     serialOptions = null
     readStream = null
@@ -31,16 +31,9 @@ class Arduino {
      * Open a connection to a user-selected Arduino.
      */
     async connect() {
-        let port: SerialPort;
+        let port: LeaphyPort;
         try {
-            const ports = await navigator.serial.getPorts()
-
-            if (ports[0]) port = ports[0]
-            else port = await navigator.serial.requestPort({
-                filters: this.robotWiredState.SUPPORTED_VENDORS.map(vendor => ({
-                    usbVendorId: vendor
-                }))
-            })
+            port = await this.robotWiredState.requestSerialPort(false)
         } catch (error) {
             console.log(error)
             throw new Error('No device selected')
@@ -56,7 +49,7 @@ class Arduino {
         this.port = port
     }
 
-    setPort(port: SerialPort) {
+    setPort(port: LeaphyPort) {
         this.port = port
     }
 
@@ -112,7 +105,7 @@ class Arduino {
                         .catch(async () => {
                             await delay(4000)
 
-                            const [port] = await navigator.serial.getPorts()
+                            const port = await this.robotWiredState.requestSerialPort(false)
                             if (!port) {
                                 this.port = null
                                 this.robotWiredState.setSerialPort(null)
@@ -166,14 +159,6 @@ class Arduino {
      */
     async close(): Promise<void> {
         this.isUploading = false
-    }
-
-    /**
-     * Check if web-serial is available.
-     * @returns {boolean} True if web-serial is available.
-     */
-    static isAvailable(): boolean {
-        return 'serial' in navigator
     }
 }
 

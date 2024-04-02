@@ -38,6 +38,9 @@ export default class Avrdude extends BaseProtocol {
 
         // create a promise that resolves when the port.ondisconnect event is fired
         const disconnectPromise = new Promise((resolve) => {
+            // todo: add compatibility for fallback devices if required, currently no avrdude devices support this
+            if (!(this.port instanceof SerialPort)) return
+
             this.port.ondisconnect = resolve
         })
 

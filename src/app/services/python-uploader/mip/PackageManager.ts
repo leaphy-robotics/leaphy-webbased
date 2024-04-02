@@ -1,18 +1,19 @@
 import {get, ls, mkdir, put, rm, rmdir} from "../filesystem/FileSystem";
 import {environment} from "src/environments/environment";
+import {LeaphyPort} from "../../../state/robot.wired.state";
 
 
 export class PackageManager {
 
-    private serialPort: SerialPort;
+    private serialPort: LeaphyPort;
 
     constructor() {}
 
-    set port(port: SerialPort) {
+    set port(port: LeaphyPort) {
         this.serialPort = port;
     }
 
-    get port(): SerialPort {
+    get port(): LeaphyPort {
         return this.serialPort;
     }
 

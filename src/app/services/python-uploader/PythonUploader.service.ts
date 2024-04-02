@@ -1,4 +1,4 @@
-import {RobotWiredState} from "../../state/robot.wired.state";
+import {LeaphyPort, RobotWiredState} from "../../state/robot.wired.state";
 import {sendCommand, enterReplMode, readResponse} from "./comms/BoardCommunication";
 import {put, get, ls, rm, rmdir} from "./filesystem/FileSystem";
 import {Injectable} from "@angular/core";
@@ -9,7 +9,7 @@ import {PackageManager} from "./mip/PackageManager";
 })
 export class PythonUploaderService {
     drive: FileSystemDirectoryHandle = null
-    port: SerialPort = null
+    port: LeaphyPort = null
     private firmware: Blob = null
     private packageManager: PackageManager = new PackageManager();
 
@@ -50,9 +50,9 @@ export class PythonUploaderService {
     async connect() {
         await this.setPythonCodeRunning(false);
         this.robotWiredState.addToUploadLog('Connecting to device');
-        let port: SerialPort;
+        let port: LeaphyPort;
         try {
-            port = await navigator.serial.requestPort({filters: [{usbVendorId: 11914}, {usbVendorId: 9025}]});
+            port = await this.robotWiredState.requestSerialPort(false);
         } catch (error) {
             console.log(error)
             throw new Error('No device selected')

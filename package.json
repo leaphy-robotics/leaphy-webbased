@@ -8,7 +8,7 @@
   "main": "src/main.ts",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --open",
+    "start": "ng serve --open --configuration dev",
     "build": "ng build --configuration production --base-href ./",
     "buildLocal": "ng build --configuration local --base-href ./",
     "buildstart": "ng build --base-href ./ && yarn run start",
@@ -59,6 +59,7 @@
     "rxjs": "~7.5.5",
     "showdown": "^2.1.0",
     "tslib": "^2.4.0",
+    "web-serial-polyfill": "^1.0.15",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

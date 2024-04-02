@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { ChartDataset } from 'chart.js';
 import { ReplaySubject, BehaviorSubject, Observable} from 'rxjs';
 import { filter, map, scan } from 'rxjs/operators';
+import { SerialPort as MockedSerialPort } from "web-serial-polyfill";
+
+
+export type LeaphyPort = SerialPort|MockedSerialPort
 
 
 @Injectable({
@@ -11,7 +15,7 @@ export class RobotWiredState {
 
     public SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 0x2e8a]
 
-    private serialPortSubject$: BehaviorSubject<SerialPort> = new BehaviorSubject(null);
+    private serialPortSubject$: BehaviorSubject<LeaphyPort> = new BehaviorSubject(null);
 
     private abortControllerSubject$: BehaviorSubject<AbortController> = new BehaviorSubject(null);
 
@@ -85,11 +89,50 @@ export class RobotWiredState {
         this.setIncomingSerialData({ time: new Date(), data: this.poisonPill });
     }
 
-    public setSerialPort(port: SerialPort): void {
+    public async requestSerialPort(forcePrompt = false, allowPrompt = true) {
+        let port: LeaphyPort
+
+        if (navigator.serial) {
+            if (!forcePrompt) {
+                const ports = await navigator.serial.getPorts()
+                if (ports[0]) port = ports[0]
+            }
+            if (!port && allowPrompt) {
+                port = await navigator.serial.requestPort({
+                    filters: this.SUPPORTED_VENDORS.map(vendor => ({
+                        usbVendorId: vendor
+                    }))
+                })
+            }
+        } else if (navigator.usb) {
+            if (!forcePrompt) {
+                const devices = await navigator.usb.getDevices()
+                if (devices[0]) port = new MockedSerialPort(devices[0])
+            }
+            if (!port && allowPrompt) {
+                const device = await navigator.usb.requestDevice({
+                    filters: this.SUPPORTED_VENDORS.map(vendor => ({
+                        vendorId: vendor
+                    }))
+                })
+                try {
+                    port = new MockedSerialPort(device)
+                } catch {
+                    throw new Error("WebUSB device is not supported")
+                }
+            }
+        } else {
+            throw new Error("WebSerial/WebUSB not supported")
+        }
+
+        return port
+    }
+
+    public setSerialPort(port: LeaphyPort): void {
         this.serialPortSubject$.next(port);
     }
 
-    public getSerialPort(): SerialPort {
+    public getSerialPort(): LeaphyPort {
         return this.serialPortSubject$.getValue();
     }
 

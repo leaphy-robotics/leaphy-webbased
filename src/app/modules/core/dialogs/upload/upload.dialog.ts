@@ -55,7 +55,7 @@ export class UploadDialog {
 
     public async startUpload(source_code: string, board: string, libraries: string) {
         this.dialogState.setIsSerialOutputListening(false);
-        if (!('serial' in navigator)) {
+        if (!navigator.serial && !navigator.usb) {
             this.uploadState.setStatusMessage('NO_SERIAL_SUPPORT')
             this.uploadState.setFailed(true)
             this.uploadState.setDone(true)

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {MatDialogRef} from '@angular/material/dialog';
-import {RobotWiredState} from "../../../../state/robot.wired.state";
+import {LeaphyPort, RobotWiredState} from "../../../../state/robot.wired.state";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
@@ -13,7 +13,7 @@ export class DebugInformationDialog {
   public os: string = '';
   public browser: string = '';
   public browserVersion: string = '';
-  public serialPort: SerialPort | undefined;
+  public serialPort?: LeaphyPort;
   public webSerialSupported: string = 'Supported';
 
 
