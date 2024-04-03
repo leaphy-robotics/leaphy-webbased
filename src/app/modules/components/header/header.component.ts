@@ -77,25 +77,19 @@ export class HeaderComponent {
     }
 
     public async onChooseRobot() {
-        if ('serial' in navigator) {
-            const port = await navigator.serial.requestPort({
-                filters: this.robotWiredState.SUPPORTED_VENDORS.map(vendor => ({
-                    usbVendorId: vendor
-                }))
-            })
-            if (port !== this.robotWiredState.getSerialPort()) {
-                await port.open({baudRate: 115200});
-                this.robotWiredState.setSerialPort(port);
-                this.dialogState.setIsSerialOutputListening(true);
-            }
-
-            this.snackBar.openFromComponent(StatusMessageDialog, {
-                duration: 2000,
-                horizontalPosition: 'center',
-                verticalPosition: 'bottom',
-                data: { message: "CONNECTED" }
-            })
+        const port = await this.robotWiredState.requestSerialPort(true)
+        if (port !== this.robotWiredState.getSerialPort()) {
+            await port.open({baudRate: 115200});
+            this.robotWiredState.setSerialPort(port);
+            this.dialogState.setIsSerialOutputListening(true);
         }
+
+        this.snackBar.openFromComponent(StatusMessageDialog, {
+            duration: 2000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+            data: { message: "CONNECTED" }
+        })
     }
 
     public onSaveWorkspaceClicked() {

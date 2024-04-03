@@ -106,11 +106,11 @@
                                 }
                             ]
                         },
-                        "local": {
+                        "dev": {
                             "fileReplacements": [
                                 {
                                     "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.local.ts"
+                                    "with": "src/environments/environment.dev.ts"
                                 }
                             ],
                             "optimization": true,
@@ -148,8 +148,8 @@
                         "production": {
                             "browserTarget": "leaphy-client:build:production"
                         },
-                        "local": {
-                            "browserTarget": "leaphy-client:build:local"
+                        "dev": {
+                            "browserTarget": "leaphy-client:build:dev"
                         }
                     }
                 },
@@ -196,8 +196,8 @@
                         "production": {
                             "devServerTarget": "leaphy-client:serve:production"
                         },
-                        "local": {
-                            "devServerTarget": "leaphy-client:serve:local"
+                        "dev": {
+                            "devServerTarget": "leaphy-client:serve:dev"
                         }
                     }
                 }
