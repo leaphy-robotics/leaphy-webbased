@@ -33,7 +33,7 @@
                             },
                             {
                                 "glob": "avrdude.wasm",
-                                "input": "./nyaode_modules/@leaphy-robotics/avrdude-webassembly/",
+                                "input": "./node_modules/@leaphy-robotics/avrdude-webassembly/",
                                 "output": "./"
                             },
                             {
