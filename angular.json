@@ -37,6 +37,11 @@
                                 "output": "./"
                             },
                             {
+                                "glob": "avrdude-worker.js",
+                                "input": "./node_modules/@leaphy-robotics/avrdude-webassembly/",
+                                "output": "./"
+                            },
+                            {
                                 "glob": "avrdude.conf",
                                 "input": "./node_modules/@leaphy-robotics/avrdude-webassembly/",
                                 "output": "./"

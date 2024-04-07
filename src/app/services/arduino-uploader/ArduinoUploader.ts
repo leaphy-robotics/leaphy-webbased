@@ -64,11 +64,13 @@ class Arduino {
         this.port = this.robotWiredState.getSerialPort();
 
         try {
-            if (this.port.readable.locked) {
+            if (this.port.readable != null && this.port.readable.locked) {
                 await this.port.readable.cancel();
                 this.port.readable.getReader().releaseLock();
             }
-            await this.port.close();
+            try {
+                await this.port.close();
+            } catch (e) {}
             await this.port.open({baudRate: 115200, bufferSize: 1024});
             const abortController = new AbortController();
 
@@ -122,10 +124,15 @@ class Arduino {
 
             this.robotWiredState.setAbortController(abortController);
         } catch (e) {
+            console.log(e);
             if (this.port == null) {
                 return;
             }
-            await this.port.close();
+            try {
+                await this.port.close();
+            } catch (e) {
+
+            }
             this.port = null;
             this.robotWiredState.setSerialPort(null);
             console.log(e);
