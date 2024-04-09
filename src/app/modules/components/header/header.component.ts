@@ -78,10 +78,10 @@ export class HeaderComponent {
 
     public async onChooseRobot() {
         const port = await this.robotWiredState.requestSerialPort(true)
-        if (port !== this.robotWiredState.getSerialPort()) {
+        if (port !== this.robotWiredState.serialPort) {
             await port.open({baudRate: 115200});
-            this.robotWiredState.setSerialPort(port);
-            this.dialogState.setIsSerialOutputListening(true);
+            this.robotWiredState.serialPort = port;
+            this.dialogState.isSerialOutputListening = true;
         }
 
         this.snackBar.openFromComponent(StatusMessageDialog, {
@@ -110,7 +110,7 @@ export class HeaderComponent {
     }
 
     public onSaveWorkspaceAsClicked() {
-        this.workspaceService.saveWorkspaceAs(this.appState.getSelectedRobotType().id).then(() => {});
+        this.workspaceService.saveWorkspaceAs(this.appState.selectedRobotType.id).then(() => {});
     }
 
     public onConnectClicked() {
@@ -119,7 +119,7 @@ export class HeaderComponent {
         }).afterClosed().subscribe((result) => {
             if (result) {
                 if (result == "HELP_ENVIRONMENT") {
-                    const langcode = this.appState.getCurrentLanguageCode();
+                    const langcode = this.appState.currentLanguageCode;
                     this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true}).then(() => {});
                 }
             }
@@ -127,12 +127,12 @@ export class HeaderComponent {
     }
 
     public async onRunClicked() {
-        const robotType = this.appState.getSelectedRobotType();
-        const code = this.codeEditorState.getCode();
+        const robotType = this.appState.selectedRobotType;
+        const code = this.codeEditorState.code;
         const libraries = [...robotType.libs];
-        libraries.push(...this.codeEditorState.getInstalledLibraries().map(lib => `${lib.name}@${lib.version}`));
+        libraries.push(...this.codeEditorState.installedLibraries.map(lib => `${lib.name}@${lib.version}`));
         try {
-            if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+            if (this.appState.currentEditor == CodeEditorType.Python) {
                 await this.uploaderService.runCode(code)
             } else {
                 this.dialog.open(UploadDialog, {
@@ -141,7 +141,7 @@ export class HeaderComponent {
                 }).afterClosed().subscribe((result) => {
                     if (result) {
                         if (result == "HELP_ENVIRONMENT") {
-                            const langcode = this.appState.getCurrentLanguageCode();
+                            const langcode = this.appState.currentLanguageCode;
                             this.router.navigateByUrl('/' + langcode + '/driverissues', {skipLocationChange: true});
                         }
                     }
@@ -155,11 +155,11 @@ export class HeaderComponent {
     }
 
     public onUndoClicked() {
-        this.blocklyState.setUndo(false);
+        this.blocklyState.undo = false;
     }
 
     public onRedoClicked() {
-        this.blocklyState.setUndo(true);
+        this.blocklyState.undo = true;
     }
 
     public onHelpClicked() {
@@ -179,7 +179,7 @@ export class HeaderComponent {
     }
 
     public onShowInfoClicked() {
-        this.dialogState.setIsInfoDialogVisible(true);
+        this.dialogState.isInfoDialogVisible = true;
     }
 
     public onViewLogClicked() {
@@ -189,25 +189,25 @@ export class HeaderComponent {
     }
 
     public onToggleSoundClicked() {
-        this.blocklyState.setIsSoundToggled();
+        this.blocklyState.isSoundToggled;
     }
 
     public onLanguageChanged(language: Language) {
-        this.appState.setChangedLanguage(language);
+        this.appState.changedLanguage = language;
         window.location.reload();
     }
 
     public onBackToBlocks() {
-        if (this.appState.getCurrentEditor() == CodeEditorType.Beginner)
+        if (this.appState.currentEditor == CodeEditorType.Beginner)
             this.router.navigate(['/blocks'], {skipLocationChange: true}).then(() => {});
-        else if (this.appState.getCurrentEditor() == CodeEditorType.CPP)
+        else if (this.appState.currentEditor == CodeEditorType.CPP)
             this.router.navigate(['/cppEditor'], { skipLocationChange: true }).then(() => {});
-        else if (this.appState.getCurrentEditor() == CodeEditorType.Python)
+        else if (this.appState.currentEditor == CodeEditorType.Python)
             this.router.navigate(['/pythonEditor'], { skipLocationChange: true }).then(() => {});
     }
 
     public onExamplesClicked() {
-        this.dialogState.setIsExamplesDialogVisible(true)
+        this.dialogState.isExamplesDialogVisible = true
     }
 
     protected readonly AppState = AppState;

@@ -10,14 +10,14 @@ import {AnnotatedLibrary, Library, LibraryResponse} from "src/app/domain/library
     styleUrls: ["./library-manager.component.scss"],
 })
 export class LibraryManagerComponent {
-    public libraries: AnnotatedLibrary[] = [];
+    private librariesBack: AnnotatedLibrary[] = [];
 
     constructor(
         public editorState: CodeEditorState,
         public dialogState: DialogState,
         private dialog: MatDialogRef<LibraryManagerComponent>
     ) {
-        if (this.editorState.getLibraryCache().length === 0) {
+        if (this.editorState.libraryCache.length === 0) {
             this.loadLibraryCache().then();
         }
 
@@ -49,25 +49,23 @@ export class LibraryManagerComponent {
             })
         })
 
-        this.editorState.setLibraryCache(Array.from(result.values()));
+        this.editorState.libraryCache = Array.from(result.values());
         this.filter();
     }
 
-    public setLibraries(libraries: Library[]) {
-        const installed = this.editorState.getInstalledLibraries();
+    set libraries(libraries: Library[]) {
+        const installed = this.editorState.installedLibraries;
 
-        this.libraries = libraries.map(lib => ({
+        this.librariesBack = libraries.map(lib => ({
             ...lib,
             installed: installed.find(installedLib => installedLib.name === lib.name)?.version
         }))
     }
 
     public filter(filter = "") {
-        this.setLibraries(
-            this.editorState.getLibraryCache()
+        this.libraries =  this.editorState.libraryCache
                 .filter(lib => lib.name.toLowerCase().includes(filter.toLowerCase()))
                 .slice(0, 50)
-        );
     }
 
     public close() {
@@ -76,22 +74,22 @@ export class LibraryManagerComponent {
 
     public install(library: Library, version: string) {
         // get installed libraries and remove existing version
-        const installed = this.editorState.getInstalledLibraries()
+        const installed = this.editorState.installedLibraries
             .filter((lib) => lib.name !== library.name);
 
-        this.editorState.setInstalledLibraries([...installed, {
+        this.editorState.installedLibraries = [...installed, {
             ...library,
             version
-        }]);
-        this.setLibraries(this.libraries);
+        }];
+        this.libraries = this.librariesBack;
     }
 
     public uninstall(library: Library) {
-        const installed = this.editorState.getInstalledLibraries();
+        const installed = this.editorState.installedLibraries;
         const current = installed.find((lib) => lib.name === library.name);
         if (!current) return;
 
-        this.editorState.setInstalledLibraries(installed.filter((lib) => lib.name !== library.name));
-        this.setLibraries(this.libraries);
+        this.editorState.installedLibraries = installed.filter((lib) => lib.name !== library.name);
+        this.libraries = this.librariesBack;
     }
 }

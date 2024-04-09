@@ -3,7 +3,7 @@
         class="monaco-editor"
         [options]="editorOptions"
         [ngModel]="codeEditorState.code$ | async"
-        (ngModelChange)="codeEditorState.setCode($event)"
+        (ngModelChange)="codeEditorState.code = ($event)"
     />
 
     <app-button-bar></app-button-bar>

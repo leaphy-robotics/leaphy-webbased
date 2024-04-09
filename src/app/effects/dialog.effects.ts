@@ -45,14 +45,14 @@ export class DialogEffects {
         // If the isSerialOutputWindowOpen is set to true open the dialog
         this.dialogState.isSerialOutputWindowOpen$
             .subscribe(() => {
-                if (this.dialogState.getIsSerialOutputWindowOpen() !== true)
+                if (this.dialogState.isSerialOutputWindowOpen !== true)
                     return;
                 this.dialog.open(SerialOutputComponent, {
                     width: "800px",
                     disableClose: true,
                     hasBackdrop: false,
                 }).afterClosed().subscribe(() => {
-                    this.dialogState.setIsSerialOutputWindowOpen(false);
+                    this.dialogState.isSerialOutputWindowOpen = false;
                 });
             });
 
@@ -60,12 +60,12 @@ export class DialogEffects {
         // If the isLibraryManagerWindowOpen is set to true open the dialog
         this.dialogState.isLibraryManagerWindowOpen$
             .subscribe(() => {
-                if (this.dialogState.getIsLibraryManagerWindowOpen() !== true)
+                if (this.dialogState.isLibraryManagerWindowOpen !== true)
                     return;
                 this.dialog.open(LibraryManagerComponent, {
                     disableClose: true,
                 }).afterClosed().subscribe(() => {
-                    this.dialogState.setIsLibraryManagerWindowOpen(false);
+                    this.dialogState.isLibraryManagerWindowOpen = false;
                 });
             });
 

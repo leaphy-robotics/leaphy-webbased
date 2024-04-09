@@ -40,11 +40,11 @@ void loop() {
             .pipe(map(([code, original]) => code !== original))
     }
 
-    public setOriginalCode(program: string){
+    set originalCode(program: string){
         this.startCodeSubject$.next(program);
     }
 
-    public setCode(program: string){
+    set code(program: string){
         if (
             this.codeSubject$.value !== program &&
             this.codeSubject$.value !== this.originalProgram
@@ -58,31 +58,31 @@ void loop() {
         this.saveStateSubject$.next(true)
     }
 
-    public setSaveState(saved: boolean) {
+    set saveState(saved: boolean) {
         this.saveStateSubject$.next(saved)
     }
 
-    public getSaveState() {
+    get saveState() {
         return this.saveStateSubject$.value
     }
 
-    public getCode(){
+    get code(){
         return this.codeSubject$.value;
     }
 
-    public setLibraryCache(cache: Library[]){
+    set libraryCache(cache: Library[]){
         this.libraryCacheSubject$.next(cache);
     }
 
-    public getLibraryCache(){
+    get libraryCache(){
         return this.libraryCacheSubject$.value;
     }
 
-    public setInstalledLibraries(libraries: InstalledLibrary[]){
+    set installedLibraries(libraries: InstalledLibrary[]){
         this.InstalledLibraries$.next(libraries);
     }
 
-    public getInstalledLibraries(){
+    get installedLibraries(){
         return this.InstalledLibraries$.value;
     }
 }

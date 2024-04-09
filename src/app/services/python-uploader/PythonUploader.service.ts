@@ -24,14 +24,14 @@ export class PythonUploaderService {
 
 
     private async setPythonCodeRunning(isRunning: boolean) {
-        if (this.robotWiredState.getPythonCodeRunning() === isRunning && isRunning) {
+        if (this.robotWiredState.pythonCodeRunning === isRunning && isRunning) {
             throw new Error('There is already a program running')
         }
 
         if (!isRunning) {
-            this.robotWiredState.setPythonSerialMonitorListening(false);
+            this.robotWiredState.pythonSerialMonitorListening = false;
         }
-        this.robotWiredState.setPythonCodeRunning(isRunning);
+        this.robotWiredState.pythonCodeRunning = isRunning;
     }
 
     async sendKeyboardInterrupt() {
@@ -79,7 +79,7 @@ export class PythonUploaderService {
         writer.releaseLock();
         reader.releaseLock();
         this.packageManager.port = port;
-        this.robotWiredState.setSerialPort(port);
+        this.robotWiredState.serialPort = port;
         try {
             await this.setPythonCodeRunning(false);
         } catch (error) {}
@@ -117,7 +117,7 @@ export class PythonUploaderService {
     async runCode(code: string) {
         this.robotWiredState.addToUploadLog('Running code');
         await this.setPythonCodeRunning(true)
-        this.robotWiredState.setPythonSerialMonitorListening(true);
+        this.robotWiredState.pythonSerialMonitorListening = true;
         if (this.port === null)
             throw new Error('Not connected')
         const writer = this.port.writable.getWriter();

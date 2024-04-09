@@ -54,26 +54,26 @@ export class UploadDialog {
     }
 
     public async startUpload(source_code: string, board: string, libraries: string) {
-        this.dialogState.setIsSerialOutputListening(false);
+        this.dialogState.isSerialOutputListening = false;
         if (!navigator.serial && !navigator.usb) {
-            this.uploadState.setStatusMessage('NO_SERIAL_SUPPORT')
-            this.uploadState.setFailed(true)
-            this.uploadState.setDone(true)
+            this.uploadState.statusMessage = 'NO_SERIAL_SUPPORT'
+            this.uploadState.failed = true
+            this.uploadState.done = true
             return
         }
 
-        if (this.robotWiredState.getSerialPort() === null) {
+        if (this.robotWiredState.serialPort === null) {
             try {
                 await this.upload.connect()
-                this.robotWiredState.setSerialPort(this.upload.port);
+                this.robotWiredState.serialPort = this.upload.port;
             } catch (error) {
                 if (error.toString() === 'Error: No device selected') {
-                    this.uploadState.setFailed(true)
-                    this.uploadState.setStatusMessage('NO_DEVICE_SELECTED')
+                    this.uploadState.failed = true
+                    this.uploadState.statusMessage = 'NO_DEVICE_SELECTED'
                     console.error(error);
                 } else {
-                    this.uploadState.setStatusMessage("UPDATE_FAILED")
-                    this.uploadState.setError(error.toString())
+                    this.uploadState.statusMessage = "UPDATE_FAILED"
+                    this.uploadState.error = error.toString()
                     console.error(error);
                 }
 
@@ -81,54 +81,53 @@ export class UploadDialog {
             }
         }
 
-        this.robotWiredState.getAbortController()?.abort("Upload started");
-        this.upload.setPort(this.robotWiredState.getSerialPort());
+        this.robotWiredState.abortController?.abort("Upload started");
+        this.upload.setPort(this.robotWiredState.serialPort);
         this.uploadState.addProgress(25);
 
-        this.uploadState.setStatusMessage('COMPILATION_STARTED');
+        this.uploadState.statusMessage = 'COMPILATION_STARTED';
         const response = await this.compile(source_code, board, libraries).catch(error => {
-            this.uploadState.setStatusMessage('COMPILATION_FAILED');
+            this.uploadState.statusMessage = 'COMPILATION_FAILED';
             // make the printed red text
             console.log('%c' + error.toString(), 'color: red');
 
             // remove the last 4 lines of the error message
             const errorLines = error.toString().split("\n");
             errorLines.splice(errorLines.length - 5, 5);
-            const errorString = errorLines.join("\n");
-            this.uploadState.setError(errorString)
+            this.uploadState.error = errorLines.join("\n")
         })
         if (!response) return
 
         this.uploadState.addProgress(25);
-        this.uploadState.setStatusMessage('UPDATE_STARTED')
+        this.uploadState.statusMessage = 'UPDATE_STARTED'
 
         try {
             await this.upload.upload(response);
         } catch (error) {
-            this.uploadState.setError(error.toString())
+            this.uploadState.error = error.toString()
             console.error(error);
 
         }
-        this.uploadState.setDone(true);
+        this.uploadState.done = true;
 
         console.log("Finished upload");
 
     }
 
     returnBlockEnvironment() {
-        this.dialogState.setIsSerialOutputListening(true);
+        this.dialogState.isSerialOutputListening = true;
         this.dialogRef.close("BLOCK_ENVIRONMENT");
     }
 
     returnHelpEnvironment() {
-        this.dialogState.setIsSerialOutputListening(true);
+        this.dialogState.isSerialOutputListening = true;
         this.dialogRef.close("HELP_ENVIRONMENT");
     }
 
     async reconnect() {
         try {
             const port = await navigator.usb.requestDevice({
-                filters: this.robotWiredState.SUPPORTED_VENDORS.map(vendor => ({
+                filters: RobotWiredState.SUPPORTED_VENDORS.map(vendor => ({
                     vendorId: vendor
                 }))
             })

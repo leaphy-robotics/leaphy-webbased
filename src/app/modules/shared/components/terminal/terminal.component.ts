@@ -24,10 +24,10 @@ export class TerminalComponent implements AfterViewInit {
         let currentLine = '';
         let currentIndent = 0;
         this.child.onData().subscribe((input) => {
-            if (!this.robotWireState.getPythonDeviceConnected()) {
+            if (!this.robotWireState.pythonDeviceConnected) {
                 return;
             }
-            if (this.robotWireState.getPythonSerialMonitorListening()) {
+            if (this.robotWireState.pythonSerialMonitorListening) {
                 if (input === '\u0003') {
                     // Send keyboard interrupt to Python code
                     (async () => {
@@ -90,11 +90,11 @@ export class TerminalComponent implements AfterViewInit {
         });
 
         this.robotWireState.isPythonSerialMonitorListening$.subscribe(async (isRunning) => {
-            if (!this.robotWireState.getPythonDeviceConnected()) {
+            if (!this.robotWireState.pythonDeviceConnected) {
                 return;
             }
             if (isRunning) {
-                const port = this.robotWireState.getSerialPort();
+                const port = this.robotWireState.serialPort;
                 const abortController = new AbortController();
 
                 const child = this.child;
@@ -151,8 +151,8 @@ export class TerminalComponent implements AfterViewInit {
                         decode(c);
 
                         if (done) {
-                            this.robotWireState.setPythonSerialMonitorListening(false);
-                            this.robotWireState.setPythonCodeRunning(false);
+                            this.robotWireState.pythonSerialMonitorListening = false;
+                            this.robotWireState.pythonCodeRunning = false;
                         }
                     },
                 });
@@ -164,22 +164,22 @@ export class TerminalComponent implements AfterViewInit {
 
                 pipePromise.catch((error) => {
                     if (error.toString().includes('Upload started')) {
-                        this.robotWireState.setPythonSerialMonitorListening(false);
-                        this.robotWireState.setPythonCodeRunning(false);
+                        this.robotWireState.pythonSerialMonitorListening = false;
+                        this.robotWireState.pythonCodeRunning = false;
                         console.log('Stream aborted');
                     } else if (error.toString().includes('The device has been lost.')) {
-                        this.robotWireState.setSerialPort(null);
+                        this.robotWireState.serialPort = null;
                         console.log('Device disconnected');
                     } else if (error.toString().includes('Running code done')) {
                         console.log('Running code done');
                     } else if (error.toString().includes('Successfully aborted')) {
                         this.child.write('\x1b[31m' + 'Keyboard interrupt' + '\x1b[0m');
                         this.abortController = null;
-                        this.robotWireState.setPythonSerialMonitorListening(false);
-                        this.robotWireState.setPythonCodeRunning(false);
+                        this.robotWireState.pythonSerialMonitorListening = false;
+                        this.robotWireState.pythonCodeRunning = false;
                         this.pythonUploader.sendKeyboardInterrupt();
                     } else {
-                        this.robotWireState.setSerialPort(null);
+                        this.robotWireState.serialPort = null;
                         console.error('Error while piping stream:', error);
                     }
                 })

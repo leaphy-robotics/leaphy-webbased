@@ -9,8 +9,6 @@ import {MatDialog} from "@angular/material/dialog";
 import {ChangeLogDialog} from "../modules/core/dialogs/change-log/change-log.dialog";
 import showdown from "showdown";
 import {WorkspaceService} from "../services/workspace.service";
-import * as Blockly from "blockly/core";
-import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
 
 @Injectable({
     providedIn: 'root',
@@ -38,9 +36,9 @@ export class AppEffects {
             .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.appState.codeEditor$))
             .subscribe(([, codeEditorType]) => {
                 if (codeEditorType == CodeEditorType.Beginner) {
-                    this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+                    this.appState.selectedCodeEditor = CodeEditorType.CPP;
                 } else if (codeEditorType == CodeEditorType.CPP) {
-                    this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
+                    this.appState.selectedCodeEditor = CodeEditorType.Beginner;
                 }
             });
 
@@ -61,7 +59,7 @@ export class AppEffects {
                     default:
                         break;
                 }
-                this.appState.setIsCodeEditorToggleConfirmed(false);
+                this.appState.isCodeEditorToggleConfirmed = false;
             });
 
 
@@ -69,7 +67,7 @@ export class AppEffects {
         this.appState.releaseInfo$
             .pipe(filter(releaseInfo => !!releaseInfo))
             .subscribe(releaseInfo => {
-                const releaseVersion = this.appState.getReleaseVersion();
+                const releaseVersion = this.appState.releaseVersion;
                 if (!releaseVersion) {
                     return;
                 }
@@ -128,23 +126,6 @@ export class AppEffects {
                 }
             })
 
-        this.appState.isDesktop$
-            .pipe(filter(isDesktop => !!isDesktop))
-            .subscribe(() => {
-                try {
-                    Blockly.dialog.setPrompt((msg, defaultValue, callback) => {
-                        this.dialog.open(VariableDialog, {
-                            width: '400px',
-                            data: { name: defaultValue }
-                        }).afterClosed().subscribe(result => {
-                            callback(result);
-                        });
-                    });
-                } catch (e) {
-                    console.log(e);
-                    throw e;
-                }
-            });
     }
 
 

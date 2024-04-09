@@ -19,9 +19,9 @@ export default class Pico extends BaseProtocol {
 
         const port = await this.waitForPort()
         await port.open({ baudRate: 115200 })
-        this.robotWiredState.setSerialPort(port)
+        this.robotWiredState.serialPort = port
         this.uploader.setPort(port)
 
-        this.uploadState.setStatusMessage("UPDATE_COMPLETE")
+        this.uploadState.statusMessage = "UPDATE_COMPLETE"
     }
 }

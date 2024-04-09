@@ -62,7 +62,7 @@ export class BlocklyEditorEffects {
             .pipe(withLatestFrom(this.blocklyState.workspaceJSON$, this.appState.selectedRobotType$))
             .subscribe(([, workspaceXml]) => {
                 this.workspaceService.saveWorkspaceTemp(workspaceXml).then(() => {});
-                this.localStorage.store("changedLanguage", this.appState.getSelectedRobotType().id);
+                this.localStorage.store("changedLanguage", this.appState.selectedRobotType.id);
             });
 
         // When all prerequisites are there, Create a new workspace and open the codeview if needed
@@ -75,7 +75,7 @@ export class BlocklyEditorEffects {
                 this.getXmlContent('./assets/blockly/leaphy-start.xml')
             ))
             .subscribe(([[[element, config], robotType], baseToolboxXml, leaphyToolboxXml, startWorkspaceXml]) => {
-                const leaphyBlocks = getBlocks(this.appState.getSelectedRobotType().id);
+                const leaphyBlocks = getBlocks(this.appState.selectedRobotType.id);
                 Blockly.defineBlocksWithJsonArray(leaphyBlocks.block)
                 config.theme = Blockly.Theme.defineTheme('leaphy', {
                     'blockStyles': THEME.defaultBlockStyles,
@@ -92,21 +92,21 @@ export class BlocklyEditorEffects {
                 toolbox.getFlyout().autoClose = false;
                 const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
                 Blockly.Xml.domToWorkspace(xml, workspace);
-                this.blocklyState.setWorkspace(workspace);
-                this.blocklyState.setToolboxXml(toolboxXmlString);
-                if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+                this.blocklyState.workspace = workspace;
+                this.blocklyState.toolboxXml = toolboxXmlString;
+                if (this.appState.currentEditor == CodeEditorType.Beginner) {
                     this.workspaceService.restoreWorkspaceTemp().then(() => {});
                 }
                 toolbox.selectItemByPosition(0);
                 toolbox.refreshTheme();
 
-                setTimeout(() => this.blocklyState.setIsSideNavOpen(robotType.features.showCodeOnStart), 200);
+                setTimeout(() => this.blocklyState.isSideNavOpen = robotType.features.showCodeOnStart, 200);
             });
 
         // When a new project is started, reset the blockly code
         this.appState.selectedRobotType$
             .pipe(filter(robotType => !robotType))
-            .subscribe(() => this.codeEditorState.setCode(''))
+            .subscribe(() => this.codeEditorState.code = '')
 
         // When the robot selection changes, set the toolbox and initialWorkspace
         this.appState.selectedRobotType$
@@ -119,7 +119,7 @@ export class BlocklyEditorEffects {
             ))
             .subscribe(([[robotType, workspace], baseToolboxXml, leaphyToolboxXml, startWorkspaceXml]) => {
                 const toolboxXmlString = this.loadToolBox(baseToolboxXml, leaphyToolboxXml, robotType);
-                this.blocklyState.setToolboxXml(toolboxXmlString);
+                this.blocklyState.toolboxXml = toolboxXmlString;
 
                 workspace.clear();
                 const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
@@ -139,8 +139,8 @@ export class BlocklyEditorEffects {
                 workspace.clearUndo();
                 workspace.addChangeListener(Blockly.Events.disableOrphans);
                 workspace.addChangeListener(async () => {
-                    this.codeEditorState.setCode(arduino.workspaceToCode(workspace, this.appState.getSelectedRobotType().id));
-                    this.blocklyState.setWorkspaceJSON(JSON.stringify(Blockly.serialization.workspaces.save(workspace)));
+                    this.codeEditorState.code = arduino.workspaceToCode(workspace, this.appState.selectedRobotType.id);
+                    this.blocklyState.workspaceJSON = JSON.stringify(Blockly.serialization.workspaces.save(workspace));
                 });
             });
 
@@ -158,21 +158,14 @@ export class BlocklyEditorEffects {
                 filter(([previous, current]) => (current === CodeEditorType.CPP || current === CodeEditorType.Python ) && current !== previous)
             )
             .subscribe(() => {
-                this.blocklyState.setIsSideNavOpen(false);
-            });
-
-        // Toggle the isSideNavOpen state
-        this.blocklyState.isSideNavOpenToggled$
-            .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.blocklyState.isSideNavOpen$))
-            .subscribe(([, isSideNavOpen]) => {
-                this.blocklyState.setIsSideNavOpen(!isSideNavOpen);
+                this.blocklyState.isSideNavOpen = false;
             });
 
         // Toggle the isSoundOn state
         this.blocklyState.isSoundToggled$
             .pipe(filter(isToggled => !!isToggled), withLatestFrom(this.blocklyState.isSoundOn$))
             .subscribe(([, isSoundOn]) => {
-                this.blocklyState.setIsSoundOn(!isSoundOn);
+                this.blocklyState.isSoundOn = !isSoundOn;
             });
 
         // When the sound is turned on off, update the Blockly function
@@ -181,7 +174,7 @@ export class BlocklyEditorEffects {
             .subscribe(([isSoundOn, basePlay]) => {
                 if (!basePlay) {
                     basePlay = Blockly.WorkspaceAudio.prototype.play;
-                    this.blocklyState.setPlaySoundFunction(basePlay);
+                    this.blocklyState.playSoundFunction = basePlay;
                 }
                 Blockly.WorkspaceAudio.prototype.play = function (name, opt_volume) {
                     if (isSoundOn) {
@@ -192,7 +185,7 @@ export class BlocklyEditorEffects {
 
         // When the code editor is changed, clear the projectFilePath
         this.appState.codeEditor$
-            .subscribe(() => this.blocklyState.setProjectFileHandle(null));
+            .subscribe(() => this.blocklyState.projectFileHandle = null);
     }
 
     private parseCategory(root: Document, category: HTMLElement, robotType: RobotType,) : HTMLElement {

@@ -21,7 +21,8 @@ import { CodeEditorType } from '../domain/code-editor.type';
 import { LocalStorageService } from '../services/localstorage.service';
 import { version } from '../../../package.json';
 import {MatDialog} from "@angular/material/dialog";
-import {ConfirmEditorDialog} from "../modules/core/dialogs/confirm-editor/confirm-editor.dialog";
+import * as Blockly from "blockly/core";
+import {VariableDialog} from "../modules/core/dialogs/variable/variable.dialog";
 
 @Injectable({
     providedIn: 'root'
@@ -29,6 +30,11 @@ import {ConfirmEditorDialog} from "../modules/core/dialogs/confirm-editor/confir
 export class AppState {
     /* eslint-disable max-len */
 
+    public robotRows : RobotType[][] = [
+        [leaphyFlitzRobotType, leaphyOriginalRobotType, leaphyClickRobotType],
+        [arduinoNanoRobotType, arduinoUnoRobotType, arduinoMegaRobotType],
+        [genericRobotType, microPythonRobotType],
+    ];
 
     public static idToRobotType = {
         'l_original_uno': leaphyOriginalRobotType,
@@ -123,28 +129,29 @@ export class AppState {
     private robotChoiceSubject$ = new BehaviorSubject<RobotSelector>(null)
     public robotChoice$ = this.robotChoiceSubject$.asObservable()
 
-
     /* eslint-enable max-len */
 
-    private defaultLanguage = new Language('nl', 'Nederlands')
-    private availableLanguages = [new Language('en', 'English'), this.defaultLanguage]
+    public static defaultLanguage = new Language('nl', 'Nederlands')
+    public static availableLanguages = [new Language('en', 'English'), AppState.defaultLanguage]
+
 
     constructor(private localStorage: LocalStorageService, private dialog: MatDialog) {
 
-        this.isDesktopSubject$ = new BehaviorSubject<boolean>(true);
-        this.isDesktop$ = this.isDesktopSubject$.asObservable();
-        this.availableRobotTypes$ = this.isDesktop$
-            .pipe(map(isDesktop => {
-                if (isDesktop) {
-                    return [
-                        [leaphyFlitzRobotType, leaphyOriginalRobotType, leaphyClickRobotType],
-                        [arduinoNanoRobotType, arduinoUnoRobotType, arduinoMegaRobotType],
-                        [genericRobotType, microPythonRobotType],
-                    ]
-                } else {}
-            }));
+        try {
+            Blockly.dialog.setPrompt((msg, defaultValue, callback) => {
+                this.dialog.open(VariableDialog, {
+                    width: '400px',
+                    data: { name: defaultValue }
+                }).afterClosed().subscribe(result => {
+                    callback(result);
+                });
+            });
+        } catch (e) {
+            console.log(e);
+            throw e;
+        }
 
-        const currentLanguage = this.localStorage.fetch<Language>('currentLanguage') || this.defaultLanguage;
+        const currentLanguage = this.localStorage.fetch<Language>('currentLanguage') || AppState.defaultLanguage;
         this.currentLanguageSubject$ = new BehaviorSubject(currentLanguage);
         this.currentLanguage$ = this.currentLanguageSubject$.asObservable();
 
@@ -153,16 +160,8 @@ export class AppState {
             .pipe(map(robotType => robotType !== genericRobotType));
     }
 
-    private isDesktopSubject$: BehaviorSubject<boolean>;
-    public isDesktop$: Observable<boolean>;
-
-    public availableRobotTypes$: Observable<RobotType[][]>;
-
     private selectedRobotTypeSubject$ = new BehaviorSubject<RobotType>(null);
     public selectedRobotType$ = this.selectedRobotTypeSubject$.asObservable();
-
-    private availableLanguagesSubject$ = new BehaviorSubject<Language[]>(this.availableLanguages);
-    public availableLanguages$ = this.availableLanguagesSubject$.asObservable();
 
     private currentLanguageSubject$: BehaviorSubject<Language>;
     public currentLanguage$: Observable<Language>
@@ -176,9 +175,6 @@ export class AppState {
     private codeEditorSubject$ = new BehaviorSubject<CodeEditorType>(CodeEditorType.None);
     public codeEditor$ = this.codeEditorSubject$.asObservable();
 
-    private saveStateSubject$ = new BehaviorSubject<boolean>(true)
-    public saveState$ = this.saveStateSubject$.asObservable()
-
     public canChangeCodeEditor$: Observable<boolean>;
 
     public setSelectedRobotType(robotType: RobotType, skipPopup: boolean = false) {
@@ -191,37 +187,37 @@ export class AppState {
         this.robotChoiceSubject$.next(selector)
     }
 
-    public setChangedLanguage(language: Language) {
+    set changedLanguage(language: Language) {
         this.localStorage.store('currentLanguage', language);
         this.changedLanguageSubject$.next(language);
     }
 
-    public setCurrentLanguage(language: Language) {
+    set currentLanguage(language: Language) {
         this.localStorage.store('currentLanguage', language);
         this.currentLanguageSubject$.next(language);
     }
 
-    public setIsCodeEditorToggleConfirmed(confirmed: boolean) {
+    set isCodeEditorToggleConfirmed(confirmed: boolean) {
         this.isCodeEditorToggleConfirmedSubject$.next(confirmed);
     }
 
-    public setSelectedCodeEditor(codeEditor: CodeEditorType) {
+    set selectedCodeEditor(codeEditor: CodeEditorType) {
         this.codeEditorSubject$.next(codeEditor);
     }
 
-    public getCurrentLanguageCode(): string {
+    get currentLanguageCode(): string {
         return this.currentLanguageSubject$.getValue().code;
     }
 
-    public getCurrentEditor(): CodeEditorType {
+    get currentEditor(): CodeEditorType {
         return this.codeEditorSubject$.getValue();
     }
 
-    public getSelectedRobotType(): RobotType {
+    get selectedRobotType(): RobotType {
         return this.selectedRobotTypeSubject$.getValue();
     }
 
-    public getReleaseVersion(): string {
+    get releaseVersion(): string {
         return this.releaseVersionSubject$.getValue();
     }
 }

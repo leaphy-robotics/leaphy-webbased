@@ -22,7 +22,7 @@ export class FileExplorerDialog {
         private robotWiredState: RobotWiredState
     ) {
         this.upload.connect().then(() => {
-            this.robotWiredState.setSerialPort(this.upload.port)
+            this.robotWiredState.serialPort = this.upload.port
             this.upload.runFileSystemCommand('ls', this.currentPath).then((files) => {
                 this.dirContent = files;
             });

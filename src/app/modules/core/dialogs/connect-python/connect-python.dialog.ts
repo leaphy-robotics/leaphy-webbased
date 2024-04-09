@@ -30,7 +30,7 @@ export class ConnectPythonDialog {
     ) {}
 
     public async makePythonRobotConnection() {
-        this.dialogState.setIsSerialOutputListening(false);
+        this.dialogState.isSerialOutputListening = false;
         this.uploading.next(true);
         this.onUpdate('CONNECTING');
         this.progressBarWidth += 25;
@@ -63,7 +63,7 @@ export class ConnectPythonDialog {
 
         this.onUpdate('CONNECTED');
         this.showReturnOptions();
-        this.robotWiredState.setPythonDeviceConnected(true);
+        this.robotWiredState.pythonDeviceConnected = true;
     }
 
     public async startFlash() {
@@ -114,12 +114,12 @@ export class ConnectPythonDialog {
     }
 
     returnBlockEnvironment() {
-        this.dialogState.setIsSerialOutputListening(true);
+        this.dialogState.isSerialOutputListening = true;
         this.dialogRef.close("BLOCK_ENVIRONMENT");
     }
 
     returnHelpEnvironment() {
-        this.dialogState.setIsSerialOutputListening(true);
+        this.dialogState.isSerialOutputListening = true;
         this.dialogRef.close("HELP_ENVIRONMENT");
     }
 

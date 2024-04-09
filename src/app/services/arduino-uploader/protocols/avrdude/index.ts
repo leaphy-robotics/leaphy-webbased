@@ -30,7 +30,7 @@ export default class Avrdude extends BaseProtocol {
         avrdude.FS.writeFile('/tmp/avrdude.conf', avrdudeConfig)
         avrdude.FS.writeFile('/tmp/program.hex', response['hex'])
         // get board
-        const mcu = this.uploader.appState.getSelectedRobotType().protocol?.microcontroller
+        const mcu = this.uploader.appState.selectedRobotType.protocol?.microcontroller
         if (!supportedMicrocontrollers.includes(mcu)) {
             throw new Error('Unsupported microcontroller')
         }
@@ -68,7 +68,7 @@ export default class Avrdude extends BaseProtocol {
             }
             throw new Error('Avrdude failed')
         }
-        this.uploadState.setStatusMessage("UPDATE_COMPLETE")
+        this.uploadState.statusMessage ="UPDATE_COMPLETE"
         return
     }
 }

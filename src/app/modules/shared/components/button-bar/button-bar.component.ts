@@ -19,15 +19,15 @@ export class ButtonBarComponent {
     ) {
     }
     public onSideNavToggled() {
-        this.blocklyState.setIsSideNavOpenToggled();
+        this.blocklyState.isSideNavOpen = !this.blocklyState.isSideNavOpen;
     }
 
     public onShowSerialOutputClicked() {
-        this.dialogState.setIsSerialOutputWindowOpen(true);
+        this.dialogState.isSerialOutputWindowOpen = true;
     }
 
     public onShowLibraryManagerClicked() {
-        this.dialogState.setIsLibraryManagerWindowOpen(true);
+        this.dialogState.isLibraryManagerWindowOpen = true;
     }
 
     protected readonly AppState = AppState;

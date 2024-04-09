@@ -27,35 +27,35 @@ export class DialogState {
     public isExamplesDialogVisibleSubject$ = new BehaviorSubject(false);
     public isExamplesDialogVisible$ = this.isExamplesDialogVisibleSubject$.asObservable()
 
-    public setIsSerialOutputWindowOpen(isOpen: boolean) {
+    set isSerialOutputWindowOpen(isOpen: boolean) {
         this.isSerialOutputWindowOpenSubject$.next(isOpen);
     }
 
-    public setIsSerialOutputListening(isFocus: boolean) {
+    set isSerialOutputListening(isFocus: boolean) {
         this.isSerialOutputListeningSubject$.next(isFocus);
     }
 
-    public setIsSerialGraphOutputSelected(isSelected: boolean) {
+    set isSerialGraphOutputSelected(isSelected: boolean) {
         this.isSerialGraphOutputSelectedSubject$.next(isSelected);
     }
 
-    public setIsInfoDialogVisible(isVisible: boolean) {
+    set isInfoDialogVisible(isVisible: boolean) {
         this.isInfoDialogVisibleSubject$.next(isVisible);
     }
 
-    public getIsSerialOutputWindowOpen() {
+    get isSerialOutputWindowOpen() {
         return this.isSerialOutputWindowOpenSubject$.getValue();
     }
 
-    public setIsLibraryManagerWindowOpen(isOpen: boolean) {
+    set isLibraryManagerWindowOpen(isOpen: boolean) {
         this.isLibraryManagerWindowOpenSubject$.next(isOpen);
     }
 
-    public getIsLibraryManagerWindowOpen() {
+    get isLibraryManagerWindowOpen() {
         return this.isLibraryManagerWindowOpenSubject$.getValue();
     }
 
-    public setIsExamplesDialogVisible(isVisible: boolean) {
+    set isExamplesDialogVisible(isVisible: boolean) {
         this.isExamplesDialogVisibleSubject$.next(isVisible)
     }
 }
