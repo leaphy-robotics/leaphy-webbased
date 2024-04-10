@@ -13,10 +13,14 @@ export type LeaphyPort = SerialPort|MockedSerialPort
 })
 export class RobotWiredState {
 
+
+    /* Variables */
     public static SUPPORTED_VENDORS = [0x1a86, 9025, 2341, 0x0403, 0x2e8a]
     public serialPort: LeaphyPort = null;
     public abortController: AbortController = null;
+    public serialWrite: WritableStreamDefaultWriter<Uint8Array> = null;
 
+    /* Observables */
     // Upload log, a Log of list of strings
     private uploadLogSubject$ = new BehaviorSubject<string[]>([]);
     public uploadLog$: Observable<string[]> = this.uploadLogSubject$.asObservable();
@@ -43,7 +47,7 @@ export class RobotWiredState {
         }, []));
 
 
-    public serialWrite: WritableStreamDefaultWriter<Uint8Array> = null;
+
 
     public serialChartDataSets$: Observable<ChartDataset[]> = this.serialData$
         .pipe(map(data => {
@@ -69,6 +73,7 @@ export class RobotWiredState {
         }));
 
 
+    /* Functions */
     set incomingSerialData(data: { time: Date, data: string }) {
         this.serialDataSubject$.next(data);
     }

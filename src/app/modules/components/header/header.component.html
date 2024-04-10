@@ -65,7 +65,7 @@
             </ng-container>
         </div>
 
-        <div *ngIf="(this.appState.selectedRobotType$ | async) === null" class="version-number">{{ (appState.releaseVersion$ | async) }}</div>
+        <div *ngIf="(this.appState.selectedRobotType$ | async) === null" class="version-number">{{ (appState.releaseVersion) }}</div>
     </div>
 </mat-toolbar>
 

@@ -123,9 +123,6 @@ export class AppState {
     public releaseInfoSubject$ = new BehaviorSubject<any>(null);
     public releaseInfo$: Observable<any> = this.releaseInfoSubject$.asObservable();
 
-    public releaseVersionSubject$ = new BehaviorSubject<string>(version);
-    public releaseVersion$: Observable<string> = this.releaseVersionSubject$.asObservable();
-
     private robotChoiceSubject$ = new BehaviorSubject<RobotSelector>(null)
     public robotChoice$ = this.robotChoiceSubject$.asObservable()
 
@@ -218,6 +215,6 @@ export class AppState {
     }
 
     get releaseVersion(): string {
-        return this.releaseVersionSubject$.getValue();
+        return version;
     }
 }

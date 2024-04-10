@@ -111,7 +111,7 @@ export class BlocklyEditorState {
         this.undoSubject$.next(redo);
     }
 
-    set isSoundToggled(_) {
+    set isSoundToggled(_: any) {
         this.isSoundToggledSubject$.next(true);
     }
 

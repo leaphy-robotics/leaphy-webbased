@@ -68,7 +68,6 @@ export class WorkspaceService {
             data: {message: 'WORKSPACE_RESTORING'}
         })
         if (message.payload.type == 'advanced' || message.payload.type == 'python') {
-            this.codeEditorState.originalCode = message.payload.data as string;
             this.codeEditorState.code = message.payload.data as string;
             if (message.payload.type == 'advanced') {
                 this.appState.selectedCodeEditor = CodeEditorType.CPP;
@@ -247,7 +246,6 @@ export class WorkspaceService {
                     }).afterClosed().subscribe(async (fileName) =>  {
                         if (fileName) {
                             const content = await this.uploaderService.runFileSystemCommand('get', fileName);
-                            this.codeEditorState.originalCode = content;
                             this.codeEditorState.code = content;
                             this.blocklyState.projectFileHandle = new PythonFile(fileName);
                         }
@@ -301,14 +299,12 @@ export class WorkspaceService {
             })
         } else if (type == 'advanced' && this.appState.currentEditor == CodeEditorType.CPP) {
             try {
-                this.codeEditorState.originalCode = workspaceTemp;
                 this.codeEditorState.code = workspaceTemp;
             } catch (error) {
                 console.log('Error:', error.message);
             }
         } else if (type == 'python' && this.appState.currentEditor == CodeEditorType.Python) {
             try {
-                this.codeEditorState.originalCode = workspaceTemp;
                 this.codeEditorState.code = workspaceTemp;
             } catch (error) {
                 console.log('Error:', error.message);
@@ -340,7 +336,6 @@ export class WorkspaceService {
         } else if (type == 'advanced') {
             this.appState.selectedCodeEditor = CodeEditorType.CPP;
             try {
-                this.codeEditorState.originalCode = workspaceTemp;
                 this.codeEditorState.code = workspaceTemp;
             } catch (error) {
                 console.log('Error:', error.message);
@@ -348,7 +343,6 @@ export class WorkspaceService {
         } else if (type == 'python') {
             this.appState.selectedCodeEditor = CodeEditorType.Python;
             try {
-                this.codeEditorState.originalCode = workspaceTemp;
                 this.codeEditorState.code = workspaceTemp;
             } catch (error) {
                 console.log('Error:', error.message);
