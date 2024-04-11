@@ -19,9 +19,9 @@ export class CodeEditorEffects {
         this.appState.codeEditor$
             .subscribe(codeEditor => {
                 if (codeEditor == CodeEditorType.Python) {
-                    this.codeEditorState.setCode(this.codeEditorState.pythonProgram);
-                } else if (codeEditor == CodeEditorType.CPP && this.appState.getSelectedRobotType() == genericRobotType) {
-                    this.codeEditorState.setCode(this.codeEditorState.originalProgram);
+                    this.codeEditorState.code = `from leaphymicropython.utils.pins import set_pwm`;
+                } else if (codeEditor == CodeEditorType.CPP && this.appState.selectedRobotType == genericRobotType) {
+                    this.codeEditorState.code = this.codeEditorState.originalProgram;
                 }
             });
     }

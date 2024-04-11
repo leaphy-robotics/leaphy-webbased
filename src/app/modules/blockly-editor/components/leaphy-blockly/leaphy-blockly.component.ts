@@ -55,7 +55,7 @@ export class LeaphyBlocklyComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.blocklyState.setBlocklyElement(this.blockContent.nativeElement);
+        this.blocklyState.blocklyElement = this.blockContent.nativeElement;
         this.blocklyState.workspace$.subscribe(workspace => {
             this.workspace = workspace
             workspace.addChangeListener((event: any) => {

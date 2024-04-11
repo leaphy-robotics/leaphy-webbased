@@ -1,11 +1,11 @@
 <div class="container">
-  <img class="leaphyLogo" src="./assets/leaphy-logo-color.svg" />
-  <div class="languages">
-    <button class="language" *ngFor="let language of appState.availableLanguages$ | async" (click)="onLanguageSelected(language)">
-        <img src="./assets/i18n/{{language.code}}.svg" width="50" height="50">
-        <div class="language-name">
-          {{language.name}}
-      </div>
-    </button>
-  </div>
+    <img class="leaphyLogo" src="./assets/leaphy-logo-color.svg" />
+    <div class="languages">
+        <button class="language" *ngFor="let language of AppState.availableLanguages" (click)="onLanguageSelected(language)">
+            <img src="./assets/i18n/{{language.code}}.svg" width="50" height="50">
+            <div class="language-name">
+                {{language.name}}
+            </div>
+        </button>
+    </div>
 </div>

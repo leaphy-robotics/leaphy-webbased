@@ -68,27 +68,26 @@ export class WorkspaceService {
             data: {message: 'WORKSPACE_RESTORING'}
         })
         if (message.payload.type == 'advanced' || message.payload.type == 'python') {
-            this.codeEditorState.setOriginalCode(message.payload.data as string);
-            this.codeEditorState.setCode(message.payload.data as string);
+            this.codeEditorState.code = message.payload.data as string;
             if (message.payload.type == 'advanced') {
-                this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+                this.appState.selectedCodeEditor = CodeEditorType.CPP;
             } else if (message.payload.type == 'python') {
-                this.appState.setSelectedCodeEditor(CodeEditorType.Python);
+                this.appState.selectedCodeEditor = CodeEditorType.Python;
             }
-            this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
+            this.blocklyState.projectFileHandle = message.payload.projectFilePath;
             await this.loadWorkspace();
             this.appState.setSelectedRobotType(genericRobotType, true);
             return;
         }
         this.appState.setSelectedRobotType(AppState.idToRobotType[message.payload.extension.replace('.', '')], true);
-        this.blocklyState.setWorkspaceJSON(message.payload.data as string);
-        this.blocklyState.setProjectFileHandle(message.payload.projectFilePath);
+        this.blocklyState.workspaceJSON = message.payload.data as string;
+        this.blocklyState.projectFileHandle = message.payload.projectFilePath;
         await this.loadWorkspace();
     }
 
     public async switchCodeEditor() {
-        const editor = this.appState.getCurrentEditor()
-        if (!this.codeEditorState.getSaveState() && editor === CodeEditorType.CPP) {
+        const editor = this.appState.currentEditor
+        if (!this.codeEditorState.saveState && editor === CodeEditorType.CPP) {
             const confirmed = await firstValueFrom(
                 this.dialog.open(ConfirmEditorDialog, {
                     width: '300px'
@@ -98,11 +97,11 @@ export class WorkspaceService {
         }
 
         if (editor === CodeEditorType.Beginner) {
-            this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
-            this.codeEditorState.setSaveState(false)
+            this.appState.selectedCodeEditor = CodeEditorType.CPP;
+            this.codeEditorState.saveState = false
         } else {
-            this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
-            this.codeEditorState.setSaveState(true)
+            this.appState.selectedCodeEditor = CodeEditorType.Beginner;
+            this.codeEditorState.saveState = true
         }
     }
 
@@ -117,7 +116,7 @@ export class WorkspaceService {
     public async saveWorkspaceAs(robotExtension: string)
     {
         let onPythonRobot = false;
-        if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+        if (this.appState.currentEditor == CodeEditorType.Python) {
             const result = await this.dialog.open(LocationSelectDialog, {
                 width: '75vw', disableClose: true,
                 data: {options: ["THIS_COMPUTER", "MICROCONTROLLER"]}
@@ -137,7 +136,7 @@ export class WorkspaceService {
         fileNamesDialogRef.afterClosed().subscribe((name: string) => {
             if (name == null)
                 return
-            if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+            if (this.appState.currentEditor == CodeEditorType.Beginner) {
                 const data = this.blocklyState.workspaceJSON;
                 const blob = new Blob([data], { type: 'text/plain' });
                 const url = window.URL.createObjectURL(blob);
@@ -148,8 +147,8 @@ export class WorkspaceService {
                 a.click();
                 window.URL.revokeObjectURL(url);
                 a.remove();
-            } else if (this.appState.getCurrentEditor() == CodeEditorType.CPP) {
-                const data = this.codeEditorState.getCode();
+            } else if (this.appState.currentEditor == CodeEditorType.CPP) {
+                const data = this.codeEditorState.code;
                 const blob = new Blob([data], { type: 'text/plain' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -160,17 +159,17 @@ export class WorkspaceService {
                 window.URL.revokeObjectURL(url);
                 // delete a after it is clicked
                 a.remove();
-            } else if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+            } else if (this.appState.currentEditor == CodeEditorType.Python) {
                 if (onPythonRobot) {
-                    if (!this.robotWiredState.getSerialPort()) {
+                    if (!this.robotWiredState.serialPort) {
                         this.uploaderService.connect().then(() => {
-                            this.uploaderService.runFileSystemCommand('put', name + '.py', this.codeEditorState.getCode());
+                            this.uploaderService.runFileSystemCommand('put', name + '.py', this.codeEditorState.code);
                         });
                     } else {
-                        this.uploaderService.runFileSystemCommand('put', name + '.py', this.codeEditorState.getCode());
+                        this.uploaderService.runFileSystemCommand('put', name + '.py', this.codeEditorState.code);
                     }
                 } else {
-                    const data = this.codeEditorState.getCode();
+                    const data = this.codeEditorState.code;
                     const blob = new Blob([data], {type: 'text/plain'});
                     const url = window.URL.createObjectURL(blob);
                     const a = document.createElement('a');
@@ -193,22 +192,22 @@ export class WorkspaceService {
      */
     public async saveWorkspace()
     {
-        if (this.blocklyState.getProjectFileHandle()) {
-            console.log(this.blocklyState.getProjectFileHandle());
-            const file = this.blocklyState.getProjectFileHandle();
+        if (this.blocklyState.projectFileHandle) {
+            console.log(this.blocklyState.projectFileHandle);
+            const file = this.blocklyState.projectFileHandle;
             if (file instanceof PythonFile) {
-                await this.uploaderService.runFileSystemCommand('put', file.path, this.codeEditorState.getCode());
+                await this.uploaderService.runFileSystemCommand('put', file.path, this.codeEditorState.code);
                 return;
             }
             const writable = await file.createWritable();
-            if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+            if (this.appState.currentEditor == CodeEditorType.Beginner) {
                 await writable.write({type: 'write', data: this.blocklyState.workspaceJSON, position: 0});
             } else {
-                await writable.write({type: 'write', data: this.codeEditorState.getCode(), position: 0});
+                await writable.write({type: 'write', data: this.codeEditorState.code, position: 0});
             }
             await writable.close();
         } else {
-            await this.saveWorkspaceAs(this.appState.getSelectedRobotType().id);
+            await this.saveWorkspaceAs(this.appState.selectedRobotType.id);
         }
 
         this.codeEditorState.afterSave()
@@ -216,12 +215,12 @@ export class WorkspaceService {
 
     public async saveWorkspaceTemp(data) {
         sessionStorage.setItem('workspace', data);
-        sessionStorage.setItem('robotType', this.appState.getSelectedRobotType().id);
-        if (this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
+        sessionStorage.setItem('robotType', this.appState.selectedRobotType.id);
+        if (this.appState.currentEditor == CodeEditorType.Beginner) {
             sessionStorage.setItem('type', 'beginner');
-        } else if (this.appState.getCurrentEditor() == CodeEditorType.CPP) {
+        } else if (this.appState.currentEditor == CodeEditorType.CPP) {
             sessionStorage.setItem('type', 'advanced');
-        } else if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+        } else if (this.appState.currentEditor == CodeEditorType.Python) {
             sessionStorage.setItem('type', 'python');
         }
     }
@@ -234,7 +233,7 @@ export class WorkspaceService {
     * Restore the workspace from a file
      */
     public async restoreWorkspace() {
-        if (this.appState.getCurrentEditor() == CodeEditorType.Python) {
+        if (this.appState.currentEditor == CodeEditorType.Python) {
             const result = await this.dialog.open(LocationSelectDialog, {
                 width: '75vw', disableClose: true,
                 data: {options: ["THIS_COMPUTER", "MICROCONTROLLER"]}
@@ -247,9 +246,8 @@ export class WorkspaceService {
                     }).afterClosed().subscribe(async (fileName) =>  {
                         if (fileName) {
                             const content = await this.uploaderService.runFileSystemCommand('get', fileName);
-                            this.codeEditorState.setOriginalCode(content);
-                            this.codeEditorState.setCode(content);
-                            this.blocklyState.setProjectFileHandle(new PythonFile(fileName));
+                            this.codeEditorState.code = content;
+                            this.blocklyState.projectFileHandle = new PythonFile(fileName);
                         }
                     });
                     return;
@@ -290,26 +288,24 @@ export class WorkspaceService {
         const workspaceTemp = sessionStorage.getItem('workspace');
         const robotType = sessionStorage.getItem('robotType');
         const type = sessionStorage.getItem('type');
-        this.blocklyState.setProjectFileHandle(null);
-        if (type == 'beginner' && this.appState.getCurrentEditor() == CodeEditorType.Beginner) {
-            if (robotType != this.appState.getSelectedRobotType().id) {
+        this.blocklyState.projectFileHandle = null;
+        if (type == 'beginner' && this.appState.currentEditor == CodeEditorType.Beginner) {
+            if (robotType != this.appState.selectedRobotType.id) {
                 return;
             }
             this.restoreWorkspaceFromMessage({
                 payload: {projectFilePath: null, data: workspaceTemp, type: 'beginner', extension: robotType},
                 displayTimeout: 1000
             })
-        } else if (type == 'advanced' && this.appState.getCurrentEditor() == CodeEditorType.CPP) {
+        } else if (type == 'advanced' && this.appState.currentEditor == CodeEditorType.CPP) {
             try {
-                this.codeEditorState.setOriginalCode(workspaceTemp);
-                this.codeEditorState.setCode(workspaceTemp);
+                this.codeEditorState.code = workspaceTemp;
             } catch (error) {
                 console.log('Error:', error.message);
             }
-        } else if (type == 'python' && this.appState.getCurrentEditor() == CodeEditorType.Python) {
+        } else if (type == 'python' && this.appState.currentEditor == CodeEditorType.Python) {
             try {
-                this.codeEditorState.setOriginalCode(workspaceTemp);
-                this.codeEditorState.setCode(workspaceTemp);
+                this.codeEditorState.code = workspaceTemp;
             } catch (error) {
                 console.log('Error:', error.message);
             }
@@ -329,27 +325,25 @@ export class WorkspaceService {
         const workspaceTemp = sessionStorage.getItem('workspace');
         const robotType = sessionStorage.getItem('robotType');
         const type = sessionStorage.getItem('type');
-        this.blocklyState.setProjectFileHandle(null);
+        this.blocklyState.projectFileHandle = null;
         this.appState.setSelectedRobotType(AppState.idToRobotType[robotType], true);
         if (type == 'beginner') {
-            this.appState.setSelectedCodeEditor(CodeEditorType.Beginner);
+            this.appState.selectedCodeEditor = CodeEditorType.Beginner;
             this.restoreWorkspaceFromMessage({
                 payload: {projectFilePath: null, data: workspaceTemp, type: 'beginner', extension: robotType},
                 displayTimeout: 1000
             })
         } else if (type == 'advanced') {
-            this.appState.setSelectedCodeEditor(CodeEditorType.CPP);
+            this.appState.selectedCodeEditor = CodeEditorType.CPP;
             try {
-                this.codeEditorState.setOriginalCode(workspaceTemp);
-                this.codeEditorState.setCode(workspaceTemp);
+                this.codeEditorState.code = workspaceTemp;
             } catch (error) {
                 console.log('Error:', error.message);
             }
         } else if (type == 'python') {
-            this.appState.setSelectedCodeEditor(CodeEditorType.Python);
+            this.appState.selectedCodeEditor = CodeEditorType.Python;
             try {
-                this.codeEditorState.setOriginalCode(workspaceTemp);
-                this.codeEditorState.setCode(workspaceTemp);
+                this.codeEditorState.code = workspaceTemp;
             } catch (error) {
                 console.log('Error:', error.message);
             }
@@ -361,7 +355,7 @@ export class WorkspaceService {
     * Load workspace
      */
     public async loadWorkspace() {
-        const workspace = this.blocklyState.getWorkspace();
+        const workspace = this.blocklyState.workspace;
         const workspaceXml = this.blocklyState.workspaceJSON;
         if (!workspace) return;
         if (!workspaceXml) return;

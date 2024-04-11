@@ -65,7 +65,7 @@
             </ng-container>
         </div>
 
-        <div *ngIf="(this.appState.selectedRobotType$ | async) === null" class="version-number">{{ (appState.releaseVersion$ | async) }}</div>
+        <div *ngIf="(this.appState.selectedRobotType$ | async) === null" class="version-number">{{ (appState.releaseVersion) }}</div>
     </div>
 </mat-toolbar>
 
@@ -133,7 +133,7 @@
 </mat-menu>
 
 <mat-menu #languageMenu="matMenu" class="matmenus">
-    <button mat-menu-item *ngFor="let language of appState.availableLanguages$ | async" [value]="language"
+    <button mat-menu-item *ngFor="let language of AppState.availableLanguages" [value]="language"
             (click)="onLanguageChanged(language)">
         <span [class.selected]="language.code === (appState.currentLanguage$ | async)?.code">{{language.name}}</span>
     </button>

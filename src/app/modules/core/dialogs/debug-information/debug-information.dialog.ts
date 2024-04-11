@@ -28,7 +28,7 @@ export class DebugInformationDialog {
     this.browser = navigator.userAgentData?.brands[1].brand ?? translate.instant("UNKNOWN");
     // @ts-ignore
     this.browserVersion = navigator.userAgentData?.brands[1].version ?? translate.instant("UNKNOWN");
-    this.serialPort = this.robotWiredState.getSerialPort();
+    this.serialPort = this.robotWiredState.serialPort;
     if (!('serial' in navigator)) {
       this.webSerialSupported = translate.instant("WEB_SERIAL_NOT_SUPPORTED");
     } else {
@@ -42,4 +42,5 @@ export class DebugInformationDialog {
 
 
   protected readonly document = document;
+    protected readonly RobotWiredState = RobotWiredState;
 }

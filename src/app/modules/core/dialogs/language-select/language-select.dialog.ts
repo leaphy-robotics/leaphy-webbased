@@ -15,7 +15,9 @@ export class LanguageSelectDialog  {
   ) { }
 
   public onLanguageSelected(language: Language) {
-    this.appState.setCurrentLanguage(language);
+    this.appState.currentLanguage = language;
     this.dialogRef.close();
   }
+
+    protected readonly AppState = AppState;
 }

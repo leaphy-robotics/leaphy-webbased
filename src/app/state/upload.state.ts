@@ -32,22 +32,22 @@ export class UploadState {
         this.progressSubject$.next(this.progressSubject$.getValue() + progress)
     }
 
-    public setStatusMessage(message: string) {
+    set statusMessage(message: string) {
         const translation = this.translate.instant(message);
         this.stateMessageSubject$.next(translation !== null ? translation : message.replace(/_/g, " "));
     }
 
-    public setDone(done: boolean) {
+    set done(done: boolean) {
         this.doneSubject$.next(done)
     }
 
-    public setError(error: string) {
-        this.setFailed(true)
+    set error(error: string) {
+        this.failed = true
         this.errorSubject$.next(error)
     }
 
-    public setFailed(failed: boolean) {
-        this.setDone(true)
+    set failed(failed: boolean) {
+        this.done = true
         this.failedSubject$.next(failed)
     }
 

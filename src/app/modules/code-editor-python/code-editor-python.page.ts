@@ -32,7 +32,7 @@ export class CodeEditorPythonPage implements AfterViewInit {
 
     ngAfterViewInit(): void {
         window.addEventListener("beforeunload", async () => {
-            await this.workspaceService.saveWorkspaceTemp(this.codeEditorState.getCode());
+            await this.workspaceService.saveWorkspaceTemp(this.codeEditorState.code);
         })
     }
 }

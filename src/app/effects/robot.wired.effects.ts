@@ -25,7 +25,7 @@ export class RobotWiredEffects {
         this.dialogState.isSerialOutputListening$
             .pipe(filter(isListening => !!isListening))
             .subscribe(async () => {
-                if (this.robotWiredState.getPythonDeviceConnected())
+                if (this.robotWiredState.pythonDeviceConnected)
                     return;
                 const robotWiredState = this.robotWiredState;
 
@@ -38,8 +38,7 @@ export class RobotWiredEffects {
                         const date = new Date();
 
                         function makeString (chunkedStr: string) {
-                            const serialData = { time: date, data: chunkedStr };
-                            robotWiredState.setIncomingSerialData(serialData);
+                            robotWiredState.incomingSerialData = { time: date, data: chunkedStr };
                         }
 
                         let i = this.logBuffer.indexOf("\n");

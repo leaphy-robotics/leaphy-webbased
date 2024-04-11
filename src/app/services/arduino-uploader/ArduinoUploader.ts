@@ -13,6 +13,7 @@ class Arduino {
     uploadState: UploadState
     appState: AppState
 
+
     /**
      * Create a new Arduino instance.
      * @param serialOptions The options to use when opening the serial port.
@@ -58,10 +59,10 @@ class Arduino {
      * @param outputStream The stream to write to
      */
     async serialMonitor(outputStream: WritableStream) {
-        if (this.robotWiredState.getSerialPort() == null) {
+        if (this.robotWiredState.serialPort == null) {
             return;
         }
-        this.port = this.robotWiredState.getSerialPort();
+        this.port = this.robotWiredState.serialPort;
 
         try {
             if (this.port.readable != null && this.port.readable.locked) {
@@ -81,7 +82,7 @@ class Arduino {
             await clearReadBuffer(this.readStream);
             this.readStream.releaseLock();
 
-            this.robotWiredState.setSerialWrite(this.writeStream);
+            this.robotWiredState.serialWrite = this.writeStream;
             const pipePromise = readableStream.pipeTo(outputStream, { signal: abortController.signal });
 
             pipePromise.catch((error) => {
@@ -89,10 +90,10 @@ class Arduino {
                     outputStream.abort("Upload started")
                     console.log('Stream aborted');
                 } else if (error.toString().includes('The device has been lost.')) {
-                    this.robotWiredState.setSerialPort(null);
+                    this.robotWiredState.serialPort = null;
                     console.log('Device disconnected');
                 } else {
-                    this.robotWiredState.setSerialPort(null);
+                    this.robotWiredState.serialPort = null;
                     console.error('Error while piping stream:', error);
                 }
             }).then(
@@ -110,11 +111,11 @@ class Arduino {
                             const port = await this.robotWiredState.requestSerialPort(false)
                             if (!port) {
                                 this.port = null
-                                this.robotWiredState.setSerialPort(null)
+                                this.robotWiredState.serialPort = null
                                 return
                             }
 
-                            this.robotWiredState.setSerialPort(port)
+                            this.robotWiredState.serialPort = port
                             this.setPort(port)
 
                             await this.port.open({baudRate: 115200})
@@ -122,7 +123,7 @@ class Arduino {
                 }
             );
 
-            this.robotWiredState.setAbortController(abortController);
+            this.robotWiredState.abortController = abortController;
         } catch (e) {
             console.log(e);
             if (this.port == null) {
@@ -134,7 +135,7 @@ class Arduino {
 
             }
             this.port = null;
-            this.robotWiredState.setSerialPort(null);
+            this.robotWiredState.serialPort = null;
             console.log(e);
         }
     }
@@ -148,7 +149,7 @@ class Arduino {
         if (this.port == null)
             throw new Error('No device selected')
 
-        const Uploader = this.appState.getSelectedRobotType().protocol.protocol
+        const Uploader = this.appState.selectedRobotType.protocol.protocol
         this.isUploading = true
 
         const upload = new Uploader(this.port, this.robotWiredState, this.uploadState, this)

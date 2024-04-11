@@ -49,7 +49,7 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
 
 
     public async write(data: string) {
-        const writer = this.robotWiredState.getSerialWrite();
+        const writer = this.robotWiredState.serialWrite;
         if (!writer) return;
 
         await writer.write(new TextEncoder().encode(`${data}\n`));
@@ -118,11 +118,11 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
     }
 
     public onViewTextOutputClicked() {
-        this.dialogState.setIsSerialGraphOutputSelected(false);
+        this.dialogState.isSerialGraphOutputSelected = false;
     }
 
     public onViewGraphOutputClicked() {
-        this.dialogState.setIsSerialGraphOutputSelected(true);
+        this.dialogState.isSerialGraphOutputSelected = true;
     }
 
     public onClearSerialDataClicked() {

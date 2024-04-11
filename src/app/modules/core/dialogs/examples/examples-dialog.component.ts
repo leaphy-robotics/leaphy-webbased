@@ -18,7 +18,7 @@ export class ExamplesDialog {
         private dialog: MatDialogRef<ExamplesDialog>,
         private workspaceService: WorkspaceService
     ) {
-        this.examples = this.getExamplesForRobot(this.appState.getSelectedRobotType().id)
+        this.examples = this.getExamplesForRobot(this.appState.selectedRobotType.id)
         this.filtered = this.examples
     }
 
@@ -44,7 +44,7 @@ export class ExamplesDialog {
             .then(res => res.text())
 
         this.workspaceService.restoreWorkspaceFromMessage({
-            payload: { data: sketch, type: 'beginner', extension: this.appState.getSelectedRobotType().id },
+            payload: { data: sketch, type: 'beginner', extension: this.appState.selectedRobotType.id },
             displayTimeout: 2000
         })
         this.close()

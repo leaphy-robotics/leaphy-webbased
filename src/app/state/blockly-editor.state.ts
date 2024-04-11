@@ -19,9 +19,6 @@ export class BlocklyEditorState {
         this.isSoundOn$ = this.isSoundOnSubject$.asObservable();
     }
 
-    private isSideNavOpenToggledSubject$ = new BehaviorSubject<boolean>(false);
-    public isSideNavOpenToggled$ = this.isSideNavOpenToggledSubject$.asObservable();
-
     private isSideNavOpenSubject$ = new BehaviorSubject(false);
     public isSideNavOpen$ = this.isSideNavOpenSubject$.asObservable();
 
@@ -73,58 +70,58 @@ export class BlocklyEditorState {
     private playSoundFunctionSubject$ = new BehaviorSubject<(name: string, opt_volume: number) => void>(null);
     public playSoundFunction$ = this.playSoundFunctionSubject$.asObservable();
 
-    public setIsSideNavOpen(status: boolean) {
+    set isSideNavOpen(status: boolean) {
         this.isSideNavOpenSubject$.next(status);
     }
 
-    public setBlocklyElement(element: ElementRef) {
+    get isSideNavOpen(): boolean {
+        return this.isSideNavOpenSubject$.getValue();
+    }
+
+    set blocklyElement(element: ElementRef) {
         this.blocklyElementSubject$.next(element);
     }
 
-    public setToolboxXml(toolboxXml: any) {
+    set toolboxXml(toolboxXml: any) {
         this.toolboxXmlSubject$.next(toolboxXml);
     }
 
-    public setWorkspace(workspace: any) {
+    set workspace(workspace: any) {
         workspace.resize();
         this.workspaceSubject$.next(workspace);
     }
 
-    public getWorkspace(): any {
+    get workspace(): any {
         return this.workspaceSubject$.getValue();
     }
 
-    public setWorkspaceJSON(workspaceXml: any) {
+    set workspaceJSON(workspaceXml: any) {
         this.workspaceJSONSubject$.next(workspaceXml);
     }
 
-    public setProjectFileHandle(path: FileSystemFileHandle | PythonFile) {
+    set projectFileHandle(path: FileSystemFileHandle | PythonFile) {
         this.projectFileHandleSubject$.next(path);
     }
 
-    public getProjectFileHandle(): FileSystemFileHandle | PythonFile {
+    get projectFileHandle(): FileSystemFileHandle | PythonFile {
         return this.projectFileHandleSubject$.getValue();
     }
 
-    public setUndo(redo: boolean) {
+    set undo(redo: boolean) {
         this.undoSubject$.next(redo);
     }
 
-    public setIsSoundToggled() {
+    set isSoundToggled(_: any) {
         this.isSoundToggledSubject$.next(true);
     }
 
-    public setIsSoundOn(isSoundOn: boolean) {
+    set isSoundOn(isSoundOn: boolean) {
         this.localStorage.store("isSoundOn", isSoundOn);
         this.isSoundOnSubject$.next(isSoundOn);
     }
 
-    public setPlaySoundFunction(fn: (name: string, opt_volume: number) => void) {
+    set playSoundFunction(fn: (name: string, opt_volume: number) => void) {
         this.playSoundFunctionSubject$.next(fn);
-    }
-
-    public setIsSideNavOpenToggled() {
-        this.isSideNavOpenToggledSubject$.next(true);
     }
 
     get workspaceJSON(): string {
