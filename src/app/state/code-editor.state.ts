@@ -6,17 +6,6 @@ import {InstalledLibrary, Library} from "src/app/domain/library-manager.types";
     providedIn: 'root'
 })
 export class CodeEditorState  {
-    public readonly originalProgram = `void leaphyProgram() {
-}
-
-void setup() {
-    leaphyProgram();
-}
-
-void loop() {
-
-}`;
-
     private codeSubject$: BehaviorSubject<string> = new BehaviorSubject<string>('');
     public code$: Observable<string> = this.codeSubject$.asObservable();
 
@@ -27,11 +16,9 @@ void loop() {
     constructor() { }
 
     set code(program: string){
-        if (
-            this.codeSubject$.value !== program &&
-            this.codeSubject$.value !== this.originalProgram
-        )
+        if (this.codeSubject$.value !== program) {
             this.saveState = false
+        }
 
         this.codeSubject$.next(program);
     }

@@ -245,8 +245,7 @@ export class WorkspaceService {
                         width: '75vw', disableClose: true,
                     }).afterClosed().subscribe(async (fileName) =>  {
                         if (fileName) {
-                            const content = await this.uploaderService.runFileSystemCommand('get', fileName);
-                            this.codeEditorState.code = content;
+                            this.codeEditorState.code = await this.uploaderService.runFileSystemCommand('get', fileName);
                             this.blocklyState.projectFileHandle = new PythonFile(fileName);
                         }
                     });
@@ -285,6 +284,7 @@ export class WorkspaceService {
     * Restore the workspace from the session storage
      */
     public async restoreWorkspaceTemp() {
+        console.log('Restoring workspace from session storage');
         const workspaceTemp = sessionStorage.getItem('workspace');
         const robotType = sessionStorage.getItem('robotType');
         const type = sessionStorage.getItem('type');
@@ -297,13 +297,10 @@ export class WorkspaceService {
                 payload: {projectFilePath: null, data: workspaceTemp, type: 'beginner', extension: robotType},
                 displayTimeout: 1000
             })
-        } else if (type == 'advanced' && this.appState.currentEditor == CodeEditorType.CPP) {
-            try {
-                this.codeEditorState.code = workspaceTemp;
-            } catch (error) {
-                console.log('Error:', error.message);
-            }
-        } else if (type == 'python' && this.appState.currentEditor == CodeEditorType.Python) {
+        } else if (
+            (type == 'advanced' && this.appState.currentEditor == CodeEditorType.CPP) ||
+            (type == 'python' && this.appState.currentEditor == CodeEditorType.Python)
+        ) {
             try {
                 this.codeEditorState.code = workspaceTemp;
             } catch (error) {
@@ -321,7 +318,7 @@ export class WorkspaceService {
     * Restore the workspace from the session storage without checking the current editor or the selected robot type
      */
     public async forceRestoreWorkspaceTemp() {
-        // restory workspace from session storage but don't care about if we selected the same robot type or the current editor
+        // restore workspace from session storage but don't care about if we selected the same robot type or the current editor
         const workspaceTemp = sessionStorage.getItem('workspace');
         const robotType = sessionStorage.getItem('robotType');
         const type = sessionStorage.getItem('type');
@@ -341,6 +338,7 @@ export class WorkspaceService {
                 console.log('Error:', error.message);
             }
         } else if (type == 'python') {
+
             this.appState.selectedCodeEditor = CodeEditorType.Python;
             try {
                 this.codeEditorState.code = workspaceTemp;
