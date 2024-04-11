@@ -18,10 +18,20 @@ export class CodeEditorEffects {
     ) {
         this.appState.codeEditor$
             .subscribe(codeEditor => {
+                console.log('codeEditor', codeEditor);
                 if (codeEditor == CodeEditorType.Python) {
                     this.codeEditorState.code = `from leaphymicropython.utils.pins import set_pwm`;
                 } else if (codeEditor == CodeEditorType.CPP && this.appState.selectedRobotType == genericRobotType) {
-                    this.codeEditorState.code = this.codeEditorState.originalProgram;
+                    this.codeEditorState.code = this.codeEditorState.code = `void leaphyProgram() {
+}
+
+void setup() {
+    leaphyProgram();
+}
+
+void loop() {
+
+}`;
                 }
             });
     }

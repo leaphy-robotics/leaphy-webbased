@@ -139,9 +139,11 @@ export class BlocklyEditorEffects {
                 workspace.clearUndo();
                 workspace.addChangeListener(Blockly.Events.disableOrphans);
                 workspace.addChangeListener(async () => {
+                    if (this.appState.currentEditor !== CodeEditorType.Beginner) return;
                     this.codeEditorState.code = arduino.workspaceToCode(workspace, this.appState.selectedRobotType.id);
                     this.blocklyState.workspaceJSON = JSON.stringify(Blockly.serialization.workspaces.save(workspace));
                 });
+
             });
 
         // When the user presses undo or redo, trigger undo or redo on the workspace
