@@ -284,6 +284,7 @@ export class WorkspaceService {
     * Restore the workspace from the session storage
      */
     public async restoreWorkspaceTemp() {
+        console.log('Restoring workspace from session storage');
         const workspaceTemp = sessionStorage.getItem('workspace');
         const robotType = sessionStorage.getItem('robotType');
         const type = sessionStorage.getItem('type');
