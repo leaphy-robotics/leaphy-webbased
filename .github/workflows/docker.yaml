@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Docker Login
-        uses: docker/login-action@v2.1.0
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -24,7 +24,7 @@ jobs:
 
       - name: Build and push PROD Docker image
         if: github.ref_type == 'tag'
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v5
         with:
           file: Dockerfile
           context: .
@@ -33,15 +33,25 @@ jobs:
 
       - name: Build and push TEST Docker image
         if: github.ref_type == 'branch'
-        uses: docker/build-push-action@v4.0.0
+        uses: docker/build-push-action@v5
         with:
           file: Dockerfile
           context: .
           push: true
           tags: ghcr.io/leaphy-robotics/leaphy-webbased/leaphy-webbased:main
 
+      - name: Redeploy TEST
+        if: github.ref_type == 'branch'
+        run: |
+          curl https://admin.leaphyeasybloqs.com/hooks/update-docker-image?stack=leaphy-webbased-test -H "X-Token: ${{ secrets.WEBHOOK_TOKEN }}"
+
+      - name: Redeploy PROD
+        if: github.ref_type == 'tag'
+        run: |
+          curl https://admin.leaphyeasybloqs.com/hooks/update-docker-image?stack=leaphy-webbased -H "X-Token: ${{ secrets.WEBHOOK_TOKEN }}"
+
       - name: Clean up old images
-        uses: actions/delete-package-versions@v4
+        uses: actions/delete-package-versions@v5
         with:
           package-name: 'leaphy-webbased/leaphy-webbased'
           package-type: 'container'
