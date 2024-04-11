@@ -1,6 +1,5 @@
 import {Injectable,} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
-import {map, withLatestFrom} from "rxjs/operators";
 import {InstalledLibrary, Library} from "src/app/domain/library-manager.types";
 
 @Injectable({
@@ -18,13 +17,10 @@ void loop() {
 
 }`;
 
-    public readonly pythonProgram = `from leaphymicropython.utils.pins import set_pwm`;
-
     private codeSubject$: BehaviorSubject<string> = new BehaviorSubject<string>('');
     public code$: Observable<string> = this.codeSubject$.asObservable();
 
     public saveState: boolean = true
-
     public libraryCache: Library[] = [];
     public installedLibraries: InstalledLibrary[] =[];
 
