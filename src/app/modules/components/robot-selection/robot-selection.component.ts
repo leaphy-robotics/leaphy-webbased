@@ -35,7 +35,7 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 export class RobotSelectionComponent {
     @Input() secondary = false
     @Input() state = 'center'
-    @Input() robots: (RobotType|RobotEntry)[][]
+    @Input() robots: (any)[][]
     @Input() selected: RobotType = null
 
     constructor(public appState: AppState) { }
