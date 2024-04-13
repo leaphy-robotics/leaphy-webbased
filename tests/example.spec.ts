@@ -53,7 +53,7 @@ test('Double robot selection', async ({ page }) => {
 	await expect(page.getByText('Original Uno')).toBeHidden();
 
 	// For some reason it only happens the second time after entering. so reload the page.
-	page.reload();
+	await page.reload();
 
 	await page.getByText('Leaphy Original').click();
 	await page.getByText('Original Uno').click();
