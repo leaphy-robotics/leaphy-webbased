@@ -143,25 +143,25 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "leaphy-client:build",
-                        "headers": {
+                      "headers": {
                             "Cross-Origin-Embedder-Policy": "require-corp",
                             "Cross-Origin-Opener-Policy": "same-origin"
-                        }
+                        },
+                        "buildTarget": "leaphy-client:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "leaphy-client:build:production"
+                          "buildTarget": "leaphy-client:build:production"
                         },
                         "dev": {
-                            "browserTarget": "leaphy-client:build:dev"
+                          "buildTarget": "leaphy-client:build:dev"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "leaphy-client:build"
+                      "buildTarget": "leaphy-client:build"
                     }
                 },
                 "test": {

@@ -1,12 +1,14 @@
 <div class="container">
-    <img class="leaphyLogo" src="./assets/leaphy-logo-color.svg" />
-    <div class="options">
-        <button mat-stroked-button *ngFor="let option of data.options; index as i" (click)="onOptionSelected(option)">
-            <div class="option">
-                <div class="option-name">
-                    {{option}}
-                </div>
-            </div>
-        </button>
-    </div>
+  <img class="leaphyLogo" src="./assets/leaphy-logo-color.svg" />
+  <div class="options">
+    @for (option of data.options; track option; let i = $index) {
+      <button mat-stroked-button (click)="onOptionSelected(option)">
+        <div class="option">
+          <div class="option-name">
+            {{option}}
+          </div>
+        </div>
+      </button>
+    }
+  </div>
 </div>

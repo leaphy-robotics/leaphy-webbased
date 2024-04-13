@@ -3,7 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { AppState } from 'src/app/state/app.state';
 
 @Component({
-  selector: 'name-variable-dialog',
+  selector: 'app-name-variable-dialog',
   templateUrl: './variable.dialog.html',
   styleUrls: ['./variable.dialog.scss']
 })

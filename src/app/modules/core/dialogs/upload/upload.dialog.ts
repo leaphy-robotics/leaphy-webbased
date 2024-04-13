@@ -8,7 +8,7 @@ import {AppState} from "../../../../state/app.state";
 import {UploadState} from "../../../../state/upload.state";
 
 @Component({
-    selector: 'upload',
+    selector: 'app-upload',
     templateUrl: './upload.dialog.html',
     styleUrls: ['./upload.dialog.scss']
 })

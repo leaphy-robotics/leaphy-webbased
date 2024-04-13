@@ -16,7 +16,7 @@ import { AppEffects } from './effects/app.effects';
 import { RobotWiredEffects } from './effects/robot.wired.effects';
 import { CoreModule } from './modules/core/core.module';
 
-import { MatomoModule } from 'ngx-matomo';
+import { MatomoModule } from 'ngx-matomo-client';
 import {CodeEditorEffects} from "./effects/code-editor.effects";
 import {MonacoEditorModule} from "ngx-monaco-editor-v2";
 
@@ -50,9 +50,6 @@ export function createTranslateLoader(http: HttpClient) {
                     siteId: 1
                 }
             ],
-            routeTracking: {
-                enable: true
-            }
         }),
         CoreModule,
         MonacoEditorModule.forRoot()

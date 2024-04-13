@@ -8,7 +8,7 @@ import {CodeEditorType} from "../../../../domain/code-editor.type";
 import {PythonUploaderService} from "../../../../services/python-uploader/PythonUploader.service";
 
 @Component({
-    selector: 'connect-python',
+    selector: 'app-connect-python',
     templateUrl: './connect-python.dialog.html',
     styleUrls: ['./connect-python.dialog.scss']
 })

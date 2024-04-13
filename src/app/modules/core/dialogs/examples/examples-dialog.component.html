@@ -1,22 +1,24 @@
 <div id="container" >
-    <div class="content">
-        <div id="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
-            {{ "EXAMPLES" | translate}}
-            <div id="button-container">
-                <form #filterForm="ngForm" (ngSubmit)="filter(filterForm.value.filter)">
-                    <input type="text" placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}" name="filter" ngModel autocomplete="off">
-                </form>
-                <button mat-stroked-button class="icon-button" (click)="close()">
-                    <mat-icon>close</mat-icon>
-                </button>
-            </div>
-        </div>
-
-        <div class="examples">
-            <div *ngFor="let example of filtered" (click)="open(example)" class="example">
-                <img class="preview" src="/examples/{{example.image}}" alt="">
-                <div class="name">{{ example.name }}</div>
-            </div>
-        </div>
+  <div class="content">
+    <div id="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+      {{ "EXAMPLES" | translate}}
+      <div id="button-container">
+        <form #filterForm="ngForm" (ngSubmit)="filter(filterForm.value.filter)">
+          <input type="text" placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}" name="filter" ngModel autocomplete="off">
+        </form>
+        <button mat-stroked-button class="icon-button" (click)="close()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
     </div>
+
+    <div class="examples">
+      @for (example of filtered; track example) {
+        <div (click)="open(example)" class="example">
+          <img class="preview" src="/examples/{{example.image}}" alt="">
+          <div class="name">{{ example.name }}</div>
+        </div>
+      }
+    </div>
+  </div>
 </div>

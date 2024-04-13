@@ -10,7 +10,7 @@ import {AnnotatedLibrary, Library, LibraryResponse} from "src/app/domain/library
     styleUrls: ["./library-manager.component.scss"],
 })
 export class LibraryManagerComponent {
-    private librariesBack: AnnotatedLibrary[] = [];
+    public librariesBack: AnnotatedLibrary[] = [];
 
     constructor(
         public editorState: CodeEditorState,

@@ -4,7 +4,7 @@ import {LeaphyPort, RobotWiredState} from "../../../../state/robot.wired.state";
 import {TranslateService} from "@ngx-translate/core";
 
 @Component({
-  selector: 'debug-information',
+  selector: 'app-debug-information',
   templateUrl: './debug-information.dialog.html',
   styleUrls: ['./debug-information.dialog.scss']
 })

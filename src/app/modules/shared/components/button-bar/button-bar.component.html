@@ -1,18 +1,24 @@
 <div class="sidenav-buttons">
-    <button *ngIf="(appState.codeEditor$ | async) !== CodeEditorType.Python" [attr.tooltip]="'READ_CODE' | translate"
-            [ngClass]="{'active': (appState.codeEditor$ | async) === 1 && (blocklyState.isSideNavOpen$ | async)}"
-            (click)="onSideNavToggled()" [disabled]="(appState.codeEditor$ | async) !== 1">
-        <mat-icon>code</mat-icon>
+  @if ((appState.codeEditor$ | async) !== CodeEditorType.Python) {
+    <button [attr.tooltip]="'READ_CODE' | translate"
+      [ngClass]="{'active': (appState.codeEditor$ | async) === 1 && (blocklyState.isSideNavOpen$ | async)}"
+      (click)="onSideNavToggled()" [disabled]="(appState.codeEditor$ | async) !== 1">
+      <mat-icon>code</mat-icon>
     </button>
+  }
 
 
-    <button *ngIf="(appState.codeEditor$ | async) !== CodeEditorType.Python" [attr.tooltip]="'SERIAL_OUTPUT' | translate" (click)="onShowSerialOutputClicked()">
-        <mat-icon>article</mat-icon>
+  @if ((appState.codeEditor$ | async) !== CodeEditorType.Python) {
+    <button [attr.tooltip]="'SERIAL_OUTPUT' | translate" (click)="onShowSerialOutputClicked()">
+      <mat-icon>article</mat-icon>
     </button>
+  }
 
 
-    <button *ngIf="(appState.codeEditor$ | async) === CodeEditorType.CPP" [attr.tooltip]="'LIBRARY_MANAGER' | translate" (click)="onShowLibraryManagerClicked()">
-        <mat-icon>library_books</mat-icon>
+  @if ((appState.codeEditor$ | async) === CodeEditorType.CPP) {
+    <button [attr.tooltip]="'LIBRARY_MANAGER' | translate" (click)="onShowLibraryManagerClicked()">
+      <mat-icon>library_books</mat-icon>
     </button>
+  }
 
 </div>
