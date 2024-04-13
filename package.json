@@ -54,7 +54,7 @@
     "ng-terminal": "~6.1.0",
     "ng2-charts": "3.0.11",
     "ngx-matomo-client": "^6.1.3",
-    "ngx-monaco-editor-v2": "16.0.1",
+    "ngx-monaco-editor-v2": "^17.0.1",
     "papaparse": "^5.4.1",
     "rxjs": "~7.5.5",
     "showdown": "^2.1.0",

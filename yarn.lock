@@ -6970,10 +6970,10 @@ ngx-matomo-client@^6.1.3:
   dependencies:
     tslib "^2.3.0"
 
-ngx-monaco-editor-v2@16.0.1:
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-monaco-editor-v2/-/ngx-monaco-editor-v2-16.0.1.tgz#5ac93821fb9124d914b399beb4da4c1b30546905"
-  integrity sha512-fhvqiQUtzEB3o6W1PrMzZkAM7N9owhoXiUF5Go/Bl/nOL90O22el+TUhszTz1o24ZQnPQZeNKhN7O+u/jVAWtg==
+ngx-monaco-editor-v2@^17.0.1:
+  version "17.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-monaco-editor-v2/-/ngx-monaco-editor-v2-17.0.1.tgz#3276c7febd2e0c15cff30ce3b99497fa6efff63c"
+  integrity sha512-GP+Ni6zKFQjF/ve5ZQtfE9eRLKL4GxMvdmDTrla1x6F5pSIcYGCcjZ4gQ1/AHMa5dgarfs+Et+1bBtAOJtI6KA==
   dependencies:
     tslib "^2.1.0"
 
