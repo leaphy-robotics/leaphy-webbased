@@ -16,6 +16,7 @@ import { AppEffects } from './effects/app.effects';
 import { RobotWiredEffects } from './effects/robot.wired.effects';
 import { CoreModule } from './modules/core/core.module';
 
+import { MatomoModule } from 'ngx-matomo-client';
 import {CodeEditorEffects} from "./effects/code-editor.effects";
 import {MonacoEditorModule} from "ngx-monaco-editor-v2";
 
@@ -40,6 +41,15 @@ export function createTranslateLoader(http: HttpClient) {
                 useFactory: createTranslateLoader,
                 deps: [HttpClient]
             }
+        }),
+        MatomoModule.forRoot({
+            scriptUrl: 'https://leaphyeasybloqs.com/matomo/matomo.js',
+            trackers: [
+                {
+                    trackerUrl: 'https://leaphyeasybloqs.com/matomo/matomo.php',
+                    siteId: 1
+                }
+            ],
         }),
         CoreModule,
         MonacoEditorModule.forRoot()
