@@ -1,5 +1,5 @@
 # Pinned node version, 20.6.0 is buggy
-FROM node:20.5.1 as builder
+FROM node:20 as builder
 
 COPY . /build
 WORKDIR /build
