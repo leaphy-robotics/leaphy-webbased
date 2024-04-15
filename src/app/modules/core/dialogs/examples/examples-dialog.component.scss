@@ -1,3 +1,4 @@
+
 input {
     background: none;
     color: var(--leaphy-color-light);
@@ -57,7 +58,7 @@ input::placeholder {
     border: 3px solid #fff;
     border-radius: 10px;
     background: #fff;
-    transition: 0.3s ease;
+    transition: .3s ease;
 
     display: flex;
     flex-direction: column;

@@ -1,100 +1,43 @@
-<div id="container">
-    <div
-        id="header"
-        cdkDrag
-        cdkDragRootElement=".cdk-overlay-pane"
-        cdkDragHandle
-    >
-        {{ "SERIAL_OUTPUT" | translate }}
-        <div id="button-container">
-            <button
-                mat-stroked-button
-                class="icon-button"
-                (click)="onCloseClicked()"
-            >
-                <mat-icon>close</mat-icon>
-            </button>
-            <button
-                mat-stroked-button
-                class="icon-button"
-                (click)="exportToCsv()"
-            >
-                <mat-icon>arrow_downward</mat-icon>
-            </button>
-            <button
-                mat-stroked-button
-                class="icon-button"
-                [class.mode-selected]="
-                    (dialogState.isSerialGraphOutputSelected$ | async) === false
-                "
-                (click)="onViewTextOutputClicked()"
-            >
-                <mat-icon>view_headline</mat-icon>
-            </button>
-            <button
-                mat-stroked-button
-                class="icon-button"
-                [disabled]="
-                    (robotWiredState.serialChartDataSets$ | async) === []
-                "
-                [class.mode-selected]="
-                    dialogState.isSerialGraphOutputSelected$ | async
-                "
-                (click)="onViewGraphOutputClicked()"
-            >
-                <mat-icon>timeline</mat-icon>
-            </button>
-            <button
-                mat-stroked-button
-                class="icon-button"
-                (click)="onClearSerialDataClicked()"
-            >
-                <mat-icon>delete</mat-icon>
-            </button>
-        </div>
+<div id="container" >
+  <div id="header" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+    {{ "SERIAL_OUTPUT" | translate}}
+    <div id="button-container">
+      <button mat-stroked-button class="icon-button" (click)="onCloseClicked()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <button mat-stroked-button class="icon-button" (click)="exportToCsv()">
+        <mat-icon>arrow_downward</mat-icon>
+      </button>
+      <button mat-stroked-button class="icon-button" [class.mode-selected]="(dialogState.isSerialGraphOutputSelected$ | async) === false"
+        (click)="onViewTextOutputClicked()">
+        <mat-icon>view_headline</mat-icon>
+      </button>
+      <button mat-stroked-button class="icon-button"  [disabled]="(robotWiredState.serialChartDataSets$ | async) === []" [class.mode-selected]="dialogState.isSerialGraphOutputSelected$ | async"
+        (click)="onViewGraphOutputClicked()">
+        <mat-icon>timeline</mat-icon>
+      </button>
+      <button mat-stroked-button class="icon-button" (click)="onClearSerialDataClicked()">
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
+  </div>
 
-    <div
-        class="serial-output"
-        style="display: block"
-        [hidden]="(dialogState.isSerialGraphOutputSelected$ | async) === false"
-    >
-        <canvas
-            baseChart
-            [datasets]="robotWiredState.serialChartDataSets$ | async"
-            [options]="lineChartOptions"
-            [legend]="lineChartLegend"
-            [type]="lineChartType"
-            [plugins]="lineChartPlugins"
-        >
-        </canvas>
-    </div>
-    <div
-        class="serial-output"
-        style="max-height: 50vh"
-        [hidden]="dialogState.isSerialGraphOutputSelected$ | async"
-        #content
-    >
-        @for (item of serialData; track item) {
-            <div class="output-item" #messages>
-                <div class="output-time">
-                    {{ item.time | date: "HH:mm:ss:SSS" }}
-                </div>
-                <pre class="output-data">{{ item.data }}</pre>
-            </div>
-        }
-    </div>
+  <div class="serial-output" style="display: block;" [hidden]="(dialogState.isSerialGraphOutputSelected$ | async) === false">
+    <canvas baseChart [datasets]="robotWiredState.serialChartDataSets$ | async" [options]="lineChartOptions"
+      [legend]="lineChartLegend" [type]="lineChartType"
+      [plugins]="lineChartPlugins">
+    </canvas>
+  </div>
+  <div class="serial-output" style="max-height: 50vh" [hidden]="dialogState.isSerialGraphOutputSelected$ | async"  #content>
+    @for (item of serialData; track item) {
+      <div class="output-item" #messages>
+        <div class="output-time">{{item.time | date:'HH:mm:ss:SSS'}}</div>
+        <pre class="output-data">{{item.data}}</pre>
+      </div>
+    }
+  </div>
 
-    <form
-        #sendForm="ngForm"
-        (ngSubmit)="write(sendForm.value.data); sendForm.reset()"
-    >
-        <input
-            class="serial-prompt"
-            [placeholder]="'SERIAL_PROMPT_PLACEHOLDER' | translate"
-            type="text"
-            name="data"
-            ngModel
-        />
-    </form>
+  <form #sendForm="ngForm" (ngSubmit)="write(sendForm.value.data); sendForm.reset()">
+    <input class="serial-prompt" [placeholder]="'SERIAL_PROMPT_PLACEHOLDER' | translate" type="text" name="data" ngModel>
+  </form>
 </div>

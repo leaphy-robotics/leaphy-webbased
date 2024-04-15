@@ -1,47 +1,52 @@
 import {
-    AfterViewInit,
-    ChangeDetectionStrategy,
+    AfterViewInit, ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
     ElementRef,
     OnInit,
     QueryList,
     ViewChild,
-    ViewChildren,
-} from "@angular/core";
-import { ChartOptions } from "chart.js";
-import "chartjs-adapter-moment";
-import { DialogState } from "src/app/state/dialog.state";
-import { RobotWiredState } from "src/app/state/robot.wired.state";
-import { MatDialogRef } from "@angular/material/dialog";
-import { unparse } from "papaparse";
+    ViewChildren
+} from '@angular/core';
+import {ChartOptions} from 'chart.js';
+import 'chartjs-adapter-moment';
+import {DialogState} from 'src/app/state/dialog.state';
+import {RobotWiredState} from 'src/app/state/robot.wired.state';
+import {MatDialogRef} from "@angular/material/dialog";
+import {unparse} from 'papaparse';
+
 
 @Component({
-    selector: "app-serial-output",
-    templateUrl: "./serial-output.component.html",
-    styleUrls: ["./serial-output.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-serial-output',
+    templateUrl: './serial-output.component.html',
+    styleUrls: ['./serial-output.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SerialOutputComponent implements AfterViewInit, OnInit {
-    @ViewChildren("messages") messages: QueryList<any>;
-    @ViewChild("content") content: ElementRef;
 
-    public serialData: { time: Date; data: string }[] = [];
+    @ViewChildren('messages') messages: QueryList<any>;
+    @ViewChild('content') content: ElementRef;
+
+    public serialData: { time: Date, data: string }[] = [];
+
 
     constructor(
         public robotWiredState: RobotWiredState,
         public dialogState: DialogState,
         private changeDetectorRef: ChangeDetectorRef,
         private dialog: MatDialogRef<SerialOutputComponent>,
-    ) {}
+    ) {
+    }
+
 
     ngOnInit(): void {
-        this.robotWiredState.serialData$.subscribe((serialData) => {
+        this.robotWiredState.serialData$.subscribe(serialData => {
             this.serialData = serialData;
             this.scrollToBottom();
             this.changeDetectorRef.detectChanges();
         });
     }
+
 
     public async write(data: string) {
         const writer = this.robotWiredState.serialWrite;
@@ -50,14 +55,13 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
         await writer.write(new TextEncoder().encode(`${data}\n`));
     }
 
+
     exportToCsv() {
-        let data = document.getElementsByClassName("output-item");
+        let data = document.getElementsByClassName("output-item")
         let dataArr = [];
         for (let i = 0; i < data.length; i++) {
-            let time =
-                data[i].getElementsByClassName("output-time")[0].innerHTML;
-            let outputData =
-                data[i].getElementsByClassName("output-data")[0].innerHTML;
+            let time = data[i].getElementsByClassName("output-time")[0].innerHTML;
+            let outputData = data[i].getElementsByClassName("output-data")[0].innerHTML;
             let outputDataArr = outputData.split(",");
             outputDataArr.unshift(time);
             dataArr.push(outputDataArr);
@@ -76,23 +80,23 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
             dataJson.push({
                 date: newDate.toLocaleDateString(),
                 time: newDate.toLocaleTimeString(),
-                data: dataArr[i].slice(1),
-            });
+                data: dataArr[i].slice(1)
+            })
         }
 
-        let filename = "serial_monitor_export.csv";
+        let filename = 'serial_monitor_export.csv'
 
         const csv = unparse(dataJson, {
-            header: true,
+            header: true
         });
 
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
 
-        const link = document.createElement("a");
+        const link = document.createElement('a');
         if (link.download !== undefined) {
             const url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", filename);
+            link.setAttribute('href', url);
+            link.setAttribute('download', filename);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -107,12 +111,11 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
 
     scrollToBottom = () => {
         try {
-            this.content.nativeElement.scrollTop =
-                this.content.nativeElement.scrollHeight;
+            this.content.nativeElement.scrollTop = this.content.nativeElement.scrollHeight;
         } catch (err) {
             console.log("Error while attempting scroll to bottom:", err);
         }
-    };
+    }
 
     public onViewTextOutputClicked() {
         this.dialogState.isSerialGraphOutputSelected = false;
@@ -134,23 +137,23 @@ export class SerialOutputComponent implements AfterViewInit, OnInit {
         responsive: true,
         maintainAspectRatio: false,
         animation: {
-            duration: 0,
+            duration: 0
         },
         scales: {
             x: {
-                type: "time",
+                type: 'time',
                 time: {
-                    unit: "second",
+                    unit: 'second',
                     displayFormats: {
-                        millisecond: "HH:mm:ss:SSS",
-                    },
+                        millisecond: 'HH:mm:ss:SSS'
+                    }
                 },
-                position: "bottom",
-            },
-        },
+                position: 'bottom'
+            }
+        }
     };
 
     public lineChartLegend = true;
-    public lineChartType = "line";
+    public lineChartType = 'line';
     public lineChartPlugins = [];
 }

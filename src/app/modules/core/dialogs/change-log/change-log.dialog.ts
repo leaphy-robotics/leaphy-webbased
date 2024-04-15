@@ -1,19 +1,20 @@
-import { AfterViewInit, Component, Inject } from "@angular/core";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import {AfterViewInit, Component, Inject} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 @Component({
-    selector: "app-change-log",
-    templateUrl: "./change-log.dialog.html",
-    styleUrls: ["./change-log.dialog.scss"],
+    selector: 'app-change-log',
+    templateUrl: './change-log.dialog.html',
+    styleUrls: ['./change-log.dialog.scss']
 })
 export class ChangeLogDialog implements AfterViewInit {
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: any,
-        public dialogRef: MatDialogRef<ChangeLogDialog>,
+        public dialogRef: MatDialogRef<ChangeLogDialog>
     ) {}
 
     public onConfirm(dontRepeat = false) {
-        localStorage.setItem("showReleaseNotes", dontRepeat ? "0" : "1");
+        localStorage.setItem("showReleaseNotes", dontRepeat ? "0" : "1")
         this.dialogRef.close();
     }
 

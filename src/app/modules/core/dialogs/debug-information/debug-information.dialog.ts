@@ -1,53 +1,46 @@
-import { Component } from "@angular/core";
-import { MatDialogRef } from "@angular/material/dialog";
-import {
-    LeaphyPort,
-    RobotWiredState,
-} from "../../../../state/robot.wired.state";
-import { TranslateService } from "@ngx-translate/core";
+import {Component} from '@angular/core';
+import {MatDialogRef} from '@angular/material/dialog';
+import {LeaphyPort, RobotWiredState} from "../../../../state/robot.wired.state";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
-    selector: "app-debug-information",
-    templateUrl: "./debug-information.dialog.html",
-    styleUrls: ["./debug-information.dialog.scss"],
+  selector: 'app-debug-information',
+  templateUrl: './debug-information.dialog.html',
+  styleUrls: ['./debug-information.dialog.scss']
 })
 export class DebugInformationDialog {
-    public os: string = "";
-    public browser: string = "";
-    public browserVersion: string = "";
-    public serialPort?: LeaphyPort;
-    public webSerialSupported: string = "Supported";
 
-    constructor(
-        public dialogRef: MatDialogRef<DebugInformationDialog>,
-        public robotWiredState: RobotWiredState,
-        private translate: TranslateService,
-    ) {
-        // @ts-ignore
-        this.os =
-            navigator.userAgentData?.platform ?? translate.instant("UNKNOWN");
-        // @ts-ignore
-        this.browser =
-            navigator.userAgentData?.brands[1].brand ??
-            translate.instant("UNKNOWN");
-        // @ts-ignore
-        this.browserVersion =
-            navigator.userAgentData?.brands[1].version ??
-            translate.instant("UNKNOWN");
-        this.serialPort = this.robotWiredState.serialPort;
-        if (!("serial" in navigator)) {
-            this.webSerialSupported = translate.instant(
-                "WEB_SERIAL_NOT_SUPPORTED",
-            );
-        } else {
-            this.webSerialSupported = translate.instant("WEB_SERIAL_SUPPORTED");
-        }
+  public os: string = '';
+  public browser: string = '';
+  public browserVersion: string = '';
+  public serialPort?: LeaphyPort;
+  public webSerialSupported: string = 'Supported';
+
+
+  constructor(
+    public dialogRef: MatDialogRef<DebugInformationDialog>,
+    public robotWiredState: RobotWiredState,
+    private translate: TranslateService,
+  ) {
+    // @ts-ignore
+    this.os = navigator.userAgentData?.platform ?? translate.instant("UNKNOWN");
+    // @ts-ignore
+    this.browser = navigator.userAgentData?.brands[1].brand ?? translate.instant("UNKNOWN");
+    // @ts-ignore
+    this.browserVersion = navigator.userAgentData?.brands[1].version ?? translate.instant("UNKNOWN");
+    this.serialPort = this.robotWiredState.serialPort;
+    if (!('serial' in navigator)) {
+      this.webSerialSupported = translate.instant("WEB_SERIAL_NOT_SUPPORTED");
+    } else {
+      this.webSerialSupported = translate.instant("WEB_SERIAL_SUPPORTED");
     }
+  }
 
-    public onCloseClicked() {
-        this.dialogRef.close();
-    }
+  public onCloseClicked() {
+    this.dialogRef.close();
+  }
 
-    protected readonly document = document;
+
+  protected readonly document = document;
     protected readonly RobotWiredState = RobotWiredState;
 }

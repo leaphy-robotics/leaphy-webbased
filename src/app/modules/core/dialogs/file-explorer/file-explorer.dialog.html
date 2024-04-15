@@ -1,33 +1,23 @@
 <div class="container">
-    <div class="file-explorer-header">
-        <input
-            type="text"
-            class="current-path"
-            value="{{ currentPath }}"
-            (change)="openDirRaw($event.target.value)"
-        />
-    </div>
-    <div class="folder-content">
-        @for (items of dirContent; track items) {
-        <div class="folder-content-header">
-            @if (items.isDir) {
-            <div
-                class="folder-content-header-name"
-                (click)="openDir(items.name)"
-            >
-                <i class="fa fa-folder item"></i>
-                <span> {{ items.name }}</span>
-            </div>
-            } @if (!items.isDir) {
-            <div
-                class="folder-content-header-name"
-                (click)="openFile(items.name)"
-            >
-                <i class="fa fa-file item"></i>
-                <span> {{ items.name }}</span>
-            </div>
-            }
-        </div>
+  <div class="file-explorer-header">
+    <input type="text" class="current-path" value="{{ currentPath }}" (change)="openDirRaw($event.target.value)">
+  </div>
+  <div class="folder-content">
+    @for (items of dirContent; track items) {
+      <div class="folder-content-header">
+        @if (items.isDir) {
+          <div class="folder-content-header-name" (click)="openDir(items.name)">
+            <i class="fa fa-folder item"></i>
+            <span>  {{ items.name }}</span>
+          </div>
         }
-    </div>
+        @if (!items.isDir) {
+          <div class="folder-content-header-name" (click)="openFile(items.name)">
+            <i class="fa fa-file item"></i>
+            <span>  {{ items.name }}</span>
+          </div>
+        }
+      </div>
+    }
+  </div>
 </div>

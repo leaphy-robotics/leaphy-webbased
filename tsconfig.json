@@ -1,26 +1,32 @@
 {
-    "compileOnSave": false,
-    "compilerOptions": {
-        "skipLibCheck": true,
-        "baseUrl": "./",
-        "outDir": "./dist/out-tsc",
-        "sourceMap": true,
-        "declaration": false,
-        "downlevelIteration": true,
-        "experimentalDecorators": true,
-        "module": "es2020",
-        "moduleResolution": "node",
-        "importHelpers": true,
-        "target": "ES2022",
-        "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true,
-        "allowJs": true,
-        "typeRoots": ["node_modules/@types"],
-        "lib": ["es2018", "dom"],
-        "useDefineForClassFields": false,
-    },
-    "angularCompilerOptions": {
-        "fullTemplateTypeCheck": true,
-        "strictInjectionParameters": true,
-    },
+  "compileOnSave": false,
+  "compilerOptions": {
+      "skipLibCheck": true,
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "module": "es2020",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "ES2022",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "allowJs": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "useDefineForClassFields": false
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  },
 }
+

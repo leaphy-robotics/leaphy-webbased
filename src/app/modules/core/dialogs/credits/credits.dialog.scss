@@ -1,49 +1,50 @@
 .container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .title {
-    font-size: 16px;
+  font-size: 16px;
 }
 
+
 .credits {
-    color: grey;
-    margin-top: 20px;
-    padding: 20px;
-    text-align: center;
+  color: grey;
+  margin-top: 20px;
+  padding: 20px;
+  text-align: center;
 
-    img {
-        width: 100%;
-        max-width: 180px;
-        height: auto;
-        display: block;
-        margin: 1em auto;
-    }
+  img {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+    display: block;
+    margin: 1em auto;
+  }
 
-    .leaphyLogo {
-        color: green;
-    }
+  .leaphyLogo {
+    color: green;
+  }
 }
 
 .buttons {
-    margin-top: 2em;
-    flex: 0 1 auto;
+  margin-top: 2em;
+  flex: 0 1 auto;
 }
 
 .start {
-    color: var(--leaphy-color-light) !important;
-    background-color: var(--leaphy-color-secundary);
-    font-size: 12px;
-    font-weight: bold;
-    border-radius: 20px;
-    text-transform: uppercase;
-    font-size: 16px;
-    outline: none;
+  color: var(--leaphy-color-light) !important;
+  background-color: var(--leaphy-color-secundary);
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 20px;
+  text-transform: uppercase;
+  font-size: 16px;
+  outline: none;
 
-    [mat-flat-button]:active {
-        color: var(--leaphy-color-light);
-    }
+  [mat-flat-button]:active {
+    color: var(--leaphy-color-light);
+  }
 }

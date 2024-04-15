@@ -1,12 +1,6 @@
 <div class="container">
-    <form
-        (submit)="this.onSubmit(document.getElementById('variablename').getAttribute('value'))"
-    >
-        <input
-            id="variablename"
-            type="text"
-            [placeholder]="'NAME_VARIABLE_PROMPT_INPUT' | translate"
-            (input)="document.getElementById('variablename').setAttribute('value', $event.target.value)"
-        />
+    <form (submit)="this.onSubmit(document.getElementById('variablename').getAttribute('value'))">
+        <input id="variablename" type="text" [placeholder]="'NAME_VARIABLE_PROMPT_INPUT' | translate"
+               (input)="document.getElementById('variablename').setAttribute('value', $event.target.value)">
     </form>
 </div>

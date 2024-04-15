@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { BlocklyEditorState } from "src/app/state/blockly-editor.state";
 import { AppState } from "src/app/state/app.state";
 import { DialogState } from "src/app/state/dialog.state";
-import { CodeEditorType } from "../../../../domain/code-editor.type";
+import {CodeEditorType} from "../../../../domain/code-editor.type";
 
 @Component({
     selector: "app-button-bar",
@@ -15,8 +15,9 @@ export class ButtonBarComponent {
         public appState: AppState,
         public blocklyState: BlocklyEditorState,
         public dialogState: DialogState,
-        public dialog: MatDialog,
-    ) {}
+        public dialog: MatDialog
+    ) {
+    }
     public onSideNavToggled() {
         this.blocklyState.isSideNavOpen = !this.blocklyState.isSideNavOpen;
     }
@@ -32,3 +33,5 @@ export class ButtonBarComponent {
     protected readonly AppState = AppState;
     protected readonly CodeEditorType = CodeEditorType;
 }
+
+

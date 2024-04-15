@@ -1,25 +1,10 @@
 <div class="container">
-    <form
-        (submit)="this.onNameSelected(document.getElementById('filename').getAttribute('value'))"
-    >
-        <input
-            id="filename"
-            type="text"
-            [placeholder]="'GIVE_FILENAME' | translate"
-            (input)="document.getElementById('filename').setAttribute('value', $event.target.value)"
-        />
+    <form (submit)="this.onNameSelected(document.getElementById('filename').getAttribute('value'))">
+        <input id="filename" type="text" [placeholder]="'GIVE_FILENAME' | translate"
+               (input)="document.getElementById('filename').setAttribute('value', $event.target.value)">
         <div id="action">
-            <input
-                class="mat-stroked-button center"
-                type="button"
-                [value]="'CANCEL' | translate"
-                (click)="onClose()"
-            />
-            <input
-                class="mat-stroked-button center"
-                type="submit"
-                [value]="'SAVE' | translate"
-            />
+            <input class="mat-stroked-button center" type="button" [value]="'CANCEL' | translate" (click)="onClose()">
+            <input class="mat-stroked-button center" type="submit" [value]="'SAVE' | translate">
         </div>
     </form>
 </div>

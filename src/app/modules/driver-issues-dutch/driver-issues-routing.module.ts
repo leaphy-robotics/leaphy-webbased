@@ -1,16 +1,14 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { DriverIssuesDutchPage } from "./driver-issues.page";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { DriverIssuesDutchPage } from './driver-issues.page';
 
-const routes: Routes = [
-    {
-        path: "",
-        component: DriverIssuesDutchPage,
-    },
-];
+const routes: Routes = [{
+  path: '',
+  component: DriverIssuesDutchPage
+}];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
-export class DriverIssuesRoutingModule {}
+export class DriverIssuesRoutingModule { }
