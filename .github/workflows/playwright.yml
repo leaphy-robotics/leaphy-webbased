@@ -22,7 +22,7 @@ jobs:
             - name: Run ESLint
               run: npx eslint .
             - name: Run prettier
-              run: npx prettier -c .
+              run: npx prettier -c ./src
             - name: Run Playwright tests
               run: yarn playwright test
             - uses: actions/upload-artifact@v4
