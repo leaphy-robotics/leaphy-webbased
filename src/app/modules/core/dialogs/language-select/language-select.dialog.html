@@ -1,13 +1,15 @@
 <div class="container">
-  <img class="leaphyLogo" src="./assets/leaphy-logo-color.svg" />
-  <div class="languages">
-    @for (language of AppState.availableLanguages; track language) {
-      <button class="language" (click)="onLanguageSelected(language)">
-        <img src="./assets/i18n/{{language.code}}.svg" width="50" height="50">
-        <div class="language-name">
-          {{language.name}}
-        </div>
-      </button>
-    }
-  </div>
+    <img class="leaphyLogo" src="./assets/leaphy-logo-color.svg" />
+    <div class="languages">
+        @for (language of AppState.availableLanguages; track language) {
+        <button class="language" (click)="onLanguageSelected(language)">
+            <img
+                src="./assets/i18n/{{language.code}}.svg"
+                width="50"
+                height="50"
+            />
+            <div class="language-name">{{language.name}}</div>
+        </button>
+        }
+    </div>
 </div>

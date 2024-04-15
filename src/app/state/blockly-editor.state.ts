@@ -1,15 +1,13 @@
 import { Injectable, ElementRef } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { LocalStorageService } from "../services/localstorage.service";
-import {PythonFile} from "../domain/python-file.type";
-
+import { PythonFile } from "../domain/python-file.type";
 
 @Injectable({
     providedIn: "root",
 })
 export class BlocklyEditorState {
-
-    constructor(private localStorage: LocalStorageService){
+    constructor(private localStorage: LocalStorageService) {
         let isSoundOn = this.localStorage.fetch<boolean>("isSoundOn");
         if (isSoundOn === null) {
             this.localStorage.store("isSoundOn", true);
@@ -55,7 +53,9 @@ export class BlocklyEditorState {
     private workspaceJSONSubject$ = new BehaviorSubject(null);
     public workspaceJSON$ = this.workspaceJSONSubject$.asObservable();
 
-    private projectFileHandleSubject$ = new BehaviorSubject<FileSystemFileHandle | PythonFile>(null);
+    private projectFileHandleSubject$ = new BehaviorSubject<
+        FileSystemFileHandle | PythonFile
+    >(null);
     public projectFileHandle$ = this.projectFileHandleSubject$.asObservable();
 
     private undoSubject$ = new BehaviorSubject<boolean>(false);
@@ -67,7 +67,9 @@ export class BlocklyEditorState {
     private isSoundOnSubject$: BehaviorSubject<boolean>;
     public isSoundOn$: Observable<boolean>;
 
-    private playSoundFunctionSubject$ = new BehaviorSubject<(name: string, opt_volume: number) => void>(null);
+    private playSoundFunctionSubject$ = new BehaviorSubject<
+        (name: string, opt_volume: number) => void
+    >(null);
     public playSoundFunction$ = this.playSoundFunctionSubject$.asObservable();
 
     set isSideNavOpen(status: boolean) {

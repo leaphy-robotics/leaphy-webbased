@@ -1,10 +1,14 @@
 <div id="start-container">
-  <app-robot-selection
-    [selected]="selector?.intercept"
-    [state]="selector ? 'left' : 'center'"
-    [robots]="appState.robotRows"
-  ></app-robot-selection>
-  @if (selector) {
-    <app-robot-selection [state]="'right'" [robots]="selector.choices" [secondary]="true"></app-robot-selection>
-  }
+    <app-robot-selection
+        [selected]="selector?.intercept"
+        [state]="selector ? 'left' : 'center'"
+        [robots]="appState.robotRows"
+    ></app-robot-selection>
+    @if (selector) {
+        <app-robot-selection
+            [state]="'right'"
+            [robots]="selector.choices"
+            [secondary]="true"
+        ></app-robot-selection>
+    }
 </div>

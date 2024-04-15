@@ -4,27 +4,27 @@
 }
 
 #container {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  height: calc(100% - 64px);
-  width: 100%;
-  overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: calc(100% - 64px);
+    width: 100%;
+    overflow: hidden;
 }
 
 .sidenav-container {
-  flex: 1 1 auto;
-  background: #eee;
+    flex: 1 1 auto;
+    background: #eee;
 }
 
 #sidenav {
-  min-width: 20%;
+    min-width: 20%;
 }
 
 app-button-bar {
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 5;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 5;
 }

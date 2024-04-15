@@ -1,8 +1,12 @@
-import {MatDialogRef} from "@angular/material/dialog";
-import {DialogState} from "src/app/state/dialog.state";
-import {Component} from "@angular/core";
-import {CodeEditorState} from "src/app/state/code-editor.state";
-import {AnnotatedLibrary, Library, LibraryResponse} from "src/app/domain/library-manager.types";
+import { MatDialogRef } from "@angular/material/dialog";
+import { DialogState } from "src/app/state/dialog.state";
+import { Component } from "@angular/core";
+import { CodeEditorState } from "src/app/state/code-editor.state";
+import {
+    AnnotatedLibrary,
+    Library,
+    LibraryResponse,
+} from "src/app/domain/library-manager.types";
 
 @Component({
     selector: "app-library-manager",
@@ -15,7 +19,7 @@ export class LibraryManagerComponent {
     constructor(
         public editorState: CodeEditorState,
         public dialogState: DialogState,
-        private dialog: MatDialogRef<LibraryManagerComponent>
+        private dialog: MatDialogRef<LibraryManagerComponent>,
     ) {
         if (this.editorState.libraryCache.length === 0) {
             this.loadLibraryCache().then();
@@ -25,29 +29,34 @@ export class LibraryManagerComponent {
     }
 
     private async loadLibraryCache() {
-        const res = await fetch('https://downloads.arduino.cc/libraries/library_index.json')
-        const { libraries } = await res.json() as LibraryResponse
+        const res = await fetch(
+            "https://downloads.arduino.cc/libraries/library_index.json",
+        );
+        const { libraries } = (await res.json()) as LibraryResponse;
 
-        const result: Map<string, Library> = new Map()
-        libraries.forEach(library => {
+        const result: Map<string, Library> = new Map();
+        libraries.forEach((library) => {
             if (result.has(library.name)) {
                 const existing = result.get(library.name);
 
                 existing.versions.push(library.version);
-                existing.versions.sort((a, b) => a.localeCompare(b)*-1);
+                existing.versions.sort((a, b) => a.localeCompare(b) * -1);
 
                 return;
             }
 
             if (library.paragraph) {
-                library.paragraph = library.paragraph.replace(/<\/?br ?\/?>/g, "\n");
+                library.paragraph = library.paragraph.replace(
+                    /<\/?br ?\/?>/g,
+                    "\n",
+                );
             }
 
             result.set(library.name, {
                 ...library,
-                versions: [library.version]
-            })
-        })
+                versions: [library.version],
+            });
+        });
 
         this.editorState.libraryCache = Array.from(result.values());
         this.filter();
@@ -56,16 +65,20 @@ export class LibraryManagerComponent {
     set libraries(libraries: Library[]) {
         const installed = this.editorState.installedLibraries;
 
-        this.librariesBack = libraries.map(lib => ({
+        this.librariesBack = libraries.map((lib) => ({
             ...lib,
-            installed: installed.find(installedLib => installedLib.name === lib.name)?.version
-        }))
+            installed: installed.find(
+                (installedLib) => installedLib.name === lib.name,
+            )?.version,
+        }));
     }
 
     public filter(filter = "") {
-        this.libraries =  this.editorState.libraryCache
-                .filter(lib => lib.name.toLowerCase().includes(filter.toLowerCase()))
-                .slice(0, 50)
+        this.libraries = this.editorState.libraryCache
+            .filter((lib) =>
+                lib.name.toLowerCase().includes(filter.toLowerCase()),
+            )
+            .slice(0, 50);
     }
 
     public close() {
@@ -74,13 +87,17 @@ export class LibraryManagerComponent {
 
     public install(library: Library, version: string) {
         // get installed libraries and remove existing version
-        const installed = this.editorState.installedLibraries
-            .filter((lib) => lib.name !== library.name);
+        const installed = this.editorState.installedLibraries.filter(
+            (lib) => lib.name !== library.name,
+        );
 
-        this.editorState.installedLibraries = [...installed, {
-            ...library,
-            version
-        }];
+        this.editorState.installedLibraries = [
+            ...installed,
+            {
+                ...library,
+                version,
+            },
+        ];
         this.libraries = this.librariesBack;
     }
 
@@ -89,7 +106,9 @@ export class LibraryManagerComponent {
         const current = installed.find((lib) => lib.name === library.name);
         if (!current) return;
 
-        this.editorState.installedLibraries = installed.filter((lib) => lib.name !== library.name);
+        this.editorState.installedLibraries = installed.filter(
+            (lib) => lib.name !== library.name,
+        );
         this.libraries = this.librariesBack;
     }
 }

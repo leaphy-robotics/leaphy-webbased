@@ -1,30 +1,43 @@
 <div class="container">
+    <div id="header">
+        {{ "UPLOAD_OUTPUT" | translate}}
+        <button
+            mat-stroked-button
+            class="icon-button"
+            (click)="onCloseClicked()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div class="upload-log">
+        @for (item of (robotWiredState.uploadLog$ | async); track item) {
+        <div class="upload-log-item">
+            <div class="upload-log-data">{{item}}</div>
+        </div>
+        }
+    </div>
 
-  <div id="header">
-    {{ "UPLOAD_OUTPUT" | translate}}
-    <button mat-stroked-button class="icon-button" (click)="onCloseClicked()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-  <div class="upload-log">
-    @for (item of (robotWiredState.uploadLog$ | async); track item) {
-      <div class="upload-log-item">
-        <div class="upload-log-data">{{item}}</div>
-      </div>
-    }
-  </div>
-
-  <div id="device-information">
-    {{ "DEVICE_INFORMATION" | translate}}
-  </div>
-  <div class="device-information">
-    <div class="operating-system device-specification">Platform: {{os}}</div>
-    <div class="browser device-specification">Browser: {{browser}}</div>
-    <div class="version-browser device-specification">Version {{browserVersion}}</div>
-    @if (serialPort) {
-      <div class="serial-device device-specification">Serial Port; Device ID: {{serialPort?.getInfo().usbProductId}}; USB Vendor ID: {{serialPort?.getInfo().usbVendorId}}</div>
-    }
-    <div class="supported-vendors device-specification">Supported Vendor IDs: {{RobotWiredState.SUPPORTED_VENDORS.join(", ")}}</div>
-    <div class="web-serial-supported device-specification">Web Serial Supported: {{webSerialSupported}}</div>
-  </div>
+    <div id="device-information">{{ "DEVICE_INFORMATION" | translate}}</div>
+    <div class="device-information">
+        <div class="operating-system device-specification">
+            Platform: {{os}}
+        </div>
+        <div class="browser device-specification">Browser: {{browser}}</div>
+        <div class="version-browser device-specification">
+            Version {{browserVersion}}
+        </div>
+        @if (serialPort) {
+        <div class="serial-device device-specification">
+            Serial Port; Device ID: {{serialPort?.getInfo().usbProductId}}; USB
+            Vendor ID: {{serialPort?.getInfo().usbVendorId}}
+        </div>
+        }
+        <div class="supported-vendors device-specification">
+            Supported Vendor IDs: {{RobotWiredState.SUPPORTED_VENDORS.join(",
+            ")}}
+        </div>
+        <div class="web-serial-supported device-specification">
+            Web Serial Supported: {{webSerialSupported}}
+        </div>
+    </div>
 </div>

@@ -1,9 +1,16 @@
 <mat-toolbar class="shadow-sm header-container" id="header-container">
-    <img src="assets/leaphy-logo.svg" class="header-logo" width="300" height="24"/>
+    <img
+        src="assets/leaphy-logo.svg"
+        class="header-logo"
+        width="300"
+        height="24"
+    />
     <div class="flex-header">
         <div class="flex-buttons">
             <!-- Add ngIf to check for URL ending with "driverissues" -->
-            @if (isDriverIssuesUrl() && this.appState.selectedRobotType$ | async) {
+            @if (
+                isDriverIssuesUrl() && this.appState.selectedRobotType$ | async
+            ) {
                 <button mat-stroked-button [matMenuTriggerFor]="projectMenu">
                     {{ "PROJECT" | translate }}
                 </button>
@@ -13,24 +20,43 @@
                 <button mat-stroked-button [matMenuTriggerFor]="moreMenu">
                     {{ "MORE" | translate }}
                 </button>
-                @if ((this.appState.selectedRobotType$ | async) !== microPythonRobotType) {
+                @if (
+                    (this.appState.selectedRobotType$ | async) !==
+                    microPythonRobotType
+                ) {
                     <button mat-stroked-button (click)="onChooseRobot()">
                         {{ "CHOOSE_ROBOT" | translate }}
                     </button>
                 }
             }
             @if (!isDriverIssuesUrl()) {
-                <button mat-stroked-button class="back-to-blocks" (click)="onBackToBlocks()">{{ "GO_BACK_TO_BLOCKS" | translate }}</button>
+                <button
+                    mat-stroked-button
+                    class="back-to-blocks"
+                    (click)="onBackToBlocks()"
+                >
+                    {{ "GO_BACK_TO_BLOCKS" | translate }}
+                </button>
             }
         </div>
 
         <div class="flex-buttons">
             <!-- Add ngIf to check for URL ending with "driverissues" -->
-            @if (isDriverIssuesUrl()  && this.appState.selectedRobotType$ | async) {
-                <button mat-stroked-button class="icon-button" (click)="onUndoClicked()">
+            @if (
+                isDriverIssuesUrl() && this.appState.selectedRobotType$ | async
+            ) {
+                <button
+                    mat-stroked-button
+                    class="icon-button"
+                    (click)="onUndoClicked()"
+                >
                     <mat-icon>undo</mat-icon>
                 </button>
-                <button mat-stroked-button class="icon-button" (click)="onRedoClicked()">
+                <button
+                    mat-stroked-button
+                    class="icon-button"
+                    (click)="onRedoClicked()"
+                >
                     <mat-icon>redo</mat-icon>
                 </button>
             }
@@ -38,35 +64,78 @@
 
         <div class="flex-buttons">
             <!-- Add ngIf to check for URL ending with "driverissues" -->
-            @if (isDriverIssuesUrl() && this.appState.selectedRobotType$ | async) {
+            @if (
+                isDriverIssuesUrl() && this.appState.selectedRobotType$ | async
+            ) {
                 @if ((appState.codeEditor$ | async) === 1) {
-                    <button mat-stroked-button [disabled]="(appState.canChangeCodeEditor$ | async) === false"
-                            (click)="onCodeEditorClicked()">
-                        <mat-icon>editor</mat-icon><span>{{ "CODE" | translate }}</span>
+                    <button
+                        mat-stroked-button
+                        [disabled]="
+                            (appState.canChangeCodeEditor$ | async) === false
+                        "
+                        (click)="onCodeEditorClicked()"
+                    >
+                        <mat-icon>editor</mat-icon
+                        ><span>{{ "CODE" | translate }}</span>
                     </button>
                 }
                 @if ((appState.codeEditor$ | async) === 2) {
-                    <button mat-stroked-button [disabled]="(appState.canChangeCodeEditor$ | async) === false"
-                            (click)="onCodeEditorClicked()">
-                        <mat-icon id="block-icon" svgIcon="block"></mat-icon><span>{{ "BLOCKS" | translate }}</span>
+                    <button
+                        mat-stroked-button
+                        [disabled]="
+                            (appState.canChangeCodeEditor$ | async) === false
+                        "
+                        (click)="onCodeEditorClicked()"
+                    >
+                        <mat-icon id="block-icon" svgIcon="block"></mat-icon
+                        ><span>{{ "BLOCKS" | translate }}</span>
                     </button>
                 }
                 <button mat-stroked-button (click)="onSaveWorkspaceClicked()">
-                    <mat-icon>save</mat-icon><span>{{ "SAVE" | translate }}</span>
+                    <mat-icon>save</mat-icon
+                    ><span>{{ "SAVE" | translate }}</span>
                 </button>
                 @if (this.appState.selectedRobotType$ | async) {
-                    @if ((appState.selectedRobotType$ | async) !== microPythonRobotType) {
-                        <button color="primary" mat-flat-button class="text-color-white" (click)="onRunClicked()">
+                    @if (
+                        (appState.selectedRobotType$ | async) !==
+                        microPythonRobotType
+                    ) {
+                        <button
+                            color="primary"
+                            mat-flat-button
+                            class="text-color-white"
+                            (click)="onRunClicked()"
+                        >
                             {{ "UPLOAD" | translate }}
                         </button>
                     }
-                    @if ((appState.selectedRobotType$ | async) === microPythonRobotType) {
-                        <button color="primary" mat-flat-button class="text-color-white" (click)="onConnectClicked()">
+                    @if (
+                        (appState.selectedRobotType$ | async) ===
+                        microPythonRobotType
+                    ) {
+                        <button
+                            color="primary"
+                            mat-flat-button
+                            class="text-color-white"
+                            (click)="onConnectClicked()"
+                        >
                             {{ "CONNECT_PYTHON_ROBOT" | translate }}
                         </button>
                     }
-                    @if ((robotWiredState.isPythonDeviceConnected$ | async) === true) {
-                        <button color="primary" mat-flat-button class="text-color-white" (click)="onRunClicked()" [disabled]="(robotWiredState.isPythonCodeRunning$ | async) === true">
+                    @if (
+                        (robotWiredState.isPythonDeviceConnected$ | async) ===
+                        true
+                    ) {
+                        <button
+                            color="primary"
+                            mat-flat-button
+                            class="text-color-white"
+                            (click)="onRunClicked()"
+                            [disabled]="
+                                (robotWiredState.isPythonCodeRunning$
+                                    | async) === true
+                            "
+                        >
                             {{ "RUN_CODE" | translate }}
                         </button>
                     }
@@ -75,43 +144,71 @@
         </div>
 
         @if ((this.appState.selectedRobotType$ | async) === null) {
-            <div class="version-number">{{ (appState.releaseVersion) }}</div>
+            <div class="version-number">{{ appState.releaseVersion }}</div>
         }
     </div>
 </mat-toolbar>
 
-<mat-menu #projectMenu="matMenu" class="matmenus font-size-menu" >
-    <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onNewProjectClicked()">
+<mat-menu #projectMenu="matMenu" class="matmenus font-size-menu">
+    <button
+        mat-menu-item
+        [disabled]="(appState.selectedRobotType$ | async) === null"
+        (click)="onNewProjectClicked()"
+    >
         <mat-icon>insert_drive_file</mat-icon>
         <span>{{ "NEW" | translate }}</span>
     </button>
-    <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onLoadWorkspaceClicked()">
+    <button
+        mat-menu-item
+        [disabled]="(appState.selectedRobotType$ | async) === null"
+        (click)="onLoadWorkspaceClicked()"
+    >
         <mat-icon>folder</mat-icon>
         <span>{{ "OPEN" | translate }}</span>
     </button>
-    <button mat-menu-item [disabled]="
-      (appState.selectedRobotType$ | async) === null ||
-      (blocklyState.projectFileHandle$ | async) === null
-    " (click)="onSaveWorkspaceClicked()">
+    <button
+        mat-menu-item
+        [disabled]="
+            (appState.selectedRobotType$ | async) === null ||
+            (blocklyState.projectFileHandle$ | async) === null
+        "
+        (click)="onSaveWorkspaceClicked()"
+    >
         <mat-icon>save</mat-icon>
         <span>{{ "SAVE" | translate }}</span>
     </button>
-    <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onSaveWorkspaceAsClicked()">
+    <button
+        mat-menu-item
+        [disabled]="(appState.selectedRobotType$ | async) === null"
+        (click)="onSaveWorkspaceAsClicked()"
+    >
         <mat-icon>save</mat-icon>
         <span>{{ "SAVEAS" | translate }}</span>
     </button>
-    <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onExamplesClicked()">
+    <button
+        mat-menu-item
+        [disabled]="(appState.selectedRobotType$ | async) === null"
+        (click)="onExamplesClicked()"
+    >
         <mat-icon>school</mat-icon>
         <span>{{ "EXAMPLES" | translate }}</span>
     </button>
 </mat-menu>
 
 <mat-menu #helpMenu="matMenu" class="matmenus">
-    <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onHelpClicked()">
+    <button
+        mat-menu-item
+        [disabled]="(appState.selectedRobotType$ | async) === null"
+        (click)="onHelpClicked()"
+    >
         <mat-icon>help_center</mat-icon>
         <span>{{ "HELP_FORUM" | translate }}</span>
     </button>
-    <button mat-menu-item [disabled]="(appState.selectedRobotType$ | async) === null" (click)="onEmailClicked()">
+    <button
+        mat-menu-item
+        [disabled]="(appState.selectedRobotType$ | async) === null"
+        (click)="onEmailClicked()"
+    >
         <mat-icon>email</mat-icon>
         <span>{{ "EMAIL" | translate }}</span>
     </button>
@@ -127,13 +224,13 @@
         <span>{{ "LANGUAGE" | translate }}</span>
     </button>
     <button mat-menu-item (click)="onToggleSoundClicked()">
-        @if ((blocklyState.isSoundOn$ | async)) {
+        @if (blocklyState.isSoundOn$ | async) {
             <mat-icon>volume_off</mat-icon>
         }
         @if ((blocklyState.isSoundOn$ | async) === false) {
             <mat-icon>volume_up</mat-icon>
         }
-        @if ((blocklyState.isSoundOn$ | async)) {
+        @if (blocklyState.isSoundOn$ | async) {
             <span>{{ "SOUND_OFF" | translate }}</span>
         }
         @if ((blocklyState.isSoundOn$ | async) === false) {
@@ -145,7 +242,11 @@
         <span>{{ "VIEW_LOG" | translate }}</span>
     </button>
 
-    <button mat-menu-item id="download_drivers" (click)="onDownloadDriversClicked()">
+    <button
+        mat-menu-item
+        id="download_drivers"
+        (click)="onDownloadDriversClicked()"
+    >
         <mat-icon>download</mat-icon>
         <span>{{ "DOWNLOAD_DRIVERS" | translate }}</span>
     </button>
@@ -153,12 +254,17 @@
 
 <mat-menu #languageMenu="matMenu" class="matmenus">
     @for (language of AppState.availableLanguages; track language) {
-        <button mat-menu-item [value]="language"
-                (click)="onLanguageChanged(language)">
-            <span [class.selected]="language.code === (appState.currentLanguage$ | async)?.code">{{language.name}}</span>
+        <button
+            mat-menu-item
+            [value]="language"
+            (click)="onLanguageChanged(language)"
+        >
+            <span
+                [class.selected]="
+                    language.code === (appState.currentLanguage$ | async)?.code
+                "
+                >{{ language.name }}</span
+            >
         </button>
     }
 </mat-menu>
-
-
-

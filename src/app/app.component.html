@@ -1,6 +1,6 @@
 <app-header></app-header>
 @if (appState.selectedRobotType$ | async) {
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 } @else {
-  <app-start></app-start>
+    <app-start></app-start>
 }

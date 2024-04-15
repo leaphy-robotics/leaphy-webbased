@@ -71,7 +71,12 @@
 
 .serial-output-backdrop {
     pointer-events: all; /* Allow interaction with elements behind the dialog */
-    background-color: rgba(0, 0, 0, 0.5); /* Customize the backdrop color if needed */
+    background-color: rgba(
+        0,
+        0,
+        0,
+        0.5
+    ); /* Customize the backdrop color if needed */
 }
 
 .serial-prompt {
