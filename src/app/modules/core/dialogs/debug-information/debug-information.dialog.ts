@@ -25,7 +25,8 @@ export class DebugInformationDialog {
     ) {
         // @ts-ignore
         this.os =
-            navigator["userAgentData"]?.platform ?? translate.instant("UNKNOWN");
+            navigator["userAgentData"]?.platform ??
+            translate.instant("UNKNOWN");
         // @ts-ignore
         this.browser =
             navigator["userAgentData"]?.brands[0].brand ??
