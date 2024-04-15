@@ -25,14 +25,14 @@ export class DebugInformationDialog {
     ) {
         // @ts-ignore
         this.os =
-            navigator["userAgentData"]?.platform ?? translate.instant("UNKNOWN");
+            navigator.userAgentData?.platform ?? translate.instant("UNKNOWN");
         // @ts-ignore
         this.browser =
-            navigator["userAgentData"]?.brands[0].brand ??
+            navigator.userAgentData?.brands[1].brand ??
             translate.instant("UNKNOWN");
         // @ts-ignore
         this.browserVersion =
-            navigator["userAgentData"]?.brands[0].version ??
+            navigator.userAgentData?.brands[1].version ??
             translate.instant("UNKNOWN");
         this.serialPort = this.robotWiredState.serialPort;
         if (!("serial" in navigator)) {
