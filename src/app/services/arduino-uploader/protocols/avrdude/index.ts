@@ -1,60 +1,65 @@
 import BaseProtocol from "../base";
 
 /*
-    * The following is a list of supported microcontrollers.
+ * The following is a list of supported microcontrollers.
  */
-const supportedMicrocontrollers = ['atmega328p', 'atmega2560']
+const supportedMicrocontrollers = ["atmega328p", "atmega2560"];
 
 /*
-    * The following is a dictionary of microcontroller to avrdude arguments.
+ * The following is a dictionary of microcontroller to avrdude arguments.
  */
 const microcontrollersToArgs = {
-    'atmega328p': 'avrdude -P /dev/null -V -v -p atmega328p -c stk500v1 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i',
-    'atmega2560': 'avrdude -P /dev/null -V -v -p atmega2560 -c stk500v2 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i'
-}
-
+    atmega328p:
+        "avrdude -P /dev/null -V -v -p atmega328p -c stk500v1 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i",
+    atmega2560:
+        "avrdude -P /dev/null -V -v -p atmega2560 -c stk500v2 -C /tmp/avrdude.conf -b 115200 -D -U flash:w:/tmp/program.hex:i",
+};
 
 export default class Avrdude extends BaseProtocol {
-
     async upload(response: Record<string, string>) {
-        const Module = await import('@leaphy-robotics/avrdude-webassembly/avrdude.js')
-        const avrdude = await Module.default()
+        const Module = await import(
+            "@leaphy-robotics/avrdude-webassembly/avrdude.js"
+        );
+        const avrdude = await Module.default();
         window["funcs"] = avrdude;
         // check if port is open
         if (this.port.readable || this.port.writable) {
-            await this.port.close()
+            await this.port.close();
         }
-        await this.port.open({ baudRate: 115200 })
-        window["activePort"] = this.port
-        const avrdudeConfig = await fetch('/avrdude.conf').then(res => res.text())
-        avrdude.FS.writeFile('/tmp/avrdude.conf', avrdudeConfig)
-        avrdude.FS.writeFile('/tmp/program.hex', response['hex'])
+        await this.port.open({ baudRate: 115200 });
+        window["activePort"] = this.port;
+        const avrdudeConfig = await fetch("/avrdude.conf").then((res) =>
+            res.text(),
+        );
+        avrdude.FS.writeFile("/tmp/avrdude.conf", avrdudeConfig);
+        avrdude.FS.writeFile("/tmp/program.hex", response["hex"]);
         // get board
-        const mcu = this.uploader.appState.selectedRobotType.protocol?.microcontroller
+        const mcu =
+            this.uploader.appState.selectedRobotType.protocol?.microcontroller;
         if (!supportedMicrocontrollers.includes(mcu)) {
-            throw new Error('Unsupported microcontroller')
+            throw new Error("Unsupported microcontroller");
         }
-        const args = microcontrollersToArgs[mcu]
+        const args = microcontrollersToArgs[mcu];
 
         // create a promise that resolves when the port.ondisconnect event is fired
         const disconnectPromise = new Promise((resolve) => {
             // todo: add compatibility for fallback devices if required, currently no avrdude devices support this
-            if (!(this.port instanceof SerialPort)) return
+            if (!(this.port instanceof SerialPort)) return;
 
-            this.port.ondisconnect = resolve
-        })
+            this.port.ondisconnect = resolve;
+        });
 
-        const startAvrdude = avrdude.cwrap("startAvrdude", "number", ["string"])
+        const startAvrdude = avrdude.cwrap("startAvrdude", "number", [
+            "string",
+        ]);
 
-        let race = await Promise.race([disconnectPromise, startAvrdude(args)])
+        let race = await Promise.race([disconnectPromise, startAvrdude(args)]);
         // if the winner is the disconnect promise, then the port was disconnected and we should stop the other promise
         if (race.type) {
-            race = -2
+            race = -2;
         }
 
-
-        if (window["writeStream"])
-            window["writeStream"].releaseLock();
+        if (window["writeStream"]) window["writeStream"].releaseLock();
 
         const log = window["avrdudeLog"];
         this.robotWiredState.clearUploadLog();
@@ -64,11 +69,11 @@ export default class Avrdude extends BaseProtocol {
 
         if (race != 0) {
             if (race == -2) {
-                throw new Error('Port disconnected')
+                throw new Error("Port disconnected");
             }
-            throw new Error('Avrdude failed')
+            throw new Error("Avrdude failed");
         }
-        this.uploadState.statusMessage ="UPDATE_COMPLETE"
-        return
+        this.uploadState.statusMessage = "UPDATE_COMPLETE";
+        return;
     }
 }

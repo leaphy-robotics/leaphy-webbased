@@ -1,17 +1,23 @@
 <div class="robot-selection" [@swipe]="state">
     <div class="column">
         @for (row of robots; track row) {
-            <div class="row robot-row" >
+            <div class="row robot-row">
                 @for (robot of row; track robot) {
-                <div class="col col-md-auto col-sm-6 text-center zoomed"
-                     (click)="onRobotSelected(robot)">
-
-                    <button class="btn shadow-sm btn-primary robot-button"
-                            [ngClass]="{ selected: selected === robot }">
-                        <img class="imgcenter" src="./assets/{{robot.svgname || robot.icon}}">
-                    </button>
-                    <p class="robot-name">{{robot.name}} </p>
-                </div>
+                    <div
+                        class="col col-md-auto col-sm-6 text-center zoomed"
+                        (click)="onRobotSelected(robot)"
+                    >
+                        <button
+                            class="btn shadow-sm btn-primary robot-button"
+                            [ngClass]="{ selected: selected === robot }"
+                        >
+                            <img
+                                class="imgcenter"
+                                src="./assets/{{ robot.svgname || robot.icon }}"
+                            />
+                        </button>
+                        <p class="robot-name">{{ robot.name }}</p>
+                    </div>
                 }
             </div>
         }

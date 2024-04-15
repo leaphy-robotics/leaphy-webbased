@@ -1,32 +1,32 @@
 #container {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  height: calc(100% - 64px);
-  width: 100%;
-  overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: calc(100% - 64px);
+    width: 100%;
+    overflow: hidden;
 }
 
 .sidenav-container {
-  flex: 1 1 auto;
-  background: #eee;
+    flex: 1 1 auto;
+    background: #eee;
 }
 
 #sidenav {
-  height: 100%;
-  width: 20%;
+    height: 100%;
+    width: 20%;
 }
 
 app-code-view {
-  display: block;
-  height: 100%;
+    display: block;
+    height: 100%;
 }
 
 app-button-bar {
-  pointer-events: none;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 2;
-  transition: right ease-out 0.25s;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 2;
+    transition: right ease-out 0.25s;
 }

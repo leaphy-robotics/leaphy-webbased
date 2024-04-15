@@ -1,34 +1,44 @@
 <div class="container">
-  @if ((uploadState.USBConnecting$ | async) === false) {
+    @if ((uploadState.USBConnecting$ | async) === false) {
     <div>
-      <p id="upload-status"
-      [class.failed-upload]="uploadState.failed$ | async">{{ uploadState.stateMessage$ | async }}</p>
-      @if ((uploadState.done$ | async) === false) {
-        <progress id="upload-progress-bar" class="progress-bar" max="150"
-        [value]="uploadState.progress$ | async"></progress>
-      }
+        <p
+            id="upload-status"
+            [class.failed-upload]="uploadState.failed$ | async"
+        >
+            {{ uploadState.stateMessage$ | async }}
+        </p>
+        @if ((uploadState.done$ | async) === false) {
+        <progress
+            id="upload-progress-bar"
+            class="progress-bar"
+            max="150"
+            [value]="uploadState.progress$ | async"
+        ></progress>
+        }
     </div>
-  }
-
-  @if (uploadState.USBConnecting$ | async) {
+    } @if (uploadState.USBConnecting$ | async) {
     <div class="return-options">
-      <p>{{ "RECONNECT_INFO" | translate }}</p>
-      <button class="block-environment" (click)="reconnect()">{{ "RECONNECT" | translate }}</button>
-    </div>
-  }
-
-  @if (uploadState.error$ | async) {
-    <pre id="error-message">{{ uploadState.error$ | async }}</pre>
-  }
-  @if (uploadState.done$ | async) {
-    <div id="return-options" class="return-options">
-      <button class="block-environment" (click)="returnBlockEnvironment()">{{ "LEAVE_UPLOADING" | translate }}
-      </button>
-      @if (uploadState.failed$ | async) {
-        <button id="helpEnviroment" class="help-environment"
-          (click)="returnHelpEnvironment()">{{ "UPLOADING_ISSUE_HELP" | translate }}
+        <p>{{ "RECONNECT_INFO" | translate }}</p>
+        <button class="block-environment" (click)="reconnect()">
+            {{ "RECONNECT" | translate }}
         </button>
-      }
     </div>
-  }
+    } @if (uploadState.error$ | async) {
+    <pre id="error-message">{{ uploadState.error$ | async }}</pre>
+    } @if (uploadState.done$ | async) {
+    <div id="return-options" class="return-options">
+        <button class="block-environment" (click)="returnBlockEnvironment()">
+            {{ "LEAVE_UPLOADING" | translate }}
+        </button>
+        @if (uploadState.failed$ | async) {
+        <button
+            id="helpEnviroment"
+            class="help-environment"
+            (click)="returnHelpEnvironment()"
+        >
+            {{ "UPLOADING_ISSUE_HELP" | translate }}
+        </button>
+        }
+    </div>
+    }
 </div>

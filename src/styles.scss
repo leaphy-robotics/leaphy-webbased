@@ -23,7 +23,7 @@ body {
     font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-@import 'node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+@import "node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
 
 :host ::ng-deep mat-dialog-container {
     background-color: white !important;
@@ -84,5 +84,5 @@ pre[class*="language-"]:after {
 }
 
 .blocklySvg {
-    background-color: transparent!important;
+    background-color: transparent !important;
 }

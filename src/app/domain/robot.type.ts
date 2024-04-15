@@ -16,7 +16,7 @@ const DEFAULTS: Features = {
     showLeaphyOperators: true,
     showLeaphySensors: false,
     showLeaphyLists: false,
-    showCodeOnStart: false
+    showCodeOnStart: false,
 };
 
 interface ProtocolInformation {
@@ -38,21 +38,20 @@ export class RobotType {
         public libs: string[],
         features?: Partial<Features>,
     ) {
-        this.features = Object.assign({}, DEFAULTS, features||{});
+        this.features = Object.assign({}, DEFAULTS, features || {});
     }
 }
 
 export interface RobotEntry {
-    name: string,
-    icon: string,
-    robot: RobotType
+    name: string;
+    icon: string;
+    robot: RobotType;
 }
 
 export interface RobotSelector {
-    intercept: RobotType,
-    choices: RobotEntry[][],
+    intercept: RobotType;
+    choices: RobotEntry[][];
 }
-
 
 export class BaseUno extends RobotType {
     constructor(
@@ -63,7 +62,17 @@ export class BaseUno extends RobotType {
         libs: string[],
         features?: Partial<Features>,
     ) {
-        super(id, {protocol: Avrdude, microcontroller: 'atmega328p'}, name, svgname, background, "arduino:avr:uno", "arduino:avr", libs, features);
+        super(
+            id,
+            { protocol: Avrdude, microcontroller: "atmega328p" },
+            name,
+            svgname,
+            background,
+            "arduino:avr:uno",
+            "arduino:avr",
+            libs,
+            features,
+        );
     }
 }
 
@@ -76,7 +85,17 @@ export class BaseNano extends RobotType {
         libs: string[],
         features?: Partial<Features>,
     ) {
-        super(id, {protocol: Avrdude, microcontroller: 'atmega328p'}, name, svgname, background, "arduino:avr:nano", "arduino:avr", libs, features);
+        super(
+            id,
+            { protocol: Avrdude, microcontroller: "atmega328p" },
+            name,
+            svgname,
+            background,
+            "arduino:avr:nano",
+            "arduino:avr",
+            libs,
+            features,
+        );
     }
 }
 
@@ -89,7 +108,17 @@ export class BaseNanoESP32 extends RobotType {
         libs: string[],
         features?: Partial<Features>,
     ) {
-        super(id, {protocol: DFU}, name, svgname, background, "arduino:esp32:nano_nora", "arduino:esp32", libs, features);
+        super(
+            id,
+            { protocol: DFU },
+            name,
+            svgname,
+            background,
+            "arduino:esp32:nano_nora",
+            "arduino:esp32",
+            libs,
+            features,
+        );
     }
 }
 
@@ -102,7 +131,16 @@ export class BaseNanoRP2040 extends RobotType {
         libs: string[],
         features?: Partial<Features>,
     ) {
-        super(id, {protocol: Pico}, name, svgname, background, "arduino:mbed_nano:nanorp2040connect", "arduino:mbed_nano", libs, features);
+        super(
+            id,
+            { protocol: Pico },
+            name,
+            svgname,
+            background,
+            "arduino:mbed_nano:nanorp2040connect",
+            "arduino:mbed_nano",
+            libs,
+            features,
+        );
     }
 }
-
