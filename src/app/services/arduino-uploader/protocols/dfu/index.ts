@@ -1,25 +1,25 @@
 import BaseProtocol from "../base";
-import base64 from 'base64-js'
-import DFUUtil from '@leaphy-robotics/dfu-util-wasm'
-import {delay} from "../../utils";
+import base64 from "base64-js";
+import DFUUtil from "@leaphy-robotics/dfu-util-wasm";
+import { delay } from "../../utils";
 
-const dfu = new DFUUtil("/dfu-util/")
+const dfu = new DFUUtil("/dfu-util/");
 
 export default class DFU extends BaseProtocol {
     async upload(response: Record<string, string>) {
-        await this.port.close()
-        await delay(1000)
-        await this.uploadState.requestUSBDevice()
+        await this.port.close();
+        await delay(1000);
+        await this.uploadState.requestUSBDevice();
 
-        const sketch = base64.toByteArray(response["sketch"])
-        await dfu.flash(sketch)
-        await delay(1000)
+        const sketch = base64.toByteArray(response["sketch"]);
+        await dfu.flash(sketch);
+        await delay(1000);
 
-        const port = await this.waitForPort()
-        await port.open({ baudRate: 115200 })
-        this.robotWiredState.serialPort = port
-        this.uploader.setPort(port)
+        const port = await this.waitForPort();
+        await port.open({ baudRate: 115200 });
+        this.robotWiredState.serialPort = port;
+        this.uploader.setPort(port);
 
-        this.uploadState.statusMessage = "UPDATE_COMPLETE"
+        this.uploadState.statusMessage = "UPDATE_COMPLETE";
     }
 }

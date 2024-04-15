@@ -1,52 +1,51 @@
 #container {
-  display: flex;
-  align-items: stretch;
-  width: 100vw;
-  overflow-y: scroll;
+    display: flex;
+    align-items: stretch;
+    width: 100vw;
+    overflow-y: scroll;
 }
 
 #header-container {
-  position: fixed; /* Fix the position */
-  top: 0; /* Position at the top */
-  left: 0; /* Position at the left */
-  right: 0; /* Position at the right */
-  z-index: 1000; /* Set a high z-index to ensure it's above other content */
-  width: 100vw; /* Take up the full width */
+    position: fixed; /* Fix the position */
+    top: 0; /* Position at the top */
+    left: 0; /* Position at the left */
+    right: 0; /* Position at the right */
+    z-index: 1000; /* Set a high z-index to ensure it's above other content */
+    width: 100vw; /* Take up the full width */
 }
 
 #container h1 {
-  margin-top: 1%;
+    margin-top: 1%;
 }
 
 #container h3 {
-  text-align: left;
-  margin-bottom: 1%;
+    text-align: left;
+    margin-bottom: 1%;
 }
 
 .content {
-  flex: 1 1 auto;
-  padding: 20px;
+    flex: 1 1 auto;
+    padding: 20px;
 }
 
 #content div {
-  margin-top: 5%;
+    margin-top: 5%;
 }
 
 #content h2 {
-  text-align: center;
-  margin-top: 3%;
+    text-align: center;
+    margin-top: 3%;
 }
 
 body {
-  overflow-y: scroll; /* Override the body's overflow */
+    overflow-y: scroll; /* Override the body's overflow */
 }
 
 h2 {
-  cursor: pointer; /* Add a pointer cursor to indicate clickability */
-  transition: color 0.3s; /* Smooth color transition on hover */
+    cursor: pointer; /* Add a pointer cursor to indicate clickability */
+    transition: color 0.3s; /* Smooth color transition on hover */
 }
 
 h2:hover {
-  color: #007bff; /* Change color on hover */
+    color: #007bff; /* Change color on hover */
 }
-

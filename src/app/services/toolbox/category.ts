@@ -1,15 +1,16 @@
-import * as Blockly from 'blockly/core';
-
+import * as Blockly from "blockly/core";
 
 /**
  * Class for a category in a toolbox.
  *
  * @alias Blockly.ToolboxCategory
  */
-export class LeaphyCategory extends Blockly.ToolboxCategory implements
-    Blockly.ISelectableToolboxItem {
+export class LeaphyCategory
+    extends Blockly.ToolboxCategory
+    implements Blockly.ISelectableToolboxItem
+{
     /** Name used for registering a toolbox category. */
-    static registrationName = 'category';
+    static registrationName = "category";
 
     /** The number of pixels to move the category over at each nested level. */
     static nestedPadding = 19;
@@ -21,31 +22,31 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * The default colour of the category. This is used as the background colour
      * of the category when it is selected.
      */
-    static defaultBackgroundColour = '#57e';
+    static defaultBackgroundColour = "#57e";
 
     // TODO(b/109816955): remove '!', see go/strict-prop-init-fix.
     override toolboxItemDef_!: Blockly.utils.toolbox.CategoryInfo;
 
     /** The name that will be displayed on the category. */
-    protected name_ = '';
+    protected name_ = "";
 
     /** The colour of the category. */
-    protected colour_ = '';
+    protected colour_ = "";
 
     /** The html container for the category. */
-    protected htmlDiv_: HTMLDivElement|null = null;
+    protected htmlDiv_: HTMLDivElement | null = null;
 
     /** The html element for the category row. */
-    protected rowDiv_: HTMLDivElement|null = null;
+    protected rowDiv_: HTMLDivElement | null = null;
 
     /** The html element that holds children elements of the category row. */
-    protected rowContents_: HTMLDivElement|null = null;
+    protected rowContents_: HTMLDivElement | null = null;
 
     /** The html element for the toolbox icon. */
-    protected iconDom_: Element|null = null;
+    protected iconDom_: Element | null = null;
 
     /** The html element for the toolbox label. */
-    protected labelDom_: Element|null = null;
+    protected labelDom_: Element | null = null;
     protected cssConfig_: CssConfig;
 
     /** True if the category is meant to be hidden, false otherwise. */
@@ -55,7 +56,8 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
     protected isDisabled_ = false;
 
     /** The flyout items for this category. */
-    protected flyoutItems_: string|Blockly.utils.toolbox.FlyoutItemInfoArray = [];
+    protected flyoutItems_: string | Blockly.utils.toolbox.FlyoutItemInfoArray =
+        [];
 
     /**
      * @param categoryDef The information needed to create a category in the
@@ -65,8 +67,10 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      *     a parent.
      */
     constructor(
-        categoryDef: Blockly.utils.toolbox.CategoryInfo, parentToolbox: Blockly.IToolbox,
-        opt_parent?: Blockly.ICollapsibleToolboxItem) {
+        categoryDef: Blockly.utils.toolbox.CategoryInfo,
+        parentToolbox: Blockly.IToolbox,
+        opt_parent?: Blockly.ICollapsibleToolboxItem,
+    ) {
         super(categoryDef, parentToolbox, opt_parent);
 
         /** All the css class names that are used to create a category. */
@@ -84,7 +88,7 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
         this.parseCategoryDef_(this.toolboxItemDef_);
         this.parseContents_(this.toolboxItemDef_);
         this.createDom_();
-        if (this.toolboxItemDef_['hidden'] === 'true') {
+        if (this.toolboxItemDef_["hidden"] === "true") {
             this.hide();
         }
     }
@@ -97,15 +101,15 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      */
     protected makeDefaultCssConfig_(): CssConfig {
         return {
-            'container': 'blocklyToolboxCategory',
-            'row': 'blocklyTreeRow',
-            'rowcontentcontainer': 'blocklyTreeRowContentContainer',
-            'icon': 'blocklyTreeIcon',
-            'label': 'blocklyTreeLabel',
-            'contents': 'blocklyToolboxContents',
-            'selected': 'blocklyTreeSelected',
-            'openicon': 'blocklyTreeIconOpen',
-            'closedicon': 'blocklyTreeIconClosed',
+            container: "blocklyToolboxCategory",
+            row: "blocklyTreeRow",
+            rowcontentcontainer: "blocklyTreeRowContentContainer",
+            icon: "blocklyTreeIcon",
+            label: "blocklyTreeLabel",
+            contents: "blocklyToolboxContents",
+            selected: "blocklyTreeSelected",
+            openicon: "blocklyTreeIconOpen",
+            closedicon: "blocklyTreeIconClosed",
         };
     }
 
@@ -116,15 +120,16 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @param categoryDef The information needed to create a category.
      */
     protected parseContents_(categoryDef: Blockly.utils.toolbox.CategoryInfo) {
-        if ('custom' in categoryDef) {
-            this.flyoutItems_ = categoryDef['custom'];
+        if ("custom" in categoryDef) {
+            this.flyoutItems_ = categoryDef["custom"];
         } else {
-            const contents = categoryDef['contents'];
+            const contents = categoryDef["contents"];
             if (!contents) return;
 
             for (let i = 0; i < contents.length; i++) {
                 const itemDef = contents[i];
-                const flyoutItem = itemDef as Blockly.utils.toolbox.FlyoutItemInfo;
+                const flyoutItem =
+                    itemDef as Blockly.utils.toolbox.FlyoutItemInfo;
                 if (Array.isArray(this.flyoutItems_)) {
                     this.flyoutItems_.push(flyoutItem);
                 }
@@ -137,14 +142,20 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      *
      * @param categoryDef The information needed to create a category.
      */
-    protected parseCategoryDef_(categoryDef: Blockly.utils.toolbox.CategoryInfo) {
-        this.name_ = 'name' in categoryDef ?
-            Blockly.utils.parsing.replaceMessageReferences(categoryDef['name']) :
-            '';
+    protected parseCategoryDef_(
+        categoryDef: Blockly.utils.toolbox.CategoryInfo,
+    ) {
+        this.name_ =
+            "name" in categoryDef
+                ? Blockly.utils.parsing.replaceMessageReferences(
+                      categoryDef["name"],
+                  )
+                : "";
         this.colour_ = this.getColour_(categoryDef);
         Object.assign(
             this.cssConfig_,
-            categoryDef['cssconfig'] || (categoryDef as any)['cssConfig']);
+            categoryDef["cssconfig"] || (categoryDef as any)["cssConfig"],
+        );
     }
 
     /**
@@ -154,16 +165,27 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      */
     protected createDom_(): HTMLDivElement {
         this.htmlDiv_ = this.createContainer_();
-        Blockly.utils.aria.setRole(this.htmlDiv_, Blockly.utils.aria.Role.TREEITEM);
-        Blockly.utils.aria.setState(this.htmlDiv_, Blockly.utils.aria.State.SELECTED, false);
-        Blockly.utils.aria.setState(this.htmlDiv_, Blockly.utils.aria.State.LEVEL, this.level_);
+        Blockly.utils.aria.setRole(
+            this.htmlDiv_,
+            Blockly.utils.aria.Role.TREEITEM,
+        );
+        Blockly.utils.aria.setState(
+            this.htmlDiv_,
+            Blockly.utils.aria.State.SELECTED,
+            false,
+        );
+        Blockly.utils.aria.setState(
+            this.htmlDiv_,
+            Blockly.utils.aria.State.LEVEL,
+            this.level_,
+        );
 
         this.rowDiv_ = this.createRowContainer_();
-        this.rowDiv_.style.pointerEvents = 'auto';
+        this.rowDiv_.style.pointerEvents = "auto";
         this.htmlDiv_.appendChild(this.rowDiv_);
 
         this.rowContents_ = this.createRowContentsContainer_();
-        this.rowContents_.style.pointerEvents = 'none';
+        this.rowContents_.style.pointerEvents = "none";
         this.rowDiv_.appendChild(this.rowContents_);
 
         // This is disabled because the icon is now created within the
@@ -180,9 +202,13 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
         // this.labelDom_ = this.createLabelDom_(this.name_);
         this.rowContents_.appendChild(this.labelDom_);
 
-        const id = this.labelDom_.getAttribute('id');
+        const id = this.labelDom_.getAttribute("id");
         if (id) {
-            Blockly.utils.aria.setState(this.htmlDiv_, Blockly.utils.aria.State.LABELLEDBY, id);
+            Blockly.utils.aria.setState(
+                this.htmlDiv_,
+                Blockly.utils.aria.State.LABELLEDBY,
+                id,
+            );
         }
 
         // This is disabled because we have this inside the Leaphy Client now.
@@ -198,8 +224,8 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @returns The div that holds the icon and the label.
      */
     protected createContainer_(): HTMLDivElement {
-        const container = document.createElement('div');
-        const className = this.cssConfig_['container'];
+        const container = document.createElement("div");
+        const className = this.cssConfig_["container"];
         if (className) {
             Blockly.utils.dom.addClass(container, className);
         }
@@ -213,15 +239,15 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @returns The div that holds the contents container.
      */
     protected createRowContainer_(): HTMLDivElement {
-        const rowDiv = document.createElement('div');
-        const className = this.cssConfig_['row'];
+        const rowDiv = document.createElement("div");
+        const className = this.cssConfig_["row"];
         if (className) {
             Blockly.utils.dom.addClass(rowDiv, className);
         }
-        const nestedPadding =
-            `${Blockly.ToolboxCategory.nestedPadding * this.getLevel()}px`;
-        this.workspace_.RTL ? rowDiv.style.paddingRight = nestedPadding :
-            rowDiv.style.paddingLeft = nestedPadding;
+        const nestedPadding = `${Blockly.ToolboxCategory.nestedPadding * this.getLevel()}px`;
+        this.workspace_.RTL
+            ? (rowDiv.style.paddingRight = nestedPadding)
+            : (rowDiv.style.paddingLeft = nestedPadding);
         return rowDiv;
     }
 
@@ -232,8 +258,8 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @returns The div that holds the icon and the label.
      */
     protected createRowContentsContainer_(): HTMLDivElement {
-        const contentsContainer = document.createElement('div');
-        const className = this.cssConfig_['rowcontentcontainer'];
+        const contentsContainer = document.createElement("div");
+        const className = this.cssConfig_["rowcontentcontainer"];
         if (className) {
             Blockly.utils.dom.addClass(contentsContainer, className);
         }
@@ -246,15 +272,15 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @returns The span that holds the category icon.
      */
     protected createIconDom_(): Element {
-        const toolboxIcon = document.createElement('span');
+        const toolboxIcon = document.createElement("span");
         if (!this.parentToolbox_.isHorizontal()) {
-            const className = this.cssConfig_['icon'];
+            const className = this.cssConfig_["icon"];
             if (className) {
                 Blockly.utils.dom.addClass(toolboxIcon, className);
             }
         }
 
-        toolboxIcon.style.display = 'inline-block';
+        toolboxIcon.style.display = "inline-block";
         return toolboxIcon;
     }
 
@@ -267,29 +293,29 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @protected
      */
     createLeaphyLabelDom_(name: string) {
-        const toolboxLabelContainer = document.createElement('div');
-        toolboxLabelContainer.style.position = 'relative';
+        const toolboxLabelContainer = document.createElement("div");
+        toolboxLabelContainer.style.position = "relative";
 
-        const toolboxIcon = document.createElement('img');
-        toolboxIcon.setAttribute('src', 'media/' + this.getId() + '.svg');
-        toolboxIcon.setAttribute('height', '72px');
-        toolboxIcon.setAttribute('width', '72px');
-        toolboxIcon.style.marginLeft = '0px';
+        const toolboxIcon = document.createElement("img");
+        toolboxIcon.setAttribute("src", "media/" + this.getId() + ".svg");
+        toolboxIcon.setAttribute("height", "72px");
+        toolboxIcon.setAttribute("width", "72px");
+        toolboxIcon.style.marginLeft = "0px";
 
         toolboxLabelContainer.appendChild(toolboxIcon);
 
-        const toolboxTextLabel = document.createElement('div');
+        const toolboxTextLabel = document.createElement("div");
 
-        toolboxTextLabel.style.top = '40px';
-        toolboxTextLabel.style.width = '50px';
-        toolboxTextLabel.style.marginLeft = '11px';
-        toolboxTextLabel.style.position = 'absolute';
-        toolboxTextLabel.style.fontSize = '10px';
-        toolboxTextLabel.style.lineHeight = '12px';
-        toolboxTextLabel.style.lineHeight = '99%';
-        toolboxTextLabel.style.textAlign = 'center';
-        toolboxTextLabel.style.verticalAlign = 'top';
-        toolboxTextLabel.style.whiteSpace = 'pre-wrap';
+        toolboxTextLabel.style.top = "40px";
+        toolboxTextLabel.style.width = "50px";
+        toolboxTextLabel.style.marginLeft = "11px";
+        toolboxTextLabel.style.position = "absolute";
+        toolboxTextLabel.style.fontSize = "10px";
+        toolboxTextLabel.style.lineHeight = "12px";
+        toolboxTextLabel.style.lineHeight = "99%";
+        toolboxTextLabel.style.textAlign = "center";
+        toolboxTextLabel.style.verticalAlign = "top";
+        toolboxTextLabel.style.whiteSpace = "pre-wrap";
 
         toolboxTextLabel.textContent = name;
 
@@ -306,10 +332,10 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @returns The span that holds the category label.
      */
     protected createLabelDom_(name: string): Element {
-        const toolboxLabel = document.createElement('span');
-        toolboxLabel.setAttribute('id', this.getId() + '.label');
+        const toolboxLabel = document.createElement("span");
+        toolboxLabel.setAttribute("id", this.getId() + ".label");
         toolboxLabel.textContent = name;
-        const className = this.cssConfig_['label'];
+        const className = this.cssConfig_["label"];
         if (className) {
             Blockly.utils.dom.addClass(toolboxLabel, className);
         }
@@ -330,7 +356,9 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
     protected addColourBorder_(colour: string) {
         if (colour) {
             const border =
-                Blockly.ToolboxCategory.borderWidth + 'px solid ' + (colour || '#ddd');
+                Blockly.ToolboxCategory.borderWidth +
+                "px solid " +
+                (colour || "#ddd");
             if (this.workspace_.RTL) {
                 this.rowDiv_!.style.borderRight = border;
             } else {
@@ -351,21 +379,20 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
         return this.rowDiv_ as Element;
     }
 
-
     /**
      * Adds appropriate classes to display an open icon.
      *
      * @param iconDiv The div that holds the icon.
      */
-    protected openIcon_(iconDiv: Element|null) {
+    protected openIcon_(iconDiv: Element | null) {
         if (!iconDiv) {
             return;
         }
-        const closedIconClass = this.cssConfig_['closedicon'];
+        const closedIconClass = this.cssConfig_["closedicon"];
         if (closedIconClass) {
             Blockly.utils.dom.removeClasses(iconDiv, closedIconClass);
         }
-        const className = this.cssConfig_['openicon'];
+        const className = this.cssConfig_["openicon"];
         if (className) {
             Blockly.utils.dom.addClass(iconDiv, className);
         }
@@ -376,15 +403,15 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      *
      * @param iconDiv The div that holds the icon.
      */
-    protected closeIcon_(iconDiv: Element|null) {
+    protected closeIcon_(iconDiv: Element | null) {
         if (!iconDiv) {
             return;
         }
-        const openIconClass = this.cssConfig_['openicon'];
+        const openIconClass = this.cssConfig_["openicon"];
         if (openIconClass) {
             Blockly.utils.dom.removeClasses(iconDiv, openIconClass);
         }
-        const className = this.cssConfig_['closedicon'];
+        const className = this.cssConfig_["closedicon"];
         if (className) {
             Blockly.utils.dom.addClass(iconDiv, className);
         }
@@ -397,7 +424,7 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @param isVisible True if category should be visible.
      */
     override setVisible_(isVisible: boolean) {
-        this.htmlDiv_!.style.display = isVisible ? 'block' : 'none';
+        this.htmlDiv_!.style.display = isVisible ? "block" : "none";
         this.isHidden_ = !isVisible;
 
         if (this.parentToolbox_.getSelectedItem() === this) {
@@ -464,9 +491,10 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      */
     setDisabled(isDisabled: boolean) {
         this.isDisabled_ = isDisabled;
-        this.getDiv()!.setAttribute('disabled', `${isDisabled}`);
-        isDisabled ? this.getDiv()!.setAttribute('disabled', 'true') :
-            this.getDiv()!.removeAttribute('disabled');
+        this.getDiv()!.setAttribute("disabled", `${isDisabled}`);
+        isDisabled
+            ? this.getDiv()!.setAttribute("disabled", "true")
+            : this.getDiv()!.removeAttribute("disabled");
     }
 
     /**
@@ -492,7 +520,7 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      *
      * @returns The definition of items to be displayed in the flyout.
      */
-    getContents(): Blockly.utils.toolbox.FlyoutItemInfoArray|string {
+    getContents(): Blockly.utils.toolbox.FlyoutItemInfoArray | string {
         return this.flyoutItems_;
     }
 
@@ -504,10 +532,12 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
      * @param contents The contents to be displayed in the flyout. A string can be
      *     supplied to create a dynamic category.
      */
-    updateFlyoutContents(contents: Blockly.utils.toolbox.FlyoutDefinition|string) {
+    updateFlyoutContents(
+        contents: Blockly.utils.toolbox.FlyoutDefinition | string,
+    ) {
         this.flyoutItems_ = [];
 
-        if (typeof contents === 'string') {
+        if (typeof contents === "string") {
             this.toolboxItemDef_ = {
                 kind: this.toolboxItemDef_.kind,
                 custom: contents,
@@ -520,9 +550,12 @@ export class LeaphyCategory extends Blockly.ToolboxCategory implements
         } else {
             this.toolboxItemDef_ = {
                 kind: this.toolboxItemDef_.kind,
-                name: 'name' in this.toolboxItemDef_ ? this.toolboxItemDef_['name'] :
-                    '',
-                contents: Blockly.utils.toolbox.convertFlyoutDefToJsonArray(contents),
+                name:
+                    "name" in this.toolboxItemDef_
+                        ? this.toolboxItemDef_["name"]
+                        : "",
+                contents:
+                    Blockly.utils.toolbox.convertFlyoutDefToJsonArray(contents),
                 id: this.toolboxItemDef_.id,
                 categorystyle: this.toolboxItemDef_.categorystyle,
                 colour: this.toolboxItemDef_.colour,

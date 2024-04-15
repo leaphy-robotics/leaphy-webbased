@@ -62,7 +62,10 @@ mat-button-toggle {
     font-weight: normal;
 }
 
-::ng-deep .mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+::ng-deep
+    .mat-button-toggle-group-appearance-standard
+    .mat-button-toggle
+    + .mat-button-toggle {
     border-color: var(--leaphy-color-secundary) !important;
 }
 
@@ -72,7 +75,9 @@ mat-button-toggle {
     font-weight: bold;
 }
 
-::ng-deep .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+::ng-deep
+    .mat-button-toggle-appearance-standard
+    .mat-button-toggle-label-content {
     line-height: 10px;
 }
 

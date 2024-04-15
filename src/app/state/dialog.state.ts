@@ -1,31 +1,36 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { Injectable } from "@angular/core";
+import { BehaviorSubject } from "rxjs";
+import { distinctUntilChanged } from "rxjs/operators";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: "root",
 })
 export class DialogState {
-
     private isLibraryManagerWindowOpenSubject$ = new BehaviorSubject(false);
-    public isLibraryManagerWindowOpen$ = this.isLibraryManagerWindowOpenSubject$.asObservable()
+    public isLibraryManagerWindowOpen$ = this.isLibraryManagerWindowOpenSubject$
+        .asObservable()
         .pipe(distinctUntilChanged());
 
     private isSerialOutputWindowOpenSubject$ = new BehaviorSubject(false);
-    public isSerialOutputWindowOpen$ = this.isSerialOutputWindowOpenSubject$.asObservable()
+    public isSerialOutputWindowOpen$ = this.isSerialOutputWindowOpenSubject$
+        .asObservable()
         .pipe(distinctUntilChanged());
 
     private isSerialOutputListeningSubject$ = new BehaviorSubject(false);
-    public isSerialOutputListening$ = this.isSerialOutputListeningSubject$.asObservable();
+    public isSerialOutputListening$ =
+        this.isSerialOutputListeningSubject$.asObservable();
 
     private isSerialGraphOutputSelectedSubject$ = new BehaviorSubject(false);
-    public isSerialGraphOutputSelected$ = this.isSerialGraphOutputSelectedSubject$.asObservable();
+    public isSerialGraphOutputSelected$ =
+        this.isSerialGraphOutputSelectedSubject$.asObservable();
 
     private isInfoDialogVisibleSubject$ = new BehaviorSubject(false);
-    public isInfoDialogVisible$ = this.isInfoDialogVisibleSubject$.asObservable();
+    public isInfoDialogVisible$ =
+        this.isInfoDialogVisibleSubject$.asObservable();
 
     public isExamplesDialogVisibleSubject$ = new BehaviorSubject(false);
-    public isExamplesDialogVisible$ = this.isExamplesDialogVisibleSubject$.asObservable()
+    public isExamplesDialogVisible$ =
+        this.isExamplesDialogVisibleSubject$.asObservable();
 
     set isSerialOutputWindowOpen(isOpen: boolean) {
         this.isSerialOutputWindowOpenSubject$.next(isOpen);
@@ -56,6 +61,6 @@ export class DialogState {
     }
 
     set isExamplesDialogVisible(isVisible: boolean) {
-        this.isExamplesDialogVisibleSubject$.next(isVisible)
+        this.isExamplesDialogVisibleSubject$.next(isVisible);
     }
 }

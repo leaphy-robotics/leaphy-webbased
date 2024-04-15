@@ -1,68 +1,68 @@
 .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: 70vh;
-  width: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 70vh;
+    width: 50vh;
 }
 
 .upload-log-item {
-  display: flex;
-  flex-direction: row;
-  justify-content: right;
-  align-items: center;
-  width: 50vh;
-  height: fit-content;
-  border-bottom: 1px solid black;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+    width: 50vh;
+    height: fit-content;
+    border-bottom: 1px solid black;
 }
 
 .upload-log-data {
-  max-width: 99%;
-  flex: 1 0 auto;
-  padding-left: 5px;
-  color: black;
-  word-break: break-all;
+    max-width: 99%;
+    flex: 1 0 auto;
+    padding-left: 5px;
+    color: black;
+    word-break: break-all;
 }
 
 .upload-log {
-  width: 50vh;
-  height: 50vh;
-  margin: 0;
-  overflow-y: scroll;
-  background-color: lightgray;
+    width: 50vh;
+    height: 50vh;
+    margin: 0;
+    overflow-y: scroll;
+    background-color: lightgray;
 }
 
 .device-information {
-  width: 50vh;
-  height: fit-content;
-  margin: 0;
-  background-color: lightgray;
+    width: 50vh;
+    height: fit-content;
+    margin: 0;
+    background-color: lightgray;
 }
 
 #header:hover {
-  cursor: grab;
+    cursor: grab;
 }
 
 #header {
-  background-color: var(--leaphy-color-primary);
-  color: var(--leaphy-color-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 10px;
-  width: 50vh;
+    background-color: var(--leaphy-color-primary);
+    color: var(--leaphy-color-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    width: 50vh;
 }
 
 #device-information {
-  background-color: var(--leaphy-color-primary);
-  color: var(--leaphy-color-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 10px;
-  width: 50vh;
+    background-color: var(--leaphy-color-primary);
+    color: var(--leaphy-color-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 10px;
+    width: 50vh;
 }
 .device-specification {
-  margin-left: 10px;
+    margin-left: 10px;
 }
