@@ -44,7 +44,7 @@ export default class Avrdude extends BaseProtocol {
         // create a promise that resolves when the port.ondisconnect event is fired
         const disconnectPromise = new Promise((resolve) => {
             // todo: add compatibility for fallback devices if required, currently no avrdude devices support this
-            if (!(this.port instanceof SerialPort)) return;
+            if (typeof SerialPort === 'undefined' || !(this.port instanceof SerialPort)) return;
 
             this.port.ondisconnect = resolve;
         });
@@ -73,6 +73,7 @@ export default class Avrdude extends BaseProtocol {
             }
             throw new Error("Avrdude failed");
         }
+        await this.port.open({ baudRate: 115200 })
         this.uploadState.statusMessage = "UPDATE_COMPLETE";
         return;
     }
