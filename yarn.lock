@@ -1829,10 +1829,12 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
-"@leaphy-robotics/avrdude-webassembly@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/avrdude-webassembly/-/avrdude-webassembly-1.4.0.tgz#ee5babb8c3202f5346dba45bb07263ae2ce9c185"
-  integrity sha512-S4vPUIsVWQuEL+GCXfAH+CisJSITNd8cs1PqzBMVwjrbFzs3XnXj/5OJ1xlgOwQkmFHQnmyWcRkQG2C43VGosg==
+"@leaphy-robotics/avrdude-webassembly@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/avrdude-webassembly/-/avrdude-webassembly-1.5.0.tgz#8c1bea9864b0d4064b8b79ef4b1121a327c10703"
+  integrity sha512-8vy45vH7pnMwKBixNeTNWwt8fbuyeREK5oPzPiKiqkQ+AXv+aWi3BojlJyZlVsO10nJpcwgPlDYDRjbDS5Hkuw==
+  dependencies:
+    "@leaphy-robotics/webusb-ftdi" "^1.0.0"
 
 "@leaphy-robotics/dfu-util-wasm@1.0.2":
   version "1.0.2"
@@ -1850,6 +1852,11 @@
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@leaphy-robotics/picotool-wasm/-/picotool-wasm-1.0.2.tgz#648150c5e29204f063750e5348b66dae3f5db14a"
   integrity sha512-ux3RyjjcHJopr/zOyTkEEtZTgzYTNd5zKNAMXvaVNDqRJIm9jCVTUytIpYPkUV7myXAt23jXl5dIVhsCiEDsqw==
+
+"@leaphy-robotics/webusb-ftdi@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/webusb-ftdi/-/webusb-ftdi-1.0.0.tgz#999a9de85cef82747f09b1dfa6e01374bd85ba07"
+  integrity sha512-/M3XdqQ9h0EPlPdE1FRCZYz8VUzP4JZe1sidUNPMOBmzwALiXElPa6jLu2eArPupt23cN1PN9yXNpSjOwtRi0Q==
 
 "@leichtgewicht/ip-codec@^2.0.1":
   version "2.0.4"
