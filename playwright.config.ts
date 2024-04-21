@@ -63,6 +63,6 @@ export default defineConfig({
         command: "yarn start",
         url: "http://localhost:4200/",
         reuseExistingServer: !process.env.CI,
-        timeout: 120 * 1000,
+        timeout: 5 * 60 * 1000,
     },
 });
