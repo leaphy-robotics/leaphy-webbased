@@ -8,4 +8,4 @@ RUN yarn install --frozen-lockfile && yarn build
 
 FROM nginx:stable
 
-COPY --from=builder /build/dist/browser /usr/share/nginx/html
+COPY --from=builder /build/dist /usr/share/nginx/html
