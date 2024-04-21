@@ -15,11 +15,11 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:browser-esbuild",
+                    "builder": "@angular-devkit/build-angular:application",
                     "options": {
                         "outputPath": "dist/",
                         "index": "src/index.html",
-                        "main": "src/main.ts",
+                        "browser": "src/main.ts",
                         "tsConfig": "tsconfig.app.json",
                         "aot": true,
                         "assets": [
@@ -96,8 +96,6 @@
                             "sourceMap": false,
                             "namedChunks": false,
                             "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -118,13 +116,11 @@
                                     "with": "src/environments/environment.dev.ts"
                                 }
                             ],
-                            "optimization": true,
+                            "optimization": false,
                             "outputHashing": "all",
-                            "sourceMap": false,
+                            "sourceMap": true,
                             "namedChunks": false,
-                            "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": true,
+                            "extractLicenses": false,
                             "budgets": [
                                 {
                                     "type": "initial",
