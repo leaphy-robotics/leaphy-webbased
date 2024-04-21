@@ -3,9 +3,12 @@ import { ChartDataset } from "chart.js";
 import { ReplaySubject, BehaviorSubject, Observable } from "rxjs";
 import { map, scan } from "rxjs/operators";
 import { SerialPort as MockedCDCSerialPort } from "web-serial-polyfill";
-import MockedFTDISerialPort from "@leaphy-robotics/webusb-ftdi"
+import MockedFTDISerialPort from "@leaphy-robotics/webusb-ftdi";
 
-export type LeaphyPort = SerialPort | MockedCDCSerialPort | MockedFTDISerialPort;
+export type LeaphyPort =
+    | SerialPort
+    | MockedCDCSerialPort
+    | MockedFTDISerialPort;
 
 @Injectable({
     providedIn: "root",
@@ -110,7 +113,8 @@ export class RobotWiredState {
             if (!forcePrompt) {
                 const [device] = await navigator.usb.getDevices();
                 if (device) {
-                    if (device.vendorId === 1027) port = new MockedFTDISerialPort(device)
+                    if (device.vendorId === 1027)
+                        port = new MockedFTDISerialPort(device);
                     else port = new MockedCDCSerialPort(device);
                 }
             }
@@ -123,7 +127,8 @@ export class RobotWiredState {
                     ),
                 });
                 try {
-                    if (device.vendorId === 1027) port = new MockedFTDISerialPort(device)
+                    if (device.vendorId === 1027)
+                        port = new MockedFTDISerialPort(device);
                     else port = new MockedCDCSerialPort(device);
                 } catch {
                     throw new Error("WebUSB device is not supported");
