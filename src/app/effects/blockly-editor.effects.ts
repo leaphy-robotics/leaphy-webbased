@@ -15,6 +15,7 @@ import {
     translations,
     arduino,
     getBlocks,
+    constantBlocks
 } from "@leaphy-robotics/leaphy-blocks";
 import { LeaphyCategory } from "../services/toolbox/category";
 import { LeaphyToolbox } from "../services/toolbox/toolbox";
@@ -30,6 +31,8 @@ import { LocalStorageService } from "../services/localstorage.service";
 
 // Defines the effects on the Blockly Editor that different state changes have
 export class BlocklyEditorEffects {
+    private firstRun = true;
+
     constructor(
         private blocklyState: BlocklyEditorState,
         private appState: AppState,
@@ -127,6 +130,11 @@ export class BlocklyEditorEffects {
                     leaphyToolboxXml,
                     startWorkspaceXml,
                 ]) => {
+                    if (this.firstRun) {
+                        this.firstRun = false;
+                        console.log(constantBlocks);
+                        Blockly.defineBlocksWithJsonArray(constantBlocks)
+                    }
                     const leaphyBlocks = getBlocks(
                         this.appState.selectedRobotType.id,
                     );
