@@ -20,7 +20,11 @@ export default class Avrdude extends BaseProtocol {
         const Module = await import(
             "@leaphy-robotics/avrdude-webassembly/avrdude.js"
         );
-        const avrdude = await Module.default();
+        const avrdude = await Module.default({
+            locateFile: (path: string) => {
+                return `/${path}`;
+            },
+        });
         window["funcs"] = avrdude;
         // check if port is open
         if (this.port.readable || this.port.writable) {
