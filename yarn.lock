@@ -1829,10 +1829,10 @@
   resolved "https://registry.yarnpkg.com/@juggle/resize-observer/-/resize-observer-3.4.0.tgz#08d6c5e20cf7e4cc02fd181c4b0c225cd31dbb60"
   integrity sha512-dfLbk+PwWvFzSxwk3n5ySL0hfBog779o8h68wK/7/APo/7cgyWp5jcXockbxdk5kFRkbeXWm4Fbi9FrdN381sA==
 
-"@leaphy-robotics/avrdude-webassembly@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@leaphy-robotics/avrdude-webassembly/-/avrdude-webassembly-1.6.0.tgz#79f2cb12b1acc9da9b8aaf3fbdc47b9d24206bc9"
-  integrity sha512-/vyom0nTJ7J1/wYfp9ZdsziDIg9i5WuqxGQNssslMeecvePcUWwjkkzHhneplsmH3rcK9Ug1q6KCb+nas1U42Q==
+"@leaphy-robotics/avrdude-webassembly@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@leaphy-robotics/avrdude-webassembly/-/avrdude-webassembly-1.6.1.tgz#78a9e58748130034e4443db09fbdd7870868acea"
+  integrity sha512-RJZVa6GN8KUC02IQkUQgMeIIjqLF9XzMSselYA3WdUQT67QriLbScd5uKiuCgHpjjzmI/FEIfKF9XSgCmuz+yg==
   dependencies:
     "@leaphy-robotics/webusb-ftdi" "^1.0.0"
 
