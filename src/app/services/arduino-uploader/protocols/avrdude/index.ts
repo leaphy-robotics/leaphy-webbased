@@ -24,7 +24,6 @@ export default class Avrdude extends BaseProtocol {
             locateFile: (path: string) => {
                 return `/${path}`;
             },
-            'printErr': function(text) { alert('stderr: ' + text) }
         });
         window["funcs"] = avrdude;
         // check if port is open
@@ -57,7 +56,7 @@ export default class Avrdude extends BaseProtocol {
 
             this.port.ondisconnect = resolve;
         });
-        console.error
+        console.error;
         const oldConsoleError = console.error;
         const workerErrorPromise = new Promise((resolve) => {
             console.error = (...data) => {
@@ -67,11 +66,17 @@ export default class Avrdude extends BaseProtocol {
                     oldConsoleError(...data);
                     resolve({ type: "error" });
                 }
-            }
+            };
         });
-        const startAvrdude = avrdude.cwrap("startAvrdude", "number", ["string"])
-        
-        let race = await Promise.race([disconnectPromise, startAvrdude(args), workerErrorPromise]);
+        const startAvrdude = avrdude.cwrap("startAvrdude", "number", [
+            "string",
+        ]);
+
+        let race = await Promise.race([
+            disconnectPromise,
+            startAvrdude(args),
+            workerErrorPromise,
+        ]);
         console.error = oldConsoleError;
         if (race.type) {
             if (race.type == "worker-error") {
@@ -99,11 +104,9 @@ export default class Avrdude extends BaseProtocol {
         }
         await this.port.open({ baudRate: 115200 });
         this.uploadState.statusMessage = "UPDATE_COMPLETE";
-    
-    
+
         // if the winner is the disconnect promise, then the port was disconnected and we should stop the other promise
-        
-        
+
         return;
     }
 }
