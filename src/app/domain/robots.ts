@@ -8,7 +8,8 @@ import {
 } from "./robot.type";
 
 const defaultLibraries = [
-    "Leaphy Extensions",
+    "Leaphy Original Extension",
+    "Leaphy Extra Extension",
     "Servo",
     "Adafruit GFX Library",
     "Adafruit SSD1306",
