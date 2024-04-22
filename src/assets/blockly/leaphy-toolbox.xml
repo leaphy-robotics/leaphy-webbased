@@ -169,6 +169,14 @@
                 </value>
             </block>
 
+            <block type="leaphy_serial_print_without_line">
+                <value name="VALUE">
+                    <shadow type="text">
+                        <field name="TEXT">text</field>
+                    </shadow>
+                </value>
+            </block>
+
             <block type="leaphy_serial_print_value">
                 <value name="NAME">
                     <shadow type="text">
@@ -473,6 +481,15 @@
                 </shadow>
             </value>
         </block>
+
+        <block type="leaphy_serial_print_without_line">
+            <value name="VALUE">
+                <shadow type="text">
+                    <field name="TEXT">text</field>
+                </shadow>
+            </value>
+        </block>
+
         <sep gap="8"></sep>
         <block type="leaphy_serial_print_value">
             <value name="NAME">
@@ -526,6 +543,16 @@
                 </shadow>
             </value>
         </block>
+        
+         <sep gap="8"></sep>
+        <block type="leaphy_serial_print_without_line">
+            <value name="VALUE">
+                <shadow type="text">
+                    <field name="TEXT">text</field>
+                </shadow>
+            </value>
+        </block>
+
         <sep gap="8"></sep>
         <block type="leaphy_serial_print_value">
             <value name="NAME">
