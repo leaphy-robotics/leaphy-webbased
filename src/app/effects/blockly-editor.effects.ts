@@ -130,15 +130,13 @@ export class BlocklyEditorEffects {
                     leaphyToolboxXml,
                     startWorkspaceXml,
                 ]) => {
+                    let allBlocks = getBlocks(robotType.id).block;
                     if (this.firstRun) {
                         this.firstRun = false;
-                        console.log(constantBlocks);
-                        Blockly.defineBlocksWithJsonArray(constantBlocks)
+                        allBlocks = allBlocks.concat(constantBlocks);
                     }
-                    const leaphyBlocks = getBlocks(
-                        this.appState.selectedRobotType.id,
-                    );
-                    Blockly.defineBlocksWithJsonArray(leaphyBlocks.block);
+                    
+                    Blockly.defineBlocksWithJsonArray(allBlocks);
                     config.theme = Blockly.Theme.defineTheme("leaphy", {
                         blockStyles: THEME.defaultBlockStyles,
                         categoryStyles: THEME.categoryStyles,
