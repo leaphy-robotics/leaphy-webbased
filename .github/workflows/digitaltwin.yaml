@@ -1,0 +1,33 @@
+name: Docker
+
+on:
+  push:
+    branches:
+      - DigitalTwin
+  workflow_dispatch: {}
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push DigitalTwin Docker image
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile
+          context: .
+          push: true
+          tags: ghcr.io/leaphy-robotics/leaphy-webbased/leaphy-webbased:digitaltwin
+
+      - name: Redeploy DigitalTwin
+        run: |
+          curl https://admin.leaphyeasybloqs.com/hooks/update-docker-image?stack=leaphy-webbased-digitaltwin -H "X-Token: ${{ secrets.WEBHOOK_TOKEN }}"
