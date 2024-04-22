@@ -15,7 +15,7 @@ import {
     translations,
     arduino,
     getBlocks,
-    constantBlocks
+    constantBlocks,
 } from "@leaphy-robotics/leaphy-blocks";
 import { LeaphyCategory } from "../services/toolbox/category";
 import { LeaphyToolbox } from "../services/toolbox/toolbox";
@@ -135,7 +135,7 @@ export class BlocklyEditorEffects {
                         this.firstRun = false;
                         allBlocks = allBlocks.concat(constantBlocks);
                     }
-                    
+
                     Blockly.defineBlocksWithJsonArray(allBlocks);
                     config.theme = Blockly.Theme.defineTheme("leaphy", {
                         blockStyles: THEME.defaultBlockStyles,
