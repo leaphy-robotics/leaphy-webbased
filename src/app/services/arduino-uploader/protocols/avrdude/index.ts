@@ -57,11 +57,17 @@ export default class Avrdude extends BaseProtocol {
 
             this.port.ondisconnect = resolve;
         });
-
+        console.error
         const oldConsoleError = console.error;
         const workerErrorPromise = new Promise((resolve) => {
-            console.error = () => {
-                resolve({ type: "worker-error" });
+            console.error = (...data) => {
+                console.log(data[1].name);
+                if (data[1].name == "ExitStatus") {
+                    resolve({ type: "worker-error" });
+                } else {
+                    oldConsoleError(...data);
+                    resolve({ type: "error" });
+                }
             }
         });
         const startAvrdude = avrdude.cwrap("startAvrdude", "number", ["string"])
