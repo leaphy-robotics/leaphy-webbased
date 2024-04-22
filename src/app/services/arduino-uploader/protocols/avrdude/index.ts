@@ -61,7 +61,6 @@ export default class Avrdude extends BaseProtocol {
         const oldConsoleError = console.error;
         const workerErrorPromise = new Promise((resolve) => {
             console.error = (...data) => {
-                console.log(data[1].name);
                 if (data[1].name == "ExitStatus") {
                     resolve({ type: "worker-error" });
                 } else {
