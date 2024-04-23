@@ -1,5 +1,5 @@
 <div class="sidenav-buttons">
-    @if ((appState.codeEditor$ | async) !== CodeEditorType.Python) {
+    @if ((appState.codeEditor$ | async) === CodeEditorType.Beginner) {
         <button
             [attr.tooltip]="'READ_CODE' | translate"
             [ngClass]="{
@@ -8,7 +8,6 @@
                     (blocklyState.isSideNavOpen$ | async)
             }"
             (click)="onSideNavToggled()"
-            [disabled]="(appState.codeEditor$ | async) !== 1"
         >
             <mat-icon>code</mat-icon>
         </button>
