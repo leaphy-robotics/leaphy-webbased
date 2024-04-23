@@ -7,6 +7,7 @@ import {
     BaseUno,
     RobotType,
 } from "./robot.type";
+import DFU from "../services/arduino-uploader/protocols/dfu";
 
 const defaultLibraries = [
     "Leaphy Extensions",
@@ -246,7 +247,7 @@ export const arduinoNanoRobotTypeGeneric = new RobotType(
 
 export const arduinoNanoESP32RobotTypeGeneric = new RobotType(
     "l_nano_esp32",
-    { protocol: Avrdude, microcontroller: "esp32" },
+    { protocol: DFU },
     "Arduino Nano ESP32",
     "nano.svg",
     null,
