@@ -24,12 +24,19 @@ interface ProtocolInformation {
     microcontroller?: string;
 }
 
+export enum PinMapping {
+    UNO,
+    NANO,
+    MEGA,
+}
+
 export class RobotType {
     public features: Features;
 
     constructor(
         public id: string,
         public protocol: ProtocolInformation,
+        public mapping: PinMapping,
         public name: string,
         public svgname: string,
         public background: string,
@@ -65,6 +72,7 @@ export class BaseUno extends RobotType {
         super(
             id,
             { protocol: Avrdude, microcontroller: "atmega328p" },
+            PinMapping.UNO,
             name,
             svgname,
             background,
@@ -88,6 +96,7 @@ export class BaseNano extends RobotType {
         super(
             id,
             { protocol: Avrdude, microcontroller: "atmega328p" },
+            PinMapping.NANO,
             name,
             svgname,
             background,
@@ -111,6 +120,7 @@ export class BaseNanoESP32 extends RobotType {
         super(
             id,
             { protocol: DFU },
+            PinMapping.NANO,
             name,
             svgname,
             background,
@@ -134,6 +144,7 @@ export class BaseNanoRP2040 extends RobotType {
         super(
             id,
             { protocol: Pico },
+            PinMapping.NANO,
             name,
             svgname,
             background,

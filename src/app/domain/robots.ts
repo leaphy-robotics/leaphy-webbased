@@ -1,14 +1,12 @@
-import { arduino } from "@leaphy-robotics/leaphy-blocks";
 import Avrdude from "../services/arduino-uploader/protocols/avrdude";
 import {
     BaseNano,
     BaseNanoESP32,
     BaseNanoRP2040,
     BaseUno,
+    PinMapping,
     RobotType,
 } from "./robot.type";
-import DFU from "../services/arduino-uploader/protocols/dfu";
-import Pico from "../services/arduino-uploader/protocols/pico";
 
 const defaultLibraries = [
     "Leaphy Extensions",
@@ -163,6 +161,7 @@ export const arduinoNanoRP2040RobotType = new BaseNanoRP2040(
 export const microPythonRobotType = new RobotType(
     "l_micropython",
     { protocol: Avrdude },
+    PinMapping.NANO,
     "MicroPython",
     "micropython.svg",
     null,
@@ -178,6 +177,7 @@ export const microPythonRobotType = new RobotType(
 export const arduinoMegaRobotType = new RobotType(
     "l_mega",
     { protocol: Avrdude, microcontroller: "atmega2560" },
+    PinMapping.MEGA,
     "Arduino Mega",
     "mega.svg",
     null,
@@ -211,6 +211,7 @@ export const arduinoUnoRobotTypeGeneric = new BaseUno(
 export const arduinoMegaRobotTypeGeneric = new RobotType(
     "l_mega",
     { protocol: Avrdude, microcontroller: "atmega2560" },
+    PinMapping.MEGA,
     "Arduino Mega",
     "mega.svg",
     null,
@@ -238,6 +239,7 @@ export const arduinoNanoESP32RobotTypeGeneric = new BaseNanoESP32(
 export const arduinoNanoEveryRobotTypeGeneric = new RobotType(
     "l_nano_every",
     { protocol: Avrdude, microcontroller: "megaavr" },
+    PinMapping.NANO,
     "Arduino Nano Every",
     "nano.svg",
     null,
