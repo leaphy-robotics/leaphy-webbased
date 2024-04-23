@@ -196,8 +196,6 @@ export const arduinoMegaRobotType = new RobotType(
     },
 );
 
-
-
 export const arduinoMegaRobotTypeGeneric = new RobotType(
     "l_mega",
     { protocol: Avrdude, microcontroller: "atmega2560" },
@@ -227,7 +225,6 @@ export const arduinoUnoRobotTypeGeneric = new RobotType(
         showLeaphySensors: true,
     },
 );
-
 
 export const arduinoNanoRobotTypeGeneric = new RobotType(
     "l_nano",

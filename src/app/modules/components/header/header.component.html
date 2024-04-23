@@ -13,11 +13,12 @@
                 isDriverIssuesUrl() && this.appState.selectedRobotType$ | async
             ) {
                 @if ((appState.codeEditor$ | async) === CodeEditorType.CPP) {
-<!--                    Add a drop down to select an robot -->
+                    <!--                    Add a drop down to select an robot -->
                     <mat-form-field class="robot-select-dropdown">
                         <mat-select
                             [(value)]="selectedRobot"
-                            (selectionChange)="onRobotSelected($event)">
+                            (selectionChange)="onRobotSelected($event)"
+                        >
                             <mat-option
                                 *ngFor="let robot of genericRobots"
                                 [value]="robot.name"
