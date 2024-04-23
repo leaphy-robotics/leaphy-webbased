@@ -201,6 +201,14 @@ export const genericRobotType = new BaseUno(
     {},
 );
 
+export const arduinoUnoRobotTypeGeneric = new BaseUno(
+    "l_uno",
+    "Arduino Uno",
+    "uno.svg",
+    null,
+    [],
+);
+
 export const arduinoMegaRobotTypeGeneric = new RobotType(
     "l_mega",
     { protocol: Avrdude, microcontroller: "atmega2560" },
@@ -216,49 +224,20 @@ export const arduinoMegaRobotTypeGeneric = new RobotType(
     },
 );
 
-export const arduinoUnoRobotTypeGeneric = new RobotType(
-    "l_uno",
-    { protocol: Avrdude, microcontroller: "atmega328p" },
-    "Arduino Uno",
-    "uno.svg",
-    null,
-    "arduino:avr:uno",
-    "arduino:avr",
-    [],
-    {
-        showLeaphyLists: true,
-        showLeaphySensors: true,
-    },
-);
-
-export const arduinoNanoRobotTypeGeneric = new RobotType(
+export const arduinoNanoRobotTypeGeneric = new BaseNano(
     "l_nano",
-    { protocol: Avrdude, microcontroller: "atmega328p" },
     "Arduino Nano",
     "nano.svg",
     null,
-    "arduino:avr:nano",
-    "arduino:avr",
     [],
-    {
-        showLeaphyLists: true,
-        showLeaphySensors: true,
-    },
 );
 
-export const arduinoNanoESP32RobotTypeGeneric = new RobotType(
+export const arduinoNanoESP32RobotTypeGeneric = new BaseNanoESP32(
     "l_nano_esp32",
-    { protocol: DFU },
     "Arduino Nano ESP32",
     "nano.svg",
     null,
-    "arduino:esp32:nano_nora",
-    "arduino:esp32",
     [],
-    {
-        showLeaphyLists: true,
-        showLeaphySensors: true,
-    },
 );
 
 export const arduinoEveryRobotTypeGeneric = new RobotType(
@@ -276,19 +255,12 @@ export const arduinoEveryRobotTypeGeneric = new RobotType(
     },
 );
 
-export const arduinoNanoRP2040RobotTypeGeneric = new RobotType(
+export const arduinoNanoRP2040RobotTypeGeneric = new BaseNanoRP2040(
     "l_nano_rp2040",
-    { protocol: Pico },
     "Arduino Nano RP2040",
     "nano.svg",
     null,
-    "arduino:mbed_nano:nanorp2040connect",
-    "arduino:mbed_nano",
     [],
-    {
-        showLeaphyLists: true,
-        showLeaphySensors: true,
-    },
 );
 
 export const genericRobots = [
