@@ -8,6 +8,7 @@ import {
     RobotType,
 } from "./robot.type";
 import DFU from "../services/arduino-uploader/protocols/dfu";
+import Pico from "../services/arduino-uploader/protocols/pico";
 
 const defaultLibraries = [
     "Leaphy Extensions",
@@ -277,7 +278,7 @@ export const arduinoEveryRobotTypeGeneric = new RobotType(
 
 export const arduinoNanoRP2040RobotTypeGeneric = new RobotType(
     "l_nano_rp2040",
-    { protocol: Avrdude, microcontroller: "rp2040" },
+    { protocol: Pico },
     "Arduino Nano RP2040",
     "nano.svg",
     null,
