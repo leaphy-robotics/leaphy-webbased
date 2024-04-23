@@ -198,7 +198,6 @@ export const genericRobotType = new BaseUno(
     "c++.svg",
     null,
     [],
-    {},
 );
 
 export const arduinoUnoRobotTypeGeneric = new BaseUno(
@@ -218,10 +217,6 @@ export const arduinoMegaRobotTypeGeneric = new RobotType(
     "arduino:avr:mega",
     "arduino:avr",
     [],
-    {
-        showLeaphyLists: true,
-        showLeaphySensors: true,
-    },
 );
 
 export const arduinoNanoRobotTypeGeneric = new BaseNano(
@@ -249,10 +244,6 @@ export const arduinoNanoEveryRobotTypeGeneric = new RobotType(
     "megaavr:avr:every",
     "megaavr:avr",
     [],
-    {
-        showLeaphyLists: true,
-        showLeaphySensors: true,
-    },
 );
 
 export const arduinoNanoRP2040RobotTypeGeneric = new BaseNanoRP2040(
