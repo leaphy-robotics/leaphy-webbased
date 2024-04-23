@@ -171,7 +171,15 @@ export class AppState {
 
         this.canChangeCodeEditor$ = this.selectedRobotType$
             .pipe(filter((robotType) => !!robotType))
-            .pipe(map((robotType) => !(genericRobots.includes(robotType) || robotType === genericRobotType)));
+            .pipe(
+                map(
+                    (robotType) =>
+                        !(
+                            genericRobots.includes(robotType) ||
+                            robotType === genericRobotType
+                        ),
+                ),
+            );
     }
 
     private selectedRobotTypeSubject$ = new BehaviorSubject<RobotType>(null);

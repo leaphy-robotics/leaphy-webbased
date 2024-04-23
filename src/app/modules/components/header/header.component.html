@@ -12,7 +12,10 @@
             @if (
                 isDriverIssuesUrl() && this.appState.selectedRobotType$ | async
             ) {
-                @if ((appState.codeEditor$ | async) === CodeEditorType.CPP && (appState.canChangeCodeEditor$ | async) === false) {
+                @if (
+                    (appState.codeEditor$ | async) === CodeEditorType.CPP &&
+                    (appState.canChangeCodeEditor$ | async) === false
+                ) {
                     <!--                    Add a drop down to select an robot -->
                     <mat-form-field class="robot-select-dropdown">
                         <mat-select

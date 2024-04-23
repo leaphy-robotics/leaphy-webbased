@@ -199,7 +199,6 @@ export const genericRobotType = new BaseUno(
     {},
 );
 
-
 export const arduinoMegaRobotTypeGeneric = new RobotType(
     "l_mega",
     { protocol: Avrdude, microcontroller: "atmega2560" },
