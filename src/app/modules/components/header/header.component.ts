@@ -30,7 +30,7 @@ import { RobotType } from "../../../domain/robot.type";
     styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent {
-    selectedRobot: string = arduinoUnoRobotType.name;
+    selectedRobot: string = this.appState.selectedRobotType?.name || genericRobots[0].name;
 
     constructor(
         public appState: AppState,

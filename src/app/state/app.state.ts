@@ -6,6 +6,7 @@ import {
     arduinoNanoRobotType,
     arduinoNanoRP2040RobotType,
     arduinoUnoRobotType,
+    genericRobots,
     genericRobotType,
     leaphyClickRobotType,
     leaphyFlitzNanoRobotType,
@@ -170,7 +171,7 @@ export class AppState {
 
         this.canChangeCodeEditor$ = this.selectedRobotType$
             .pipe(filter((robotType) => !!robotType))
-            .pipe(map((robotType) => robotType !== genericRobotType));
+            .pipe(map((robotType) => !(genericRobots.includes(robotType) || robotType === genericRobotType)));
     }
 
     private selectedRobotTypeSubject$ = new BehaviorSubject<RobotType>(null);

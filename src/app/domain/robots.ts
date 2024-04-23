@@ -1,3 +1,4 @@
+import { arduino } from "@leaphy-robotics/leaphy-blocks";
 import Avrdude from "../services/arduino-uploader/protocols/avrdude";
 import {
     BaseNano,
@@ -121,15 +122,6 @@ export const arduinoUnoRobotType = new BaseUno(
     },
 );
 
-export const genericRobotType = new BaseUno(
-    "l_code",
-    "Leaphy C++",
-    "c++.svg",
-    null,
-    [],
-    {},
-);
-
 export const arduinoNanoRobotType = new BaseNano(
     "l_nano",
     "Arduino Nano",
@@ -195,6 +187,18 @@ export const arduinoMegaRobotType = new RobotType(
         showLeaphySensors: true,
     },
 );
+
+/* Generic robots for the C++ code editor */
+
+export const genericRobotType = new BaseUno(
+    "l_code",
+    "Leaphy C++",
+    "c++.svg",
+    null,
+    [],
+    {},
+);
+
 
 export const arduinoMegaRobotTypeGeneric = new RobotType(
     "l_mega",
