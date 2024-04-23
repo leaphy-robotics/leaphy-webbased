@@ -1,3 +1,4 @@
+import { arduino } from "@leaphy-robotics/leaphy-blocks";
 import Avrdude from "../services/arduino-uploader/protocols/avrdude";
 import {
     BaseNano,
@@ -6,6 +7,8 @@ import {
     BaseUno,
     RobotType,
 } from "./robot.type";
+import DFU from "../services/arduino-uploader/protocols/dfu";
+import Pico from "../services/arduino-uploader/protocols/pico";
 
 const defaultLibraries = [
     "Leaphy Extensions",
@@ -121,15 +124,6 @@ export const arduinoUnoRobotType = new BaseUno(
     },
 );
 
-export const genericRobotType = new BaseUno(
-    "l_code",
-    "Leaphy C++",
-    "c++.svg",
-    null,
-    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960"]),
-    {},
-);
-
 export const arduinoNanoRobotType = new BaseNano(
     "l_nano",
     "Arduino Nano",
@@ -195,3 +189,76 @@ export const arduinoMegaRobotType = new RobotType(
         showLeaphySensors: true,
     },
 );
+
+/* Generic robots for the C++ code editor */
+
+export const genericRobotType = new BaseUno(
+    "l_code",
+    "Leaphy C++",
+    "c++.svg",
+    null,
+    [],
+);
+
+export const arduinoUnoRobotTypeGeneric = new BaseUno(
+    "l_uno",
+    "Arduino Uno",
+    "uno.svg",
+    null,
+    [],
+);
+
+export const arduinoMegaRobotTypeGeneric = new RobotType(
+    "l_mega",
+    { protocol: Avrdude, microcontroller: "atmega2560" },
+    "Arduino Mega",
+    "mega.svg",
+    null,
+    "arduino:avr:mega",
+    "arduino:avr",
+    [],
+);
+
+export const arduinoNanoRobotTypeGeneric = new BaseNano(
+    "l_nano",
+    "Arduino Nano",
+    "nano.svg",
+    null,
+    [],
+);
+
+export const arduinoNanoESP32RobotTypeGeneric = new BaseNanoESP32(
+    "l_nano_esp32",
+    "Arduino Nano ESP32",
+    "nano.svg",
+    null,
+    [],
+);
+
+export const arduinoNanoEveryRobotTypeGeneric = new RobotType(
+    "l_nano_every",
+    { protocol: Avrdude, microcontroller: "megaavr" },
+    "Arduino Nano Every",
+    "nano.svg",
+    null,
+    "megaavr:avr:every",
+    "megaavr:avr",
+    [],
+);
+
+export const arduinoNanoRP2040RobotTypeGeneric = new BaseNanoRP2040(
+    "l_nano_rp2040",
+    "Arduino Nano RP2040",
+    "nano.svg",
+    null,
+    [],
+);
+
+export const genericRobots = [
+    arduinoUnoRobotTypeGeneric,
+    arduinoNanoRobotTypeGeneric,
+    arduinoNanoESP32RobotTypeGeneric,
+    arduinoNanoRP2040RobotTypeGeneric,
+    arduinoMegaRobotTypeGeneric,
+    arduinoNanoEveryRobotTypeGeneric,
+];
