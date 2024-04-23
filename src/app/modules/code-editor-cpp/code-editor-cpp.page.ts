@@ -14,7 +14,7 @@ import { MonacoEditorModule } from "ngx-monaco-editor-v2";
     imports: [CommonModule, SharedModule, CoreModule, MonacoEditorModule],
 })
 export class CodeEditorCppPage implements AfterViewInit {
-    editorOptions = {
+    editorOptions: any = {
         language: "cpp",
         automaticLayout: true,
     };
@@ -22,7 +22,16 @@ export class CodeEditorCppPage implements AfterViewInit {
     constructor(
         public codeEditorState: CodeEditorState,
         private workspaceService: WorkspaceService,
-    ) {}
+    ) {
+        // check if we are currently in dark mode
+        const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        if (isDarkMode) {
+            this.editorOptions = {
+                ...this.editorOptions,
+                theme: "vs-dark",
+            };
+        }
+    }
 
     ngAfterViewInit(): void {
         window.addEventListener("beforeunload", async () => {

@@ -6,7 +6,13 @@
     padding: 0 20px;
 
     & > button {
-        background-color: var(--leaphy-color-primary);
+        @media (prefers-color-scheme: dark) {
+            background-color: var(--leaphy-color-primary-dark-tint);
+        }
+        @media (prefers-color-scheme: light) {
+            background-color: var(--leaphy-color-primary);
+        }
+
         border: 2px solid transparent;
         box-sizing: content-box;
         margin-bottom: 40px;

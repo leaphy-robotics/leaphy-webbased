@@ -10,15 +10,15 @@ import "@blockly/field-bitmap";
 
 import {
     CATEGORIES,
-    THEME,
     EXTENSIONS,
     translations,
     arduino,
     getBlocks,
     constantBlocks,
 } from "@leaphy-robotics/leaphy-blocks";
-import { LeaphyCategory } from "../services/toolbox/category";
-import { LeaphyToolbox } from "../services/toolbox/toolbox";
+import * as THEME from "../services/blockly/theme";
+import { LeaphyCategory } from "../services/blockly/category";
+import { LeaphyToolbox } from "../services/blockly/toolbox";
 import { CodeEditorState } from "../state/code-editor.state";
 import { genericRobotType, microPythonRobotType } from "../domain/robots";
 import { RobotType } from "../domain/robot.type";
@@ -137,12 +137,7 @@ export class BlocklyEditorEffects {
                     }
 
                     Blockly.defineBlocksWithJsonArray(allBlocks);
-                    config.theme = Blockly.Theme.defineTheme("leaphy", {
-                        blockStyles: THEME.defaultBlockStyles,
-                        categoryStyles: THEME.categoryStyles,
-                        componentStyles: THEME.componentStyles,
-                        name: "leaphy",
-                    });
+                    config.theme = Blockly.Theme.defineTheme("dark", THEME.theme);
                     const toolboxXmlString = this.loadToolBox(
                         baseToolboxXml,
                         leaphyToolboxXml,

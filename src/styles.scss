@@ -68,23 +68,54 @@ pre[class*="language-"]:after {
 // global variables
 
 :root {
-    --leaphy-color-primary: #06778f;
-    --leaphy-color-primary-dark-tint: #035e72;
-    --leaphy-color-secundary: #32a5a9;
-    --leaphy-color-dark: #343444;
-    --leaphy-color-light: #ffffff;
+    @media (prefers-color-scheme: light) {
+        --leaphy-color-primary: #06778f;
+        --leaphy-color-primary-dark-tint: #104d59;
+        --leaphy-color-secundary: #32a5a9;
+        --leaphy-color-dark: #343444;
+        --leaphy-color-light: #ffffff;
 
-    --leaphy-block-default: #06778f;
-    --leaphy-block-yellow: #d9b53f;
-    --leaphy-block-green: #75b342;
-    --leaphy-block-orange: #de7c3b;
-    --leaphy-block-blue: #4095ce;
-    --leaphy-block-yellow: #d9b53f;
-    --leaphy-block-grey: #7d7d80;
+        --leaphy-block-default: #06778f;
+        --leaphy-block-yellow: #d9b53f;
+        --leaphy-block-green: #75b342;
+        --leaphy-block-orange: #de7c3b;
+        --leaphy-block-blue: #4095ce;
+        --leaphy-block-yellow: #d9b53f;
+        --leaphy-block-grey: #7d7d80;
 
-    --mat-menu-item-label-text-size: 12px !important;
+        --mat-menu-item-label-text-size: 12px !important;
+
+        --start-screen-bg: white;
+    }
+    @media (prefers-color-scheme: dark) {
+        --leaphy-color-primary: #06778f;
+        --leaphy-color-primary-dark-tint: #104d59;
+        --leaphy-color-secundary: #32a5a9;
+        --leaphy-color-dark: #343444;
+        --leaphy-color-light: #ffffff;
+
+        --leaphy-block-default: #06778f;
+        --leaphy-block-yellow: #d9b53f;
+        --leaphy-block-green: #75b342;
+        --leaphy-block-orange: #de7c3b;
+        --leaphy-block-blue: #4095ce;
+        --leaphy-block-yellow: #d9b53f;
+        --leaphy-block-grey: #7d7d80;
+
+        --mat-menu-item-label-text-size: 12px !important;
+
+        --start-screen-bg: #1e1e1e;
+    }
+
 }
 
 .blocklySvg {
-    background-color: transparent !important;
+    /* Light mode */
+    @media (prefers-color-scheme: light) {
+        background-color: transparent !important;
+    }
+    /* Dark mode */
+    @media (prefers-color-scheme: dark) {
+        background-color: var(--leaphy-color-dark) !important;
+    }
 }
