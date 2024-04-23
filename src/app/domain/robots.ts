@@ -126,7 +126,7 @@ export const genericRobotType = new BaseUno(
     "Leaphy C++",
     "c++.svg",
     null,
-    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960"]),
+    [],
     {},
 );
 
@@ -195,3 +195,105 @@ export const arduinoMegaRobotType = new RobotType(
         showLeaphySensors: true,
     },
 );
+
+
+
+export const arduinoMegaRobotTypeGeneric = new RobotType(
+    "l_mega",
+    { protocol: Avrdude, microcontroller: "atmega2560" },
+    "Arduino Mega",
+    "mega.svg",
+    null,
+    "arduino:avr:mega",
+    "arduino:avr",
+    [],
+    {
+        showLeaphyLists: true,
+        showLeaphySensors: true,
+    },
+);
+
+export const arduinoUnoRobotTypeGeneric = new RobotType(
+    "l_uno",
+    { protocol: Avrdude, microcontroller: "atmega328p" },
+    "Arduino Uno",
+    "uno.svg",
+    null,
+    "arduino:avr:uno",
+    "arduino:avr",
+    [],
+    {
+        showLeaphyLists: true,
+        showLeaphySensors: true,
+    },
+);
+
+
+export const arduinoNanoRobotTypeGeneric = new RobotType(
+    "l_nano",
+    { protocol: Avrdude, microcontroller: "atmega328p" },
+    "Arduino Nano",
+    "nano.svg",
+    null,
+    "arduino:avr:nano",
+    "arduino:avr",
+    [],
+    {
+        showLeaphyLists: true,
+        showLeaphySensors: true,
+    },
+);
+
+export const arduinoNanoESP32RobotTypeGeneric = new RobotType(
+    "l_nano_esp32",
+    { protocol: Avrdude, microcontroller: "esp32" },
+    "Arduino Nano ESP32",
+    "nano.svg",
+    null,
+    "arduino:esp32:nano_nora",
+    "arduino:esp32",
+    [],
+    {
+        showLeaphyLists: true,
+        showLeaphySensors: true,
+    },
+);
+
+export const arduinoEveryRobotTypeGeneric = new RobotType(
+    "l_every",
+    { protocol: Avrdude, microcontroller: "megaavr" },
+    "Arduino Every",
+    "nano.svg",
+    null,
+    "megaavr:avr:every",
+    "megaavr:avr",
+    [],
+    {
+        showLeaphyLists: true,
+        showLeaphySensors: true,
+    },
+);
+
+export const arduinoNanoRP2040RobotTypeGeneric = new RobotType(
+    "l_nano_rp2040",
+    { protocol: Avrdude, microcontroller: "rp2040" },
+    "Arduino Nano RP2040",
+    "nano.svg",
+    null,
+    "arduino:mbed_nano:nanorp2040connect",
+    "arduino:mbed_nano",
+    [],
+    {
+        showLeaphyLists: true,
+        showLeaphySensors: true,
+    },
+);
+
+export const genericRobots = [
+    arduinoUnoRobotTypeGeneric,
+    arduinoNanoRobotTypeGeneric,
+    arduinoNanoESP32RobotTypeGeneric,
+    arduinoNanoRP2040RobotTypeGeneric,
+    arduinoMegaRobotTypeGeneric,
+    arduinoEveryRobotTypeGeneric,
+];

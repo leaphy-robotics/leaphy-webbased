@@ -8,7 +8,7 @@ import { CodeEditorType } from "../../../domain/code-editor.type";
 import { RobotWiredState } from "../../../state/robot.wired.state";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import JSZip from "jszip";
-import { microPythonRobotType } from "../../../domain/robots";
+import {arduinoUnoRobotType, genericRobots, microPythonRobotType} from "../../../domain/robots";
 import { DebugInformationDialog } from "../../core/dialogs/debug-information/debug-information.dialog";
 import { MatDialog } from "@angular/material/dialog";
 import { UploadDialog } from "../../core/dialogs/upload/upload.dialog";
@@ -17,6 +17,8 @@ import { PythonUploaderService } from "../../../services/python-uploader/PythonU
 import { ConnectPythonDialog } from "../../core/dialogs/connect-python/connect-python.dialog";
 import { StatusMessageDialog } from "../../core/dialogs/status-message/status-message.dialog";
 import { WorkspaceService } from "../../../services/workspace.service";
+import {MatSelectChange} from "@angular/material/select";
+import {RobotType} from "../../../domain/robot.type";
 
 @Component({
     selector: "app-header",
@@ -24,6 +26,8 @@ import { WorkspaceService } from "../../../services/workspace.service";
     styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent {
+    selectedRobot: string = arduinoUnoRobotType.name;
+
     constructor(
         public appState: AppState,
         public blocklyState: BlocklyEditorState,
@@ -246,4 +250,18 @@ export class HeaderComponent {
 
     protected readonly AppState = AppState;
     protected readonly microPythonRobotType = microPythonRobotType;
+    protected readonly CodeEditorType = CodeEditorType;
+
+
+    onRobotSelected($event: MatSelectChange) {
+        this.selectedRobot = $event.value;
+        for (const robot of this.genericRobots) {
+            if (robot.name === this.selectedRobot) {
+                this.appState.setSelectedRobotType(robot);
+                break;
+            }
+        }
+    }
+
+    protected readonly genericRobots = genericRobots;
 }
