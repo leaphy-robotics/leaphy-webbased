@@ -9,12 +9,8 @@
 
 .sidenav-container {
     flex: 1 1 auto;
-    @media (prefers-color-scheme: dark) {
-        background: #333;
-    }
-    @media (prefers-color-scheme: light) {
-        background: #eee;
-    }
+    background: var(--leaphy-background-color);
+
 }
 
 #sidenav {

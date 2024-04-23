@@ -1,3 +1,4 @@
+
 .sidenav-buttons {
     pointer-events: initial;
     display: flex;
@@ -6,13 +7,7 @@
     padding: 0 20px;
 
     & > button {
-        @media (prefers-color-scheme: dark) {
-            background-color: var(--leaphy-color-primary-dark-tint);
-        }
-        @media (prefers-color-scheme: light) {
-            background-color: var(--leaphy-color-primary);
-        }
-
+        background-color: var(--leaphy-color-primary);
         border: 2px solid transparent;
         box-sizing: content-box;
         margin-bottom: 40px;
@@ -32,7 +27,7 @@
         }
 
         &:enabled::before {
-            background: var(--leaphy-color-dark);
+            background-color: var(--leaphy-color-dark);
             border-radius: 5px;
             content: attr(tooltip);
             display: inline-block;

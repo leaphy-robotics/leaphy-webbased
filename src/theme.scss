@@ -1,6 +1,20 @@
 @use "@angular/material" as mat;
 @include mat.core();
 
+:root {
+    --dark-mode: 0;
+
+}
+
+body[data-theme='light'] {
+    --dark-mode: 0;
+}
+
+body[data-theme='dark'] {
+    --dark-mode: 1;
+}
+
+
 $light-mode-palette: (
     50: transparent,
     100: #b2dfdb,
@@ -62,11 +76,14 @@ $dark-theme: mat.define-dark-theme(
 );
 
 /* Light mode */
-@media (prefers-color-scheme: light) {
+body[data-theme='light'] {
     @include mat.all-component-themes($light-mode);
 }
+
 /* Dark mode */
-@media (prefers-color-scheme: dark) {
+body[data-theme='dark'] {
     @include mat.all-component-themes($dark-theme);
 }
+
+
 

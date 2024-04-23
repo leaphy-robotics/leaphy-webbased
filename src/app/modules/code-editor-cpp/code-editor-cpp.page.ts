@@ -24,7 +24,7 @@ export class CodeEditorCppPage implements AfterViewInit {
         private workspaceService: WorkspaceService,
     ) {
         // check if we are currently in dark mode
-        const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const isDarkMode = document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'dark';
         if (isDarkMode) {
             this.editorOptions = {
                 ...this.editorOptions,

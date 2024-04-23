@@ -137,7 +137,6 @@ export class AppEffects {
                 this.localStorage.store("releaseVersion", releaseVersion);
 
                 const robotId = this.localStorage.fetch("changedLanguage");
-                console.log(robotId);
                 if (robotId) {
                     this.localStorage.store("changedLanguage", "");
                     this.workspaceService

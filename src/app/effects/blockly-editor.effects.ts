@@ -1,29 +1,29 @@
-import { Injectable } from "@angular/core";
-import { BlocklyEditorState } from "../state/blockly-editor.state";
-import { filter, pairwise, withLatestFrom } from "rxjs/operators";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { combineLatest, Observable } from "rxjs";
-import { AppState } from "../state/app.state";
-import { CodeEditorType } from "../domain/code-editor.type";
+import {Injectable} from "@angular/core";
+import {BlocklyEditorState} from "../state/blockly-editor.state";
+import {filter, pairwise, withLatestFrom} from "rxjs/operators";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {combineLatest, Observable} from "rxjs";
+import {AppState} from "../state/app.state";
+import {CodeEditorType} from "../domain/code-editor.type";
 import * as Blockly from "blockly";
 import "@blockly/field-bitmap";
 
 import {
-    CATEGORIES,
-    EXTENSIONS,
-    translations,
     arduino,
-    getBlocks,
+    CATEGORIES,
     constantBlocks,
+    EXTENSIONS,
+    getBlocks,
+    translations,
 } from "@leaphy-robotics/leaphy-blocks";
-import * as THEME from "../services/blockly/theme";
-import { LeaphyCategory } from "../services/blockly/category";
-import { LeaphyToolbox } from "../services/blockly/toolbox";
-import { CodeEditorState } from "../state/code-editor.state";
-import { genericRobotType, microPythonRobotType } from "../domain/robots";
-import { RobotType } from "../domain/robot.type";
-import { WorkspaceService } from "../services/workspace.service";
-import { LocalStorageService } from "../services/localstorage.service";
+import {LeaphyCategory} from "../services/blockly/category";
+import {LeaphyToolbox} from "../services/blockly/toolbox";
+import {CodeEditorState} from "../state/code-editor.state";
+import {genericRobotType, microPythonRobotType} from "../domain/robots";
+import {RobotType} from "../domain/robot.type";
+import {WorkspaceService} from "../services/workspace.service";
+import {LocalStorageService} from "../services/localstorage.service";
+import getTheme from "../services/blockly/theme";
 
 @Injectable({
     providedIn: "root",
@@ -32,6 +32,7 @@ import { LocalStorageService } from "../services/localstorage.service";
 // Defines the effects on the Blockly Editor that different state changes have
 export class BlocklyEditorEffects {
     private firstRun = true;
+    private startWorkspaceXml = ``;
 
     constructor(
         private blocklyState: BlocklyEditorState,
@@ -41,6 +42,10 @@ export class BlocklyEditorEffects {
         private workspaceService: WorkspaceService,
         private localStorage: LocalStorageService,
     ) {
+        this.getXmlContent("./assets/blockly/leaphy-start.xml").subscribe(
+            (xml) => (this.startWorkspaceXml = xml),
+        );
+
         Blockly.registry.register(
             Blockly.registry.Type.TOOLBOX_ITEM,
             Blockly.ToolboxCategory.registrationName,
@@ -120,16 +125,15 @@ export class BlocklyEditorEffects {
                 withLatestFrom(
                     this.getXmlContent("./assets/blockly/base-toolbox.xml"),
                     this.getXmlContent("./assets/blockly/leaphy-toolbox.xml"),
-                    this.getXmlContent("./assets/blockly/leaphy-start.xml"),
                 ),
             )
             .subscribe(
-                ([
-                    [[element, config], robotType],
-                    baseToolboxXml,
-                    leaphyToolboxXml,
-                    startWorkspaceXml,
-                ]) => {
+                async ([
+                           [[element, config], robotType],
+                           baseToolboxXml,
+                           leaphyToolboxXml,
+                       ]) => {
+                    let THEME = getTheme();
                     let allBlocks = getBlocks(robotType.id).block;
                     if (this.firstRun) {
                         this.firstRun = false;
@@ -137,7 +141,7 @@ export class BlocklyEditorEffects {
                     }
 
                     Blockly.defineBlocksWithJsonArray(allBlocks);
-                    config.theme = Blockly.Theme.defineTheme("dark", THEME.theme);
+                    config.theme = Blockly.Theme.defineTheme("leaphy", THEME);
                     const toolboxXmlString = this.loadToolBox(
                         baseToolboxXml,
                         leaphyToolboxXml,
@@ -152,7 +156,7 @@ export class BlocklyEditorEffects {
                         CATEGORIES.LISTS,
                     );
                     toolbox.getFlyout().autoClose = false;
-                    const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
+                    const xml = Blockly.utils.xml.textToDom(this.startWorkspaceXml);
                     Blockly.Xml.domToWorkspace(xml, workspace);
                     this.blocklyState.workspace = workspace;
                     this.blocklyState.toolboxXml = toolboxXmlString;
@@ -161,7 +165,8 @@ export class BlocklyEditorEffects {
                     ) {
                         this.workspaceService
                             .restoreWorkspaceTemp()
-                            .then(() => {});
+                            .then(() => {
+                            });
                     }
                     toolbox.selectItemByPosition(0);
                     toolbox.refreshTheme();
@@ -172,8 +177,7 @@ export class BlocklyEditorEffects {
                                 robotType.features.showCodeOnStart),
                         200,
                     );
-                },
-            );
+                });
 
         // When a new project is started, reset the blockly code
         this.appState.selectedRobotType$
@@ -200,12 +204,11 @@ export class BlocklyEditorEffects {
                     leaphyToolboxXml,
                     startWorkspaceXml,
                 ]) => {
-                    const toolboxXmlString = this.loadToolBox(
+                    this.blocklyState.toolboxXml = this.loadToolBox(
                         baseToolboxXml,
                         leaphyToolboxXml,
                         robotType,
                     );
-                    this.blocklyState.toolboxXml = toolboxXmlString;
 
                     workspace.clear();
                     const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);

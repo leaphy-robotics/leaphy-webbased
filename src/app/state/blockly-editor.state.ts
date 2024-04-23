@@ -129,4 +129,8 @@ export class BlocklyEditorState {
     get workspaceJSON(): string {
         return this.workspaceJSONSubject$.getValue();
     }
+
+    get blocklyConfig(): any {
+        return this.blocklyConfigSubject$.getValue();
+    }
 }

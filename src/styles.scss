@@ -18,7 +18,7 @@ html {
 html,
 body {
     height: 100%;
-    background-color: #f1f1f1;
+    //background-color: #f1f1f1;
 }
 body {
     margin: 0;
@@ -67,8 +67,14 @@ pre[class*="language-"]:after {
 
 // global variables
 
+// check on the root element if the theme is light or dark
+
+
 :root {
-    @media (prefers-color-scheme: light) {
+
+    body[data-theme='light'] {
+        --leaphy-header-bg: #06778f;
+
         --leaphy-color-primary: #06778f;
         --leaphy-color-primary-dark-tint: #104d59;
         --leaphy-color-secundary: #32a5a9;
@@ -86,9 +92,20 @@ pre[class*="language-"]:after {
         --mat-menu-item-label-text-size: 12px !important;
 
         --start-screen-bg: white;
+
+        --leaphy-background-color: #eeeeee;
+
+        --leaphy-robot-tile: #ffffff;
+        --leaphy-robot-tile-border: #f1f1f1;
+
+        --leaphy-text-color: #000000;
+
+        --leaphy-blockly-bg: #ffffff;
     }
-    @media (prefers-color-scheme: dark) {
-        --leaphy-color-primary: #06778f;
+    body[data-theme='dark']  {
+        --leaphy-header-bg: #104d59;
+
+        --leaphy-color-primary: #104d59;
         --leaphy-color-primary-dark-tint: #104d59;
         --leaphy-color-secundary: #32a5a9;
         --leaphy-color-dark: #343444;
@@ -105,17 +122,20 @@ pre[class*="language-"]:after {
         --mat-menu-item-label-text-size: 12px !important;
 
         --start-screen-bg: #1e1e1e;
+        --leaphy-background-color: #1e1e1e;
+
+        --leaphy-robot-tile: #343444;
+        --leaphy-robot-tile-border: #343444;
+
+        --leaphy-text-color: lightgray;
+
+        --leaphy-blockly-bg: #353444;
     }
 
 }
 
 .blocklySvg {
-    /* Light mode */
-    @media (prefers-color-scheme: light) {
-        background-color: transparent !important;
-    }
-    /* Dark mode */
-    @media (prefers-color-scheme: dark) {
-        background-color: var(--leaphy-color-dark) !important;
-    }
+    background-color: var(--leaphy-blockly-bg) !important;
 }
+
+

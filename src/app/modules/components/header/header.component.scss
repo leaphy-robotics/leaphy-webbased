@@ -1,3 +1,4 @@
+
 .robot-select-dropdown {
     padding-top: 5%;
     padding-right: 5%;
@@ -5,13 +6,10 @@
 }
 
 .header-container {
-    @media (prefers-color-scheme: dark) {
-        background-color: var(--leaphy-color-primary-dark-tint);
-    } @media (prefers-color-scheme: light) {
-        background-color: var(--leaphy-color-primary);
-    }
     padding: 10px 0; /* Added padding to prevent content from being too close to the edges */
+    background-color: var(--leaphy-header-bg);
 }
+
 
 .header-logo {
     height: 18px;
@@ -41,17 +39,16 @@ button {
 
 [mat-stroked-button],
 [mat-flat-button] {
-    @media (prefers-color-scheme: dark) {
-        background-color: var(--leaphy-color-primary-dark-tint);
-        border-color: var(--leaphy-color-secundary);
-    } @media (prefers-color-scheme: light) {
-        background-color: var(--leaphy-color-primary);
-        border-color: var(--leaphy-color-secundary);
-    }
+    background-color: transparent;
+    border-color: var(--leaphy-color-secundary);
     font-size: 12px;
     font-weight: normal;
     border-radius: 20px;
     padding: 5px 15px; /* Added padding to buttons */
+
+    span {
+        color: var(--leaphy-color-light);
+    }
 }
 
 #block-icon {
@@ -108,6 +105,7 @@ mat-button-toggle {
     align-content: center;
 
     mat-icon {
+        color: var(--leaphy-color-light) !important;
         width: 100%;
         height: 100%;
         margin-top: 15px;
