@@ -27,7 +27,7 @@ export const leaphyOriginalRobotType = new BaseUno(
     "Leaphy Original",
     "orig.svg",
     "orig_uno.svg",
-    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960"]),
+    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960","ArduinoBLE"]),
     {
         showLeaphyActuators: true,
         showLeaphyOperators: false,

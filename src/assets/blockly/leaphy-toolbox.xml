@@ -44,6 +44,9 @@
             <block type="leaphy_compass_degrees">
             </block>
 
+            <block type="bleutooth_setup">
+            </block>
+
             <block type="leaphy_gas_sensor">
             </block>
 
@@ -160,7 +163,13 @@
                     </shadow>
                 </value>
             </block>
-
+            <block type="leaphy_digital_twin_test">
+                <value name="VALUE">
+                    <shadow type="text">
+                        <field name="TEXT">text</field>
+                    </shadow>
+                </value>
+            </block>
             <block type="leaphy_serial_print_line">
                 <value name="VALUE">
                     <shadow type="text">
@@ -473,6 +482,11 @@
             </value>
         </block>
         <sep gap="8"></sep>
+        <block type="leaphy_digital_twin_test">
+          <block type="display_image">
+            <field name="IMAGE">media/Leaphy.png</field> 
+        </block>
+        <sep gap="8"></sep>
         <block type="leaphy_serial_print_line">
             <value name="VALUE">
                 <shadow type="text">
@@ -530,6 +544,14 @@
                     <field name="NUM">
                         0
                     </field>
+                </shadow>
+            </value>
+        </block>
+        <sep gap="8"></sep>
+        <block type="leaphy_digital_twin_test">
+            <value name="VALUE">
+                <shadow type="text">
+                    <field name="TEXT">text</field>
                 </shadow>
             </value>
         </block>
