@@ -16,19 +16,31 @@ $light-mode-palette: (
     contrast: (),
 );
 
-$leaphy-color-accent: mat.define-palette($light-mode-palette, 50);
-$leaphy-color-primary: mat.define-palette($light-mode-palette, A100);
-$leaphy-color-warn: mat.define-palette($light-mode-palette, 900);
+$leaphy-color-accent-light: mat.define-palette($light-mode-palette, 50);
+$leaphy-color-primary-light: mat.define-palette($light-mode-palette, A100);
+$leaphy-color-warn-light: mat.define-palette($light-mode-palette, 900);
 
 $light-mode: mat.define-light-theme(
     (
         color: (
-            primary: $leaphy-color-primary,
-            accent: $leaphy-color-accent,
-            warn: $leaphy-color-warn,
+            primary: $leaphy-color-primary-light,
+            accent: $leaphy-color-accent-light,
+            warn: $leaphy-color-warn-light,
+        ),
+        typography: mat.define-legacy-typography-config(),
+    )
+);
+
+$dark-mode: mat.define-dark-theme(
+    (
+        color: (
+            primary: $leaphy-color-primary-light,
+            accent: $leaphy-color-accent-light,
+            warn: $leaphy-color-warn-light,
         ),
         typography: mat.define-legacy-typography-config(),
     )
 );
 
 @include mat.all-component-themes($light-mode);
+@include mat.select-theme($light-mode);
