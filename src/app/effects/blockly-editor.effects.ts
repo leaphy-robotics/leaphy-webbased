@@ -9,21 +9,25 @@ import * as Blockly from "blockly";
 import "@blockly/field-bitmap";
 
 import {
-    CATEGORIES,
-    THEME,
-    EXTENSIONS,
-    translations,
     arduino,
-    getBlocks,
-    constantBlocks,
+    blocks,
+    CATEGORIES,
+    EXTENSIONS,
+    THEME,
+    translations,
 } from "@leaphy-robotics/leaphy-blocks";
 import { LeaphyCategory } from "../services/toolbox/category";
 import { LeaphyToolbox } from "../services/toolbox/toolbox";
 import { CodeEditorState } from "../state/code-editor.state";
-import { genericRobotType, microPythonRobotType } from "../domain/robots";
+import {
+    genericRobotType,
+    leaphyFlitzNanoRobotType,
+    microPythonRobotType,
+} from "../domain/robots";
 import { RobotType } from "../domain/robot.type";
 import { WorkspaceService } from "../services/workspace.service";
 import { LocalStorageService } from "../services/localstorage.service";
+import PinSelectorField from "../domain/blockly-fields";
 
 @Injectable({
     providedIn: "root",
@@ -41,6 +45,8 @@ export class BlocklyEditorEffects {
         private workspaceService: WorkspaceService,
         private localStorage: LocalStorageService,
     ) {
+        Blockly.defineBlocksWithJsonArray(blocks);
+        Blockly.fieldRegistry.register("field_pin_selector", PinSelectorField);
         Blockly.registry.register(
             Blockly.registry.Type.TOOLBOX_ITEM,
             Blockly.ToolboxCategory.registrationName,
@@ -73,13 +79,6 @@ export class BlocklyEditorEffects {
             null as unknown as undefined, // TODO(#6920)
             ["controls_if_elseif", "controls_if_else"],
         );
-
-        // When the current language is set: Find and set the blockly translations
-        this.appState.currentLanguage$
-            .pipe(filter((language) => !!language))
-            .subscribe(async (language) => {
-                Blockly.setLocale(translations[language.code]);
-            });
 
         // When the language is changed, save the workspace temporarily
         this.appState.changedLanguage$
@@ -130,13 +129,18 @@ export class BlocklyEditorEffects {
                     leaphyToolboxXml,
                     startWorkspaceXml,
                 ]) => {
-                    let allBlocks = getBlocks(robotType.id).block;
-                    if (this.firstRun) {
-                        this.firstRun = false;
-                        allBlocks = allBlocks.concat(constantBlocks);
-                    }
+                    const translation =
+                        translations[this.appState.currentLanguageCode];
+                    if (robotType === leaphyFlitzNanoRobotType)
+                        translation.ARD_SERVO_WRITE =
+                            translation.ARD_SERVO_ARM_WRITE;
+                    else
+                        translation.ARD_SERVO_WRITE =
+                            translation.ARD_SERVO_REGULAR_WRITE;
 
-                    Blockly.defineBlocksWithJsonArray(allBlocks);
+                    Blockly.setLocale(translation);
+
+                    PinSelectorField.processPinMappings(robotType);
                     config.theme = Blockly.Theme.defineTheme("leaphy", {
                         blockStyles: THEME.defaultBlockStyles,
                         categoryStyles: THEME.categoryStyles,
@@ -205,12 +209,11 @@ export class BlocklyEditorEffects {
                     leaphyToolboxXml,
                     startWorkspaceXml,
                 ]) => {
-                    const toolboxXmlString = this.loadToolBox(
+                    this.blocklyState.toolboxXml = this.loadToolBox(
                         baseToolboxXml,
                         leaphyToolboxXml,
                         robotType,
                     );
-                    this.blocklyState.toolboxXml = toolboxXmlString;
 
                     workspace.clear();
                     const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);

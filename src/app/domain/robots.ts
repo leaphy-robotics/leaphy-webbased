@@ -4,6 +4,7 @@ import {
     BaseNanoESP32,
     BaseNanoRP2040,
     BaseUno,
+    PinMapping,
     RobotType,
 } from "./robot.type";
 
@@ -169,6 +170,7 @@ export const arduinoNanoRP2040RobotType = new BaseNanoRP2040(
 export const microPythonRobotType = new RobotType(
     "l_micropython",
     { protocol: Avrdude },
+    PinMapping.NANO,
     "MicroPython",
     "micropython.svg",
     null,
@@ -184,6 +186,7 @@ export const microPythonRobotType = new RobotType(
 export const arduinoMegaRobotType = new RobotType(
     "l_mega",
     { protocol: Avrdude, microcontroller: "atmega2560" },
+    PinMapping.MEGA,
     "Arduino Mega",
     "mega.svg",
     null,
