@@ -27,7 +27,7 @@ export const leaphyOriginalRobotType = new BaseUno(
     "Leaphy Original",
     "orig.svg",
     "orig_uno.svg",
-    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960","ArduinoBLE"]),
+    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960"]),
     {
         showLeaphyActuators: true,
         showLeaphyOperators: false,
@@ -40,7 +40,7 @@ export const leaphyOriginalNanoRobotType = new BaseNano(
     "Original Nano",
     "orig.svg",
     "orig_nano.svg",
-    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960"]),
+    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960" ,"ArduinoBLE"]),
     {
         showLeaphyActuators: true,
         showLeaphyOperators: true,
@@ -66,7 +66,7 @@ export const leaphyOriginalNanoRP2040RobotType = new BaseNanoRP2040(
     "Original Nano RP2040",
     "orig.svg",
     "orig_nano_rp2040.svg",
-    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960"]),
+    defaultLibraries.concat(["QMC5883LCompass", "Arduino_APDS9960", "ArduinoBLE"]),
     {
         showLeaphyActuators: true,
         showLeaphyOperators: true,
