@@ -240,10 +240,10 @@ export const arduinoNanoESP32RobotTypeGeneric = new BaseNanoESP32(
     [],
 );
 
-export const arduinoEveryRobotTypeGeneric = new RobotType(
-    "l_every",
+export const arduinoNanoEveryRobotTypeGeneric = new RobotType(
+    "l_nano_every",
     { protocol: Avrdude, microcontroller: "megaavr" },
-    "Arduino Every",
+    "Arduino Nano Every",
     "nano.svg",
     null,
     "megaavr:avr:every",
@@ -269,5 +269,5 @@ export const genericRobots = [
     arduinoNanoESP32RobotTypeGeneric,
     arduinoNanoRP2040RobotTypeGeneric,
     arduinoMegaRobotTypeGeneric,
-    arduinoEveryRobotTypeGeneric,
+    arduinoNanoEveryRobotTypeGeneric,
 ];
