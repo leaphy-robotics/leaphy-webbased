@@ -31,4 +31,6 @@ export class ButtonBarComponent {
 
     protected readonly AppState = AppState;
     protected readonly CodeEditorType = CodeEditorType;
+
+    onShowBoardSelectClicked() {}
 }
