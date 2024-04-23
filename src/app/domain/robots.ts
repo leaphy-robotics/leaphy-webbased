@@ -1,5 +1,12 @@
 import Avrdude from "../services/arduino-uploader/protocols/avrdude";
-import {BaseNano, BaseNanoESP32, BaseNanoRP2040, BaseUno, PinMapping, RobotType,} from "./robot.type";
+import {
+    BaseNano,
+    BaseNanoESP32,
+    BaseNanoRP2040,
+    BaseUno,
+    PinMapping,
+    RobotType,
+} from "./robot.type";
 
 const defaultLibraries = [
     "Leaphy Extensions",
