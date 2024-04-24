@@ -234,6 +234,10 @@ export class AppState {
         this.isCodeEditorToggleConfirmedSubject$.next(confirmed);
     }
 
+    get selectedCodeEditor(): CodeEditorType {
+        return this.codeEditorSubject$.getValue();
+    }
+
     set selectedCodeEditor(codeEditor: CodeEditorType) {
         this.codeEditorSubject$.next(codeEditor);
     }

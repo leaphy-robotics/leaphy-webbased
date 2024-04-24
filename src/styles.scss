@@ -71,9 +71,17 @@ pre[class*="language-"]:after {
 
 
 :root {
+    --leaphy-block-default: #06778f;
+    --leaphy-block-yellow: #d9b53f;
+    --leaphy-block-green: #75b342;
+    --leaphy-block-orange: #de7c3b;
+    --leaphy-block-blue: #4095ce;
+    --leaphy-block-yellow: #d9b53f;
+    --leaphy-block-grey: #7d7d80;
 
     body[data-theme='light'] {
         --leaphy-header-bg: #06778f;
+        --leaphy-header-icon-color: #06778f;
 
         --leaphy-color-primary: #06778f;
         --leaphy-color-primary-dark-tint: #104d59;
@@ -81,43 +89,28 @@ pre[class*="language-"]:after {
         --leaphy-color-dark: #343444;
         --leaphy-color-light: #ffffff;
 
-        --leaphy-block-default: #06778f;
-        --leaphy-block-yellow: #d9b53f;
-        --leaphy-block-green: #75b342;
-        --leaphy-block-orange: #de7c3b;
-        --leaphy-block-blue: #4095ce;
-        --leaphy-block-yellow: #d9b53f;
-        --leaphy-block-grey: #7d7d80;
-
         --mat-menu-item-label-text-size: 12px !important;
 
-        --start-screen-bg: white;
-
-        --leaphy-background-color: #eeeeee;
+        --start-screen-bg: #f1f1f1;
+        --leaphy-background-color: #c1c1c1;
 
         --leaphy-robot-tile: #ffffff;
         --leaphy-robot-tile-border: #f1f1f1;
+        --leaphy-robot-icon-filter: invert(0);
 
         --leaphy-text-color: #000000;
 
-        --leaphy-blockly-bg: #ffffff;
+        --leaphy-blockly-bg: #ececec;
     }
     body[data-theme='dark']  {
         --leaphy-header-bg: #104d59;
+        --leaphy-header-icon-color: #32a5a9;
 
         --leaphy-color-primary: #104d59;
         --leaphy-color-primary-dark-tint: #104d59;
         --leaphy-color-secundary: #32a5a9;
         --leaphy-color-dark: #343444;
         --leaphy-color-light: #ffffff;
-
-        --leaphy-block-default: #06778f;
-        --leaphy-block-yellow: #d9b53f;
-        --leaphy-block-green: #75b342;
-        --leaphy-block-orange: #de7c3b;
-        --leaphy-block-blue: #4095ce;
-        --leaphy-block-yellow: #d9b53f;
-        --leaphy-block-grey: #7d7d80;
 
         --mat-menu-item-label-text-size: 12px !important;
 
@@ -126,6 +119,7 @@ pre[class*="language-"]:after {
 
         --leaphy-robot-tile: #343444;
         --leaphy-robot-tile-border: #343444;
+        --leaphy-robot-icon-filter: invert(20%);
 
         --leaphy-text-color: lightgray;
 

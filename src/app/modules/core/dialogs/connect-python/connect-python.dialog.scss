@@ -67,9 +67,10 @@
     cursor: pointer;
     margin-top: 1vw;
     align-self: flex-end;
-    background-color: transparent;
+    background-color: var(--leaphy-color-secundary);
+    border-radius: 5px;
     //text-underline: var(--leaphy-color-primary) 1px;
-    color: blue;
+    color: var(--leaphy-text-color);
 }
 
 .help-environment {

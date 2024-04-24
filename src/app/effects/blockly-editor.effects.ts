@@ -33,6 +33,68 @@ import getTheme from "../services/blockly/theme";
 export class BlocklyEditorEffects {
     private firstRun = true;
     private startWorkspaceXml = ``;
+    private baseToolboxXml = ``;
+    private leaphyToolboxXml = ``;
+
+    private readonly darkTheme = getTheme("dark");
+    private readonly lightTheme = getTheme("light");
+
+    public async loadTheme() {
+        const workspace = this.blocklyState.workspace;
+        const darkMode = document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'dark';
+        const blocklyTheme = darkMode ? this.darkTheme : this.lightTheme;
+        workspace.setTheme(blocklyTheme);
+        workspace.refreshTheme();
+    }
+
+    public async loadBlockly(element, robotType: RobotType, config: Blockly.BlocklyOptions) {
+        let allBlocks = getBlocks(robotType.id).block;
+        if (this.firstRun) {
+            this.firstRun = false;
+            allBlocks = allBlocks.concat(constantBlocks);
+        }
+
+        Blockly.defineBlocksWithJsonArray(allBlocks);
+
+        const toolboxXmlString = this.loadToolBox(
+            robotType,
+        );
+        config.toolbox = toolboxXmlString;
+        // @ts-ignore
+        const workspace = Blockly.inject(element, config);
+        const darkMode = document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'dark';
+        const blocklyTheme = darkMode ? this.darkTheme : this.lightTheme;
+        workspace.setTheme(blocklyTheme);
+        const toolbox = workspace.getToolbox();
+        workspace.registerToolboxCategoryCallback(
+            "LISTS",
+            CATEGORIES.LISTS,
+        );
+        toolbox.getFlyout().autoClose = false;
+        const xml = Blockly.utils.xml.textToDom(this.startWorkspaceXml);
+        Blockly.Xml.domToWorkspace(xml, workspace);
+        this.blocklyState.workspace = workspace;
+        this.blocklyState.toolboxXml = toolboxXmlString;
+        if (
+            this.appState.currentEditor == CodeEditorType.Beginner
+        ) {
+            this.workspaceService
+                .restoreWorkspaceTemp()
+                .then(() => {
+                });
+        }
+        toolbox.selectItemByPosition(0);
+        toolbox.refreshTheme();
+
+        setTimeout(
+            () =>
+                (this.blocklyState.isSideNavOpen =
+                    robotType.features.showCodeOnStart),
+            200,
+        );
+    }
+
+
 
     constructor(
         private blocklyState: BlocklyEditorState,
@@ -133,50 +195,9 @@ export class BlocklyEditorEffects {
                            baseToolboxXml,
                            leaphyToolboxXml,
                        ]) => {
-                    let THEME = getTheme();
-                    let allBlocks = getBlocks(robotType.id).block;
-                    if (this.firstRun) {
-                        this.firstRun = false;
-                        allBlocks = allBlocks.concat(constantBlocks);
-                    }
-
-                    Blockly.defineBlocksWithJsonArray(allBlocks);
-                    config.theme = Blockly.Theme.defineTheme("leaphy", THEME);
-                    const toolboxXmlString = this.loadToolBox(
-                        baseToolboxXml,
-                        leaphyToolboxXml,
-                        robotType,
-                    );
-                    config.toolbox = toolboxXmlString;
-                    // @ts-ignore
-                    const workspace = Blockly.inject(element, config);
-                    const toolbox = workspace.getToolbox();
-                    workspace.registerToolboxCategoryCallback(
-                        "LISTS",
-                        CATEGORIES.LISTS,
-                    );
-                    toolbox.getFlyout().autoClose = false;
-                    const xml = Blockly.utils.xml.textToDom(this.startWorkspaceXml);
-                    Blockly.Xml.domToWorkspace(xml, workspace);
-                    this.blocklyState.workspace = workspace;
-                    this.blocklyState.toolboxXml = toolboxXmlString;
-                    if (
-                        this.appState.currentEditor == CodeEditorType.Beginner
-                    ) {
-                        this.workspaceService
-                            .restoreWorkspaceTemp()
-                            .then(() => {
-                            });
-                    }
-                    toolbox.selectItemByPosition(0);
-                    toolbox.refreshTheme();
-
-                    setTimeout(
-                        () =>
-                            (this.blocklyState.isSideNavOpen =
-                                robotType.features.showCodeOnStart),
-                        200,
-                    );
+                    this.baseToolboxXml = baseToolboxXml;
+                    this.leaphyToolboxXml = leaphyToolboxXml;
+                    await this.loadBlockly(element, robotType, config);
                 });
 
         // When a new project is started, reset the blockly code
@@ -205,8 +226,6 @@ export class BlocklyEditorEffects {
                     startWorkspaceXml,
                 ]) => {
                     this.blocklyState.toolboxXml = this.loadToolBox(
-                        baseToolboxXml,
-                        leaphyToolboxXml,
                         robotType,
                     );
 
@@ -333,19 +352,18 @@ export class BlocklyEditorEffects {
         return category;
     }
 
+
     private loadToolBox(
-        baseToolboxXml: string,
-        leaphyToolboxXml: string,
         robotType: RobotType,
     ): string {
         const parser = new DOMParser();
         const toolboxXmlDoc = parser.parseFromString(
-            baseToolboxXml,
+            this.baseToolboxXml,
             "text/xml",
         );
         const toolboxElement = toolboxXmlDoc.getElementById("easyBloqsToolbox");
         const leaphyCategories = parser.parseFromString(
-            leaphyToolboxXml,
+            this.leaphyToolboxXml,
             "text/xml",
         );
         const leaphyRobotCategory = leaphyCategories.getElementById(

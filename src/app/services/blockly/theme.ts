@@ -1,14 +1,15 @@
 
 // check if user is using dark or light theme
-import {ITheme} from "blockly/core/theme";
+import * as Blockly from "blockly";
+import {ITheme, Theme} from "blockly/core/theme";
 
 
 
-function getTheme(): ITheme {
-    const isDarkMode = document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'dark';
+function getTheme(themeStr): Theme {
 
     let theme: ITheme;
-    if (isDarkMode) {
+    if (themeStr === "dark") {
+        console.log("Dark mode");
         theme = {
             blockStyles: {
                 leaphy_blocks: {colourPrimary: "#06434f", hat: "cap"},
@@ -38,10 +39,10 @@ function getTheme(): ITheme {
                 scrollbarColour: "#9c9a9a",
                 flyoutOpacity: 1,
             },
-            name: "leaphy",
+            name: "dark",
         }
 
-    } else {
+    } else if (themeStr === "light") {
         theme = {
             blockStyles: {
                 leaphy_blocks: {colourPrimary: "#06778f", hat: "cap"},
@@ -72,12 +73,12 @@ function getTheme(): ITheme {
                 scrollbarColour: "#ccc",
                 flyoutOpacity: 1,
             },
-            name: "leaphy",
+            name: "light",
         }
 
     }
 
-    return theme;
+    return Blockly.Theme.defineTheme(themeStr, theme);
 }
 
 export default getTheme;

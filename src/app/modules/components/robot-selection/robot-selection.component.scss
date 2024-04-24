@@ -13,14 +13,7 @@
 
     &:hover,
     &:active {
-        body[data-theme='dark'] & {
-            background-color: #444452 !important;
-            border: 3px solid var(--leaphy-color-primary) !important;
-        }
-        body[data-theme='light'] & {
-            background-color: #ffffff !important;
-            border: 3px solid var(--leaphy-color-primary) !important;
-        }
+        border: 3px solid var(--leaphy-color-primary) !important;
     }
 }
 
@@ -29,9 +22,8 @@
 .robot-button img {
     max-width: 90%;
     max-height: 90%;
-    body[data-theme='dark'] & {
-        filter: invert(20%);
-    }
+    filter: var(--leaphy-robot-icon-filter);
+
 }
 
 .selected {
