@@ -14,7 +14,6 @@ input::placeholder {
     width: 100%;
     height: calc(100% - 64px);
     max-height: 60vh;
-    background: #f1f1f1;
 }
 
 #header:hover {
@@ -54,9 +53,11 @@ input::placeholder {
 
 .example {
     aspect-ratio: 1/1;
-    border: 3px solid #fff;
+    border: 3px solid var(--leaphy-robot-tile-border);
     border-radius: 10px;
-    background: #fff;
+    background: var(--leaphy-robot-tile);
+    color: var(--leaphy-text-color);
+
     transition: 0.3s ease;
 
     display: flex;
