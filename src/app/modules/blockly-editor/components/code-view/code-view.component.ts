@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { CodeEditorState } from "../../../../state/code-editor.state";
+import {editor} from "monaco-editor";
+import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
 
 @Component({
     selector: "app-code-view",
@@ -7,7 +9,7 @@ import { CodeEditorState } from "../../../../state/code-editor.state";
     styleUrls: ["./code-view.component.scss"],
 })
 export class CodeViewComponent {
-    editorOptions: any = {
+    editorOptions: IStandaloneEditorConstructionOptions = {
         language: "cpp",
         readOnly: true,
         automaticLayout: true,

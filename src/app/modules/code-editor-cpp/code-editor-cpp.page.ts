@@ -7,7 +7,7 @@ import { WorkspaceService } from "../../services/workspace.service";
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
 import { AppState } from "../../state/app.state";
 import {editor} from "monaco-editor";
-import EditorOption = editor.EditorOption;
+import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
 
 @Component({
     standalone: true,
@@ -17,7 +17,7 @@ import EditorOption = editor.EditorOption;
     imports: [CommonModule, SharedModule, CoreModule, MonacoEditorModule],
 })
 export class CodeEditorCppPage implements AfterViewInit {
-    editorOptions = {
+    editorOptions: IStandaloneEditorConstructionOptions = {
         language: "cpp",
         automaticLayout: true,
         theme: "vs"

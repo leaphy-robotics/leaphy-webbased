@@ -15,9 +15,10 @@ import { AppState } from "../../state/app.state";
     imports: [CommonModule, SharedModule, CoreModule, MonacoEditorModule],
 })
 export class CodeEditorPythonPage implements AfterViewInit {
-    editorOptions: any = {
+    editorOptions = {
         language: "python",
         automaticLayout: true,
+        theme: "vs"
     };
 
     constructor(
@@ -28,23 +29,14 @@ export class CodeEditorPythonPage implements AfterViewInit {
         // check if we are currently in dark mode
         const isDarkMode = appState.selectedTheme === "dark";
         if (isDarkMode) {
-            this.editorOptions = {
-                ...this.editorOptions,
-                theme: "vs-dark",
-            };
+            this.editorOptions.theme = "vs-dark"
         }
 
         appState.selectedTheme$.subscribe((theme) => {
             if (theme === "dark") {
-                this.editorOptions = {
-                    ...this.editorOptions,
-                    theme: "vs-dark",
-                };
+                this.editorOptions.theme = "vs-dark"
             } else {
-                this.editorOptions = {
-                    ...this.editorOptions,
-                    theme: "vs",
-                };
+                this.editorOptions.theme= "vs"
             }
         });
     }
