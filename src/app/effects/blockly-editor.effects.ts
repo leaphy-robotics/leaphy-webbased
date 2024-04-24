@@ -15,8 +15,8 @@ import {
     EXTENSIONS,
     translations,
 } from "@leaphy-robotics/leaphy-blocks";
-import { LeaphyCategory } from "../services/toolbox/category";
-import { LeaphyToolbox } from "../services/toolbox/toolbox";
+import { LeaphyCategory } from "../services/blockly/category";
+import { LeaphyToolbox } from "../services/blockly/toolbox";
 import { CodeEditorState } from "../state/code-editor.state";
 import {
     genericRobotType,
@@ -64,13 +64,12 @@ export class BlocklyEditorEffects {
                     Blockly.setLocale(translation);
 
                     PinSelectorField.processPinMappings(robotType);
-        let allBlocks = getBlocks(robotType.id).block;
         if (this.firstRun) {
             this.firstRun = false;
-            allBlocks = allBlocks.concat(constantBlocks);
+            Blockly.defineBlocksWithJsonArray(blocks);
         }
 
-        Blockly.defineBlocksWithJsonArray(allBlocks);
+
 
         const toolboxXmlString = this.loadToolBox(
             robotType,
@@ -210,7 +209,7 @@ export class BlocklyEditorEffects {
                     this.leaphyToolboxXml = leaphyToolboxXml;
                     await this.loadBlockly(element, robotType, config);
                 });
-          
+
         // When a new project is started, reset the blockly code
         this.appState.selectedRobotType$
             .pipe(filter((robotType) => !robotType))

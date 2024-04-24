@@ -2,10 +2,6 @@ import { Injectable, ElementRef } from "@angular/core";
 import { BehaviorSubject, Observable } from "rxjs";
 import { LocalStorageService } from "../services/localstorage.service";
 import { PythonFile } from "../domain/python-file.type";
-import getTheme from "../services/blockly/theme";
-import {CATEGORIES, constantBlocks, getBlocks} from "@leaphy-robotics/leaphy-blocks";
-import * as Blockly from "blockly";
-import {CodeEditorType} from "../domain/code-editor.type";
 
 @Injectable({
     providedIn: "root",

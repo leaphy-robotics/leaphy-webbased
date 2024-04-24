@@ -31,12 +31,12 @@ export class AppEffects {
             .subscribe((theme) => {
                 document.getElementsByTagName("body")[0].setAttribute(
                     "data-theme",
-                    theme.replace('"', ""),
+                    theme,
                 );
 
                 document.getElementsByTagName("body")[0].setAttribute(
                     "data-bs-theme",
-                    theme.replace('"', ""),
+                    theme
                 );
 
                 localStorage.store("theme", theme);
