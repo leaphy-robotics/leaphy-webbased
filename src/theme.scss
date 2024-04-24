@@ -3,17 +3,15 @@
 
 :root {
     --dark-mode: 0;
-
 }
 
-body[data-theme='light'] {
+body[data-theme="light"] {
     --dark-mode: 0;
 }
 
-body[data-theme='dark'] {
+body[data-theme="dark"] {
     --dark-mode: 1;
 }
-
 
 $light-mode-palette: (
     50: transparent,
@@ -65,25 +63,22 @@ $light-mode: mat.define-light-theme(
 );
 
 $dark-theme: mat.define-dark-theme(
-        (
-            color: (
-                primary: $leaphy-color-primary-dark,
-                accent: $leaphy-color-accent-light,
-                warn: $leaphy-color-warn-light,
-            ),
-            typography: mat.define-legacy-typography-config(),
-        )
+    (
+        color: (
+            primary: $leaphy-color-primary-dark,
+            accent: $leaphy-color-accent-light,
+            warn: $leaphy-color-warn-light,
+        ),
+        typography: mat.define-legacy-typography-config(),
+    )
 );
 
 /* Light mode */
-body[data-theme='light'] {
+body[data-theme="light"] {
     @include mat.all-component-themes($light-mode);
 }
 
 /* Dark mode */
-body[data-theme='dark'] {
+body[data-theme="dark"] {
     @include mat.all-component-themes($dark-theme);
 }
-
-
-

@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 /* You can add global styles to this file, and also import other style files */
 @import url("./assets/fonts/inter/inter.css");
@@ -69,7 +69,6 @@ pre[class*="language-"]:after {
 
 // check on the root element if the theme is light or dark
 
-
 :root {
     --leaphy-block-default: #06778f;
     --leaphy-block-yellow: #d9b53f;
@@ -79,7 +78,7 @@ pre[class*="language-"]:after {
     --leaphy-block-yellow: #d9b53f;
     --leaphy-block-grey: #7d7d80;
 
-    body[data-theme='light'] {
+    body[data-theme="light"] {
         --leaphy-header-bg: #06778f;
         --leaphy-header-icon-color: #06778f;
 
@@ -102,7 +101,7 @@ pre[class*="language-"]:after {
 
         --leaphy-blockly-bg: #ececec;
     }
-    body[data-theme='dark']  {
+    body[data-theme="dark"] {
         --leaphy-header-bg: #104d59;
         --leaphy-header-icon-color: #32a5a9;
 
@@ -125,11 +124,8 @@ pre[class*="language-"]:after {
 
         --leaphy-blockly-bg: #353444;
     }
-
 }
 
 .blocklySvg {
     background-color: var(--leaphy-blockly-bg) !important;
 }
-
-

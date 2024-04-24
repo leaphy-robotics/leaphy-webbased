@@ -15,7 +15,6 @@ export class AppComponent {
         private matIconRegistry: MatIconRegistry,
         private domSanitizer: DomSanitizer,
     ) {
-
         this.matIconRegistry.addSvgIcon(
             "block",
             this.domSanitizer.bypassSecurityTrustResourceUrl(

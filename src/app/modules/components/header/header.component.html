@@ -31,20 +31,36 @@
                         </mat-select>
                     </mat-form-field>
                 }
-                <button mat-stroked-button class="text-color-white" [matMenuTriggerFor]="projectMenu">
+                <button
+                    mat-stroked-button
+                    class="text-color-white"
+                    [matMenuTriggerFor]="projectMenu"
+                >
                     {{ "PROJECT" | translate }}
                 </button>
-                <button mat-stroked-button class="text-color-white" [matMenuTriggerFor]="helpMenu">
+                <button
+                    mat-stroked-button
+                    class="text-color-white"
+                    [matMenuTriggerFor]="helpMenu"
+                >
                     {{ "HELP" | translate }}
                 </button>
-                <button mat-stroked-button class="text-color-white" [matMenuTriggerFor]="moreMenu">
+                <button
+                    mat-stroked-button
+                    class="text-color-white"
+                    [matMenuTriggerFor]="moreMenu"
+                >
                     {{ "MORE" | translate }}
                 </button>
                 @if (
                     (this.appState.selectedRobotType$ | async) !==
                     microPythonRobotType
                 ) {
-                    <button mat-stroked-button class="text-color-white" (click)="onChooseRobot()">
+                    <button
+                        mat-stroked-button
+                        class="text-color-white"
+                        (click)="onChooseRobot()"
+                    >
                         {{ "CHOOSE_ROBOT" | translate }}
                     </button>
                 }
@@ -107,7 +123,11 @@
                         "
                         (click)="onCodeEditorClicked()"
                     >
-                        <mat-icon class="text-color-white" id="block-icon" svgIcon="block"></mat-icon
+                        <mat-icon
+                            class="text-color-white"
+                            id="block-icon"
+                            svgIcon="block"
+                        ></mat-icon
                         ><span>{{ "BLOCKS" | translate }}</span>
                     </button>
                 }
@@ -297,17 +317,23 @@
     <button
         mat-menu-item
         (click)="onThemeChanged('dark')"
-        [class.selected]="document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'dark'"
+        [class.selected]="
+            document
+                .getElementsByTagName('body')[0]
+                .getAttribute('data-theme') === 'dark'
+        "
     >
         <span>{{ "DARK_THEME" | translate }}</span>
     </button>
     <button
         mat-menu-item
         (click)="onThemeChanged('light')"
-        [class.selected]="document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'light'"
+        [class.selected]="
+            document
+                .getElementsByTagName('body')[0]
+                .getAttribute('data-theme') === 'light'
+        "
     >
         <span>{{ "LIGHT_THEME" | translate }}</span>
     </button>
-
-
 </mat-menu>

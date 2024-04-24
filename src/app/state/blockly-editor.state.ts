@@ -137,5 +137,4 @@ export class BlocklyEditorState {
     get blocklyConfig(): any {
         return this.blocklyConfigSubject$.getValue();
     }
-
 }

@@ -7,7 +7,7 @@ import { CodeEditorState } from "../../../../state/code-editor.state";
     styleUrls: ["./code-view.component.scss"],
 })
 export class CodeViewComponent {
-    editorOptions : any = {
+    editorOptions: any = {
         language: "cpp",
         readOnly: true,
         automaticLayout: true,
@@ -15,7 +15,10 @@ export class CodeViewComponent {
 
     constructor(public codeEditor: CodeEditorState) {
         // check if we are currently in dark mode
-        const isDarkMode = document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'dark';
+        const isDarkMode =
+            document
+                .getElementsByTagName("body")[0]
+                .getAttribute("data-theme") === "dark";
         if (isDarkMode) {
             this.editorOptions = {
                 ...this.editorOptions,

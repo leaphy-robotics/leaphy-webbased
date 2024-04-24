@@ -9,7 +9,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ChangeLogDialog } from "../modules/core/dialogs/change-log/change-log.dialog";
 import showdown from "showdown";
 import { WorkspaceService } from "../services/workspace.service";
-import {BlocklyEditorEffects} from "./blockly-editor.effects";
+import { BlocklyEditorEffects } from "./blockly-editor.effects";
 
 @Injectable({
     providedIn: "root",
@@ -29,18 +29,18 @@ export class AppEffects {
         this.appState.selectedTheme$
             .pipe(filter((theme) => !!theme))
             .subscribe((theme) => {
-                document.getElementsByTagName("body")[0].setAttribute(
-                    "data-theme",
-                    theme,
-                );
+                document
+                    .getElementsByTagName("body")[0]
+                    .setAttribute("data-theme", theme);
 
-                document.getElementsByTagName("body")[0].setAttribute(
-                    "data-bs-theme",
-                    theme
-                );
+                document
+                    .getElementsByTagName("body")[0]
+                    .setAttribute("data-bs-theme", theme);
 
                 localStorage.store("theme", theme);
-                if (this.appState.selectedCodeEditor == CodeEditorType.Beginner) {
+                if (
+                    this.appState.selectedCodeEditor == CodeEditorType.Beginner
+                ) {
                     this.blocklyEffects.loadTheme();
                 }
             });

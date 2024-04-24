@@ -1,10 +1,10 @@
-import {Injectable} from "@angular/core";
-import {BlocklyEditorState} from "../state/blockly-editor.state";
-import {filter, pairwise, withLatestFrom} from "rxjs/operators";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {combineLatest, Observable} from "rxjs";
-import {AppState} from "../state/app.state";
-import {CodeEditorType} from "../domain/code-editor.type";
+import { Injectable } from "@angular/core";
+import { BlocklyEditorState } from "../state/blockly-editor.state";
+import { filter, pairwise, withLatestFrom } from "rxjs/operators";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { combineLatest, Observable } from "rxjs";
+import { AppState } from "../state/app.state";
+import { CodeEditorType } from "../domain/code-editor.type";
 import * as Blockly from "blockly";
 import "@blockly/field-bitmap";
 
@@ -45,58 +45,52 @@ export class BlocklyEditorEffects {
 
     public async loadTheme() {
         const workspace = this.blocklyState.workspace;
-        const darkMode = document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'dark';
+        const darkMode =
+            document
+                .getElementsByTagName("body")[0]
+                .getAttribute("data-theme") === "dark";
         const blocklyTheme = darkMode ? this.darkTheme : this.lightTheme;
         workspace.setTheme(blocklyTheme);
         workspace.refreshTheme();
     }
 
-    public async loadBlockly(element, robotType: RobotType, config: Blockly.BlocklyOptions) {
-        const translation =
-                        translations[this.appState.currentLanguageCode];
-                    if (robotType === leaphyFlitzNanoRobotType)
-                        translation.ARD_SERVO_WRITE =
-                            translation.ARD_SERVO_ARM_WRITE;
-                    else
-                        translation.ARD_SERVO_WRITE =
-                            translation.ARD_SERVO_REGULAR_WRITE;
+    public async loadBlockly(
+        element,
+        robotType: RobotType,
+        config: Blockly.BlocklyOptions,
+    ) {
+        const translation = translations[this.appState.currentLanguageCode];
+        if (robotType === leaphyFlitzNanoRobotType)
+            translation.ARD_SERVO_WRITE = translation.ARD_SERVO_ARM_WRITE;
+        else translation.ARD_SERVO_WRITE = translation.ARD_SERVO_REGULAR_WRITE;
 
-                    Blockly.setLocale(translation);
+        Blockly.setLocale(translation);
 
-                    PinSelectorField.processPinMappings(robotType);
+        PinSelectorField.processPinMappings(robotType);
         if (this.firstRun) {
             this.firstRun = false;
             Blockly.defineBlocksWithJsonArray(blocks);
         }
 
-
-
-        const toolboxXmlString = this.loadToolBox(
-            robotType,
-        );
+        const toolboxXmlString = this.loadToolBox(robotType);
         config.toolbox = toolboxXmlString;
         // @ts-ignore
         const workspace = Blockly.inject(element, config);
-        const darkMode = document.getElementsByTagName('body')[0].getAttribute('data-theme') === 'dark';
+        const darkMode =
+            document
+                .getElementsByTagName("body")[0]
+                .getAttribute("data-theme") === "dark";
         const blocklyTheme = darkMode ? this.darkTheme : this.lightTheme;
         workspace.setTheme(blocklyTheme);
         const toolbox = workspace.getToolbox();
-        workspace.registerToolboxCategoryCallback(
-            "LISTS",
-            CATEGORIES.LISTS,
-        );
+        workspace.registerToolboxCategoryCallback("LISTS", CATEGORIES.LISTS);
         toolbox.getFlyout().autoClose = false;
         const xml = Blockly.utils.xml.textToDom(this.startWorkspaceXml);
         Blockly.Xml.domToWorkspace(xml, workspace);
         this.blocklyState.workspace = workspace;
         this.blocklyState.toolboxXml = toolboxXmlString;
-        if (
-            this.appState.currentEditor == CodeEditorType.Beginner
-        ) {
-            this.workspaceService
-                .restoreWorkspaceTemp()
-                .then(() => {
-                });
+        if (this.appState.currentEditor == CodeEditorType.Beginner) {
+            this.workspaceService.restoreWorkspaceTemp().then(() => {});
         }
         toolbox.selectItemByPosition(0);
         toolbox.refreshTheme();
@@ -108,8 +102,6 @@ export class BlocklyEditorEffects {
             200,
         );
     }
-
-
 
     constructor(
         private blocklyState: BlocklyEditorState,
@@ -201,14 +193,15 @@ export class BlocklyEditorEffects {
             )
             .subscribe(
                 async ([
-                           [[element, config], robotType],
-                           baseToolboxXml,
-                           leaphyToolboxXml,
-                       ]) => {
+                    [[element, config], robotType],
+                    baseToolboxXml,
+                    leaphyToolboxXml,
+                ]) => {
                     this.baseToolboxXml = baseToolboxXml;
                     this.leaphyToolboxXml = leaphyToolboxXml;
                     await this.loadBlockly(element, robotType, config);
-                });
+                },
+            );
 
         // When a new project is started, reset the blockly code
         this.appState.selectedRobotType$
@@ -235,9 +228,7 @@ export class BlocklyEditorEffects {
                     leaphyToolboxXml,
                     startWorkspaceXml,
                 ]) => {
-                    this.blocklyState.toolboxXml = this.loadToolBox(
-                        robotType,
-                    );
+                    this.blocklyState.toolboxXml = this.loadToolBox(robotType);
 
                     workspace.clear();
                     const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
@@ -362,10 +353,7 @@ export class BlocklyEditorEffects {
         return category;
     }
 
-
-    private loadToolBox(
-        robotType: RobotType,
-    ): string {
+    private loadToolBox(robotType: RobotType): string {
         const parser = new DOMParser();
         const toolboxXmlDoc = parser.parseFromString(
             this.baseToolboxXml,

@@ -26,8 +26,8 @@
     <button class="upload" (click)="makePythonRobotConnection()">
         {{ "CONNECT_PYTHON_ROBOT" | translate }}
     </button>
-    <button class="firmware" (click)="flashFirmware()"
-        >{{ "FLASH_FIRMWARE" | translate }}
+    <button class="firmware" (click)="flashFirmware()">
+        {{ "FLASH_FIRMWARE" | translate }}
     </button>
     } @if (didUpload | async) {
     <div id="return-options" class="return-options">
