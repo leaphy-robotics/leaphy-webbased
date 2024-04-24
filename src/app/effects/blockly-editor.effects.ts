@@ -10,19 +10,23 @@ import "@blockly/field-bitmap";
 
 import {
     arduino,
+    blocks,
     CATEGORIES,
-    constantBlocks,
     EXTENSIONS,
-    getBlocks,
     translations,
 } from "@leaphy-robotics/leaphy-blocks";
-import {LeaphyCategory} from "../services/blockly/category";
-import {LeaphyToolbox} from "../services/blockly/toolbox";
-import {CodeEditorState} from "../state/code-editor.state";
-import {genericRobotType, microPythonRobotType} from "../domain/robots";
-import {RobotType} from "../domain/robot.type";
-import {WorkspaceService} from "../services/workspace.service";
-import {LocalStorageService} from "../services/localstorage.service";
+import { LeaphyCategory } from "../services/toolbox/category";
+import { LeaphyToolbox } from "../services/toolbox/toolbox";
+import { CodeEditorState } from "../state/code-editor.state";
+import {
+    genericRobotType,
+    leaphyFlitzNanoRobotType,
+    microPythonRobotType,
+} from "../domain/robots";
+import { RobotType } from "../domain/robot.type";
+import { WorkspaceService } from "../services/workspace.service";
+import { LocalStorageService } from "../services/localstorage.service";
+import PinSelectorField from "../domain/blockly-fields";
 import getTheme from "../services/blockly/theme";
 
 @Injectable({
@@ -48,6 +52,18 @@ export class BlocklyEditorEffects {
     }
 
     public async loadBlockly(element, robotType: RobotType, config: Blockly.BlocklyOptions) {
+        const translation =
+                        translations[this.appState.currentLanguageCode];
+                    if (robotType === leaphyFlitzNanoRobotType)
+                        translation.ARD_SERVO_WRITE =
+                            translation.ARD_SERVO_ARM_WRITE;
+                    else
+                        translation.ARD_SERVO_WRITE =
+                            translation.ARD_SERVO_REGULAR_WRITE;
+
+                    Blockly.setLocale(translation);
+
+                    PinSelectorField.processPinMappings(robotType);
         let allBlocks = getBlocks(robotType.id).block;
         if (this.firstRun) {
             this.firstRun = false;
@@ -108,6 +124,8 @@ export class BlocklyEditorEffects {
             (xml) => (this.startWorkspaceXml = xml),
         );
 
+        Blockly.defineBlocksWithJsonArray(blocks);
+        Blockly.fieldRegistry.register("field_pin_selector", PinSelectorField);
         Blockly.registry.register(
             Blockly.registry.Type.TOOLBOX_ITEM,
             Blockly.ToolboxCategory.registrationName,
@@ -140,13 +158,6 @@ export class BlocklyEditorEffects {
             null as unknown as undefined, // TODO(#6920)
             ["controls_if_elseif", "controls_if_else"],
         );
-
-        // When the current language is set: Find and set the blockly translations
-        this.appState.currentLanguage$
-            .pipe(filter((language) => !!language))
-            .subscribe(async (language) => {
-                Blockly.setLocale(translations[language.code]);
-            });
 
         // When the language is changed, save the workspace temporarily
         this.appState.changedLanguage$
@@ -199,7 +210,7 @@ export class BlocklyEditorEffects {
                     this.leaphyToolboxXml = leaphyToolboxXml;
                     await this.loadBlockly(element, robotType, config);
                 });
-
+          
         // When a new project is started, reset the blockly code
         this.appState.selectedRobotType$
             .pipe(filter((robotType) => !robotType))
