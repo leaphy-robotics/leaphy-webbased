@@ -272,13 +272,8 @@ export class HeaderComponent {
     protected readonly genericRobots = genericRobots;
 
     onThemeChanged(theme: any) {
-        const body = document.getElementsByTagName("body")[0];
-        body.setAttribute("data-theme", theme);
-        body.setAttribute("data-bs-theme", theme);
-        localStorage.setItem("theme", theme);
-        if (this.appState.selectedCodeEditor == CodeEditorType.Beginner) {
-            this.blocklyEffect.loadTheme();
-        }
+        this.appState.selectedTheme = theme;
+
     }
 
     protected readonly document = document;

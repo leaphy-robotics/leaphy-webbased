@@ -9,6 +9,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ChangeLogDialog } from "../modules/core/dialogs/change-log/change-log.dialog";
 import showdown from "showdown";
 import { WorkspaceService } from "../services/workspace.service";
+import {BlocklyEditorEffects} from "./blockly-editor.effects";
 
 @Injectable({
     providedIn: "root",
@@ -21,7 +22,29 @@ export class AppEffects {
         private localStorage: LocalStorageService,
         private dialog: MatDialog,
         private workspaceService: WorkspaceService,
+        private blocklyEffects: BlocklyEditorEffects,
     ) {
+        this.appState.selectedTheme = localStorage.fetch("theme") || "light";
+
+        this.appState.selectedTheme$
+            .pipe(filter((theme) => !!theme))
+            .subscribe((theme) => {
+                document.getElementsByTagName("body")[0].setAttribute(
+                    "data-theme",
+                    theme.replace('"', ""),
+                );
+
+                document.getElementsByTagName("body")[0].setAttribute(
+                    "data-bs-theme",
+                    theme.replace('"', ""),
+                );
+
+                localStorage.store("theme", theme);
+                if (this.appState.selectedCodeEditor == CodeEditorType.Beginner) {
+                    this.blocklyEffects.loadTheme();
+                }
+            });
+
         // Use the current language to translate the angular strings
         this.appState.currentLanguage$
             .pipe(filter((language) => !!language))
