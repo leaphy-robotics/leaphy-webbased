@@ -18,7 +18,7 @@ export class CodeEditorPythonPage implements AfterViewInit {
     editorOptions = {
         language: "python",
         automaticLayout: true,
-        theme: "vs"
+        theme: "vs",
     };
 
     constructor(
@@ -29,14 +29,14 @@ export class CodeEditorPythonPage implements AfterViewInit {
         // check if we are currently in dark mode
         const isDarkMode = appState.selectedTheme === "dark";
         if (isDarkMode) {
-            this.editorOptions.theme = "vs-dark"
+            this.editorOptions.theme = "vs-dark";
         }
 
         appState.selectedTheme$.subscribe((theme) => {
             if (theme === "dark") {
-                this.editorOptions.theme = "vs-dark"
+                this.editorOptions.theme = "vs-dark";
             } else {
-                this.editorOptions.theme= "vs"
+                this.editorOptions.theme = "vs";
             }
         });
     }

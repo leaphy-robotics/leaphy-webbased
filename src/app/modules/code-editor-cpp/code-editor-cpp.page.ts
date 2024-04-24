@@ -6,7 +6,7 @@ import { CoreModule } from "../core/core.module";
 import { WorkspaceService } from "../../services/workspace.service";
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
 import { AppState } from "../../state/app.state";
-import {editor} from "monaco-editor";
+import { editor } from "monaco-editor";
 import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
 
 @Component({
@@ -16,11 +16,11 @@ import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructi
     styleUrls: ["./code-editor-cpp.page.scss"],
     imports: [CommonModule, SharedModule, CoreModule, MonacoEditorModule],
 })
-export class CodeEditorCppPage implements AfterViewInit {
+export class prCodeEditorCppPage implements AfterViewInit {
     editorOptions: IStandaloneEditorConstructionOptions = {
         language: "cpp",
         automaticLayout: true,
-        theme: "vs"
+        theme: "vs",
     };
 
     constructor(
@@ -31,14 +31,14 @@ export class CodeEditorCppPage implements AfterViewInit {
         // check if we are currently in dark mode
         const isDarkMode = appState.selectedTheme === "dark";
         if (isDarkMode) {
-            this.editorOptions.theme = "vs-dark"
+            this.editorOptions.theme = "vs-dark";
         }
 
         appState.selectedTheme$.subscribe((theme) => {
             if (theme === "dark") {
-                this.editorOptions.theme = "vs-dark"
+                this.editorOptions.theme = "vs-dark";
             } else {
-                this.editorOptions.theme= "vs"
+                this.editorOptions.theme = "vs";
             }
         });
     }

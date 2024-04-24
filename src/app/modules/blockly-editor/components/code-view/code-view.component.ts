@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { CodeEditorState } from "../../../../state/code-editor.state";
-import {editor} from "monaco-editor";
+import { editor } from "monaco-editor";
 import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
 
 @Component({
