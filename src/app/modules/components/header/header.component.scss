@@ -28,6 +28,11 @@ button {
     font-size: 12px;
     line-height: 36px;
     height: 40px;
+    color: var(--leaphy-text-color);
+
+    .selected {
+        color: var(--leaphy-header-icon-color);
+    }
 
     mat-icon {
         color: var(--leaphy-header-icon-color);
