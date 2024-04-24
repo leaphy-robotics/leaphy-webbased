@@ -16,7 +16,7 @@ import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructi
     styleUrls: ["./code-editor-cpp.page.scss"],
     imports: [CommonModule, SharedModule, CoreModule, MonacoEditorModule],
 })
-export class prCodeEditorCppPage implements AfterViewInit {
+export class CodeEditorCppPage implements AfterViewInit {
     editorOptions: IStandaloneEditorConstructionOptions = {
         language: "cpp",
         automaticLayout: true,
