@@ -33,14 +33,6 @@ export class CodeEditorCppPage implements AfterViewInit {
         if (isDarkMode) {
             this.editorOptions.theme = "vs-dark";
         }
-
-        appState.selectedTheme$.subscribe((theme) => {
-            if (theme === "dark") {
-                this.editorOptions.theme = "vs-dark";
-            } else {
-                this.editorOptions.theme = "vs";
-            }
-        });
     }
 
     ngAfterViewInit(): void {

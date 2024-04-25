@@ -31,7 +31,8 @@ button {
     color: var(--leaphy-text-color);
 
     .selected {
-        color: var(--leaphy-header-icon-color);
+        color: var(--leaphy-header-icon-color) !important;
+
     }
 
     mat-icon {

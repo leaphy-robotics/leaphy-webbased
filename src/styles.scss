@@ -18,7 +18,7 @@ html {
 html,
 body {
     height: 100%;
-    //background-color: #f1f1f1;
+
 }
 body {
     margin: 0;
@@ -96,10 +96,11 @@ pre[class*="language-"]:after {
         --leaphy-robot-tile: #ffffff;
         --leaphy-robot-tile-border: #f1f1f1;
         --leaphy-robot-icon-filter: invert(0);
+        --leaphy-robot-right-bg: #d5d4d4;
 
         --leaphy-text-color: #000000;
 
-        --leaphy-blockly-bg: #ececec;
+        --leaphy-blockly-bg: #e1e1e1;
     }
     body[data-theme="dark"] {
         --leaphy-header-bg: #104d59;
@@ -119,6 +120,7 @@ pre[class*="language-"]:after {
         --leaphy-robot-tile: #343444;
         --leaphy-robot-tile-border: #343444;
         --leaphy-robot-icon-filter: invert(20%);
+        --leaphy-robot-right-bg: #363645;
 
         --leaphy-text-color: lightgray;
 
@@ -127,5 +129,10 @@ pre[class*="language-"]:after {
 }
 
 .blocklySvg {
+    z-index: 0;
+    background-color: transparent !important;
+}
+
+body {
     background-color: var(--leaphy-blockly-bg) !important;
 }

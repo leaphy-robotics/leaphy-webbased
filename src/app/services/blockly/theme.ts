@@ -5,7 +5,6 @@ import { ITheme, Theme } from "blockly/core/theme";
 function getTheme(themeStr): Theme {
     let theme: ITheme;
     if (themeStr === "dark") {
-        console.log("Dark mode");
         theme = {
             blockStyles: {
                 leaphy_blocks: { colourPrimary: "#06434f", hat: "cap" },
@@ -27,7 +26,6 @@ function getTheme(themeStr): Theme {
                 functions_category: { colour: "#10324a" },
             },
             componentStyles: {
-                workspaceBackgroundColour: "#1e1e1e",
                 toolboxBackgroundColour: "#343444",
                 toolboxForegroundColour: "#fff",
                 flyoutBackgroundColour: "#1e1e1e",
@@ -59,7 +57,6 @@ function getTheme(themeStr): Theme {
                 functions_category: { colour: "#4095CE" },
             },
             componentStyles: {
-                workspaceBackgroundColour: "#E5E5E5",
                 toolboxBackgroundColour: "#343444",
                 toolboxForegroundColour: "#fff",
                 flyoutBackgroundColour: "#FFFFFF",
