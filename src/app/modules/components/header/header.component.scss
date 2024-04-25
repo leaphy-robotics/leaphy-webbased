@@ -43,7 +43,7 @@ button {
 [mat-stroked-button],
 [mat-flat-button] {
     background-color: transparent;
-    border-color: var(--leaphy-color-secundary);
+    border-color: var(--leaphy-header-button-border) !important;
     font-size: 12px;
     font-weight: normal;
     border-radius: 20px;

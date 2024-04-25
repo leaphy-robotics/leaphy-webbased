@@ -80,6 +80,7 @@ pre[class*="language-"]:after {
     body[data-theme="light"] {
         --leaphy-header-bg: #06778f;
         --leaphy-header-icon-color: #06778f;
+        --leaphy-header-button-border: #32a5a9;
 
         --leaphy-color-primary: #06778f;
         --leaphy-color-primary-dark-tint: #104d59;
@@ -104,6 +105,7 @@ pre[class*="language-"]:after {
     body[data-theme="dark"] {
         --leaphy-header-bg: #104d59;
         --leaphy-header-icon-color: #32a5a9;
+        --leaphy-header-button-border: #343444;
 
         --leaphy-color-primary: #104d59;
         --leaphy-color-primary-dark-tint: #104d59;
