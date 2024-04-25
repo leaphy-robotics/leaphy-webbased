@@ -14,7 +14,7 @@ function getTheme(themeStr): Theme {
                 logic_blocks: { colourPrimary: "#45662a" },
                 variable_blocks: { colourPrimary: "#87451a" },
                 list_blocks: { colourPrimary: "#3f144a" },
-                procedure_blocks: { colourPrimary: "#10324a" },
+                procedure_blocks: { colourPrimary: "#06416c" },
             },
 
             categoryStyles: {
@@ -23,7 +23,7 @@ function getTheme(themeStr): Theme {
                 numbers_category: { colour: "#45662a" },
                 variables_category: { colour: "#87451a" },
                 lists_category: { colour: "#3f144a" },
-                functions_category: { colour: "#10324a" },
+                functions_category: { colour: "#06416c" },
             },
             componentStyles: {
                 toolboxBackgroundColour: "#343444",

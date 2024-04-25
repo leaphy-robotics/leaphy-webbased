@@ -1,4 +1,5 @@
 @use "@angular/material" as mat;
+@use "sass:map";
 @include mat.core();
 
 :root {
@@ -40,7 +41,19 @@ $dark-mode-palette: (
     800: #00695c,
     900: #004d40,
     A100: #10324a,
-    contrast: (),
+    contrast: (
+        50: transparent,
+        100: #b2dfdb,
+        200: #80cbc4,
+        300: #4db6ac,
+        400: #26a69a,
+        500: #009688,
+        600: #00897b,
+        700: #00796b,
+        800: #00695c,
+        900: #004d40,
+        A100: #32a5a9,
+    ),
 );
 
 $leaphy-color-accent-light: mat.define-palette($light-mode-palette, 50);
@@ -50,6 +63,7 @@ $leaphy-color-warn-light: mat.define-palette($light-mode-palette, 900);
 $leaphy-color-accent-dark: mat.define-palette($dark-mode-palette, 50);
 $leaphy-color-primary-dark: mat.define-palette($dark-mode-palette, A100);
 $leaphy-color-warn-dark: mat.define-palette($dark-mode-palette, 900);
+$leaphy-color-selected-dark: mat.define-palette($light-mode-palette, A100);
 
 $light-mode: mat.define-light-theme(
     (
@@ -60,6 +74,11 @@ $light-mode: mat.define-light-theme(
         ),
         typography: mat.define-legacy-typography-config(),
     )
+);
+
+$dark-background: (
+    card: #424242,
+    selected-button: #32a5a9,
 );
 
 $dark-theme: mat.define-dark-theme(
@@ -73,6 +92,9 @@ $dark-theme: mat.define-dark-theme(
     )
 );
 
+$color-map: map.get($dark-theme, 'color');
+$modified-color-map: map.merge($color-map, ('background': $dark-background));
+$dark-theme: map.merge($dark-theme, ('color': $modified-color-map));
 /* Light mode */
 body[data-theme="light"] {
     @include mat.all-component-themes($light-mode);
