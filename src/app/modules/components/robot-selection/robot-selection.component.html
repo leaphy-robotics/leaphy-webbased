@@ -1,6 +1,5 @@
-
 <!-- if the display is the right display give it the right display class -->
-<div class="robot-selection" [@swipe]="state" class="{{state}}-select">
+<div class="robot-selection" [@swipe]="state" class="{{ state }}-select">
     <div class="column">
         @for (row of robots; track row) {
             <div class="row robot-row">

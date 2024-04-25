@@ -314,18 +314,18 @@
 </mat-menu>
 
 <mat-menu #themeMenu="matMenu" class="matmenus">
-    <button
-        mat-menu-item
-        (click)="onThemeChanged('dark')">
-        <span  [class.selected]="
-            (this.appState.selectedTheme$ | async) === 'dark'
-        ">{{ "DARK_THEME" | translate }}</span>
+    <button mat-menu-item (click)="onThemeChanged('dark')">
+        <span
+            [class.selected]="(this.appState.selectedTheme$ | async) === 'dark'"
+            >{{ "DARK_THEME" | translate }}</span
+        >
     </button>
-    <button
-        mat-menu-item
-        (click)="onThemeChanged('light')">
-        <span  [class.selected]="
-            (this.appState.selectedTheme$ | async) === 'light'
-        ">{{ "LIGHT_THEME" | translate }}</span>
+    <button mat-menu-item (click)="onThemeChanged('light')">
+        <span
+            [class.selected]="
+                (this.appState.selectedTheme$ | async) === 'light'
+            "
+            >{{ "LIGHT_THEME" | translate }}</span
+        >
     </button>
 </mat-menu>

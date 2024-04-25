@@ -1,8 +1,13 @@
-import {AfterViewInit, ChangeDetectorRef, Component, OnInit} from "@angular/core";
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    OnInit,
+} from "@angular/core";
 import { CodeEditorState } from "../../../../state/code-editor.state";
 import { editor } from "monaco-editor";
 import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
-import {AppState} from "../../../../state/app.state";
+import { AppState } from "../../../../state/app.state";
 
 @Component({
     selector: "app-code-view",
@@ -14,16 +19,18 @@ export class CodeViewComponent {
         language: "cpp",
         readOnly: true,
         automaticLayout: true,
-        theme: "vs"
+        theme: "vs",
     };
 
-    constructor(private cdr: ChangeDetectorRef, public codeEditor: CodeEditorState, private appState: AppState) {
-
-
+    constructor(
+        private cdr: ChangeDetectorRef,
+        public codeEditor: CodeEditorState,
+        private appState: AppState,
+    ) {
         // check if we are currently in dark mode
         const isDarkMode = this.appState.selectedTheme === "dark";
         if (isDarkMode) {
-            this.editorOptions.theme= "vs-dark";
+            this.editorOptions.theme = "vs-dark";
         }
     }
 }
