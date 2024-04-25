@@ -39,15 +39,12 @@ pre[class*="language-"]:after {
     display: none;
 }
 
-
-
 // global variables
 
 // check on the root element if the theme is light or dark
 
 :root {
     --leaphy-color-light: #ffffff;
-
 
     body[data-theme="light"] {
         --leaphy-header-bg: #06778f;
@@ -97,10 +94,8 @@ pre[class*="language-"]:after {
         --mat-option-selected-state-label-text-color: #32a5a9; // OVERRIDE
 
         --leaphy-blockly-bg: #353444;
-
     }
 }
-
 
 .blocklySvg {
     z-index: 0;

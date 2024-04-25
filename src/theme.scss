@@ -92,9 +92,19 @@ $dark-theme: mat.define-dark-theme(
     )
 );
 
-$color-map: map.get($dark-theme, 'color');
-$modified-color-map: map.merge($color-map, ('background': $dark-background));
-$dark-theme: map.merge($dark-theme, ('color': $modified-color-map));
+$color-map: map.get($dark-theme, "color");
+$modified-color-map: map.merge(
+    $color-map,
+    (
+        "background": $dark-background,
+    )
+);
+$dark-theme: map.merge(
+    $dark-theme,
+    (
+        "color": $modified-color-map,
+    )
+);
 /* Light mode */
 body[data-theme="light"] {
     @include mat.all-component-themes($light-mode);
