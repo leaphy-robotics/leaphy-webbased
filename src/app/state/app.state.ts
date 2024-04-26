@@ -127,6 +127,9 @@ export class AppState {
         },
     ];
 
+    public selectedThemeSubject$ = new BehaviorSubject<string>("");
+    public selectedTheme$ = this.selectedThemeSubject$.asObservable();
+
     public releaseInfoSubject$ = new BehaviorSubject<any>(null);
     public releaseInfo$: Observable<any> =
         this.releaseInfoSubject$.asObservable();
@@ -234,6 +237,10 @@ export class AppState {
         this.isCodeEditorToggleConfirmedSubject$.next(confirmed);
     }
 
+    get selectedCodeEditor(): CodeEditorType {
+        return this.codeEditorSubject$.getValue();
+    }
+
     set selectedCodeEditor(codeEditor: CodeEditorType) {
         this.codeEditorSubject$.next(codeEditor);
     }
@@ -252,5 +259,13 @@ export class AppState {
 
     get releaseVersion(): string {
         return version;
+    }
+
+    set selectedTheme(theme: string) {
+        this.selectedThemeSubject$.next(theme);
+    }
+
+    get selectedTheme(): string {
+        return this.selectedThemeSubject$.getValue();
     }
 }

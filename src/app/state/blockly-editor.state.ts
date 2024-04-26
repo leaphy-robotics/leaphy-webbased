@@ -80,6 +80,10 @@ export class BlocklyEditorState {
         return this.isSideNavOpenSubject$.getValue();
     }
 
+    get blocklyElement(): ElementRef {
+        return this.blocklyElementSubject$.getValue();
+    }
+
     set blocklyElement(element: ElementRef) {
         this.blocklyElementSubject$.next(element);
     }
@@ -128,5 +132,9 @@ export class BlocklyEditorState {
 
     get workspaceJSON(): string {
         return this.workspaceJSONSubject$.getValue();
+    }
+
+    get blocklyConfig(): any {
+        return this.blocklyConfigSubject$.getValue();
     }
 }

@@ -13,11 +13,10 @@ import {
     blocks,
     CATEGORIES,
     EXTENSIONS,
-    THEME,
     translations,
 } from "@leaphy-robotics/leaphy-blocks";
-import { LeaphyCategory } from "../services/toolbox/category";
-import { LeaphyToolbox } from "../services/toolbox/toolbox";
+import { LeaphyCategory } from "../services/blockly/category";
+import { LeaphyToolbox } from "../services/blockly/toolbox";
 import { CodeEditorState } from "../state/code-editor.state";
 import {
     genericRobotType,
@@ -28,6 +27,7 @@ import { RobotType } from "../domain/robot.type";
 import { WorkspaceService } from "../services/workspace.service";
 import { LocalStorageService } from "../services/localstorage.service";
 import PinSelectorField from "../domain/blockly-fields";
+import getTheme from "../services/blockly/theme";
 
 @Injectable({
     providedIn: "root",
@@ -36,6 +36,72 @@ import PinSelectorField from "../domain/blockly-fields";
 // Defines the effects on the Blockly Editor that different state changes have
 export class BlocklyEditorEffects {
     private firstRun = true;
+    private startWorkspaceXml = ``;
+    private baseToolboxXml = ``;
+    private leaphyToolboxXml = ``;
+
+    private readonly darkTheme = getTheme("dark");
+    private readonly lightTheme = getTheme("light");
+
+    public async loadTheme() {
+        const workspace = this.blocklyState.workspace;
+        const darkMode =
+            document
+                .getElementsByTagName("body")[0]
+                .getAttribute("data-theme") === "dark";
+        const blocklyTheme = darkMode ? this.darkTheme : this.lightTheme;
+        workspace.setTheme(blocklyTheme);
+        workspace.refreshTheme();
+    }
+
+    public async loadBlockly(
+        element,
+        robotType: RobotType,
+        config: Blockly.BlocklyOptions,
+    ) {
+        const translation = translations[this.appState.currentLanguageCode];
+        if (robotType === leaphyFlitzNanoRobotType)
+            translation.ARD_SERVO_WRITE = translation.ARD_SERVO_ARM_WRITE;
+        else translation.ARD_SERVO_WRITE = translation.ARD_SERVO_REGULAR_WRITE;
+
+        Blockly.setLocale(translation);
+
+        PinSelectorField.processPinMappings(robotType);
+        if (this.firstRun) {
+            this.firstRun = false;
+            Blockly.defineBlocksWithJsonArray(blocks);
+        }
+
+        const toolboxXmlString = this.loadToolBox(robotType);
+        config.toolbox = toolboxXmlString;
+        // @ts-ignore
+        const workspace = Blockly.inject(element, config);
+        const darkMode =
+            document
+                .getElementsByTagName("body")[0]
+                .getAttribute("data-theme") === "dark";
+        const blocklyTheme = darkMode ? this.darkTheme : this.lightTheme;
+        workspace.setTheme(blocklyTheme);
+        const toolbox = workspace.getToolbox();
+        workspace.registerToolboxCategoryCallback("LISTS", CATEGORIES.LISTS);
+        toolbox.getFlyout().autoClose = false;
+        const xml = Blockly.utils.xml.textToDom(this.startWorkspaceXml);
+        Blockly.Xml.domToWorkspace(xml, workspace);
+        this.blocklyState.workspace = workspace;
+        this.blocklyState.toolboxXml = toolboxXmlString;
+        if (this.appState.currentEditor == CodeEditorType.Beginner) {
+            this.workspaceService.restoreWorkspaceTemp().then(() => {});
+        }
+        toolbox.selectItemByPosition(0);
+        toolbox.refreshTheme();
+
+        setTimeout(
+            () =>
+                (this.blocklyState.isSideNavOpen =
+                    robotType.features.showCodeOnStart),
+            200,
+        );
+    }
 
     constructor(
         private blocklyState: BlocklyEditorState,
@@ -45,6 +111,10 @@ export class BlocklyEditorEffects {
         private workspaceService: WorkspaceService,
         private localStorage: LocalStorageService,
     ) {
+        this.getXmlContent("./assets/blockly/leaphy-start.xml").subscribe(
+            (xml) => (this.startWorkspaceXml = xml),
+        );
+
         Blockly.defineBlocksWithJsonArray(blocks);
         Blockly.fieldRegistry.register("field_pin_selector", PinSelectorField);
         Blockly.registry.register(
@@ -119,68 +189,17 @@ export class BlocklyEditorEffects {
                 withLatestFrom(
                     this.getXmlContent("./assets/blockly/base-toolbox.xml"),
                     this.getXmlContent("./assets/blockly/leaphy-toolbox.xml"),
-                    this.getXmlContent("./assets/blockly/leaphy-start.xml"),
                 ),
             )
             .subscribe(
-                ([
+                async ([
                     [[element, config], robotType],
                     baseToolboxXml,
                     leaphyToolboxXml,
-                    startWorkspaceXml,
                 ]) => {
-                    const translation =
-                        translations[this.appState.currentLanguageCode];
-                    if (robotType === leaphyFlitzNanoRobotType)
-                        translation.ARD_SERVO_WRITE =
-                            translation.ARD_SERVO_ARM_WRITE;
-                    else
-                        translation.ARD_SERVO_WRITE =
-                            translation.ARD_SERVO_REGULAR_WRITE;
-
-                    Blockly.setLocale(translation);
-
-                    PinSelectorField.processPinMappings(robotType);
-                    config.theme = Blockly.Theme.defineTheme("leaphy", {
-                        blockStyles: THEME.defaultBlockStyles,
-                        categoryStyles: THEME.categoryStyles,
-                        componentStyles: THEME.componentStyles,
-                        name: "leaphy",
-                    });
-                    const toolboxXmlString = this.loadToolBox(
-                        baseToolboxXml,
-                        leaphyToolboxXml,
-                        robotType,
-                    );
-                    config.toolbox = toolboxXmlString;
-                    // @ts-ignore
-                    const workspace = Blockly.inject(element, config);
-                    const toolbox = workspace.getToolbox();
-                    workspace.registerToolboxCategoryCallback(
-                        "LISTS",
-                        CATEGORIES.LISTS,
-                    );
-                    toolbox.getFlyout().autoClose = false;
-                    const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
-                    Blockly.Xml.domToWorkspace(xml, workspace);
-                    this.blocklyState.workspace = workspace;
-                    this.blocklyState.toolboxXml = toolboxXmlString;
-                    if (
-                        this.appState.currentEditor == CodeEditorType.Beginner
-                    ) {
-                        this.workspaceService
-                            .restoreWorkspaceTemp()
-                            .then(() => {});
-                    }
-                    toolbox.selectItemByPosition(0);
-                    toolbox.refreshTheme();
-
-                    setTimeout(
-                        () =>
-                            (this.blocklyState.isSideNavOpen =
-                                robotType.features.showCodeOnStart),
-                        200,
-                    );
+                    this.baseToolboxXml = baseToolboxXml;
+                    this.leaphyToolboxXml = leaphyToolboxXml;
+                    await this.loadBlockly(element, robotType, config);
                 },
             );
 
@@ -209,11 +228,7 @@ export class BlocklyEditorEffects {
                     leaphyToolboxXml,
                     startWorkspaceXml,
                 ]) => {
-                    this.blocklyState.toolboxXml = this.loadToolBox(
-                        baseToolboxXml,
-                        leaphyToolboxXml,
-                        robotType,
-                    );
+                    this.blocklyState.toolboxXml = this.loadToolBox(robotType);
 
                     workspace.clear();
                     const xml = Blockly.utils.xml.textToDom(startWorkspaceXml);
@@ -338,19 +353,15 @@ export class BlocklyEditorEffects {
         return category;
     }
 
-    private loadToolBox(
-        baseToolboxXml: string,
-        leaphyToolboxXml: string,
-        robotType: RobotType,
-    ): string {
+    private loadToolBox(robotType: RobotType): string {
         const parser = new DOMParser();
         const toolboxXmlDoc = parser.parseFromString(
-            baseToolboxXml,
+            this.baseToolboxXml,
             "text/xml",
         );
         const toolboxElement = toolboxXmlDoc.getElementById("easyBloqsToolbox");
         const leaphyCategories = parser.parseFromString(
-            leaphyToolboxXml,
+            this.leaphyToolboxXml,
             "text/xml",
         );
         const leaphyRobotCategory = leaphyCategories.getElementById(

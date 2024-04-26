@@ -1,17 +1,17 @@
 .robot-name {
     margin-top: 10px;
+    color: var(--leaphy-text-color);
 }
 
 .robot-button {
-    background-color: #ffffff;
-    border: solid 1px #f1f1f1;
+    background-color: var(--leaphy-robot-tile) !important;
+    border: solid 1px var(--leaphy-robot-tile-border) !important;
     width: 10vw;
     max-width: 180px !important;
     aspect-ratio: 1 / 1;
 
     &:hover,
     &:active {
-        background-color: #ffffff !important;
         border: 3px solid var(--leaphy-color-primary) !important;
     }
 }
@@ -19,6 +19,7 @@
 .robot-button img {
     max-width: 90%;
     max-height: 90%;
+    filter: var(--leaphy-robot-icon-filter);
 }
 
 .selected {
@@ -42,6 +43,11 @@
     top: 0;
     height: calc(100vh - 64px);
     width: 50vw;
+    background-color: var(--start-screen-bg);
+}
+
+.right-select {
+    background-color: var(--leaphy-robot-right-bg);
 }
 
 .robot-row {

@@ -31,20 +31,36 @@
                         </mat-select>
                     </mat-form-field>
                 }
-                <button mat-stroked-button [matMenuTriggerFor]="projectMenu">
+                <button
+                    mat-stroked-button
+                    class="text-color-white"
+                    [matMenuTriggerFor]="projectMenu"
+                >
                     {{ "PROJECT" | translate }}
                 </button>
-                <button mat-stroked-button [matMenuTriggerFor]="helpMenu">
+                <button
+                    mat-stroked-button
+                    class="text-color-white"
+                    [matMenuTriggerFor]="helpMenu"
+                >
                     {{ "HELP" | translate }}
                 </button>
-                <button mat-stroked-button [matMenuTriggerFor]="moreMenu">
+                <button
+                    mat-stroked-button
+                    class="text-color-white"
+                    [matMenuTriggerFor]="moreMenu"
+                >
                     {{ "MORE" | translate }}
                 </button>
                 @if (
                     (this.appState.selectedRobotType$ | async) !==
                     microPythonRobotType
                 ) {
-                    <button mat-stroked-button (click)="onChooseRobot()">
+                    <button
+                        mat-stroked-button
+                        class="text-color-white"
+                        (click)="onChooseRobot()"
+                    >
                         {{ "CHOOSE_ROBOT" | translate }}
                     </button>
                 }
@@ -95,7 +111,7 @@
                         "
                         (click)="onCodeEditorClicked()"
                     >
-                        <mat-icon>editor</mat-icon
+                        <mat-icon class="text-color-white">editor</mat-icon
                         ><span>{{ "CODE" | translate }}</span>
                     </button>
                 }
@@ -107,12 +123,16 @@
                         "
                         (click)="onCodeEditorClicked()"
                     >
-                        <mat-icon id="block-icon" svgIcon="block"></mat-icon
+                        <mat-icon
+                            class="text-color-white"
+                            id="block-icon"
+                            svgIcon="block"
+                        ></mat-icon
                         ><span>{{ "BLOCKS" | translate }}</span>
                     </button>
                 }
                 <button mat-stroked-button (click)="onSaveWorkspaceClicked()">
-                    <mat-icon>save</mat-icon
+                    <mat-icon class="text-color-white">save</mat-icon
                     ><span>{{ "SAVE" | translate }}</span>
                 </button>
                 @if (this.appState.selectedRobotType$ | async) {
@@ -243,6 +263,10 @@
         <mat-icon>language</mat-icon>
         <span>{{ "LANGUAGE" | translate }}</span>
     </button>
+    <button mat-menu-item [matMenuTriggerFor]="themeMenu">
+        <mat-icon>mode</mat-icon>
+        <span>{{ "THEME" | translate }}</span>
+    </button>
     <button mat-menu-item (click)="onToggleSoundClicked()">
         @if (blocklyState.isSoundOn$ | async) {
             <mat-icon>volume_off</mat-icon>
@@ -287,4 +311,21 @@
             >
         </button>
     }
+</mat-menu>
+
+<mat-menu #themeMenu="matMenu" class="matmenus">
+    <button mat-menu-item (click)="onThemeChanged('dark')">
+        <span
+            [class.selected]="(this.appState.selectedTheme$ | async) === 'dark'"
+            >{{ "DARK_THEME" | translate }}</span
+        >
+    </button>
+    <button mat-menu-item (click)="onThemeChanged('light')">
+        <span
+            [class.selected]="
+                (this.appState.selectedTheme$ | async) === 'light'
+            "
+            >{{ "LIGHT_THEME" | translate }}</span
+        >
+    </button>
 </mat-menu>

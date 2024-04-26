@@ -1,5 +1,18 @@
 @use "@angular/material" as mat;
+@use "sass:map";
 @include mat.core();
+
+:root {
+    --dark-mode: 0;
+}
+
+body[data-theme="light"] {
+    --dark-mode: 0;
+}
+
+body[data-theme="dark"] {
+    --dark-mode: 1;
+}
 
 $light-mode-palette: (
     50: transparent,
@@ -16,19 +29,118 @@ $light-mode-palette: (
     contrast: (),
 );
 
-$leaphy-color-accent: mat.define-palette($light-mode-palette, 50);
-$leaphy-color-primary: mat.define-palette($light-mode-palette, A100);
-$leaphy-color-warn: mat.define-palette($light-mode-palette, 900);
+$dark-mode-palette: (
+    50: transparent,
+    100: #b2dfdb,
+    200: #80cbc4,
+    300: #4db6ac,
+    400: #26a69a,
+    500: #009688,
+    600: #00897b,
+    700: #00796b,
+    800: #00695c,
+    900: #004d40,
+    A100: #10324a,
+    contrast: (
+        50: transparent,
+        100: #b2dfdb,
+        200: #80cbc4,
+        300: #4db6ac,
+        400: #26a69a,
+        500: #009688,
+        600: #00897b,
+        700: #00796b,
+        800: #00695c,
+        900: #004d40,
+        A100: #32a5a9,
+    ),
+);
+
+$leaphy-color-accent-light: mat.define-palette($light-mode-palette, 50);
+$leaphy-color-primary-light: mat.define-palette($light-mode-palette, A100);
+$leaphy-color-warn-light: mat.define-palette($light-mode-palette, 900);
+
+$leaphy-color-accent-dark: mat.define-palette($dark-mode-palette, 50);
+$leaphy-color-primary-dark: mat.define-palette($dark-mode-palette, A100);
+$leaphy-color-warn-dark: mat.define-palette($dark-mode-palette, 900);
+$leaphy-color-selected-dark: mat.define-palette($light-mode-palette, A100);
 
 $light-mode: mat.define-light-theme(
     (
         color: (
-            primary: $leaphy-color-primary,
-            accent: $leaphy-color-accent,
-            warn: $leaphy-color-warn,
+            primary: $leaphy-color-primary-light,
+            accent: $leaphy-color-accent-light,
+            warn: $leaphy-color-warn-light,
         ),
         typography: mat.define-legacy-typography-config(),
     )
 );
 
-@include mat.all-component-themes($light-mode);
+$grey-palette: (
+    50: #fafafa,
+    100: #f5f5f5,
+    200: #eeeeee,
+    300: #e0e0e0,
+    400: #bdbdbd,
+    500: #9e9e9e,
+    600: #757575,
+    700: #616161,
+    800: #424242,
+    900: #212121,
+    A100: #ffffff,
+    A200: #eeeeee,
+    A400: #bdbdbd,
+    A700: #616161,
+);
+
+$dark-background: (
+    status-bar: black,
+    app-bar: #212121,
+    background: #303030,
+    hover: rgba(white, 0.04),
+    disabled-button: rgba(white, 0.12),
+    raised-button: #424242,
+    focused-button: rgba(white, 0.12),
+    dialog: #424242,
+    card: #424242,
+    selected-button: #32a5a9,
+    selected-disabled-button: #424242,
+    disabled-button-toggle: black,
+    unselected-chip: #616161,
+    disabled-list-option: rgba(white, 0.12),
+    tooltip: #616161,
+);
+
+$dark-theme: mat.define-dark-theme(
+    (
+        color: (
+            primary: $leaphy-color-primary-dark,
+            accent: $leaphy-color-accent-light,
+            warn: $leaphy-color-warn-light,
+        ),
+        typography: mat.define-legacy-typography-config(),
+    )
+);
+
+$color-map: map.get($dark-theme, "color");
+$modified-color-map: map.merge(
+    $color-map,
+    (
+        "background": $dark-background,
+    )
+);
+$dark-theme: map.merge(
+    $dark-theme,
+    (
+        "color": $modified-color-map,
+    )
+);
+/* Light mode */
+body[data-theme="light"] {
+    @include mat.all-component-themes($light-mode);
+}
+
+/* Dark mode */
+body[data-theme="dark"] {
+    @include mat.all-component-themes($dark-theme);
+}

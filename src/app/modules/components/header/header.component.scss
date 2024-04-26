@@ -1,11 +1,12 @@
 .robot-select-dropdown {
     padding-top: 5%;
     padding-right: 5%;
+    color: white;
 }
 
 .header-container {
-    background-color: var(--leaphy-color-primary);
     padding: 10px 0; /* Added padding to prevent content from being too close to the edges */
+    background-color: var(--leaphy-header-bg);
 }
 
 .header-logo {
@@ -27,21 +28,30 @@ button {
     font-size: 12px;
     line-height: 36px;
     height: 40px;
+    color: var(--leaphy-text-color);
+
+    .selected {
+        color: var(--leaphy-header-icon-color) !important;
+    }
 
     mat-icon {
-        color: var(--leaphy-color-primary);
+        color: var(--leaphy-header-icon-color);
         margin-right: 5px;
     }
 }
 
 [mat-stroked-button],
 [mat-flat-button] {
-    color: var(--leaphy-color-light) !important;
-    border-color: var(--leaphy-color-secundary) !important;
+    background-color: transparent;
+    border-color: var(--leaphy-header-button-border) !important;
     font-size: 12px;
     font-weight: normal;
     border-radius: 20px;
     padding: 5px 15px; /* Added padding to buttons */
+
+    span {
+        color: var(--leaphy-color-light);
+    }
 }
 
 #block-icon {
@@ -98,6 +108,7 @@ mat-button-toggle {
     align-content: center;
 
     mat-icon {
+        color: var(--leaphy-color-light) !important;
         width: 100%;
         height: 100%;
         margin-top: 15px;

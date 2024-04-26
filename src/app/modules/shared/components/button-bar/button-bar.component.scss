@@ -26,7 +26,7 @@
         }
 
         &:enabled::before {
-            background: var(--leaphy-color-dark);
+            background-color: var(--leaphy-color-dark);
             border-radius: 5px;
             content: attr(tooltip);
             display: inline-block;

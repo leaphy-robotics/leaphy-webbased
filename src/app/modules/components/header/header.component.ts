@@ -23,6 +23,7 @@ import { StatusMessageDialog } from "../../core/dialogs/status-message/status-me
 import { WorkspaceService } from "../../../services/workspace.service";
 import { MatSelectChange } from "@angular/material/select";
 import { RobotType } from "../../../domain/robot.type";
+import { BlocklyEditorEffects } from "../../../effects/blockly-editor.effects";
 
 @Component({
     selector: "app-header",
@@ -36,6 +37,7 @@ export class HeaderComponent {
     constructor(
         public appState: AppState,
         public blocklyState: BlocklyEditorState,
+        public blocklyEffect: BlocklyEditorEffects,
         public dialogState: DialogState,
         public robotWiredState: RobotWiredState,
         private router: Router,
@@ -268,4 +270,10 @@ export class HeaderComponent {
     }
 
     protected readonly genericRobots = genericRobots;
+
+    onThemeChanged(theme: any) {
+        this.appState.selectedTheme = theme;
+    }
+
+    protected readonly document = document;
 }

@@ -1,3 +1,5 @@
+@use "@angular/material" as mat;
+
 /* You can add global styles to this file, and also import other style files */
 @import url("./assets/fonts/inter/inter.css");
 @font-face {
@@ -16,7 +18,6 @@ html {
 html,
 body {
     height: 100%;
-    background-color: #f1f1f1;
 }
 body {
     margin: 0;
@@ -38,51 +39,73 @@ pre[class*="language-"]:after {
     display: none;
 }
 
-.blocklyToolboxCategory {
-    margin: 3px 0;
+// global variables
 
-    .blocklyTreeRow {
-        box-sizing: content-box;
-        border-left: 6px solid var(--leaphy-block-default);
+// check on the root element if the theme is light or dark
 
-        &#l_situation {
-            border-color: var(--leaphy-block-yellow);
-        }
+:root {
+    --leaphy-color-light: #ffffff;
 
-        &#l_numbers {
-            border-color: var(--leaphy-block-green);
-        }
+    body[data-theme="light"] {
+        --leaphy-header-bg: #06778f;
+        --leaphy-header-icon-color: #06778f;
+        --leaphy-header-button-border: #32a5a9;
 
-        &#l_variables {
-            border-color: var(--leaphy-block-orange);
-        }
+        --leaphy-color-primary: #06778f;
+        --leaphy-color-primary-dark-tint: #104d59;
+        --leaphy-color-secundary: #32a5a9;
+        --leaphy-color-dark: #343444;
 
-        &#l_functions {
-            border-color: var(--leaphy-block-blue);
-        }
+        --mat-menu-item-label-text-size: 12px !important;
+
+        --start-screen-bg: #f1f1f1;
+        --leaphy-background-color: #c1c1c1;
+
+        --leaphy-robot-tile: #ffffff;
+        --leaphy-robot-tile-border: #f1f1f1;
+        --leaphy-robot-icon-filter: invert(0);
+        --leaphy-robot-right-bg: white;
+
+        --leaphy-text-color: #000000;
+
+        --leaphy-blockly-bg: #e1e1e1;
+    }
+    body[data-theme="dark"] {
+        --leaphy-header-bg: #104d59;
+        --leaphy-header-icon-color: #32a5a9;
+        --leaphy-header-button-border: #343444;
+
+        --leaphy-color-primary: #104d59;
+        --leaphy-color-primary-dark-tint: #104d59;
+        --leaphy-color-secundary: #32a5a9;
+        --leaphy-color-dark: #343444;
+
+        --mat-menu-item-label-text-size: 12px !important;
+
+        --start-screen-bg: #1e1e1e;
+        --leaphy-background-color: #1e1e1e;
+
+        --leaphy-robot-tile: #414145;
+        --leaphy-robot-tile-border: #343444;
+        --leaphy-robot-icon-filter: invert(20%);
+        --leaphy-robot-right-bg: #363645;
+
+        --leaphy-text-color: lightgray;
+        --mat-option-selected-state-label-text-color: #32a5a9; // OVERRIDE
+
+        --leaphy-blockly-bg: #353444;
     }
 }
 
-// global variables
-
-:root {
-    --leaphy-color-primary: #06778f;
-    --leaphy-color-primary-dark-tint: #035e72;
-    --leaphy-color-secundary: #32a5a9;
-    --leaphy-color-dark: #343444;
-    --leaphy-color-light: #ffffff;
-
-    --leaphy-block-default: #06778f;
-    --leaphy-block-yellow: #d9b53f;
-    --leaphy-block-green: #75b342;
-    --leaphy-block-orange: #de7c3b;
-    --leaphy-block-blue: #4095ce;
-    --leaphy-block-yellow: #d9b53f;
-    --leaphy-block-grey: #7d7d80;
-
-    --mat-menu-item-label-text-size: 12px !important;
+.blocklySvg {
+    z-index: 0;
+    background-color: transparent !important;
 }
 
-.blocklySvg {
-    background-color: transparent !important;
+.blocklyHtmlInput {
+    background-color: white !important;
+}
+
+body {
+    background-color: var(--leaphy-blockly-bg) !important;
 }

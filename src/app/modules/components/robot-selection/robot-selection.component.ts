@@ -20,21 +20,18 @@ import {
                 "center",
                 style({
                     translate: "-50%",
-                    background: "#ffffff00",
                 }),
             ),
             state(
                 "left",
                 style({
                     translate: "-100%",
-                    background: "#ffffff00",
                 }),
             ),
             state(
                 "right",
                 style({
                     translate: "0",
-                    background: "#fff",
                 }),
             ),
             transition("center => left", [animate(".3s ease-out")]),

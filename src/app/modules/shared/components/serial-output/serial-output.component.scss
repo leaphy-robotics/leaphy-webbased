@@ -23,7 +23,7 @@
     height: calc(100% + 29px);
     margin: 0;
     overflow-y: scroll;
-    background-color: aliceblue;
+    background-color: var(--start-screen-bg);
 }
 
 [mat-stroked-button],

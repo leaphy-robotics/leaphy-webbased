@@ -21,7 +21,7 @@
     max-width: 99%;
     flex: 1 0 auto;
     padding-left: 5px;
-    color: black;
+    color: var(--leaphy-text-color) !important;
     word-break: break-all;
 }
 
@@ -30,14 +30,14 @@
     height: 50vh;
     margin: 0;
     overflow-y: scroll;
-    background-color: lightgray;
+    background-color: var(--leaphy-background-color);
 }
 
 .device-information {
     width: 50vh;
     height: fit-content;
     margin: 0;
-    background-color: lightgray;
+    background-color: var(--leaphy-background-color);
 }
 
 #header:hover {
@@ -46,7 +46,7 @@
 
 #header {
     background-color: var(--leaphy-color-primary);
-    color: var(--leaphy-color-light);
+    color: var(--leaphy-text-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -56,7 +56,7 @@
 
 #device-information {
     background-color: var(--leaphy-color-primary);
-    color: var(--leaphy-color-light);
+    color: var(--leaphy-text-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -65,4 +65,5 @@
 }
 .device-specification {
     margin-left: 10px;
+    color: var(--leaphy-text-color);
 }

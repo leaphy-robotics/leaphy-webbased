@@ -5,6 +5,9 @@ import { SharedModule } from "../shared/shared.module";
 import { CoreModule } from "../core/core.module";
 import { WorkspaceService } from "../../services/workspace.service";
 import { MonacoEditorModule } from "ngx-monaco-editor-v2";
+import { AppState } from "../../state/app.state";
+import { editor } from "monaco-editor";
+import IStandaloneEditorConstructionOptions = editor.IStandaloneEditorConstructionOptions;
 
 @Component({
     standalone: true,
@@ -14,15 +17,23 @@ import { MonacoEditorModule } from "ngx-monaco-editor-v2";
     imports: [CommonModule, SharedModule, CoreModule, MonacoEditorModule],
 })
 export class CodeEditorCppPage implements AfterViewInit {
-    editorOptions = {
+    editorOptions: IStandaloneEditorConstructionOptions = {
         language: "cpp",
         automaticLayout: true,
+        theme: "vs",
     };
 
     constructor(
         public codeEditorState: CodeEditorState,
         private workspaceService: WorkspaceService,
-    ) {}
+        private appState: AppState,
+    ) {
+        // check if we are currently in dark mode
+        const isDarkMode = appState.selectedTheme === "dark";
+        if (isDarkMode) {
+            this.editorOptions.theme = "vs-dark";
+        }
+    }
 
     ngAfterViewInit(): void {
         window.addEventListener("beforeunload", async () => {
