@@ -7,7 +7,7 @@ function getTheme(themeStr): Theme {
     if (themeStr === "dark") {
         theme = {
             blockStyles: {
-                leaphy_blocks: { colourPrimary: "#06434f", hat: "cap" },
+                leaphy_blocks: { colourPrimary: "#066c80", hat: "cap" },
                 loop_blocks: { colourPrimary: "#69530d" },
                 math_blocks: { colourPrimary: "#45662a" },
                 text_blocks: { colourPrimary: "#45662a" },
@@ -18,7 +18,7 @@ function getTheme(themeStr): Theme {
             },
 
             categoryStyles: {
-                leaphy_category: { colour: "#06434f" },
+                leaphy_category: { colour: "#066c80" },
                 situation_category: { colour: "#69530d" },
                 numbers_category: { colour: "#45662a" },
                 variables_category: { colour: "#87451a" },
